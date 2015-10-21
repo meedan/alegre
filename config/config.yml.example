@@ -1,0 +1,8 @@
+development: &default
+  secret_token: somethingsecret
+
+test:
+  <<: *default
+
+production:
+  <<: *default
