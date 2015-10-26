@@ -1,8 +1,0 @@
-bundle exec rake swagger:docs
-sudo rake meedan:api_keys:create
-sudo rails s
-
-http://localhost:3000/api
-
-Created a new API key with access token bba6828717c26c10e1ed314f0ac55c70 and that expires at 2015-11-21 18:56:07 UTC
-

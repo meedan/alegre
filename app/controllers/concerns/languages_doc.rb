@@ -5,14 +5,33 @@ module LanguagesDoc
   included do
     swagger_controller :languages, 'Languages'
 
-    swagger_api :classify do
-      summary 'MLG - Send some text to be classified'
-      notes 'MLG - Use this method in order to identify the language of a given text'
+    swagger_api :identification do
+      summary 'Identify the language of a given text'
+      notes 'Use this method in order to identify the language of a given text'
       param :query, :text, :string, :required, 'Text to be classified'
       response :ok, 'Returns text language'
       response 400, 'Parameters missing (text was not provided)'
       response 401, 'Access denied'
     end
+
+    swagger_api :sample do
+      summary 'Add training sample to the model'
+      notes 'Use this method in order to add training sample to the model'
+      param :query, :language, :string, :required, 'Language'
+      param :query, :text, :string, :required, 'Text to be inserted'
+      response :ok, 'Returns ok'
+      response 400, 'Parameters missing (text was not provided)'
+      response 401, 'Access denied'
+    end
+
+    swagger_api :language do
+      summary 'List supported languages'
+      notes 'Use this method in order to list supported languages'
+      response :ok, 'Returns list'
+      response 400, 'Parameters missing (text was not provided)'
+      response 401, 'Access denied'
+    end
+
   end
 end
 # :nocov:

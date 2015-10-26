@@ -3,7 +3,10 @@
   "swaggerVersion": "1.2",
   "basePath": "/",
   "apis": [
-
+    {
+      "path": "api/v1/languages.{format}",
+      "description": "Languages"
+    }
   ],
   "info": {
     "title": "API Docs",

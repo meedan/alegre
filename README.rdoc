@@ -1,28 +1,78 @@
-== README
+## MLG REST API design
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A REST API for MLG
 
-Things you may want to cover:
+### Configuration
+* Update api-mlg/config/initializers/train.rb: 
+	Add model file, stopwords files and DYSL paths
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### How to use it (development)
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+:~/api-mlg$ sudo rake meedan:api_keys:create
+key will be used in the web interface
+
+:~/api-mlg$sudo bundle exec rake swagger:docs
+:~/api-mlg$sudo rails s
+
+web interface: http://localhost:3000/api
+
+
+### Current features
+
+DYSL:
+
+* Add training sample to a model file
+* List supported languages
+* Language Identification
+
+
+#### Add training sample to a model file
+
+Format: POST /api/languages/sample
+
+`curl -X POST http://localhost:3000/api/languages/sample -d '{"text":"this is a new sample","language":"en"}' -H "Content-Type: application/json"`
+
+Returns:
+
+`{
+  "type": "success",
+  "data": true
+}`
+
+In order to use this method, you need to have the corpus files inside the API server.
+
+#### List supported languages in a model
+
+Format: GET /api/languages/anguage
+
+`curl -X GET http://localhost:3000/api/languages/language -H "Content-Type: application/json" -H 
+
+Returns:
+
+`{ "type": "language_code", "data": ["en","pt","es","ar"]}`
+
+
+#### Language Identification
+
+Format: GET /api/languages/identification
+
+`curl -X GET http://localhost:3000/api/languages/identification -d '{"text":"what is my language?"}' -H "Content-Type: application/json" 
+
+Returns:
+
+`{
+  "type": "language",
+  "data": [
+    [
+      0.9556870372582787,
+      "en"
+    ],
+    [
+      0.04431296274172125,
+      "ms"
+    ]
+  ]
+}`
+
+
