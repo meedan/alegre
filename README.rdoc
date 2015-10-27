@@ -10,6 +10,7 @@ A REST API for MLG
 
 
 :~/api-mlg$ sudo rake meedan:api_keys:create
+
 key will be used in the web interface
 
 :~/api-mlg$sudo bundle exec rake swagger:docs

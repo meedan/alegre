@@ -81,9 +81,9 @@ module Api
       #   render_error 'Invalid value', 'INVALID_VALUE'
       # end
 
-      # def render_parameters_missing
-      #   render_error 'Parameters missing', 'MISSING_PARAMETERS'
-      # end
+       def render_parameters_missing
+         render_error 'Parameters missing', 'MISSING_PARAMETERS', 400
+       end
 
       # def render_not_found
       #   render_error 'Id not found', 'ID_NOT_FOUND', 404
