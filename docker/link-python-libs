@@ -1,0 +1,8 @@
+#!/bin/bash
+prefix=$(python -c 'import sys; print sys.prefix')
+for lib in $(find /usr/lib/ -name "*libpython*")
+do
+  echo "Linking ${lib}..."
+  ln -s $lib "${prefix}/lib/" 2>/dev/null
+done
+exit 0
