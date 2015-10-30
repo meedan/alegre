@@ -1,4 +1,4 @@
-namespace :meedan do
+namespace :lapis do
   namespace :api_keys do
 
     task delete_expired: :environment do

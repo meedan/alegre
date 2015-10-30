@@ -9,7 +9,8 @@ A REST API for MLG
 ### How to use it (development)
 
 
-:~/api-mlg$ sudo rake meedan:api_keys:create
+:~/api-mlg$ sudo rake lapis:api_keys:create
+801c259f34baaaea8135fc94499d45f2
 
 key will be used in the web interface
 

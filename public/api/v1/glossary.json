@@ -1,0 +1,45 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "glossary",
+  "apis": [
+    {
+      "path": "api/glossary/term",
+      "operations": [
+        {
+          "notes": "Use this method in order to add a new term to glossary",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "POST: Success; GET: { \"type\": \"term\", \"data\": { \"_score\" : \"6.837847\", \"_id\" : \"312826213161669685473612972876928820074\", \"_source:\", \"lang\" : \"en\", \"definition\" : \"test definition\", \"term\" : \"test\", \"translations:[\"lang\" : \"pt\", \"definition\" : \"definição de teste\", \"term\" : \"teste\"], \"context: {\"source:\"{\"url\" : \"testSite.url\", \"name\" : \"test site\"}, \"time-zone\" : \"PDT / MST\", \"tags:[\"greetings\", \"hello\"], \"post\" : \"xxxx\", \"page_id\" : \"test\", \"data_source\" : \"dictionary\"}, \"_index\" : \"glossary_mlg , \"_type\" : \"glossary\"}}"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Parameters missing (text was not provided)"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "summary": "Add (Post) and Get term",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "data",
+              "type": "string",
+              "description": "POST : {\"lang\": \"en\", \"definition\": \"test definition\",\"term\": \"test\",\"translations\": [ {\"lang\": \"pt\",\"definition\": \"definição de teste\",\"term\": \"teste\"}],\"context\": {\"post\": \"post\", \"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"},\"post\": \"xxxx\",\"data_source\": \"dictionary\",\"time-zone\": \"PDT / MST\"},\"page_id\":\"test\", \"data_source\": \"dictionary\" } ; GET : {\"term\":\"hello\",\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"}, \"post\": \"lala lala\", \"data_source\": \"dictionary\"}}",
+              "required": true
+            }
+          ],
+          "method": "post",
+          "nickname": "Api::V1::Glossary#term"
+        }
+      ]
+    }
+  ]
+}

@@ -9,6 +9,6 @@ class ApiConstraints
   end
 
   def self.accept(version = 1)
-    "application/vnd.meedan.v#{version}"
+    "application/vnd.lapis.v#{version}"
   end
 end

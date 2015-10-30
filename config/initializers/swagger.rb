@@ -13,8 +13,8 @@ Swagger::Docs::Config.register_apis({
     api_extension_type: nil,
     attributes: {
       info: {
-        title: 'API Docs',
-        description: 'Documentation and API explorer'
+        title: INFO[:title],
+        description: INFO[:description]
       }
     }
   }

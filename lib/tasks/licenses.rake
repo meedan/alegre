@@ -1,4 +1,4 @@
-namespace :meedan do
+namespace :lapis do
   task :licenses do
     Gem.licenses.each do |license, gems| 
       gems.sort_by { |gem| gem.name }.each do |gem|

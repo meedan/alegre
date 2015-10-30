@@ -1,4 +1,4 @@
-module MeedanConstants
+module LapisConstants
   class ErrorCodes
     UNAUTHORIZED = 1
     MISSING_PARAMETERS = 2

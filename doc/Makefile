@@ -37,7 +37,7 @@ api.txt:
 	$(RAKE) routes | sed 's/.*\([PGD]\)/\1/g' | sed 's/(.:format).*//g' | grep -v Pattern | sort | nl >> api.txt
 
 licenses.csv:
-	$(RAKE) meedan:licenses > licenses.csv
+	$(RAKE) lapis:licenses > licenses.csv
 
 api-docs.json:
 	cd .. && $(RAKE) swagger:docs && cd - && ln -s ../public/api-docs.json

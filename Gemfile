@@ -61,3 +61,5 @@ gem 'protected_attributes'
 gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
+
+gem 'unicorn'

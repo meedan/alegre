@@ -1,3 +1,4 @@
+#encoding: utf-8 
 require 'rubypython'
 
 class Api::V1::LanguagesController < Api::V1::BaseApiController

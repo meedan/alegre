@@ -1,0 +1,73 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "tm",
+  "apis": [
+    {
+      "path": "api/tm/tuple",
+      "operations": [
+        {
+          "notes": "Use this method in order to add tuple in Translation Memory (TM)",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "POST: Success; GET: { \"type\": \"tupleTM\", {\"data\": \"[{\"l2\":\"portuguese\", \"c2\":\"pt\", \"sentence2\":\"oi mundo\"}]\",\"context\":{ \"source\":\"test site\", \"time-zone\": \"PDT / MST\"}}"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Parameters missing (text was not provided)"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "summary": "POST: Add tuple in Translation Memory (TM); GET: Search TM",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "data",
+              "type": "string",
+              "description": "POST: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", \"l2\":\"portuguese\", \"c2\":\"pt\", \"sentence2\":\"oi mundo\", \"source\":\"test site\", \"time-zone\": \"PDT / MST\"} ; GET: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", context:{ \"source\":\"test site\", \"time-zone\": \"PDT / MST\"}}",
+              "required": true
+            }
+          ],
+          "method": "post",
+          "nickname": "Api::V1::Tm#tuple"
+        }
+      ]
+    },
+    {
+      "path": "api/tm/source",
+      "operations": [
+        {
+          "notes": "Use this method in order to get sources in TM",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Returns list: { \"type\": \"sources\", \"data\": [[\"testSite.url\", \"Test Site\"],[\"https://en.wiktionary.org/wiki/hello\", \"Greetings\"]]}"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Parameters missing (text was not provided)"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "summary": "Get sources in TM",
+          "method": "get",
+          "nickname": "Api::V1::Tm#source"
+        }
+      ]
+    }
+  ]
+}

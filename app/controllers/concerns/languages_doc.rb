@@ -1,3 +1,4 @@
+#encoding: utf-8 
 # :nocov:
 module LanguagesDoc
   extend ActiveSupport::Concern
