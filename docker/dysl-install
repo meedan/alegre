@@ -1,0 +1,10 @@
+#!/bin/bash
+git clone https://github.com/meedan/dysl.git
+cd dysl
+git checkout develop
+pip install -r requirements.txt
+easy_install numpy
+easy_install scipy
+easy_install -U gensim
+cd ..
+exit 0

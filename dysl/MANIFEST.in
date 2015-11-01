@@ -1,0 +1,2 @@
+include README.md
+include dysl//dysl/corpora/multiLanguage/*/*.txt

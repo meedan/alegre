@@ -1,0 +1,396 @@
+
+Facebook
+Z Wikipedii, wolnej encyklopedii
+Skocz do: nawigacja, szukaj
+	Ten artykuł od 2015-03 wymaga modyfikacji na podstawie najświeższych informacji.
+Niektóre treści są już na pewno lub najprawdopodobniej nieaktualne. Artykuł należy zweryfikować i odpowiednio go zmienić.
+Dokładniejsze informacje o tym, co należy poprawić, być może znajdują się w dyskusji tego artykułu.
+Po wyeliminowaniu niedoskonałości prosimy usunąć szablon „Dopracować” z kodu tego artykułu.
+Facebook
+serwis społecznościowy
+Facebook New Logo (2015).svg
+logo strony
+Data powstania 	4 lutego 2004
+Autor 	Mark Zuckerberg
+Chris Hughes
+Dustin Moskovitz
+Eduardo Saverin
+Właściciel 	Facebook, Inc.
+Rejestracja 	wymagana
+Miejsce w Alexa.com 	2[1]
+Język programowania 	C++, język D[2] i PHP
+Strona internetowa
+Facebook, Inc.
+Forma prawna 	spółka akcyjna
+Państwo 	 Stany Zjednoczone
+Siedziba 	Menlo Park
+Ważni pracownicy 	Mark Zuckerberg (Prezes i dyrektor generalny)
+Zatrudnienie 	9 199 (2014)[3]
+Przychody 	12,466 mld USD (2014)[3]
+Zysk operacyjny 	4,910 mld USD (2014)[3]
+Zysk netto 	2,940 mld USD (2014)[3]
+Aktywa 	40,184 mld USD (2014)[3]
+Kapitał własny 	36,096 mld USD (2014)[3]
+ISIN 	
+
+US30303M1027
+Symbol akcji 	NASDAQ: FB
+
+Facebook – serwis społecznościowy, w ramach którego zarejestrowani użytkownicy mogą tworzyć sieci i grupy, dzielić się wiadomościami i zdjęciami oraz korzystać z aplikacji, będący własnością Facebook, Inc. z siedzibą w Menlo Park. W styczniu 2014 liczba użytkowników na całym świecie wynosiła około miliarda, a co miesiąc wgrywanych jest ponad 1 mld zdjęć oraz 10 mln filmów, których obecnie jest 265 miliardów[4]. Średni wiek użytkownika serwisu to 22 lata[4]. Dane zgromadzone na Facebooku to ponad 980 petabajtów, co 24 godziny przybywa ponad 0,5 petabajta[5].
+
+Projekt został uruchomiony 4 lutego 2004 na Uniwersytecie Harvarda (w stanie Massachusetts) i był początkowo przeznaczony przede wszystkim dla uczniów szkół średnich i studentów szkół wyższych (college’ów, uniwersytetów). Jego głównym autorem jest Mark Zuckerberg (obecnie pełni on funkcję CEO). Serwis zatrudnia ok. 1000 pracowników (stan na sierpień 2009)[6]. Planowane przychody przekroczą 150 mln USD (2008)[7]. We wrześniu 2009 założyciel Facebooka poinformował na swoim blogu, że Facebook po raz pierwszy przestał przynosić straty i zaczął pokrywać swoje koszty operacyjne oraz inwestycje w nowe serwery.
+
+W marcu 2008 autor portalu, 23-letni Mark Zuckerberg, plasując się na 735. miejscu rankingu Forbesa zestawiającego najbogatszych ludzi świata, został najmłodszym miliarderem świata (1,5 mld USD)[7][8].
+
+W październiku 2010 na ekrany kin wszedł film The Social Network ukazujący historię portalu Facebook (pierwotnie TheFacebook) i jego założycieli. W zakończeniu filmu podano szacunkową wartość portalu i wynosiła ona 25 miliardów dolarów.
+
+18 maja 2012 roku Facebook jako firma pojawił się po raz pierwszy na amerykańskiej giełdzie NASDAQ, stając się najwyżej wycenianą w dniu debiutu spółką giełdową w historii[9]. Szacunki dotyczące wartości serwisu okazały się jednak mocno przesadzone, gdyż oczekiwania inwestorów były zbyt duże w stosunku do realnych możliwości serwisu[10].
+
+W lutym 2014 portal wprowadził przy współpracy ze środowiskami LGBT, większą liczbę możliwych do wybrania płci, z myślą o osobach transgender[11].
+
+Spis treści
+
+    1 Historia
+        1.1 Utworzenie
+        1.2 Kalifornia
+        1.3 News Feed
+        1.4 Wartość rynkowa
+        1.5 Polska wersja językowa
+        1.6 Facebook Lite
+    2 Aspekty techniczne
+    3 Funkcje
+        3.1 Dodatkowe funkcje
+            3.1.1 Oś czasu
+            3.1.2 Facebook Messenger
+    4 Krytyka
+    5 Plagiaty
+    6 Film o Facebooku
+    7 Facebook dla programistów
+    8 Statystyki
+    9 Udziałowcy
+        9.1 Pracownicy
+        9.2 Fundusze inwestycyjne
+        9.3 Krytykanci i "wrogowie"
+        9.4 Aniołowie biznesu
+        9.5 Byli pracownicy
+        9.6 Inwentorzy korporacyjni
+    10 Przypisy
+    11 Linki zewnętrzne
+
+Historia[edytuj | edytuj kod]
+Utworzenie[edytuj | edytuj kod]
+Mark Zuckerberg w 2005
+Facebook Data Center w Prineville w Oregonie
+
+Zuckerberg, jako student Uniwersytetu Harvarda, 4 lutego 2004 stworzył wraz z grupą studentów serwis społecznościowy on-line TheFacebook, w ramach którego zarejestrowani użytkownicy mogli odszukiwać i kontynuować szkolne znajomości oraz dzielić się wiadomościami i zdjęciami. Utworzenie kodu źródłowego strony zajęło mu 2 tygodnie. Serwis bardzo szybko uzyskał ogromne zainteresowanie wśród studentów i osiągnął sukces na Harvardzie. Ponad ⅔ studentów zarejestrowało się na nowo powstałej stronie już w pierwszych 2 tygodniach jej funkcjonowania.
+
+Wówczas Zuckerberg zdecydował się rozszerzyć zasięg serwisu na inne szkoły. Rozpoczął współpracę ze swym współlokatorem Dustinem Moskovitzem. Kolejnymi uniwersytetami, które objęto zasięgiem serwisu były: Stanford, Columbia oraz Yale, a następnie pozostałe uczelnie z Ligi Bluszczowej (ang. Ivy League) oraz inne bostońskie szkoły.
+
+Latem, na początku działalności serwisu, Zuckerberg i Moskovitz rozszerzyli zasięg jego działalności na prawie 30 szkół.
+Kalifornia[edytuj | edytuj kod]
+
+Latem 2004 Zuckerberg, Moskovitz, dziewczyna Zuckerberga Hilary Shinn oraz grupa ich znajomych przenieśli się do Palo Alto w Kalifornii. Wynajęli tam mały dom, który posłużył im za pierwsze biuro. Pod koniec lata Zuckerberg spotkał Petera Thiela, który zainwestował w powstające przedsiębiorstwo. Parę miesięcy później powstało biuro na University Avenue w centrum miasta. Obecnie firma ma swoją siedzibę w czterech budynkach, które tworzą, jak to Zuckerberg nazywa, „kampus miejski” w centrum Palo Alto.
+News Feed[edytuj | edytuj kod]
+
+5 września 2006 w serwisie Facebook uruchomiono tzw. News Feed, czyli listę, na której widoczne było co znajomi robili aktualnie na stronie serwisu. Spotkało się to z falą krytyki skierowaną na Zuckerberga. Twierdzono, że narzędzie to jest niepotrzebne – określono je jako narzędzie do cyberstalkingu (internetowego nękania, prześladowania, osaczania). Trzy dni później Zuckerberg odpowiedział na falę krytyki listem otwartym, w którym przeprosił użytkowników serwisu za swoje przedsięwzięcie.
+Wartość rynkowa[edytuj | edytuj kod]
+
+24 października 2007 opublikowano w prasie informacje, że firma Microsoft kupiła część akcji Facebook. Było to 1,6% za kwotę 240 milionów dolarów amerykańskich. Szacunkowa wartość Facebooka wynosiła wtedy 15 mld USD.
+Polska wersja językowa[edytuj | edytuj kod]
+
+Od maja 2008 roku działa polska wersja językowa serwisu, uruchomiona dzięki tłumaczeniom wykonanym przez użytkowników.
+Facebook Lite[edytuj | edytuj kod]
+
+W kwietniu 2009 roku została oddana do użytku wersja „lite”. Była to uproszczona wersja serwisu, pozbawiona np. Facebook Chat, przeznaczona przede wszystkim dla ludzi posiadających słabsze komputery bądź łącza internetowe. Facebook Lite został wyłączony bez dodatkowych wyjaśnień w dniu 20 kwietnia 2010 roku. Osoby pracujące przy projekcie skupione zostały wokół usługi Facebook Questions[12].
+Aspekty techniczne[edytuj | edytuj kod]
+
+Facebook został napisany w języku PHP, który następnie jest tłumaczony za pomocą autorskiego narzędzia – HipHop for PHP na C++ co ma się przekładać na zredukowanie o 50% obciążenia serwerów[13].
+Funkcje[edytuj | edytuj kod]
+
+Serwis przeszedł wiele zmian wizualnych, co nie zawsze spotykało się z aprobatą użytkowników; największy sprzeciw pojawił się po zmianach strony głównej – zamiast statycznej zawartości w formie wirtualnej wizytówki spotykanej w tego typu serwisach, pojawił się mikroblog wraz z powiadomieniami aplikacji. Facebook oferuje wewnętrzną platformę aplikacji internetowych[14], dzięki której każdy z użytkowników może napisać własny program i udostępniać go innym użytkownikom. Platforma ta, umożliwia również zarabianie pieniędzy twórcom, poprzez oferowanie zawartości premium (np. dodatkowe przedmioty w grach, wirtualne pieniądze wykupowane za prawdziwą walutę); a także umożliwia komunikowanie się programów zewnętrznych, serwisów z Facebookiem – wiele serwisów internetowych (m.in. Digg, lifehacker.com, crunchgear.com) oferuje możliwość „podpięcia” konta z wykorzystaniem nazwy i hasła użytkownika Facebooka, co jest własną wersją rozproszonego uwierzytelnienia OpenID (funkcja nosi nazwę Facebook Connect[15]). Serwis oferuje również wewnętrzny komunikator, który umożliwia komunikację poprzez programy zewnętrzne obsługujące protokół XMPP[16].
+Dodatkowe funkcje[edytuj | edytuj kod]
+
+Facebook posiada także wiele typowych funkcji obecnych w innych serwisach społecznościowych, takich jak: albumy ze zdjęciami, blog, notes, książka adresowa, lista znajomych, grupy użytkowników, blokowanie użytkowników, poczta wewnętrzna.
+Oś czasu[edytuj | edytuj kod]
+
+W grudniu 2011 wprowadzono Oś czasu, nowy rodzaj profilu, który pozwala na dodawanie „Wydarzeń z życia” (np. ukończenia szkoły, pierwszego spotkania z daną osobą, podróży czy złamanej kości itd.) oraz postów z ustawioną datą w przeszłości[17][18]. Dodatkowo generowana jest mapa ze wszystkimi odwiedzonymi przez użytkownika miejscami.
+
+Facebook oferuje również każdemu użytkownikowi aby adres www do jego profilu składał się z ciągu przypadkowych cyfr bądź wybranej przez siebie nazwy użytkownika[19][20].
+
+Facebook we współpracy z Cisco oferuje również specjalne modemy dla firm oraz przedsiębiorstw, które pozwolą ich klientom na darmowy dostęp do internetu w zamian za podstawowe dane demograficzne przekazywane firmie oferującej internet[21][22][23].
+Facebook Messenger[edytuj | edytuj kod]
+
+13 listopada 2013 roku została wydana nowa wersja 3.0 aplikacji Facebook Messenger[24] dla iOS i Androida. Nowa wersja pozwala korzystać z numeru telefonu do wysyłania wiadomości do wszystkich numerów bez konieczności bycia przyjaciółmi na Facebooku. Podobna funkcje ma aplikacja WhatsApp która została wykupiona za 16 mld dolarów przez Facebooka[25].
+Krytyka[edytuj | edytuj kod]
+
+Rozwój funkcji serwisu i wzrost jego popularności spowodował, że niektórzy naukowcy zaczęli ostrzegać przed możliwością uzależnienia od Facebooka[26]. Problem ten dotyczy przede wszystkim młodych ludzi, którzy spędzają na Facebooku kilka godzin dziennie. Według naukowców nie mogą oni poradzić sobie z rosnącym zaangażowaniem w to, co dzieje się aktualnie na Facebooku. Presja zalogowania się i sprawdzenia informacji dotyczących znajomych, obejrzenia ich najnowszych zdjęć oraz porównania wyników gier, czy testów, jest tak silna, że zapominają oni o innych aspektach życia.
+
+Serwis jest też krytykowany za przyczynianie się do gorszych wyników w nauce (w porównaniu z uczniami, którzy go nie używają) oraz za kształtowanie osobowości narcystycznej[27][28].
+
+Pliki cookies ładowane przez serwis zapamiętują wszystkie strony, które mają powiązanie z Facebookiem. W związku z czym czasami część życia prywatnego osób zarejestrowanych na Facebooku jest pod kontrolą, nawet po wylogowaniu[29].
+
+W Stanach Zjednoczonych Facebook został skazany na wypłatę 10 milionów dolarów na cele charytatywne za wykorzystywanie wizerunku użytkowników wbrew ich woli i wiedzy[30].
+
+Zmieniono także interfejs centrum aplikacji, w wyniku czego trudniej jest jednoznacznie określić jakie dane przekazujemy serwisowi oraz twórcy aplikacji podczas korzystania z danego programu lub gry[31].
+
+Serwis planuje także udostępnić reklamodawcom adresy e-mail oraz numery telefonów swoich użytkowników[32].
+
+Kontrowersje wzbudza także ilość danych które Facebook zbiera na temat osób z niego korzystających. Znana jest sytuacja, gdy Max Schrems – austriacki student prawa – wysłał do siedziby serwisu oficjalny list z prośbą o udostępnienie mu danych jakie zostały zgromadzone na jego temat, w czasie gdy posiadał konto na Facebooku. Prośba została rozpatrzona po myśli Schremsa i dostał on płytę CD ze wszystkimi informacjami na temat jego aktywności (np. posty na jego profilu, korespondencja ze znajomymi czy też linki które "polubił"). Niepokój Schremsa wzbudziło to, iż dane te były przechowywane na serwerach Facebooka, mimo że nie posiadał już on w nim konta[33]. Sprawą zainteresował się Irlandzki Komisarz Ochrony Danych Osobowych, który postanowił się przyjrzeć problemowi[34].
+
+Firma jest też posądzana o szpiegowanie użytkowników i wdrażanie nowych funkcji bez jakichkolwiek ostrzeżeń (czasami zdarza się że są jednocześnie domyślnie włączone)[35] i monitoring w zamian za dodatkowe możliwości[36][37].
+
+W 2012 roku Facebook organizował na próbie 700 tysięcy użytkowników, eksperyment psychologiczny, mający na celu stwierdzić czy da się manipulować uczuciami osób przez internet, zaś informacja o kontrowersyjnym eksperymencie wyszła na jaw w 2014[38].
+Plagiaty[edytuj | edytuj kod]
+
+19 lipca 2008 Facebook złożył wniosek do sądu w San José w Kalifornii o ukaranie studiVZ – niemieckojęzycznej platformy o podobnym charakterze, której zarzuca plagiat (kradzież własności intelektualnej). Paradoksalnie w innym procesie twórcy Facebooka zostali oskarżeni o to samo przez braci Camerona i Tylera Winklevossów, którym musieli wypłacić 65 mln dolarów odszkodowania[39][40].
+Film o Facebooku[edytuj | edytuj kod]
+
+W 2010 roku został nakręcony film obyczajowy The Social Network w reżyserii Davida Finchera opowiadający o powstaniu Facebooka wykonany na podstawie książki Bena Mezricha Miliarderzy z przypadku (ang. The Accidental Billionaires). Światowa premiera miała miejsce 24 września 2010. Film otrzymał wiele nagród, w tym trzy Oscary (za scenariusz adaptowany, montaż i muzykę) i cztery Złote Globy. Film nie przedstawia jednak prawdziwych scen z życia bohaterów ani nie ukazuje faktycznych relacji między nimi.
+Facebook dla programistów[edytuj | edytuj kod]
+
+Facebook dostarcza także API dla swojego portalu, dzięki czemu programiści mogą wykorzystywać funkcjonalności portalu w swoich aplikacjach. Dostępne są SDK dla wielu języków i platform:
+
+    Android
+    C#
+    iPhone
+    JavaScript
+    PHP
+    Python
+
+Dodatkowo, istnieje SDK dla języka C#, dzięki czemu możliwe jest pisanie aplikacji w tym języku dla różnych platform, które wspiera .NET Framework: Facebook C# SDK. Facebook udostępnia także LikeBoxy i inne pluginy, które można dodać do treści innych stron[41].
+Statystyki[edytuj | edytuj kod]
+
+Poniższa lista przedstawia listę stron na Facebooku o największej liczbie polubień.
+Stan na 2 maja 2014[42].
+Mj 	Nazwa strony 	Polubienia
+1. 	Facebook for Every Phone 	521 692 949
+2. 	Facebook 	161 827 868
+3. 	Cristiano Ronaldo 	102 673 969
+4. 	Shakira 	100 247 341
+5. 	Eminem 	91 896 244
+6. 	Vin Diesel 	91 498 284
+7. 	Coca-Cola 	89 869 563
+8. 	FC Barcelona 	82 127 459
+9. 	Rihanna 	81 553 866
+10. 	Real Madrid C.F. 	81 317 521
+11. 	YouTube 	80 638 732
+12. 	Leo Messi 	75 815 603
+13. 	Michael Jackson 	75 222 640
+14. 	Candy Crush Saga 	75 102 287
+15. 	Bob Marley 	73 129 045
+16. 	Will Smith 	73 041 487
+17. 	Justin Bieber 	72 400 283
+18. 	Katy Perry 	71 969 639
+19. 	Harry Potter 	71 796 500
+20. 	Taylor Swift 	70 824 090
+Udziałowcy[edytuj | edytuj kod]
+Pracownicy
+
+    Mark Zuckerberg (24%)
+    Jeff Rothschild (0,8%)
+    David Ebersman (0,11%)
+    Mike Schroepfer (0,11%)
+    Sheryl Sandberg (0,1%)
+    Theodore Ullyot (0,1%)
+
+Fundusze inwestycyjne
+
+    Accel (10%)
+    Greylock (1,5%)
+    Meritech (1,5%)
+    Elevation Partners (1,5%)
+    WTI (0,5%)
+    Mark Andreessen (0,25%)
+    Andreessen Horowitz (0,18%)
+    General Atlantic (0,1%)
+    Kleiner Perkins (0,073%)
+
+Krytykanci i "wrogowie"
+
+    Cam Winklevoss (0,022%)
+    Tyler Winklevoss (0,022%)
+    Divya Narendra (0,022%)
+
+Aniołowie biznesu
+
+    Peter Thiel (3%)
+    Jim Breyer (1%)
+    Li Ka-Shing (0,8%)
+    Mark Pincus (0,5%)
+    Reid Hoffman (0,5%)
+    Samwer Brothers (0,1%)
+
+Byli pracownicy
+
+    Dustin Moskovitz (6%)
+    Eduardo Saverin (5%)
+    Sean Parker (4%)
+    Chris Hughes (1%)
+    Matt Cohler (0,8%)
+    Adam D'Angelo (0,8%)
+    Owen Van Natta (0,8%)
+    Justin Rosenstein (0,24%)
+    David Choe (0,2%)
+    Ezra Callahan (0,08%)
+
+Inwentorzy korporacyjni
+
+    Digital Sky (5%)
+    Microsoft (1,6%)
+    Goldman Sachs (1%)
+    Interpublic (0,25%)
+    T. Rowe Price (0,25%)
+    Fidelity Investments (0,18%)
+
+Źródło:[43]
+Przypisy
+
+    ↑ Alexa Top 500 Global Sites (ang.). www.alexa.com. [dostęp 2015-03-15].
+    ↑ Facebook Adopts D Language. 2013-10-16. [dostęp 2014-7-18].
+    ↑ a b c d e f ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 For the fiscal year ended December 31, 2014, FACEBOOK, INC. (ang.). Swiss Re. [dostęp 2015-04-22].
+    ↑ a b http://media2.pl/internet/96698-Facebookowi-nie-straszne-konta-widma.-Zuckerberg-ma-juz-miliard.html
+    ↑ http://www.theregister.co.uk/2012/11/09/facebook_open_sources_corona/
+    ↑ Facebook To Increase Staff By 50% This Year.
+    ↑ a b #785 Mark Zuckerberg – Forbes.com.
+    ↑ Gates już nie jest najbogatszym człowiekiem świata.
+    ↑ Tomasz Grynkiewicz: Facebook na giełdzie. Debiut, jakiego internet nie widział. Gazeta Wyborcza, 2012-05-18. [dostęp 2012-05-18].
+    ↑ Facebook jak "sklep z pustymi półkami" Interia.pl [Dostęp 2012-09-01]
+    ↑ Już nie tylko "mężczyzna" i "kobieta". Facebook pozwala wybrać inną płeć. TVN24 [Dostęp 17 lutego 2014]
+    ↑ Facebook Shuts Down Facebook Lite.
+    ↑ Adam Golański: HipHop for PHP: Facebook uwalnia translator PHP – C++ (pol.). W: Web Hosting [on-line]. 2010-02-02 20:54. [dostęp 2013-12-26].
+    ↑ Facebook Launches Facebook Platform; They are the Anti-MySpace.
+    ↑ Kiedyś było OpenID teraz jest Facebook AntyWeb [Dostęp 2012-09-01]
+    ↑ Facebook Chat Now Available Everywhere | Facebook.
+    ↑ Szpunar Wiktor: Oś czasu na Facebooku. 5 ważnych ustawień prywatności. (pol.). PCWorld. [dostęp 2011-12-26].
+    ↑ Przedstawiamy oś czasu. Facebook. [dostęp 2011-12-26].
+    ↑ Wojtek Onyśków: Facebook: Tworzenie krótkiego adresu profilu (pol.). W: Instalki.pl [on-line]. 31 Lipiec 2013 14:49. [dostęp 2013-07-31].
+    ↑ Facebook umożliwił administratorom zmianę adresu profilu (pol.). W: wirtualnemedia.pl [on-line]. [dostęp 2013-07-31].
+    ↑ Darmowy internet dzięki Facebook WiFi (pol.). [dostęp 2013-12-26].
+    ↑ Dawid Sych: [www.conowego.pl/aktualnosci/darmowy-internet-dla-posiadaczy-konta-na-facebooku-10404/#.UrwmYKpSaWU.facebook Darmowy Internet dla posiadaczy konta na Facebooku] (pol.). W: CoNowego.pl [on-line]. 03.10.2013 09:54. [dostęp 2013-12-26].
+    ↑ Jennifer Van Grove: Why Facebook is giving out free Wi-Fi for check-ins (ang.). October 2, 2013 1:00 PM PDT. [dostęp 2013-12-26].
+    ↑ Facebook Messenger 3.0, sempre più simile a WhatsApp (wł.). insidehardware.it. [dostęp 2014-02-22].
+    ↑ Facebook kupuje komunikator WhatsApp za 16 mld dolarów (pol.). forbes.pl. [dostęp 2014-02-22].
+    ↑ Uzależnienie od Facebooka – nowy niebezpieczny nałóg.
+    ↑ Kids Who Use Facebook Do Worse in School – TIME Healthland.
+    ↑ Sprawdź, czy jesteś uzależniony od Facebooka Fakt.pl [dostęp 2012-06-17].
+    ↑ Ethan A. Huff, NaturalNews.com: Facebook śledzi każdy twój ruch, nawet po wylogowaniu. 1.10.2011. [dostęp 3.10.2011].
+    ↑ Ugoda za „lubię to”. Facebook zapłaci 10 mln dol. na cele charytatywne. Gazeta Wyborcza [Dostęp 2012-06-17].
+    ↑ Facebook chce uśpić naszą czujność nowym ekranem autoryzacji aplikacji Antyweb [Dostęp 2012-09-01]
+    ↑ Reklamy targetowane na e-mail lub numer telefonu już niebawem na Facebooku Antyweb [Dostęp 2012-09-01]
+    ↑ Europa kontra Facebook Presseurop [Dostęp 2012-09-01]
+    ↑ Facebook narusza prywatność. Wyeliminuje błędy? Polskie Radio [Dostęp 2012-09-01]
+    ↑ Facebook wprowadza rozpoznawanie twarzy – Komputer światFacebook przeprasza za rozpoznawanie twarzy
+    ↑ Facebook podsłuchuje nasze rozmowy? – Przemysław Kreft – Komputer Świat
+    ↑ Aplikacja Facedeals. Ile dzieli Facebooka od Wielkiego Brata? – Michał Chrobot, Komputer Świat
+    ↑ Kontrowersyjny eksperyment Facebooka powiązany z amerykańskim wojskiem (pol.). Niebezpiecznik.pl, 2014-07-03, 18:39.
+    ↑ Winklevoss Twins Lose Legal War With Facebook. 11.04.2011. [dostęp 3.10.2011]./.
+    ↑ Bracia Winklevoss nie rezygnują z walki o Facebook. 21.04.2011. [dostęp 3.10.2011].
+    ↑ Facebook Developers
+    ↑ Facebbok Pages.
+    ↑ Who OWNS Facebook?. [dostęp 2 maja 2015].
+
+Linki zewnętrzne[edytuj | edytuj kod]
+Informacje w projektach siostrzanych
+Commons-logo.svg  Ilustracje i media w Wikimedia Commons
+Wikiquote-logo.svg  Cytaty w Wikicytatach
+
+    Strona główna Facebook
+    With friends like this... – The ugly truth about the founders of Facebook w The Guardian, 14.01.2008
+
+p • d • e
+Spółki notowane w indeksie NASDAQ-100 (Stan na 24 kwietnia 2015)
+
+21st Century Fox • Activision Blizzard • Adobe • Akamai • Alexion Pharmaceuticals • Altera • Amazon.com • American Airlines Group • Amgen • Analog Devices • Apple • Applied Materials • Autodesk • ADP • Avago • Baidu • Bed Bath & Beyond • Biogen Idec • Broadcom • C.H. Robinson • Catamaran • CA Technologies • Celgene • Cerner • Charter Communications • Check Point • Cisco • Citrix • Cognizant • Comcast • Costco • Dish • DirecTV • Discovery • Dollar Tree • eBay • Electronic Arts • Expeditors International • Express Scripts • Facebook • Fastenal • Fiserv • Garmin • Gilead Sciences • Google • Henry Schein • Illumina • Intel • Intuit • Intuitive Surgical • Keurig Green Mountain • KLA Tencor • Kraf Foods • Lam Research • Liberty Global • Liberty Interactive • Liberty Media • Linear Technology • Marriott • Mattel • Micron Technology • Microsoft • Mondelēz • Monster • Mylan • NetApp • Netflix • Nvidia • NXP • O'Reilly Automotive • Paccar • Paychex • Qualcomm • Regeneron • Ross Stores • SanDisk • SBA Communications • Seagate • Sigma-Aldrich • Sirius XM • Staples • Starbucks • Stericycle • Symantec • Tesla • Texas Instruments • The Priceline Group • Tractor Supply Company • TripAdvisor • Verisk • Vertex Pharmaceuticals • Viacom • VimpelCom • Vodafone • Walgreens Boots Alliance • Western Digital • Whole Foods Market • Wynn Resorts • Xilinx • Yahoo!
+	NASDAQ Logo.svg
+Źródło: „https://pl.wikipedia.org/w/index.php?title=Facebook&oldid=43607853”
+Kategorie:
+
+    Przedsiębiorstwa z siedzibą w Kalifornii
+    Facebook
+    Serwisy społecznościowe
+    Amerykańskie strony internetowe
+
+Ukryta kategoria:
+
+    Artykuły wymagające aktualizacji
+
+Menu nawigacyjne
+Narzędzia osobiste
+
+    Utwórz konto
+    Zaloguj się
+
+Przestrzenie nazw
+
+    Artykuł
+    Dyskusja
+
+Warianty
+
+Wyświetleń
+
+    Czytaj
+    Edytuj
+    Edytuj kod źródłowy
+    Historia i autorzy
+
+Więcej
+
+Szukaj
+Nawigacja
+
+    Strona główna
+    Losuj artykuł
+    Kategorie artykułów
+    Najlepsze artykuły
+    Zgłoś błąd
+    Zgłoś błąd w pliku
+    Częste pytania (FAQ)
+
+Dla czytelników
+
+    Wyszukaj informacje
+    Użyj informacji
+    O Wikipedii
+    Kontakt
+    Wspomóż Wikipedię
+
+Dla wikipedystów
+
+    Pierwsze kroki
+    Centrum pomocy
+    Zasady edytowania
+    Kawiarenka
+    Ogłoszenia
+    Ostatnie zmiany
+
+Narzędzia
+
+    Linkujące
+    Zmiany w linkowanych
+    Prześlij plik
+    Strony specjalne
+    Link do tej wersji
+    Informacje o tej stronie
+    Element Wikidanych
+    Cytowanie tego artykułu
+
+Drukuj lub eksportuj
+
+    Utwórz książkę
+    Pobierz jako PDF
+    Wersja do druku
+
+W innych językach
+
+Edytuj linki
+
+    Tę stronę ostatnio zmodyfikowano o 21:54, 14 wrz 2015.
+    Tekst udostępniany na licencji Creative Commons: uznanie autorstwa, na tych samych warunkach, z możliwością obowiązywania dodatkowych ograniczeń. Zobacz szczegółowe informacje o warunkach korzystania.
+
+    Zasady zachowania poufności
+    O Wikipedii
+    Korzystasz z Wikipedii tylko na własną odpowiedzialność
+    Dla deweloperów
+    Wersja dla urządzeń mobilnych
+

@@ -1,0 +1,519 @@
+
+Facebook
+Från Wikipedia
+Hoppa till: navigering, sök
+Facebook
+Facebooks logotyp
+
+Webbplats
+Typ av webbplats 	community
+Språk 	över 71, ursprungligen engelska (se lista)
+Ägare 	Facebook, Inc.
+Historik
+Skapare 	Mark Zuckerberg
+Chris Hughes
+Dustin Moskovitz
+Eduardo Saverin
+Startad 	4 februari 2004
+Statistik
+Alexa-ranking 	2
+(13 september 2011)[1]
+Kommersiell 	ja
+Övrigt
+Registrering 	Krävs, dock inte för att titta på vissa presentationer
+Programspråk 	C++, PHP och programspråket D [2]
+Länk
+Status 	online
+
+
+Facebook är ett socialt medium eller en social nätverkstjänst som grundades i februari 2004 och drivs och ägs av Facebook, Inc.[3] I mars 2013 hade Facebook mer än 1,1 miljard aktiva användare.[4] Användarna kan skapa en personlig profil, lägga till andra användare som vänner och utbyta meddelanden, samt få automatiska meddelanden när någon postar meddelanden eller media på deras profil. Dessutom kan användare ansluta sig till intressegrupper, som exempelvis arbetsplats, skola eller universitet. Facebook har fått sitt namn efter de fotokataloger som i USA delas ut till studenter av universitetens administration, vars syfte är att hjälpa studenterna att lära känna varandra bättre.
+
+Facebook grundades av Mark Zuckerberg tillsammans med hans college-rumskamrater och studievänner Eduardo Saverin, Dustin Moskovitz och Chris Hughes.[5] Till en början begränsades registreringen på webbplatsen till endast Harvardstudenter, men utökades senare till andra universitet i Bostonområdet, Ivy League-universiteten och Stanford University. Gradvis öppnades webbplatsen för studenter vid andra universitet i USA och Kanada, high school-studenter, och slutligen till allmänheten och senare resten av världen.
+
+Den 20 januari 2009 rankade Compete.com Facebook som den mest använda sociala nättjänsten i hela världen i antalet aktiva användare per månad, med Myspace som nummer 2. Entertainment Weekly la den på sin lista över det bästa från 2000-talets första årtionde med kommentaren: "Hur i all världen har vi spionerat på våra ex, kommit ihåg våra medarbetares födelsedagar, stört våra vänner och spelat konstiga spel innan Facebook fanns?".[6] Quantcast uppskattar att Facebook har 135,1 miljoner unika besökare varje månad endast från USA.[7] Enligt Social Media Today uppskattas det i april 2010 att 41,6 procent av den amerikanska befolkningen har ett Facebook-konto.[8]
+
+Den 9 april 2012 meddelades det att Facebook köper Instagram för en miljard US-dollar, motsvarande cirka 6,7 miljarder kronor.[9]
+
+Facebook har blivit blockerat av regeringar i flera länder, bland annat Pakistan, Syrien, Kina, Vietnam, Iran och Nordkorea.[källa behövs]
+
+Innehåll
+
+    1 Historia
+    2 Företaget
+        2.1 Ägarförhållanden
+        2.2 Börsnotering
+        2.3 Anläggningar
+    3 Utveckling
+        3.1 Förvärv
+        3.2 Språk
+    4 Försäljning
+    5 Grupper
+        5.1 Opinionsbildning på Facebook
+    6 Applikationer
+    7 Övrigt
+        7.1 Facerape
+        7.2 Brottsbekämpningsverktyg
+        7.3 Social Network
+        7.4 Försäljning av sidor
+    8 Kritik
+        8.1 Integritet och sekretess
+        8.2 Svårigheter att radera eget konto
+        8.3 Censur av innehåll
+        8.4 Smutskastning av Google
+        8.5 Brist på tillgänglighet
+    9 Referenser
+    10 Externa länkar
+
+Historia[redigera | redigera wikitext]
+Mark Zuckerberg skapade Facebook i sitt studentrum på Harvard.
+Facebooks äldre logotyp
+
+Mark Zuckerberg startade Facemash[10], föregångaren till Facebook, den 28 oktober 2003, medan han gick på Harvard som andraårsstudent. Enligt studenttidningen The Harvard Crimson kunde webbplatsen jämföras med Hot or Not. På webbplatsen användes fotografier från de nio studenthusen där två bilder ställdes bredvid varandra för att låta användaren jämföra vem som var "hetast". För att åstadkomma detta lyckades Zuckerberg hacka de skyddade områdena i Harvards datornät och kopierade studenthusens privata ID-bilder. Harvard hade vid den tiden inte en elevkatalog. Facemash lockade 450 besökare och 22 000 bildvisningar de första fyra timmarna.
+
+Länken till webbplatsen spred sig snabbt över hela Harvard, men lades sedan ner av skolans administration. Zuckerberg anklagades av administrationen för sekretessbrott, upphovsbrott, och kränkning av den personliga integriteten. Han riskerade relegering, men anklagelserna lades ner. Zuckerberg ägnade sommaren åt att bygga ett studiesocialt hjälpmedel för konsthistorieutbildningen genom att lägga upp 500 augusteiska bilder på en webbplats. Bredvid bilden fanns en liten bildkommentar. Han öppnade upp webbplatsen till sina klasskamrater, och folk började dela sina anteckningar.
+
+I januari 2004 började Zuckerberg skriva kod för en ny webbplats. Den 4 februari samma år lanserade han "Thefacebook", ursprungligen beläget på webbadressen "thefacebook.com". Sex dagar efter att webbplatsen lanserades anklagades Zuckerberg av de tre Harvardstudenterna Cameron Winklevoss, Tyler Winklevoss och Divya Narendra för att avsiktligt ha vilselett dem att tro att han skulle hjälpa dem att bygga ett socialt nätverk kallat HarvardConnection (sedermera ConnectU), medan han i stället tog deras idéer och skapade en konkurrent. De tre klagade till Harvard Crimson, och tidningen började göra en undersökning. De tre lämnade sedan in en stämningsansökan mot Zuckerberg.[11]
+
+Registreringen på webbplatsen var ursprungligen begränsade till endast studerande vid Harvard. Inom den första månaden var mer än hälften av studenterna vid Harvard registrerade på tjänsten.[12] Eduardo Saverin (ekonomi), Dustin Moskovitz (programmerare), Andrew McCollum (grafiker) och Chris Hughes hjälpte Zuckerberg att vidareutveckla webbplatsen. I mars 2004 utökade registreringsmöjligheterna till Stanford, Columbia och Yale.[13] Därefter öppnades det för övriga Ivy League-skolor, Boston University, New York University och MIT, för att sedan gradvis omfatta de flesta universitet i Kanada och USA.[14][15]
+
+Facebook bolagiserades under sommaren 2004. Företagaren Sean Parker, som tidigare hade rådgivit Zuckerberg, blev företagets VD.[16] I juni 2004 flyttade företaget till Palo Alto i Kalifornien. Den fick sin första investering senare samma månad från PayPalgrundaren Peter Thiel.[17] Företaget tog bort "the" från sitt namn efter att man anskaffat sig domännamnet "facebook.com" 2005 för 200 000 USD.[18]
+
+Facebook lanserade en high school-version i september 2005, vilket Zuckerberg ansåg vara det mest logiska steget i utvecklingen. Detta kom senare att vidareutvecklas till att företagsanställda i flera stora företag, däribland Apple och Microsoft, fick chansen att registrera sig.[19] Den 26 september 2006 öppnades Facebook för alla personer som är över 13 år och har en giltig e-postadress.[20]
+
+Den 24 oktober 2007 meddelade Microsoft att man hade köpt 1,6 procent av Facebook för 240 miljoner USD. Detta gjorde att bolaget värderades till motsvarande 15 miljarder USD. Med Microsofts köp ingick även rättigheterna att annonsera internationellt på Facebook. I oktober 2008 meddelade Facebook att deras internationella huvudkontor skulle ligga i Dublin i Irland. I september 2009 sades det för första gången att Facebook hade ett positivt kassaflöde.[21] I november 2010 listades företaget på SecondMarket, och Facebooks värde uppgavs som 41 miljarder USD. Detta gjorde att de överträffade eBay och det blev det tredje största webbaserade företaget i USA efter Google och Amazon.[22] Facebook har identifierats som en möjlig kandidat för en börslistning senast 2013.[23]
+
+Trafiken till Facebook har ökat stadigt efter 2009. Fler människor besökte Facebook än Google den 13 mars 2010 i USA.[24] Den 22 september 2011 inleddes Facebook ett samarbete med Spotify som innebär att om en användare har kopplat sitt konto till Facebook kan användarna lyssna på låtarna direkt i Facebook och låtarna som användarna lyssnar på visas även i loggen. Samma dag berättades också att användarna kommer lättare få tillgång till tidigare inlägg och kunna lägga till äldre händelser genom en "tidslinje".[25]
+Företaget[redigera | redigera wikitext]
+Facebook, Inc.
+Typ 	Publikt aktiebolag
+NYSE: FB
+Huvudkontor 	USA Menlo Park, CA, US
+Nyckelpersoner 	Mark Zuckerberg
+Styrelseordförande Vd
+Antal anställda 	4 619 - December 2012
+Ekonomi
+Omsättning 	▲ $ 5,089 miljarder
+Rörelseresultat 	▲ $ 538 miljoner
+Vinst efter skatt 	▲ $ 53 miljoner
+Tillgångar 	▲ $ 15,103 miljarder
+Eget kapital 	▲ $ 11,755 miljarder
+Övrigt
+Fotnoter 	Siffror från 2012 års bokslut.[26]
+Entrén till Facebooks nuvarande huvudkontor i Stanford Research Park, Palo Alto, Kalifornien.
+Chris Hughes
+Dustin Moskovitz
+Sean Parker
+Ägarförhållanden[redigera | redigera wikitext]
+
+De största aktieägarna av Facebook är[när?] Mark Zuckerberg 24 procent, Accel Partners 10 procent, Digital Sky Technologies 10 procent, Dustin Moskovitz 6 procent, Eduardo Saverin 5 procent, Sean Parker 4 procent och Peter Thiel 3 procent. Adam D'Angelo, CTO och vän till Zuckerberg, avgick i maj 2008. Rapporter hävdade att han och Zuckerberg började gräla och att han inte längre var intresserad av något delägarskap i bolaget.
+
+Microsoft är Facebooks exklusiva partner för hostning av bannerannonsering. Enligt internetmarknadsundersökningsföretaget comScore samlar Facebook in lika mycket data från sina besökare som Google och Microsoft, men betydligt mindre än Yahoo.[27] Under 2010 började Facebooks säkerhetsgrupp att arbeta för att minska riskerna för att användarnas privatadata ska läcka ut. Den 6 november 2007 lanserade Facebook Facebook Beacon, vilket var ett försök att visa reklam baserat på vad en användares vänner har gjort för inköp. Facebook Beacon blev dock ingen succé.
+
+Facebook har i regel en lägre klickfrekvens ("CTR") för annonser än de flesta större webbplatser. För bannerreklam har Facebook en femtedel av klickfrekvensen jämfört med webben som helhet.[28] Detta innebär att en mindre andel av Facebooks användare klickar på annonser än på många andra stora webbplatser. Medan till exempel Google-användare klickar på den första annonsen för sökresultaten i genomsnitt 8 procent av tiden (80 000 klick per miljon sökningar),[29] så klickar Facebook-användare på annonser i genomsnitt 0,04 procent av tiden (400 klick per miljon sidor).[30] Att skräddarsy annonser och reklam för att tjäna pengar är vanligt på Facebook.
+
+Sarah Smith, som var Facebooks Online Sales Operations Manager, har bekräftat att framgångsrika reklamkampanjer kan ha klickfrekvenser så låg som 0,05 procent till 0,04 procent, och att CTR för annonser brukar falla inom två veckor.[31] Det konkurrerande sociala nätverket Myspaces CTR är ungefär 0,1 procent, vilket är 2,5 gånger bättre än Facebooks men fortfarande låg jämfört med många andra webbplatser. Facebooks låga CTR kan kanske förklaras med att Facebooks användare är mer tekniskt kunniga och därför använder annonsblockeringsprogram för att dölja annonser. Användarna är yngre och är därför bättre på att ignorera reklambudskap. Det går även att jämföra med Myspace där användarena tillbringar mer tid att bläddra igenom innehållet medan man på Facebook tillbringar sin tid med att kommunicera med vänner, och därav inte lägger sin tid på att uppmärksamma reklamen.[32]
+Börsnotering[redigera | redigera wikitext]
+
+Facebook börsnoterades i maj 2012 på Nasdaq. De närmaste dagarna efter introduktionen föll aktien och många handlare upplevde tekniska problem som gjorde att de av misstag köpte fler aktier än avsett, vilket när de sedan sålde bidragit till kursfallet. Flera stämningar har riktats mot Facebook, Nasdaq och Morgan Stanley[33] och börsnoteringen ska utredas av den amerikanska finansinspektionen.[34]
+Anläggningar[redigera | redigera wikitext]
+
+Ett skräddarsytt datacenter med 38 procent lägre strömförbrukning jämfört med befintliga datacenter öppnades i april 2011 i Prineville, Oregon.[35]
+
+I Luleå ska 3 stycken serverhallar byggas[36] på Porsön enligt detaljplanen.[35][37] Första serverhallen tas i bruk i slutet av 2012.[38] Varje byggnad blir 300 x 100 meter vilket innebär en totalyta på cirka 90 000 m².[35][37] 30 stycken dieselaggregat på 8 MW per styck ska hantera eventuella elavbrott. Stora bränslecisterner ska grävas ned i marken på området.[35][37] Elförbrukningen beräknas till 1,70 * 1015 joule per år (473 * 106 kWh)[35] Dieselaggregaten ska provköras 1-2 timmar varje dag vilket kräver tillstånd enligt miljöbalken för den typen av bränslehantering, säger miljöskyddsenheten vid länsstyrelsen i Norrbotten till TT.[35] Ett naturskyddsområde finns i närheten. Driftbuller skall isoleras för att undvika störning för de boende i närheten. Varmluften från verksamheten förväntas påverka temperaturen runt serverhallarna med 1 - 4 °C i närområdet. Miljöskyddsenheten funderar på vilka energihushållningskrav som ska ställas vid tillståndsprövning.[35] Luleå blev valt på grund av lättillgängliga högspänningsledningar.[39] och det kalla nordliga klimatet som innebär lägre kostnad för kylning.[35]
+
+Förutom anläggningen i Prineville har Facebook också del av 9 stycken andra serverhallar. [35] [37]
+Utveckling[redigera | redigera wikitext]
+"Top 10" länder som har flest Facebook-användare.[ifrågasatt uppgift]
+
+Mark Zuckerberg grundade Thefacebook i januari 2004, då han studerade på Harvard University. Då var sidan endast till för Harvard-studenter, och redan under första månaden fick sidan många användare. Facebook expanderade till MIT, Boston University och Boston College. I april öppnades sidan för fler skolor och under 2005 sålde AboutFace Corporation domänen facebook.com till Facebook för 200 000 USD. Den 2 september skapades en high school-version av Facebook och snart öppnades den även för skolor i Storbritannien, Australien, Mexiko och flera andra länder. I december samma år hade sidan mer än 11 miljoner användare världen över.[40]
+
+Expansionen fortsatte till nya länder och universitet och samarbeten med andra företag, såsom iTunes och Blogger, skapades. I slutet av 2006 öppnades Facebook för alla personer med en giltig e-postadress.[41] Efter detta växte Facebook än mer och det släpptes nya funktioner, såsom Facebook Marketplace för annonsmarknad och Facebook Platform som tillåter användare att utveckla egna applikationer till sidan.
+Förvärv[redigera | redigera wikitext]
+
+Den 15 november 2010 meddelade Facebook att man förvärvat fb.com från American Farm Bureau Federation för en hemlig summa pengar, men den 11 januari 2011 redovisade Farm Bureau domänförsäljningsintäkter för 8,5 miljoner dollar, vilket gör förvärvet av fb.com till en av de tio dyraste domänförsäljningarna någonsin.[42]
+Språk[redigera | redigera wikitext]
+
+Antalet språk på sidan har ökat i takt med att antalet medlemmar och i augusti 2011 hade Facebook över 70 språkalternativ, varav engelska, spanska, franska, portugisiska och kinesiska hade fler än ett språkval.[43]
+
+    Afrikaans
+    Albanska
+    Arabiska
+    Armeniska
+    Azerbajdzjanska
+    Baskiska
+    Bengali
+    Bosniska
+    Bulgariska
+    Danska
+    Engelska
+    Esperanto
+    Estniska
+    Filipino
+    Finska
+    Franska
+    Frisiska
+
+	
+
+    Färöiska
+    Galiciska
+    Georgiska
+    Grekiska
+    Hebreiska
+    Hindi
+    Indonesiska
+    Iriska
+    Isländska
+    Italienska
+    Japanska
+    Katalanska
+    Kinesiska
+    Koreanska
+    Kroatiska
+    Kurdiska
+    Kymriska
+
+	
+
+    Latin
+    Leet
+    Lettiska
+    Litauiska
+    Makedonska
+    Malajiska
+    Malayalam
+    Nederländska
+    Nepali
+    Norska
+    Nynorska
+    Persiska
+    Polska
+    Portugisiska
+    Punjabi
+    Rumänska
+    Ryska
+
+	
+
+    Serbiska
+    Slovakiska
+    Slovenska
+    Spanska
+    Svenska
+    Swahili
+    Thai
+    Tjeckiska
+    Tamil
+    Telugu
+    Turkiska
+    Tyska
+    Ukrainska
+    Ungerska
+    Vietnamesiska
+    Vitryska
+
+Försäljning[redigera | redigera wikitext]
+
+I kölvattnet av News Corps uppköp av Myspace florerade många rykten om att större mediaföretag var intresserade av att köpa Facebook. Mark Zuckerberg har förnekat alla försäljningsrykten. Han ska ha tackat nej till summor uppemot en miljard dollar av Yahoo! och 2,3 miljarder av Google.[44] I oktober 2007 såldes 1,6 % av Facebook till Microsoft för 240 miljoner USD.[45]
+Grupper[redigera | redigera wikitext]
+
+Facebook har många tusentals intressegrupper. Vem som helst kan skapa en egen grupp. Grupper skapas under olika kategorier. Förutom grupper under exempelvis geografi, utbildning och musik finns kategorin För skojs skull med underkategorier som Internskämt och Helt meningslöst.
+
+Den 10-åriga fotomodellen Thylane Blondeaus grupp stängdes ned av hennes mamma efter att den uppmärksammats negativt i media.[46]
+
+Det har förekommit att internettroll skapar grupper som de sedan byter namn på när gruppen kommit upp i ett betydande antal medlemmar. Under 2010 uppmärksammades detta i media då personer mot sin vilja hade hamnat i grupper som bytt namn till Vi som har sexfantasier om barn och Vi som haft sex med våra föräldrar.[47][48]
+Opinionsbildning på Facebook[redigera | redigera wikitext]
+
+En del av grupperna och deras medlemmar kämpar för olika frågor. I en del fall har grupperna lyckats påverka omvärlden.
+
+I november 2008 fick Facebook-gruppen "Petition to Get Rid of 'is' from Facebook Status Update!"[49] sin vilja igenom efter en tids kamp. Facebook uppmärksammade gruppens krav och tog bort ordet "is" (är) i statusuppdateringarna. Tidigare var man tvungen att ha en status som började med ens namn och ordet is, exempelvis Mark Zuckerberg is wanting ice cream (ungefärlig översättning: Mark Zuckerberg är viljande att ha glass). Även för icke engelskspråkiga användare innebar förändringen att man nu kunde skriva lite vad man ville som status. Innan ändringen kunde en svensk användares status vara i stil med Sven Johansson is surfar på Wikipedia.
+
+Några Facebook-grupper har varit en samlande röst för frågor som varit aktuella även utanför Facebook:
+
+    Den svenska gruppen "Vi som vill ha Magnum Double tillbaka!" ville att glassen Magnum Double skulle börja produceras igen av tillverkaren GB Glace. När gruppen hade över 16000 medlemmar så beslutade tillverkaren i mars 2011 att glassen "Magnum Double Caramel" skulle börja tillverkas igen.[50]
+    Den brittiska gruppen "Stop the Great HSBC Graduate Rip-Off", startad av den brittiska nationella studentkåren NUS, protesterade mot att den brittiska banken HSBC ville ta bort räntefria krediter upp till 1500 GBP för brittiska studenter. Efter kritik från kunder och beaktande av NUS kampanj på Facebook valde banken att återkalla sitt tidigare beslut.[51][52]
+    Den svenska gruppen "Öl till Magnus Sigge Svensson" skapades under oktober 2011 och ville att den svenske hockeyspelaren Magnus Svensson skulle få sitt 17 år försenade pris som bestod av en årsförbrukning öl. Han vann priset när han blev uttagen i världslaget i ishockey under de olympiska vinterspelen 1994. Ett par dagar efter att gruppen hade skapats och blivit uppmärksammad i kvällstidningen Aftonbladet så lovade Warsteiners svenska distributör Berntson Brands att priset skulle levereras till Svensson.[53][54][55]
+
+Facebook sägs även ha varit ett viktigt bidragande hjälpmedel för att organisera den Egyptiska revolutionen 2011. [källa behövs]
+Applikationer[redigera | redigera wikitext]
+
+Facebook har tusentals olika applikationer skapade av andra än Facebook, främst av företag. Bland dessa finns många spel. Genom applikationer har i vissa fall virus kunnat sprida sig i nätverket. En virusliknande bluff är "Dislike Button".[56][57]
+Övrigt[redigera | redigera wikitext]
+Facerape[redigera | redigera wikitext]
+
+Facerape innebär att någon utger sig för att vara den inloggade personen på en Facebook-profil och skriver eller ändrar saker på personens Facebook-konto. Ett facerape utförs oftast av någon i personens närhet som kommit över lösenordet eller använder samma dator där den utsatta är inloggad. Fenomenet är inte bundet till Facebook men fick sitt namn därifrån då användningen av Facebook är stor och facerapes är vanligt förekommande på sajten. Enligt en undersökning av Datainspektionen från 2007 hade hälften av de svenska ungdomarna någon gång utsatts för en facerape.[58]
+
+Några vanligt förekommande manipulationer är:
+
+    Inlägg som menas att vara lustiga författas och publiceras
+    Profilbilden byts ut
+    Förlöjligande eller förnedrande statusuppdateringar
+    Språkinställningen ändras
+    Vänner tas bort från vänlistan
+    Diverse massutskick av meddelanden eller masskommentering
+    Information på profilen ändras, till exempel politisk åskådning
+
+Fenomenet facerape blev mycket omskrivet och uppmärksammat i media under slutet av 2010 och början av 2011[källa behövs], vilket ledde till att diskussionen kring nätmobbning tog ny fart.
+
+Facebook har nyligen tagit fram nya funktioner som ska förbättra säkerheten för att kunna hindra att Facebook-konton används av andra personer. Man måste dock aktivera funktionerna själv. En av dem är att man kan få meddelanden via SMS eller e-post när en dator eller mobiltelefon loggar in på ens Facebook-konto. Även funktioner för att se när senaste inloggning skedde och funktioner för att logga ur andra datorer finns.
+
+Det finns numera speciella sidor där användare lägger upp sina bästa Facerapes som underhållning.
+Brottsbekämpningsverktyg[redigera | redigera wikitext]
+
+2007 hittades en brottsling via Facebook. En student vid universitetet Georgetown University i Washington DC i USA föll offer för ett överfall, men så småningom kunde man peka ut förövaren på Facebook.[59]
+Social Network[redigera | redigera wikitext]
+
+I oktober 2010 hade filmen Social Network premiär i USA. Filmen, som är regisserad av David Fincher, handlar om skapandet av Facebook och de juridiska turerna.
+Försäljning av sidor[redigera | redigera wikitext]
+
+En form av spam är sidor med bilder och texter av typen "Like if you hate cancer" eller "Comment and see what happens". Antalet gilla-markeringar, delningar och kommentarer ökar sidans ranking vilket gör det mer sannolikt att den ska visas högt i användares nyhetsflöde. När sidan byggt upp ett stort antal gilla-markeringar och kommentarer säljs den till någon som vill ha en hög ranking direkt.[60][61]
+Kritik[redigera | redigera wikitext]
+
+Bilder som laddas upp på Facebook ägs också av dem automatiskt. Det kan handla om privata bilder men även videoklipp som medlemmarna laddar upp. Dessa kan Facebook i sin tur använda precis som de behagar, exempelvis sälja i kommersiella syften.[källa behövs]
+Integritet och sekretess[redigera | redigera wikitext]
+
+Den information som Facebookanvändare fyller i sin profil används för att skräddarsy annonser. Detta kan tolkas som att Facebook säljer sina användares personuppgifter.[62]
+
+Facebook har även kritiserats för förändringar i sin sekretesspolicy.[63] Det har skapats tredjepartsverktyg som kan användas för att underlätta hantering av sekretessinställningar på Facebook.[64]
+Svårigheter att radera eget konto[redigera | redigera wikitext]
+
+Kritik har väckts mot Facebook eftersom det kan vara svårt att helt radera sin identitet och sina uppgifter från webbplatsen.[65] Borttagningsprocessen för ett konto tar 14 dagar att genomföra. Loggar man in på kontot under denna period så avbryts processen.
+
+Kritiker menar att en användare måste radera alla uppgifter och allt material från kontot manuellt, om den vill att allt ska raderas fullständigt från Facebooks servrar, innan en begäran för att bli borttagen ska skickas. I december 2009 lanserades webbtjänsten Web 2.0 Suicide Machine, som skapades för att ta hand om en fullständig radering av ett konto från Facebook och även andra webbplatser.[66] I början av år 2010 skickade Facebook ett brev till sidans upphovsmän och krävde bl.a. att möjligheten att logga in på ett Facebook-konto via webbtjänsten skulle försvinna.[67]
+Censur av innehåll[redigera | redigera wikitext]
+Flickan på loftet från 1905 av Anders Zorn (t v) och Världens ursprung från 1866 av Gustave Courbet (t h) 		Flickan på loftet från 1905 av Anders Zorn (t v) och Världens ursprung från 1866 av Gustave Courbet (t h)
+Flickan på loftet från 1905 av Anders Zorn (t v) och Världens ursprung från 1866 av Gustave Courbet (t h)
+
+Ett par fall har uppmärksammats i media där Facebook har censurerat innehåll. Den danske performancekonstnären Uwe Max Jensen hade lagt upp en bild av Anders Zorns målning Flickan på loftet på sin Facebooksida. Facebook menade att bilden stred mot företagets bildpolicy, tog bort den och blockerade Jensen från att ladda upp fler bilder.[68]
+
+"För oss som varumärke är det problematiskt på flera sätt. Det är en slags
+amerikansk kulturimperialism som exporterar en ganska annorlunda moral
+till Europa. [...] Vi kommer inte att ändra på vår marknadsföring. Bilderna
+är i enlighet med vad vi som varumärke står för och detta kommer säker
+att hända igen."
+—Micke Kazarnowicz, ansvarig för digital kommunikation för Björn Borg,
+kommentar i Dagens Media[69]
+
+En mans konto blockerades efter att mannen använt oljemålningen Världens ursprung från 1866 av Gustave Courbet som sin profilbild.[70]
+
+Bloggaren Micke Kazarnowicz fick sitt personliga konto fryst på grund av en bild av två nakna män som lagts upp på den officiella Facebook-sidan för klädmärket Björn Borg. Bilden, som är tagen av danske Jacob Mohr Hansen, utgör enligt Kazarnowicz en del av en kampanj "Swedish Exports" för Björn Borgs underkläder. För att åter få tillgång till sitt konto var Kazarnowicz tvungen att lova att inte ladda upp pornografiskt innehåll.[69]
+
+En bild på två män som kysser varandra togs bort från sidan, men Facebook menade i efterhand att det var ett misstag.[71]
+
+En PR-bild för filmen Attenberg där två kvinnors tungor möts förbjöds[72][73] och i augusti 2011 rapporterades att en satirteckning i danska dagstidningen Politiken av Dansk Folkepartis ledartrio utan kläder plockades bort.[74]
+
+Redaktören för tidningen Mobil Business fick sitt konto avstängt efter att ha lagt upp en bild på sin dotter.[75]
+
+Den tunisiska bloggaren Lina Ben Mhenni kritiserade Facebook för att under Tunisiska revolutionen 2010–2011 ha censurerat inlägg och lämnat ut uppgifter om sina användare.[76]
+
+Inför en utställning 2015 av Anders Zorns fotografier hade Fotografiska lagt ut bilder på sitt Facebookkonto, vilka raderades.[77]
+Smutskastning av Google[redigera | redigera wikitext]
+
+I maj 2011 framkom att Facebook hade anlitat PR-firman Burson-Marsteller för att förmå nyhetsföretag som Washington Post och USA Today att publicera negativa nyheter om Google bland annat med inriktning på eventuella brister i användarsäkerheten i Googles tjänster.[78]
+Brist på tillgänglighet[redigera | redigera wikitext]
+
+Företaget har kritiserats för sin brist på tillgänglighet.[79] Enligt e-handelslagen, en del av marknadsföringslagen, måste svenska bolag med verksamhet i Sverige uppge en adress och en e-postadress genom vilka man kan kontakta bolaget, men Facebook uppger inte detta på sin webbplats. I Sverige är Facebook registrerad hos Patent- och registreringsverket och Bolagsverket på Sveavägen 13 i Stockholm.[80]
+Referenser[redigera | redigera wikitext]
+
+    ^ http://www.alexa.com/siteinfo/facebook.com
+    ^ Bridgwater, Adrian (16 oktober 2013). ”Facebook Adopts D Language”. Dr Dobb's (San Francisco). http://www.drdobbs.com/mobile/facebook-adopts-d-language/240162694.
+    ^ Eldon, Eric. ”2008 growth puts Facebook in better position to make money”. VentureBeat. http://venturebeat.com/2008/12/18/2008-growth-puts-facebook-in-better-position-to-make-money/. Läst 18 december 2008.
+    ^ Facebook kvartalsrapport Q1 2013 Läst 2013-08-19
+    ^ Carlson, Nicholas. ”At Last – The Full Story Of How Facebook Was Founded”. Business Insider. http://www.businessinsider.com/how-facebook-was-founded-2010-3. Läst 5 mars 2010.
+    ^ Geier, Thom (11 december 2009). ”THE 100 Greatest Movies, TV Shows, Albums, Books, Characters, Scenes, Episodes, Songs, Dresses, Music Videos, and Trends that entertained us over the 10 Years”. Entertainment Weekly.
+    ^ ”facebook.com — Quantcast Audience Profile”. Quantcast. 27 oktober 2010. http://www.quantcast.com/facebook.com. Läst 7 november 2010.
+    ^ ”41.6% of the US Population Has a Facebook Account”. 8 augusti 2010. http://replay.waybackmachine.org/20100829045932/http://socialmediatoday.com/roywells1/158020/416-us-population-has-facebook-account. Läst 6 januari 2011.
+    ^ ”Facebook ska köpa Instagram”. SVT.se. 9 april 2012. http://svt.se/2.22584/1.2767078/facebook_ska_kopa_instagram. Läst 10 april 2012.
+    ^ http://www.thesundayindian.com/en/photo-albums/241/
+    ^ Stone, Brad (28 juni 2008). ”Judge Ends Facebook’s Feud With ConnectU”. The New York Times. http://bits.blogs.nytimes.com/2008/06/26/judge-ends-facebooks-feud-with-connectu/. Läst 15 mars 2011.
+    ^ Phillips, Sarah (25 juli 2007). ”A brief history of Facebook”. The Guardian. http://www.guardian.co.uk/technology/2007/jul/25/media.newmedia. Läst 15 mars 2011.
+    ^ ”Press Room”. Facebook. 1 januari 2007. http://www.facebook.com/press/info.php?timeline. Läst 15 mars 2011.
+    ^ Rosmarin, Rachel (11 september 2006). ”Open Facebook”. Forbes. http://www.forbes.com/2006/09/11/facebook-opens-up-cx_rr_0911facebook.html. Läst 15 mars 2011.
+    ^ ”Online network created by Harvard students flourishes”. The Tufts Daily. http://www.tuftsdaily.com/2.5541/1.600318. Läst 21 augusti 2009.
+    ^ Rosen, Ellen (26 maj 2005). ”Student's Start-Up Draws Attention and $13 Million”. The New York Times. http://www.nytimes.com/2005/05/26/business/26sbiz.html?_r=2&scp=1&sq. Läst 18 maj 2009.
+    ^ ”Why you should beware of Facebook”. The Age. 20 januari 2008. http://www.theage.com.au/news/general/beware-facebook/2008/01/18/1200620184398.html?page=fullpage.
+    ^ Williams, Chris (1 oktober 2007). ”Facebook wins Manx battle for face-book.com”. The Register. http://www.theregister.co.uk/2007/10/01/facebook_domain_dispute/.
+    ^ Lacy (12 september 2006). ”Facebook: Opening the Doors Wider”. BusinessWeek. http://www.businessweek.com/technology/content/sep2006/tc20060912_682123.htm?chan=top+news_top+news+index_technology.
+    ^ Abram, Carolyn (26 september 2006). ”Welcome to Facebook, everyone.”. Facebook. http://blog.facebook.com/blog.php?post=2210227130. Läst 8 mars 2008.
+    ^ ”Facebook 'cash flow positive,' signs 300M users”. CBC News. 16 september 2009. http://www.cbc.ca/technology/story/2009/09/16/tech-facebook-300-million-users.html. Läst 23 mars 2010.
+    ^ Womack, Brian (15 november 2010). ”Facebook Becomes Third Biggest US Web Company”. The Jakarta Globe. http://www.thejakartaglobe.com/technology/facebook-becomes-third-biggest-us-web-company/406751.
+    ^ ”6 Reasons Groupon's Rejection Of Google Is Great For The Universe”. Business Insider. 10 december 2010. http://www.businessinsider.com/google-groupon-deal. Läst 13 januari 2011.
+    ^ ”Facebook Reaches Top Ranking in US”. http://weblogs.hitwise.com/heather-dougherty/2010/03/facebook_reaches_top_ranking_i.html.
+    ^ ”Nya Facebook får tidslinje och Spotify-integrering”. nordichardware.se. http://www.nordichardware.se/nyheter/85-software/44224-nya-facebook-far-tidslinje-och-spotify-integrering.html. Läst 23 september 2011.
+    ^ ”Financial Statements for Facebook Inc”. Google Finance.com. http://www.google.com/finance?q=NYSE%3AACW&fstype=ii&ei=FMiVUODUA8mmwAOTCQ.
+    ^ Story, Louise (10 mars 2008). ”To Aim Ads, Web Is Keeping Closer Eye on You”. The New York Times. http://www.nytimes.com/2008/03/10/technology/10privacy.html. Läst 9 mars 2008.
+    ^ ”Facebook May Revamp Beacon”. Businessweek. 28 november 2007. http://www.businessweek.com/technology/content/nov2007/tc20071128_366355_page_2.htm. Läst 15 mars 2011.
+    ^ ”Google AdWords Click Through Rates Per Position”. AccuraCast. 9 oktober 2009. http://www.accuracast.com/seo-weekly/adwords-clickthrough.php.
+    ^ Denton, Nick (7 mars 2007). ”Facebook ‘consistently the worst performing site’”. Gawker. http://gawker.com/#!242234/advertising/facebook-consistently-the-worst-performing-site.
+    ^ ”Facebook Says Click Through Rates Do Not Match Those At Google”. TechPulse 360. 12 augusti 2009. http://techpulse360.com/2009/08/12/facebook-says-its-click-through-rates-do-not-match-those-at-google/. Läst 18 juli 2010.
+    ^ Leggatt, Helen (16 juli 2007). ”Advertisers disappointed with Facebook's CTR”. BizReport. http://www.bizreport.com/2007/07/advertisers_disappointed_with_facebooks_ctr.html. Läst 18 juli 2010.
+    ^ Svenska sparare kritiska mot Facebook-notering, SvD Näringsliv, 2012-05-23
+    ^ Stämningarna mot Facebook strömmar in, placera.nu, 2012-05-23
+    ^ [a b c d e f g h i] dn.se - Snart klart för Facebook i Luleå publicerad 16 maj 2011, läst 28 okt 2011
+    ^ nsd.se - Facebookbygge i Luleå - en världsnyhet
+    ^ [a b c d] Källa: Länsstyrelsen och Facebook (TT), via Dagens Nyheter 2011-05-16
+    ^ svtplay.se - Aktuellt-21, 27 okt 2011
+    ^ nsd.se - Därför fick Luleå serverhallarna
+    ^ Kornblum, Janet (8 januari 2006). ”Teens hang out at MySpace”. USA Today. http://www.usatoday.com/tech/news/2006-01-08-myspace-teens_x.htm?csp=34.
+    ^ Abram, Carolyn (26 september 2006). ”Welcome to Facebook, everyone.”. http://blog.facebook.com/blog.php?post=2210227130.
+    ^ ”FB.com acquired by Facebook”. NameMon News. January 11, 2011. http://namemon.com/news/1-latest-news/115-fbcom-acquired-by-facebook.
+    ^ Språk på Facebook
+    ^ Miller, Jason Lee (11 oktober 2006). ”First YouTube, Now Facebook? Rumors Circulate”. WebProNews. http://www.webpronews.com/topnews/2006/10/10/first-youtube-now-facebook-rumors-circulate.
+    ^ ”Facebook and Microsoft Expand Strategic Alliance”. Facebook Pressroom. 24 oktober 2007. http://www.facebook.com/press/releases.php?p=8084.
+    ^ 10-Year-Old Model Thylane Blondeau’s Mother Speaks, Closes Her Daughter’s Facebook Group
+    ^ Ström, Sofia (14 januari 2010). ””Jag blir så förbannad””. Aftonbladet. http://www.aftonbladet.se/nyheter/article6428781.ab.
+    ^ ”Falska facebookgrupper ny trend”. Dagens Nyheter. 14 januari 2010. http://www.dn.se/nyheter/sverige/falska-facebookgrupper-ny-trend.
+    ^ ”Petition to Get Rid of "is" from Facebook Status Update!”. Facebook. http://www.facebook.com/group.php?gid=2590361215.
+    ^ ”Vi som vill ha Magnum Double tillbaka!”. 30 mars 2011. Arkiverad från originalet den 2012-05-25. https://archive.is/W1uh.
+    ^ ”Bank lyssnar på Facebook-protest”. E24. 31 augusti 2007. http://www.e24.se/business/it-och-telekom/bank-lyssnar-pa-facebook-protest_10645.e24.
+    ^ ”Facebook forces HSBC retreat on student fees”. 31 augusti 2007. http://www.telegraph.co.uk/news/uknews/1561760/Facebook-forces-HSBC-retreat-on-student-fees.html. Läst 15 mars 2010.
+    ^ ”Öl till Magnus Sigge Svensson”. 5 oktober 2011. Arkiverad från originalet den 2012-09-25. https://archive.is/zYhG.
+    ^ ”"Hjälp mig få min öl – då blir magen glad"”. 5 oktober 2011. http://www.aftonbladet.se/sportbladet/hockey/article13725960.ab.
+    ^ ”Efter 17 år – nu får Magnus sin öl”. 5 oktober 2011. http://www.aftonbladet.se/sportbladet/hockey/article13730451.ab.
+    ^ ”TV4Nyheterna – Virus sprids på Facebook”. TV4 Play. 17 augusti 2010. http://www.tv4play.se/nyheter_och_debatt/tv4nyheterna?title=virus_sprids_pa_facebook&videoid=1044042. Läst 19 augusti 2010.
+    ^ ”Sophos flags Facebook 'dislike button' scam”. 16 augusti 2010. http://news.cnet.com/8301-13577_3-20013762-36.html.
+    ^ ”Hälften av unga har utsatts för facerape”. Datainspektionen. 28 januari 2011. http://www.datainspektionen.se/press/nyhetsarkiv/2011/halften-av-unga-har-utsatts-for-facerape/. Läst 24 februari 2012.
+    ^ ”Facebook används för att hitta brottslingar”. Svenska Dagbladet. 29 september 2007. http://www.svd.se/nyheter/utrikes/facebook-anvands-for-att-hitta-brottslingar_283201.svd. Läst 15 mars 2010.
+    ^ Yahoo News: Why 'Liking' Facebook virals makes scammers rich
+    ^ AOL UK: How 'Liking' a page on Facebook makes cash for spammers
+    ^ ”Facebook är inte "gratis"”. Expressen. 22 augusti 2007. http://www.expressen.se/nyheter/1.808398/facebook-ar-inte-gratis.
+    ^ ”Facebook’s Gone Rogue; It’s Time for an Open Alternative”. Wired. 10 maj 2010. http://www.wired.com/epicenter/2010/05/facebook-rogue/.
+    ^ ”Securing your Facebook privacy settings”. Macworld. 12 maj 2010. http://www.macworld.com/article/151437/2010/05/reclaimprivacy_facebook.html.
+    ^ ”With friends like this... – The ugly truth about the founders of Facebook”. 14 januari 2008. http://www.guardian.co.uk/technology/2008/jan/14/facebook.
+    ^ ”Så här försvinner du från Facebook och Twitter”. 26 januari 2010. http://pcforalla.idg.se/2.1054/1.288599/sa-har-forsvinner-du-fran-facebook-och-twitter.
+    ^ ”C&D letter from Facebook”. 6 januari 2010. http://suicidemachine.org/download/Web_2.0_Suicide_Machine.pdf.
+    ^ TT Spektra. "Zorn censureras på Facebook", DN, 23 mars 2011. Läst den 27 mars 2011.
+    ^ [a b] Erik Westerberg. "Björn Borg rasar mot Facebooks 'kulturimperialism'", Dagens Media, 29 mars 2011. Läst den 30 mars 2011.
+    ^ "Facebook account suspended over nude Courbet painting as profile picture", The Telegraph, 13 april 2011. Läst den 20 april 2011.
+    ^ "Facebook Deletes Gay Kiss Pic", The Advocate, 18 April 2011. Läst den 20 april 2011.
+    ^ "Kyssande tjejer tas bort från Facebook", Dagens Nyheter, 6 maj 2011. Läst den 8 maj 2011.
+    ^ "http://svt.se/2.27170/1.2415797/facebook_censurerar_kyss_-_igen Facebook censurerar kyss - igen", Kulturnyheterna, SVT, 5 maj 2011. Läst den 23 augusti 2011.
+    ^ "http://svt.se/2.27170/1.2508497/naken_satir_blev_for_mycket_for_facebook Naken satir blev för mycket för Facebook", Kulturnyheterna, SVT, 22 augusti 2011. Läst den 23 augusti 2011.
+    ^ Nanok Bie. "Lade upp bild på dotter - blev avstängd från Facebook", SVT:s webbplats, 29 augusti 2011. Läst den 4 september 2011.
+    ^ "Kulturnyheterna 12 mars 2012", SVT. Sett den 12 mars 2012.
+    ^ Anders Martinsson. "Facebook stoppar Zorn-bilder", Göteborgs-Posten, 3 juni 2015. Läst den 10 juli 2015.
+    ^ Clas Svahn. "Facebook betalade för att svärta ned Google", Dagens Nyheter, 12 maj 2011. Läst den 13 maj 2011.
+    ^ Nanok Bie. "Hallå Google och Facebook, var är ni?", SVT:s webbplats, 26 augusti 2011. Läst den 4 september 2011.
+    ^ ratsit.se, Läst 12 oktober 2011.
+
+Externa länkar[redigera | redigera wikitext]
+
+    Facebook
+    The Facebook Blog (engelska)
+    Facebook Newsroom (engelska)
+
+v • d • r
+Facebook
+Översikt 	
+Historia · Tidslinje · Förvärv · Kritik
+Webbsida 	
+Beacon · Features · Platform
+Grundare 	
+Mark Zuckerberg (24 %) · Chris Hughes (1 %) · Dustin Moskovitz (6 %) · Eduardo Saverin (5 %)
+Styrelse 	
+Mark Zuckerberg · Marc Andreessen · Jim Breyer · Don Graham · Peter Thiel
+Befattningshavare 	
+Nuvarande
+	
+Mark Zuckerberg (VD) · Chris Cox (produkt) · Sheryl Sandberg  · Elliot Schrage (Global Communications, Marketing och Public Policy) · Mike Schroepfer (Engineering) · Bret Taylor  · Ted Ullyot
+Föredetta
+	
+Sean Parker (ordförande) · Owen Van Natta  · Gideon Yu  · Adam D'Angelo  · Chris Kelly  · Matt Cohler
+Kända
+anställda 	
+Nuvarande
+	
+Andrei Alexandrescu  · Randi Zuckerberg
+Föredetta
+	
+Charlie Cheever  · Andrew McCollum
+Mjukvara 	
+HipHop for PHP · Apache Cassandra · Apache Thrift · Scribe · Apache Hive · FQL
+Övrigt 	
+Activity stream · f8 conference · Social graph · The Facebook Effect · The Accidental Billionaires · Social Network · Wirehog
+Hämtad från "https://sv.wikipedia.org/w/index.php?title=Facebook&oldid=30528945"
+Kategorier:
+
+    Bildanden 2004
+    Facebook
+    Censur
+    Sociala medier
+
+Dolda kategorier:
+
+    Alla artiklar som behöver källor
+    Alla artiklar som behöver enstaka källor
+    Artiklar som behöver enstaka källor 2012-09
+    Artiklar med när-mallar 2012-05
+    Samtliga artiklar med när-mallar
+    Artiklar med ifrågasatta uppgifter-samtliga
+    Artiklar med ifrågasatta uppgifter 2011-09
+    Artiklar som behöver enstaka källor 2011-10
+    Artiklar som behöver enstaka källor 2011-06
+    Artiklar som behöver enstaka källor 2011-08
+
+Navigeringsmeny
+Personliga verktyg
+
+    Skapa konto
+    Logga in
+
+Namnrymder
+
+    Artikel
+    Diskussion
+
+Varianter
+
+Visningar
+
+    Visa
+    Redigera
+    Redigera wikitext
+    Visa historik
+
+Mer
+
+Sök
+Navigering
+
+    Huvudsida
+    Skriv en ny artikel
+    Deltagarportalen
+    Bybrunnen
+    Senaste ändringarna
+    Slumpartikel
+    Ladda upp filer
+    Stöd Wikipedia
+    Kontakta Wikipedia
+    Hjälp
+
+Skriv ut/exportera
+
+    Skapa en bok
+    Ladda ner som PDF
+    Utskriftsvänlig version
+
+Verktyg
+
+    Sidor som länkar hit
+    Relaterade ändringar
+    Specialsidor
+    Permanent länk
+    Sidinformation
+    Wikidataobjekt
+    Citera denna sida
+
+Språk
+
+Redigera länkar
+
+    Sidan ändrades senast den 10 september 2015 kl. 18.52.
+    Wikipedias text är tillgänglig under licensen Creative Commons Erkännande-dela-lika 3.0 Unported. För bilder, se respektive bildsida (klicka på bilden). Se vidare Wikipedia:Upphovsrätt och användarvillkor.
+
+    Wikimedias integritetspolicy
+    Om Wikipedia
+    Förbehåll
+    Utvecklare
+    Mobilformat
+

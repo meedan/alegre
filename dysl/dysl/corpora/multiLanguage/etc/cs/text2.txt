@@ -1,0 +1,500 @@
+
+Facebook
+Z Wikipedie, otevřené encyklopedie
+Skočit na: Navigace, Hledání
+Facebook
+Logo Facebooku
+Typ 	akciová společnost
+Založeno 	Cambridge, Massachusetts
+(1. února 2004)[1]
+Ústředí 	Palo Alto, Kalifornie
+Dublin, Irsko (mezinárodní ústředí pro Evropu, Afriku a Střední východ)
+Klíčoví lidé 	Mark Zuckerberg, zakladatel a CEO
+Dustin Moskovitz, spoluzakladatel
+Eduardo Severin, spoluzakladatel
+Sheryl Sandbergová, COO
+Matt Cohler, Manažer pro strategii a obchod
+Chris Hughes, spoluzakladatel
+Hodnota 	$500 miliard USD (IPO 2012)
+Zaměstnanci 	10,082 (březen 2015)[2][3]
+Webová stránka 	www.facebook.com
+Typ stránky 	sociální síť
+Registrace 	povinná
+Dostupné jazyky 	84 jazyků včetně češtiny
+Spuštěno 	4. února 2004[4]
+Současný stav 	aktivní
+Napsán v 	C++, jazyk D [5]a PHP
+Ústředí Facebooku v Palo Alto v Californii
+Ikona Facebooku
+
+Facebook je rozsáhlý společenský webový systém sloužící hlavně k tvorbě sociálních sítí, komunikaci mezi uživateli, sdílení multimediálních dat, udržování vztahů a zábavě. Se svojí 1,5 miliardy aktivních uživatelů (únor 2015)[3] je jednou z největších společenských sítí na světě. Je plně přeložen do osmdesáti čtyř jazyků.[3] Jméno serveru vzniklo z papírových letáků zvaných Facebooks, které se rozdávají prvákům na amerických univerzitách. Tyto letáky slouží k bližšímu seznámení studentů mezi sebou.
+
+V roce 2010 vznikl americký film The Social Network, který pojednává o počátcích Facebooku.
+
+Obsah
+
+    1 Historie
+    2 Možnosti systému
+        2.1 Fotky (Photos)
+        2.2 Videa (Video)
+        2.3 Události (Events)
+        2.4 Zeď (Wall)
+        2.5 Dárky (Gifts)
+        2.6 Bazar (Marketplace)
+        2.7 Šťouchnutí (Poke)
+        2.8 Status bar
+        2.9 Facebook e-mail
+        2.10 Messenger
+        2.11 Možnosti pro firmy
+    3 Aplikace třetích stran
+        3.1 Další aplikace
+        3.2 Hry
+            3.2.1 Farm Heroes Saga
+            3.2.2 Friends For Sale
+            3.2.3 Mafia Wars
+            3.2.4 FarmVille
+    4 Technické detaily
+    5 Statistiky
+    6 Informační soukromí uživatelů Facebooku
+        6.1 Obvinění z nezákonného nakládání s osobními údaji uživatelů
+        6.2 Možnosti ochrany uživatelských dat a soukromí
+    7 Akcie Facebooku na burze
+    8 Využití v marketingu
+    9 Negativní důsledky a kritika
+    10 Odkazy
+        10.1 Reference
+        10.2 Externí odkazy
+
+Historie[editovat | editovat zdroj]
+
+Facebook byl založen Markem Zuckerbergem, bývalým studentem Harvardovy univerzity. Původně byl tento systém omezen jenom pro studenty Harvardovy univerzity, pod doménou thefacebook.com. Během dvou měsíců byl rozšířen na některé další, které patří do tzv. Ivy League, a již do konce roku byly připojeny další univerzity. Nakonec byl přístup otevřen pro všechny uživatele s univerzitní e-mailovou adresou (.edu, ac.uk, ...) nebo pro některé zahraniční schválené univerzity, v Česku k prvním otevřeným vysokým školám patřila Masarykova univerzita. Od 27. února 2006 se začaly do systému připojovat některé nadnárodní obchodní společnosti. Od 11. srpna 2006 se může dle licence používání připojit kdokoli starší 13 let. Uživatelé se v systému mohou připojovat k různým skupinám uživatelů, kteří působí například v rámci jedné školy, firmy nebo geografické lokace.
+
+Začátkem prosince 2007 se stal Facebook se svými 57 milióny aktivními členy stránkou s největším počtem uživatelů mezi studentskými weby. Od září 2006 do září 2007 se Facebook dostal z 60. na 7. pozici mezi nejnavštěvovanějšími stránkami světa. V USA je Facebook jedničkou pro on-line sdílení fotografií s více než 60 milióny nahraných fotografií týdně.[6] Společnost Facebook vydělává hlavně na reklamách na stránkách, které jsou přesně cíleny podle zájmů uživatele a jeho chování na stránkách samotného Facebooku. Hodnota společnosti byla v roce 2006 odhadována na 100 miliónů USD.[7] Podle serveru TechCrunch, mělo v roce 2005 na Facebooku profil 85 % studentů amerických univerzit, z nichž se 60 % přihlašovalo denně, 85 % alespoň týdně a 93 % alespoň jednou měsíčně.[8] V roce 2010 společnost získala v soutěži Křišťálová Lupa 1. místo v kategorii sociální sítě. Další ocenění získala za službu Facebook Chat (5. místo v kategorii komunikační technologie) a za mobilní verzi svých stránek (3. místo v kategorii mobilní služby).[9] V květnu 2012 byly akcie společnosti uvedeny na burzu NASDAQ, emisní cena akcií 38 USD ocenila celou společnost na 104 miliard USD. Navzdory očekávání však první den obchodování cena akcií nijak výrazně nevzrostla.[10]
+
+V roce 2014 koupil Facebook svého zřejmě největšího konkurenta v oblasti posílání zpráv, službu WhatsApp.[11] Facebook měl zájem i o službu Snapchat, ale ta se koupit nenechala.[12]
+
+Protože (nebo přestože) Facebook trvá na používání reálných jmen ve své síti, v roce 2014 se v New York Times objevila informace, že Facebook připravuje novou aplikaci, ve které by uživatelé svá skutečná jména používat nemuseli, není ale jasné, jestli se bude jednat o aplikaci propojenou s vlastním Facebookem.[13]
+
+V oblasti reklamních služeb Facebook spustil službu Atlas, jejíž základ koupil od Microsoftu a která umožňuje zobrazovat cílenou reklamu i na mobilních zařízeních a dokáže párovat informace o uživatelích i bez využití cookies.[14] Pro malé obchodníky spustil službu Local Awareness, která umožňuje nastavit vzdálenost od obchodu, ve které se budou zobrazovat reklamy na daný obchod, pokud se v této vzdálenosti bude uživatel mobilního zařízení nacházet a kromě vlastní reklamy bude možné nechat si i zobrazit si mapu cesty k tomuto obchodu.[15]
+Možnosti systému[editovat | editovat zdroj]
+Facebook and Firefox.jpg
+
+Po registraci v systému a odsouhlasení licence používání má uživatel možnost vyplnit svůj detailní profil a může se připojovat k různým skupinám uživatelů a získávat nové kontakty. Pokud jiný uživatel souhlasí s tím, že je váš přítel, můžete vidět také jeho profil. Někteří uživatelé ovšem svoje profily pomocí nastavení práv uživatelů zveřejňují i lidem, kteří jsou zapsáni pod stejnou skupinou nebo i celému internetu. Systém umožňuje komunikaci mezi uživateli pomocí zpráv, diskusních fór nebo diskusemi na uživatelských profilech (anglicky The Wall). Další funkce obstarávají externí i interní aplikace. Ty nejpoužívanější pocházejí přímo z dílen Facebooku. Facebook ale také poskytuje otevřené API, které může kdokoli využít a napsat si vlastní rozšiřující aplikaci. Hlavní síla Facebooku je v propojenosti jednotlivých komponent, většina textu může sloužit jako hypertextové odkazy k dalšímu obsahu.
+Fotky (Photos)[editovat | editovat zdroj]
+
+Tato aplikace, která byla vyvinuta přímo autory systému Facebook, umožňuje sdílet fotografie na sociální síti Facebook. Upload fotografií je řešen přes javový applet, statickou stránku s formulářem nebo pomocí externích aplikací. Jedna galerie fotografií může mít prozatím maximálně 200 fotografií, ale počet galerií na jednoho uživatele k březnu 2010 není omezen. Na fotografiích můžete jednoduše označovat své přátele, kteří pak dostanou oznámení, že se na dané fotce nacházejí.
+
+V roce 2015 Facebook připravoval software DeepFace, který dokáže na fotografiích správně rozpoznat tvář konkrétního člověka v 97,35 % případů (lidský mozek správně tvář rozpozná v 98 % případů) a i když Yann LeCun vysvětlil, že systém má být nasazen kvůli tomu, aby uživatel Facebooku byl informován o tom, že někdo na Facebook uložil fotografii s ním, a mohl se rozhodnout, zda ji chce smazat, současně ale Facebook bude mít informace o tom, kde se dotyčný pohyboval, pokud ho někdo vyfotí náhodou.[16]
+Videa (Video)[editovat | editovat zdroj]
+
+Tato aplikace je určená pro sdílení videa mezi přáteli. Jedno video, může mít maximálně 1024 MB a může být maximálně 45 minut dlouhé. Videa se dají jednoduše prohlížet, pomocí technologie Flash a podobně jako v aplikaci Fotografie, zde můžete označovat svoje přátele. V současné době se nejvíce využívá MP4
+Události (Events)[editovat | editovat zdroj]
+
+Tato aplikace je určena pro plánování událostí nebo jakýchkoliv akcí. Umožňuje nastavit mnoho informací o akci, zvát přátele na akce nebo akci zveřejnit. K akci lze přidávat další multimediální obsah.
+Zeď (Wall)[editovat | editovat zdroj]
+
+Každý uživatel má v profilu The Wall, na kterou mu ostatní uživatelé mohou psát vzkazy a zobrazují se zde v podstatě všechny děje v sociální síti Facebook. Na Wall se dá vkládat i další multimediální obsah. Od března 2012 je forma ZEĎ postupně všem uživatelům změněná na styl Timeline. Tento styl lépe zobrazuje vaší historii a důležité okamžiky.
+Dárky (Gifts)[editovat | editovat zdroj]
+
+Uživatelé si mezi sebou mohou posílat virtuální dárky, které představují vektorové obrázky. Jeden dárek stojí 1$.
+Bazar (Marketplace)[editovat | editovat zdroj]
+
+Bazar slouží k vkládání inzerátů, výměně a prodeji různých věcí. Tato služba je mezi uživateli velmi rozšířená.
+Šťouchnutí (Poke)[editovat | editovat zdroj]
+
+Některý uživatel chce čas od času pošťouchnout a navázat kontakt nebo touto metodou jen tak upozornit své přátele. ,,Šťouchnout" je mezi uživateli velmi oblíbená funkce, i když její princip je jednoduchý - jen oznamuje, že do vás váš přítel šťouchl a vy na to můžete reagovat. "Šťouchnutí" se interpretuje různě, především jako snaha o upoutání pozornosti, jeho další varianta je výzva k pohlavnímu styku. Existuje spousta podobných aplikací jako např. X Me dovolující libovolnou akci jako "Obejmutí" (Hug), "Polibek" (Kiss) nebo "Zlechtání" (Tickle). Další podobné aplikace dovolují uživatelům si mezi sebou posílat různé předměty jako různé druhy alkoholu (Booze Mail), rybičky v akváriu (My Aquarium) nebo třeba různé druhy mimozemšťanů (My Solar System).
+Status bar[editovat | editovat zdroj]
+
+Statusový řádek umožňuje uživateli vystavovat tzv. statusy, což jsou krátké texty vyjadřující zpravidla nálady, názory nebo stav uživatele, popřípadě jeho oblíbené vtipy, odkazy či hlášky.
+Facebook e-mail[editovat | editovat zdroj]
+
+Záměrem facebooku bylo poskytnout vlastní elektronickou poštu na doméně @facebook.com. Jelikož tato aktivita nevyšla, je doporučeno jako prevence před možným spamem (e-mailovou adresu lze snadno odhadnout) službu Používat Facebook e-mail deaktivovat.[17]
+Messenger[editovat | editovat zdroj]
+
+Messenger vznikl jako samostatná aplikace oddělením chatu z vlastní facebookové aplikace. V dubnu 2015 byla spuštěna webová verze Messengeru.[18]
+Možnosti pro firmy[editovat | editovat zdroj]
+
+Firmy mohou na Facebooku zakládat oficiální stránky ("Pages"), díky kterým mohou komunikovat se svými příznivci ("Likers", dříve "Fans"). Ke komerčním účelům je možné na Facebooku využívat také PPC reklamu - textové inzeráty doplněné o obrázek. Při dostatečně velké útratě mohou firmy na Facebooku nakupovat i bannery. Tento způsob inzerce je ale teprve na začátku, mediálním zastoupením pro Facebook je v ČR agentura Arbo Interactive.
+Aplikace třetích stran[editovat | editovat zdroj]
+Další aplikace[editovat | editovat zdroj]
+
+Portálových aplikací je nepřeberné množství:
+
+    Import RSS: import skladeb z Last.fm,
+    různé druhy testů,
+    mapka zemí, které daný uživatel navštívil,
+    přání k Vánocům,
+
+Hry[editovat | editovat zdroj]
+
+Hry jsou často založené na využití sociálnosti uživatelů. Provozovatelé her získávají nové uživatele tím, že své stávající uživatele uplácejí novými funkcemi nebo zpřístupněním skrytých funkcí za rozeslání pozvánek co možná největšímu počtu svých "přátel". To některé uživatele vede k zakládání vícero účtů, což se zase sám FB snaží popírat.
+Farm Heroes Saga[editovat | editovat zdroj]
+
+Farma heroes saga je jednou z nejpopulárnějších her na facebooku. Hra je velmi snadná. Hráč dostane pět životů v jednom čase a musí se s ním hrát. Hráči musí přepnout dlaždice a dělat zápasy dosažení zadaného cíle v každé úrovni. Jedno je důležité, že zde existuje určitý počet tahů v každé úrovni. Takže je potřeba dokončit své cíle v tomto počtu tahů.
+Friends For Sale[editovat | editovat zdroj]
+
+Friends For Sale má 3,7 milionu aktivních uživatelů.[19] U jejího zrodu stáli dva studenti, Alexander Le a Siqi Chen.[20] Během 3 měsíců se tato aplikace stala s 300% růstem 10. nejoblíbenější na celém Facebooku, v současnosti[zdroj?] má na 300 milionů zhlédnutých stránek měsíčně.[21]
+Mafia Wars[editovat | editovat zdroj]
+
+    Podrobnější informace naleznete v článku Mafia Wars.
+
+Aplikace Mafia Wars patří k velmi populárním hrám, zaměřeným na páchání virtuálních zločinů a neustálé rozšiřování své mafie. Není zpoplatněna přímo, její výdělky plynou z principu zpoplatňování prémiového obsahu pomocí služeb kreditních karet nebo služby PayPal.
+FarmVille[editovat | editovat zdroj]
+
+    Podrobnější informace naleznete v článku FarmVille.
+
+Aplikace FarmVille je flashová hra, kde se uživatel stará o virtuální farmu a pomocí virálního efektu spolupracuje se svými přáteli ve svém sousedství, aplikace také nabízí placený prémiový obsah.
+Technické detaily[editovat | editovat zdroj]
+
+Jádro Facebooku je postaveno na softwarovém balíku LAMP (Linux, Apache, MySQL, PHP). Systém ale používá mnoho dalších technologií jako AJAX, Java nebo Flash.
+
+Pro tvorbu aplikací pro Facebook byl vytvořen jazyk FBML (Facebook Markup Language), který je rozšířením HTML a zajišťuje konzistenci aplikací a bezpečnost. Je také možné používat upravený JavaScript pod názvem FBJS (Facebook JavaScript). Pro dotazy k databázi se používá FQL (Facebook Query Language). Společnost Facebook pomocí svých developerských stránek uvolňuje některé svoje technologie pod různými licencemi k volnému užití.
+Statistiky[editovat | editovat zdroj]
+Mark Zuckerberg, zakladatel a CEO
+
+    Aktivních uživatelů: 1,5 miliardy (2/2015)+[22]
+    Průměr nových uživatelů za den: 450 000
+    Zhlédnuté stránky: Přes 70 miliard za měsíc
+    Vyhledávání: Přes 500 triliónů za měsíc
+    Velikost indexu vyhledávání: 200 GB
+    Největší země: USA, Kanada, Spojené království
+
+    Další země seřazené podle počtu uživatelů: Austrálie, Turecko, Švédsko, Norsko, Jižní Afrika, Francie, Hong Kong.
+
+    Největší sociální sítě: Londýn, UK: 1 760 596 a Toronto, Kanada: 966 092
+    Pořadí v návštěvnosti všech webových aplikací na světě: 3.
+    Fotografií: 140 miliard fotografií (denně se nahraje na Facebook 200 milionů fotografií)[23]
+
+Podle studie doktorandů z Princetonu má Facebook mezi lety 2015 a 2017 přijít až o 80 % uživatelů,[24] výzkumníci své závěry o vzestupech a pádech sociálních sítí odvodili od případu sociální sítě MySpace a aplikovali na ně model šíření nakažlivých chorob. Data o vyhledávání názvu sociálních sítí čerpali ze služby Google Trends. Výsledky výzkumu byly po zveřejnění podrobeny kritice vzhledem k zjednodušení problému – významná část uživatelů při opakovaných návštěvách sociální sítě již adresu nemusí vyhledávat (pamatuje si ji sám uživatel či jeho webový prohlížeč), případně uživatel se k sociální síti připojuje pomocí aplikace na chytrém telefonu a tudíž název sítě prostřednictvím vyhledávače Google nehledá. Společnost Facebook na tuto analýzu zareagovala podobnou zprávou, kde pomocí počtu „lajků“ facebookových stránkách univerzit či dat z Google Scholar vyvodil, že Princetonu bude ubývat počet studentů, až univerzita zcela zanikne. Facebook dále poukázal na snižující se frekvenci vyhledávání slova „air“ (anglicky vzduch), z čehož po vzoru princetonské studie spočítal, že kolem roku 2060 na Zemi žádný vzduch nebude.[25][26]
+Informační soukromí uživatelů Facebooku[editovat | editovat zdroj]
+
+Problémy Facebooku vyplývají z koncentrace citlivých osobních dat a spousty aplikací, které k nim mají přístup. Aplikace může napsat kdokoli a poté data použít ke svým účelům. Facebook byl zakázán v některých pracovištích a školách pro sdílení nevhodného obsahu. Facebook je blokován například v Sýrii údajně z důvodu pomlouvání vládních autorit přes Facebook.[27] Facebook také nechtěně umožnil pomocí aplikace Beacon ostatním přátelům zjistit, co daný uživatel nakupuje na internetu.[28] Julian Assange tvrdí, že Facebook a Google mají tajné projekty na sledování.[29] Navíc jen podle lajků lze statisticky s vysokou pravděpodobností určit pohlaví, náboženské vyznání, rasu, atp.[30]
+
+Samotné podmínky užití Facebooku velmi zasahují do práv a soukromí uživatelů, neboť obsahují oprávnění na použití veškerého obsahu podléhajícího duševnímu vlastnictví, který uživatel zveřejní na Facebooku nebo v návaznosti na něj, souhlas s přenesením a zpracováním osobních údajů uživatele ve Spojených státech amerických, povolení použít jméno uživatele a profilové fotografie ve spojení s komerčním, sponzorovaným nebo souvisejícím obsahem a souhlas s případným odškodněním Facebooku za veškeré škody, ztráty a výdaje jakéhokoli druhu (včetně přiměřených poplatků a nákladů na právní zastoupení) pokud vůči Facebooku vznese žalobu sousející s kroky dotyčného uživatele.[31]
+Obvinění z nezákonného nakládání s osobními údaji uživatelů[editovat | editovat zdroj]
+
+Kanadská komise pro ochranu soukromí zjistila, že Facebook porušuje kanadské zákony o shromažďování osobních údajů, které si provozovatel ponechává i poté, co se uživatelé ze sítě odhlásí. Komise dala v červenci 2009 provozovatelům měsíční lhůtu na přijetí opatření ke změnám.[32]
+Možnosti ochrany uživatelských dat a soukromí[editovat | editovat zdroj]
+
+Existují rozšíření webových prohlížečů informující uživatele Facebooku o úniku osobních informací. [33]
+Akcie Facebooku na burze[editovat | editovat zdroj]
+Akcie FB - Cena od IPO do 2013[34]
+
+Akcie společnosti Facebook jsou kotovány na NASDAQ pod symbolem FB[35].
+
+IPO společnosti Facebook proběhlo dne 18.5.2012 a v jeho rámci umístila společnost na trhu 421 miliónů akcií za cenu 38 USD za akcii, což odpovídalo horní hranici stanoveného cenového rozpětí 34-38 USD. Dosažená cena IPO ocenila hodnotu celého Facebooku na 104 mld.USD, což učinilo tento úpis jedním z největších v historii technologického sektoru a suverénně největším v historii internetu.[36]
+
+Emise akcií ovšem nebyla zpočátku příliš úspěšná a cena klesla z 38 dolarů za kus až pod 20 dolarů[37]. Akcií se proto zbavila řada vedoucích členů společnosti[38] Koncem srpna 2013 přesáhla cena akcií kurz stanovený v IPO a ke konci roku 2013 se cena pohybuje na hranici 50 USD[34].
+Využití v marketingu[editovat | editovat zdroj]
+
+Facebook je možné, stejně jako jiné sociální sítě, využít marketingově, a to zejména pro virální marketing.
+
+Některé firmy nakupují fanoušky, aby vzbudila dojem většího zájmu vzhledem ke konkurenci, což má ale za následek, že nové příspěvky se zobrazí méně fanouškům firmy, kteří mají o odebírání novinek opravdu zájem.[39] Situace se zhoršila v prosinci 2013, kdy viditelnost příspěvků byla snížena na 4 % fanoušků a v únoru 2014 dále snížena na 2 % a pokud firmy nezaplatí, měla by jim být viditelnost příspěvků snížena až na nulu.[40] Aby byl zachován dojem fungování, přešel Facebook z metriky „lidé, kteří o tom mluví“ na jinou metriku.[40] Podle Valleywagu se tímto Facebooku povedl největší kanadský fór internetové éry, když přesvědčil nepočítaně celebrit, skupin, firem i značek, že jeho služby jsou nejlepší cestou k dosažení lidí a v okamžiku, kdy jsou na něm všichni doslova závislí, udělal z nich svá rukojmí.[40]
+Negativní důsledky a kritika[editovat | editovat zdroj]
+
+Lidé mohou získat psychickou závislost.[41] Dále může užívání prohlubovat reálnou osamělost.[42] Pokud se někdo rozhodne z Facebooku odejít, mohou u něho vzniknout abstinenční příznaky a nepochopení okolí, proč dotyčný nechce Facebook používat.[43]
+
+Facebook bývá také často kritizován pro nedostatečnou ochranu soukromí, které dle kritiků otevírá dveře kyberšikaně.
+
+V roce 2014 se na společnost Facebook snesla vlna kritiky kvůli sociologickému průzkumu, při němž bylo sledováno, jaké dopady mají negativní (či pozitivní) zprávy na náladu jedince. Ke zjištění bylo použito např. zpráv od falešných přátel. Kritika se snesla hlavně z důvodu neuvědomnění uživatelů na fakt, že se stali účastníky experimentu, kterých prý mohlo být až 700 000. Společnost se ale braní tím, že uživatelské podmínky podobné skutky umožňují.
+
+Facebook je kritizován to, že sleduje chování na internetu nejen registrovaných uživatelů, ale i neregistrovaných, sám Facebook sledování neregistrovaných uživatelů přiznává.[44] Kvůli sledování uživatelů včetně těch neregistrovaných byla na Facebook podána žaloba.[45] Sledování ne-uživatelů Facebooku bylo podle jeho vlastního prohlášení Facebooku způsobeno chybou a navíc je podle Facebooku šmírovací cookie zásadní bezpečnostní nástroj.[46] Protože otázka sledování uživatelů na Facebooku neregistrovaných byla otevřena už po druhé a zřejmě je pro Facebook výhodná, očekává se, že podobná chyba se vloudí do kódu Facebooku znovu.[46]
+
+Uživatel přihlášený k Facebooku je sledován pomocí cookie na všech stránkách, na kterých jsou umístěny jeho aktivní prvky, pokud se uživatel odhlásí a cookie si smaže, může ji Facebook snadno obnovit.[47] Uživatelé, kteří nejsou registrovaní na Facebooku, dostanou cookie přidělenou také, včetně těch uživatelů, kteří vyjádří zájem o nesledování.[47]
+Odkazy[editovat | editovat zdroj]
+Reference[editovat | editovat zdroj]
+
+    ↑ ELDON, Eric. 2008 growth puts Facebook in better position to make money. VentureBeat [online]. 2008-12-18 [cit. 2009-01-09]. Dostupné online.
+    ↑ Facebook. newsroom [online]. 2015-03-31. Dostupné online.
+    ↑ a b c Statistika [online]. Facebook, [cit. 2010-01-05]. Dostupné online. (anglicky)
+    ↑ At Last -- The Full Story Of How Facebook Was Founded
+    ↑ METZ, Cade Metz. The Next Big Programming Language You’ve Never Heard Of. Wired. 7. 7 2014. Dostupné online. (anglicky)
+    ↑ BEAVER, Doug. Facebook Photos Infrastructure [online]. Facebook, 2007-05-21 22:39, [cit. 2009-01-09]. Dostupné online. (anglicky)
+    ↑ ARRINGTON, Michael. Yahoo’s “Project Fraternity” Docs Leaked. TechCrunch [online]. 2006-12-12 [cit. 2009-01-09]. Dostupné online.
+    ↑ ARRINGTON, Michael. 85% of College Students use FaceBook. TechCrunch [online]. 2005-09-07 [cit. 2009-01-09]. Dostupné online.
+    ↑ VYLEŤAL, Martin. Křišťálová Lupa 2010 zná své vítěze. Lupa.cz [online]. 2010-11-26, roč. 12 [cit. 2010-12-07]. Dostupné online. ISSN 1213-0702.
+    ↑ tyden.cz: Akcie Facebooku rostly jen mírně, jejich debut byl zklamáním
+    ↑ SLÍŽEK, David. Facebook koupí WhatsApp, za soka Messengeru dá 16 miliard USD. Lupa.cz [online]. 20. 2. 2014 9:51. Dostupné online. ISSN 1213-0702.
+    ↑ BERÁNEK, Jan. NSA pomohla startupům k milionům. Anonymita láká, ale vzbuzuje otázky. Lupa.cz [online]. 3. 4. 2014 6:30. Dostupné online. ISSN 1213-0702.
+    ↑ SLÍŽEK, David. NYT: Facebook chystá aplikaci, ve které budou všichni anonymní. Lupa.cz [online]. 8. 10. 2014 9:47. Dostupné online. ISSN 1213-0702.
+    ↑ ČIČÁK, Matěj. Facebook připravuje Atlas: reklamní systém nezávislý na cookies. Živě [online]. 27. 9. 2014. Dostupné online.
+    ↑ BERÁNEK, Jan. Facebook rozjíždí lokálně cílené reklamy i s navigací přímo do obchodu. Lupa.cz [online]. 10. 10. 2014 11:12. Dostupné online. ISSN 1213-0702.
+    ↑ JEMELKA, Petr. Facebook vás pozná. Už brzy vás najde na každé fotce. aktualne.cz [online]. 15. 2. 2015 20:15. Dostupné online.
+    ↑ DOČEKAL, Daniel. Odstraňte svoji e-mailovou adresu na Facebooku, je tak jako tak zbytečná. Lupa.cz [online]. 30. 4. 2014 8:44. Dostupné online. ISSN 1213-0702.
+    ↑ SLÍŽEK, David. Facebook spustil samostatný webový Messenger, start poznamenal výpadek. Lupa.cz [online]. 9. 4. 2015 9:04. Dostupné online. ISSN 1213-0702.
+    ↑ statistika, facebook.com/applications/Friends_For_Sale!/
+    ↑ http://highscalability.com/friends-sale-architecture-300-million-page-view-month-facebook-ror-app
+    ↑ prezentace, highscalability.com
+    ↑ Statistika [online]. Facebook, [cit. 2013-01-21]. Dostupné online. (anglicky)
+    ↑ BERGEN, Jennifer. Facebook stores 10,000x more photos than the Library of Congress. Geek.com [online]. 20. září 2011 [cit. 2012-06-21]. Dostupné online.  (anglicky)
+    ↑ Facebook je nemocný, do pár let může skončit. Metro. leden 2014, čís. 15, s. 10. Dostupné online. ISSN 1211-7811.
+    ↑ SLÍŽEK, David. Za pár let všichni odejdou z Facebooku. Skončí Princeton. A dojde vzduch. Lupa.cz [online]. 2014-01-24 [cit. 2014-03-05]. Dostupné online.
+    ↑ LAUSCHMANN, Jindřich. Facebook kontruje satirou: Hrozí, že Princeton do pár let úplně zanikne. Tyinternety.cz [online]. 2014-01-24 [cit. 2014-03-05]. Dostupné online.
+    ↑ OWEIS, Khaled Yacoub. Syria blocks Facebook in Internet crackdown. Reuters [online]. 2007-11-23 16:54 EST [cit. 2009-01-09]. Dostupné online.
+    ↑ ZUCKERBERG, Mark. Thoughts on Beacon [online]. Facebook, 2007-12-05 16:00, [cit. 2009-01-09]. Dostupné online. (anglicky)
+    ↑ http://crypto-world.info/news/index.php?prispevek=20985&sekce=s - Assange říká, že Google a Facebook mají skryté projekty pro americký dohled
+    ↑ http://www.osel.cz/index.php?clanek=6780 - Podle Facebooku poznáš člověka …
+    ↑ JEŽEK, David. Odejděte z facebooku dokud není pozdě. CDR [online]. 2. 12. 2014. Dostupné online. ISSN 1213-2225.
+    ↑ Facebook má další problém. Už i Kanada ho obviňuje z porušování zákonů. iHNed.cz [online]. 2009-07-17 [cit. 2010-11-30]. Dostupné online. ISSN 1213-7693.
+    ↑ [Jan]. Jakou cenu máte pro Facebook?. lupa.cz [online]. 2012-07-12. Dostupné online.
+    ↑ a b Akcie Facebook (FB) online kurzy.cz
+    ↑ FACEBOOK (FB) NASDAQ (anglicky)
+    ↑ IPO akcie Facebook (FB) Zpravodajství o průběhu IPO na NASDAQ, porovnání IPO
+    ↑ Jak se vyvíjí Facebook na burze? Nesplnil očekávání Lupa.cz
+    ↑ .Akcií Facebooku se zbavili další lidé sedící v čele firmy Idnes.cz
+    ↑ Eliška Vyhnánková: Je to zlo. Prosím, nedělejte to. Lupa.cz [online]. 21. 3. 2014 6:30. Dostupné online. ISSN 1213-0702.
+    ↑ a b c DOČEKAL, Daniel. Facebookové stránky v původní podobě končí, viditelnost příspěvků klesla na 2 %. Lupa.cz [online]. 25. 3. 2014 6:30. Dostupné online. ISSN 1213-0702.
+    ↑ http://www.tyinternety.cz/2011/05/08/clanek/zavislost-na-facebooku-jako-psychicka-porucha/ - Závislost na Facebooku jako psychická porucha
+    ↑ http://www.national-geographic.cz/detail/facebook-jako-diagnoza-osamelosti-46036/ - Facebook jako diagnoza osamělosti
+    ↑ JEŽEK, David. Na co se připravit a co váš čeká po odchodu z facebooku. CDR [online]. 9. 12. 2014. Dostupné online. ISSN 1213-2225.
+    ↑ JEMELKA, Petr. Facebook špehuje i ty, kteří ho nepoužívají. aktualne.cz [online]. 1. 4. 2015 15:23. Dostupné online.
+    ↑ BERÁNEK, Jan. Ve Vídni začíná soud s Facebookem. Odpor vede Max Schrems. Lupa.cz [online]. 9. 4. 2015 14:35. Dostupné online. ISSN 1213-0702.
+    ↑ a b DOČEKAL, Daniel. Facebook: šmírování ne-uživatelů byla chyba, už jsme ji opravili. Lupa.cz [online]. 13. 4. 2015 10:00. Dostupné online. ISSN 1213-0702.
+    ↑ a b DOČEKAL, Daniel. Facebook porušuje zákony a šmíruje přihlášené, odhlášené i uživatele bez účtů. Lupa.cz [online]. 8. 4. 2015 6:30. Dostupné online. ISSN 1213-0702.
+
+Externí odkazy[editovat | editovat zdroj]
+
+    Logo Wikimedia Commons Obrázky, zvuky či videa k tématu Facebook ve Wikimedia Commons
+    Téma Facebook ve Wikicitátech
+    Kategorie Facebook ve Wikizprávách
+    Oficiální stránky
+    Facebook na Twitteru
+
+Citováno z „https://cs.wikipedia.org/w/index.php?title=Facebook&oldid=12887751“
+Kategorie:
+
+    Facebook
+    Internetové společnosti v USA
+    Sociální sítě
+    Internetová kultura
+    Internetové stránky
+    Software pro Windows Phone
+    Nadnárodní společnosti
+    Vzniklo 2004
+
+Skrytá kategorie:
+
+    Údržba:Články obsahující nedoložená tvrzení
+
+Navigační menu
+Osobní nástroje
+
+    Vytvoření účtu
+    Přihlášení
+
+Jmenné prostory
+
+    Článek
+    Diskuse
+
+Varianty
+
+Zobrazení
+
+    Číst
+    Editovat
+    Editovat zdroj
+    Zobrazit historii
+
+Další
+
+Hledání
+Navigace
+
+    Hlavní strana
+    Nejlepší články
+    Náhodný článek
+    Poslední změny
+    Komunitní portál
+    Pod lípou
+    Nápověda
+    Podpořte Wikipedii
+
+Tisk/export
+
+    Vytvořit knihu
+    Stáhnout jako PDF
+    Verze k tisku
+
+Nástroje
+
+    Odkazuje sem
+    Související změny
+    Načíst soubor
+    Speciální stránky
+    Trvalý odkaz
+    Informace o stránce
+    Položka Wikidat
+    Citovat stránku
+
+V jiných jazycích
+
+    Acèh
+    Afrikaans
+    Akan
+    Alemannisch
+    አማርኛ
+    العربية
+    مصرى
+    অসমীয়া
+    Asturianu
+    Авар
+    Azərbaycanca
+    Boarisch
+    Žemaitėška
+    Bikol Central
+    Беларуская
+    Беларуская (тарашкевіца)‎
+    Български
+    Bahasa Banjar
+    বাংলা
+    Brezhoneg
+    Bosanski
+    Català
+    Нохчийн
+    Cebuano
+    کوردیی ناوەندی
+    Чӑвашла
+    Cymraeg
+    Dansk
+    Deutsch
+    Zazaki
+    Ελληνικά
+    Emiliàn e rumagnòl
+    English
+    Esperanto
+    Español
+    Eesti
+    Euskara
+    Estremeñu
+    فارسی
+    Suomi
+    Føroyskt
+    Français
+    Frysk
+    Gaeilge
+    贛語
+    Galego
+    Avañe'ẽ
+    𐌲𐌿𐍄𐌹𐍃𐌺
+    ગુજરાતી
+    Gaelg
+    Hausa
+    עברית
+    हिन्दी
+    Hrvatski
+    Magyar
+    Հայերեն
+    Bahasa Indonesia
+    Interlingue
+    Ilokano
+    Íslenska
+    Italiano
+    日本語
+    Basa Jawa
+    ქართული
+    Qaraqalpaqsha
+    Taqbaylit
+    Қазақша
+    ភាសាខ្មែរ
+    ಕನ್ನಡ
+    한국어
+    Kurdî
+    Кыргызча
+    Latina
+    Ladino
+    Lëtzebuergesch
+    Limburgs
+    Lumbaart
+    ລາວ
+    Lietuvių
+    Latviešu
+    मैथिली
+    Malagasy
+    Олык марий
+    Baso Minangkabau
+    Македонски
+    മലയാളം
+    Монгол
+    मराठी
+    Bahasa Melayu
+    Malti
+    မြန်မာဘာသာ
+    Эрзянь
+    مازِرونی
+    Nāhuatl
+    Plattdüütsch
+    Nedersaksies
+    नेपाली
+    Nederlands
+    Norsk nynorsk
+    Norsk bokmål
+    Diné bizaad
+    ଓଡ଼ିଆ
+    Ирон
+    ਪੰਜਾਬੀ
+    Kapampangan
+    Papiamentu
+    Deitsch
+    Polski
+    Piemontèis
+    پنجابی
+    پښتو
+    Português
+    Română
+    Русский
+    Kinyarwanda
+    संस्कृतम्
+    Саха тыла
+    Sicilianu
+    Scots
+    Srpskohrvatski / српскохрватски
+    සිංහල
+    Simple English
+    Slovenčina
+    Slovenščina
+    Soomaaliga
+    Shqip
+    Српски / srpski
+    Seeltersk
+    Basa Sunda
+    Svenska
+    Kiswahili
+    Ślůnski
+    தமிழ்
+    తెలుగు
+    Тоҷикӣ
+    ไทย
+    Tagalog
+    Türkçe
+    Татарча/tatarça
+    Тыва дыл
+    ئۇيغۇرچە / Uyghurche
+    Українська
+    اردو
+    Oʻzbekcha/ўзбекча
+    Vèneto
+    Vepsän kel’
+    Tiếng Việt
+    West-Vlams
+    Walon
+    Winaray
+    მარგალური
+    ייִדיש
+    中文
+    文言
+    Bân-lâm-gú
+    粵語
+    IsiZulu
+
+Upravit odkazy
+
+    Stránka byla naposledy editována 13. 9. 2015 v 10:23.
+    Text je dostupný pod licencí Creative Commons Uveďte autora – Zachovejte licenci 3.0 Unported, případně za dalších podmínek. Podrobnosti naleznete na stránce Podmínky užití.
+
+    Ochrana osobních údajů
+    O Wikipedii
+    Vyloučení odpovědnosti
+    Vývojáři
+    Mobilní verze
+

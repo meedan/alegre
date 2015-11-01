@@ -1,0 +1,164 @@
+
+Facebook
+Fra Wikipedia, den frie encyklopedi
+Hopp til: navigasjon, søk
+	Denne artikkelen kan inneholde feil på grunn av informasjon som er utdatert. Du kan hjelpe med å oppdatere artikkelen. Artikkelens diskusjonsside kan inneholde mer informasjon.
+Type nettsted 	Nettsamfunn
+Tilgjengelige språk 	Afrikaans, albansk, arabisk, aserbajdsjansk, baskisk, bengali, bokmål, bosnisk, bulgarsk, dansk, engelsk, esperanto, estisk, filippinsk, finsk, fransk, færøysk, georgisk, gresk, hebraisk, hindi, indonesisk, irsk, italiensk, islandsk, japansk, katalansk, kinesisk, koreansk, kroatisk, latin, latvisk, leet, litauisk, makedonsk, malayalam, malayisk, maltesisk, nederlandsk, nepali, nynorsk, persisk, polsk, portugisisk, panjabi, rumensk, russisk, serbisk, slovakisk, slovensk, spansk, svensk, swahili, tamilsk, telugu, thai, tsjekkisk, tyrkisk, tysk, ukrainsk, ungarsk, vietnamesisk, walisisk
+Eier 	Mark Zuckerberg
+Inntekt 	USD 650 millioner (2009)[1]
+Programmeringsspråk 	C++, PHP og D[2]
+			
+Den amerikanske studenten Mark Zuckerberg, en av initiativtakerne til nettsamfunnet Facebook
+
+Facebook (NASDAQ: FB) er et nettsamfunn, opprinnelig laget for universitetsstudenter og -ansatte i USA. Siden har det spredt seg til andre bruksområder, inkludert venner, skoler og geografiske områder. Det er et sosialt nettverk der brukeren kommuniserer ved at en profil blir opprettet. Der kan han/hun skrive om seg selv, legge ut bilder samt snakke med andre. Nettsamfunnet har mer enn 600 millioner aktive brukere på verdensbasis, og anslåtte 1 500 000 norske brukere per 23. januar 2009.[3] I juni 2011 ble Facebook det første nettstedet på Internett med mer en 1 billion (1012) sidevisninger i måneden.[4]
+
+Brukere lager en profil som inneholder personlig informasjon, bilder og interesser. Deretter kan de opprette relasjoner til andre brukere, utveksle private og offentlige meldinger og knytte seg til forskjellige typer grupper. Tjenesten er reklamefinansiert, og gratis for brukeren.
+
+Facebook eies av Facebook Inc. registrert i California, USA.
+
+Innhold
+
+    1 Historie
+    2 Applikasjoner
+    3 Referanser
+    4 Eksterne lenker
+
+Historie
+
+Nettstedet ble startet av Mark Zuckerberg, med hjelp fra Andrew McCollum og Eduardo Saverin, den 4. februar 2004 under navnet «The Facebook». Zuckerberg var student ved Harvard University, og nettstedet var ment som et internt nettverk for universitetstudenter. De ville lage et verktøy som skulle gjøre det lettere for studenter å holde kontakten med hverandre.[5] Ordet Facebook stammer fra skolekataloger i USA, som deles ut til nye studenter på høgskoler og universiteter.
+
+Selv om det var registrert norske brukere før var det først 26. september 2006 at nettverket ble åpnet for alle med en gyldig e-postadresse. I Norge økte interessen rundt Facebook drastisk i første halvdel av 2007. Rundt årsskiftet var det registrert 3 000 norske brukere, i april samme året var tallet steget til et sted mellom 80 000 og 170 000.[6] Facebook har blitt en farsott i Norge, med cirka 576 000 medlemmer i Facebook-nettverket, ifølge en rapport som er gjengitt på NA24.[trenger referanse] USA er landet med flest brukere med sine 61 millioner brukere, fulgt av Storbritannia med ti millioner brukere og Canada med åtte millioner brukere.[trenger referanse] Danmark har flest brukere av landene i Skandinavia med 976 315 medlemmer.[trenger referanse] Tyskland følger etter med bare 186 123 brukere.[trenger referanse]
+
+I 2008 begynte man å oversette Facebook til andre språk, blant andre bokmål, nynorsk, spansk, dansk, tysk, fransk, nederlandsk og urdu. Oversettelsen skjer av brukerne selv, som stemmer for eller imot oversettelser.[7] Trafikken til Facebook økte stabilt etter 2009. Flere mennesker besøkte Facebook enn Google uken som avsluttet 13. mars 2010.[8]
+
+Nettstedet har blitt kritisert av Nasjonal sikkerhetsmyndighet, Jens Stoltenberg og George Bush: «Over to hundre tusen nordmenn utleverer personlig informasjon om seg selv på Facebook. Det øker faren for anslag som i ytterste konsekvens kan medføre tap av liv eller omfattende skade mot rikets sikkerhet»[9]
+Enkelte har også stilt seg kritisk til mulig misbruk av personlig informasjon på nettsamfunnet. Blant annet så hevdet den kjente internettaktivisten Julian Assange i 2012 at Facebook deler sensitive personopplysninger med amerikanske etterretningstjenester. Han omtalte videre Facebook som den «farligste spionmaskinen som noensinne er oppfunnet».[10]
+Applikasjoner
+
+Facebook lanserte Facebook Platform 24. mai 2007, et rammeverk som programvareutviklere kan bruke for å lage applikasjoner som interagerer med Facebook, og som for brukere tilsynelatende kjører på Facebooks egne servere. Samtidig lanserte de et eget markeringsspråk kalt Facebook Markup Language (FBML) som utviklere kan bruke for at deres applikasjoner kan kommunisere med Facebook-tjenester.
+
+Det finnes i dag tusenvis av Facebook-applikasjoner, bl.a. en rekke spill som spilles av millioner av brukere. Spillet FarmVille er den mest brukte applikasjonen per oktober 2010.
+Referanser
+
+    ^ «Facebook's revenue came in at $650 million last year, and is expected to reach $1.1 billion by the end of this year, Eric Eldon at Inside Facebook reports.»
+    ^ «The Next Big Programming Language You’ve Never Heard Of» (engelsk). Wired. 7. juli 2014. Besøkt 24. juli 2014.
+    ^ «1,5 millioner nordmenn på Facebook» (Norsk). VG. 23. januar 2009. Besøkt 23. januar 2009.
+    ^ Digi - Facebook med en billion sidevisninger i juni
+    ^ «Facebook - en introduksjon». knol.google.com. Besøkt 1. oktober 2008.
+    ^ «Facebook-feber» fra Aftenposten, publisert 26. april 2007
+    ^ «Facebook på norsk» (norsk). YEYE. Besøkt 25. april 2008.
+    ^ «Facebook Reaches Top Ranking in US»
+    ^ * Roar Thon, Seniorkonsulent, Nasjonal sikkerhetsmyndighet, www.nsm.stat.no (21. juli 2007). «Facebook truer rikets sikkerhet». Aftenposten. Besøkt 21. juli 2007. «INFORMASJON PÅ AVVEIE»
+    ^ TV2 Nyhetene – Assange: – Facebook er en farlig spionmaskin (31.1.2012)
+
+Eksterne lenker
+Commons-logo.svg 	Commons: Kategori:Facebook – bilder, video eller lyd
+
+    Facebook
+    «With friends like these ...». The Guardian. 11. januar 2008. Besøkt 28. januar 2010. «Now even if you don't buy the idea that Facebook is some kind of extension of the American imperialist programme crossed with a massive information-gathering tool, there is no way of denying that as a business, it is pure mega-genius.»
+    «Et ideologisk instrument». Klassekampen. 17. januar 2008. Besøkt 28. januar 2010.
+    «Facebook kan selge informasjonen din videre. So?». ROOT.no. 20. mai 2007. Besøkt 28. januar 2010. «En grei regel er at du aldri bør legge ut mer informasjon på disse community-sidene enn du ville skreket ut i en større forsamling av kjente og ukjente mennesker.»
+    «Hvordan tenke personvern i Facebook?». Datatilsynet. 7. mai 2007. Besøkt 28. januar 2010.
+    «Facebook ser deg – også utenfor Facebook», fra nrk.no 8. august 2014
+
+StubbDenne artikkelen er foreløpig kort eller mangelfull. Du kan hjelpe Wikipedia ved å utvide eller endre den.
+Hentet fra «https://no.wikipedia.org/w/index.php?title=Facebook&oldid=14394382»
+Kategorier:
+
+    Selskaper notert på NASDAQ
+    Nettsteder i USA
+    Facebook
+    Selskaper etablert i 2004
+    2004 i USA
+
+Skjulte kategorier:
+
+    Artikler med eksterne lenker på engelsk
+    Utdaterte artikler
+    Artikler som trenger referanser
+    Feilmerkede stubber
+    Usorterte stubber
+    Stubber 2015-09
+
+Navigasjonsmeny
+Personlig
+
+    Opprett konto
+    Logg inn
+
+Navnerom
+
+    Artikkel
+    Diskusjon
+
+Varianter
+
+Visninger
+
+    Les
+    Vis kilde
+    Vis historikk
+
+Mer
+
+Søk
+Navigasjon
+
+    Forside
+    Svaksynte
+    Utmerkede artikler
+    Hjelp
+    Siste endringer
+
+Prosjekt
+
+    Stilmanual
+    Skribentportal
+    Underprosjekter
+    Tinget
+    Torget
+    Tilfeldig side
+
+Wikipedia
+
+    Kontakt Wikipedia
+    Donasjoner
+    Wikimedia Norge
+
+Andre
+
+Eksterne søk
+
+Lager
+
+Verktøy
+
+    Lenker hit
+    Relaterte endringer
+    Spesialsider
+    Permanent lenke
+    Sideinformasjon
+    Wikidata-element
+    Siter denne siden
+
+Skriv ut / eksporter
+
+    Opprett en bok
+    Last ned som PDF
+    Utskriftsvennlig versjon
+
+På andre språk
+
+   
+Rediger lenker
+
+    Denne siden ble sist endret 10. sep. 2015 kl. 11:12.
+    Innholdet er tilgjengelig under Creative Commons-lisensen Navngivelse-Del på samme vilkår, men ytterligere betingelser kan gjelde. Se bruksvilkårene for detaljer.
+
+    Personvern
+    Om Wikipedia
+    Forbehold
+    Utviklere
+    Mobilvisning
+

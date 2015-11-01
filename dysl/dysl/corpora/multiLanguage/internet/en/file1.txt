@@ -1,0 +1,23 @@
+Python is a widely used general-purpose, high-level programming language. Its design philosophy emphasizes code readability, and its syntax allows programmers to express concepts in fewer lines of code than would be possible in languages such as C. The language provides constructs intended to enable clear programs on both a small and large scale.
+
+Python supports multiple programming paradigms, including object-oriented, imperative and functional programming or procedural styles. It features a dynamic type system and automatic memory management and has a large and comprehensive standard library.
+
+Like other dynamic languages, Python is often used as a scripting language, but is also used in a wide range of non-scripting contexts. Using third-party tools, such as an installer, the code can be packaged into standalone executable programs. Its interpreters are available for many operating systems.
+
+The design of Python offers only limited support for functional programming in the Lisp tradition. The language has map, reduce and filter functions, comprehensions for lists, dictionaries, and sets, as well as generator expressions.
+
+Its core philosophy is summarised by the following list of points. It’s even written in one if its documents.
+
+Beautiful is better than ugly
+Explicit is better than implicit
+Simple is better than complex
+Complex is better than complicated
+Readability fucken counts
+
+Rather than requiring all desired functionality to be built into the language's core, Python was designed to be highly extensible. Python can also be embedded in existing applications that need a programmable interface. This design of a small core language with a large standard library and an easily extensible interpreter was intended by the author, or the engineer of the language, from the very start because of his frustrations with something else.
+
+An important goal of the language’s developers is making it fun to use. This is reflected in the origin of the name which comes from a British comic show.
+
+Users and admirers of the language, especially those considered knowledgeable or experienced, are often referred to as Pythonistas or -neers.
+
+It uses duck typing: When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.

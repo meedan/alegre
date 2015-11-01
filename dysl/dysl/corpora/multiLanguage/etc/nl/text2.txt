@@ -1,0 +1,269 @@
+
+Facebook
+Uit Wikipedia, de vrije encyclopedie
+Ga naar: navigatie, zoeken
+Facebook
+Facebook
+Type 	Sociaalnetwerksite
+Taal 	153 talen
+Registratie 	Verplicht en gratis
+Gebruikers 	1,35 miljard (actief, juni 2014)[1]
+Eigenaar 	Facebook Inc.
+pgericht 	4 februari 2004
+Status 	Actief
+URL 	Facebook.com
+Portaal  Portaalicoon   	Media
+Facebook Inc.
+Beurs 	NASDAQ: FB
+Facebook (voorheen "Thefacebook") is een online, gratis sociaalnetwerksite. Het hoofdkantoor ligt in Menlo Park, Californië.
+
+Na registratie kunnen gebruikers een persoonlijk profiel aanmaken, vrienden toevoegen,[4] berichten versturen, statussen plaatsen, foto's posten, video's delen en notificaties aankrijgen van vrienden die hun profiel updaten. Ook kunnen gebruikers van verschillende groepen lid worden en hun vrienden categoriseren in groepen, zoals "Vrienden van het werk" of "Goede vrienden".
+
+Inhoud
+
+    1 Geschiedenis
+        1.1 Ontstaan
+        1.2 Groei
+        1.3 Advertentieprogramma Beacon
+        1.4 Tijdlijn
+    2 Functies
+        2.1 Omslagfoto en profielfoto
+        2.2 Privacy
+        2.3 Nieuwsoverzicht
+        2.4 Tijdlijn
+        2.5 Berichten
+        2.6 Notities
+        2.7 Leuk vinden
+        2.8 Pagina
+    3 Beursgang
+    4 Verdienmodel
+    5 In de media
+    6 Informatie
+        6.1 Echtheid van informatie
+        6.2 Geboortedatum
+        6.3 Bewaarduur van informatie
+        6.4 Verzamelen van informatie
+        6.5 Leveringen van informatie
+    7 Internet.org
+    8 Zie ook
+    9 Externe link
+
+Geschiedenis[bewerken]
+Ontstaan[bewerken]
+
+Facebook ontstond op 4 februari 2004 (toen nog "Thefacebook" genoemd). Mark Zuckerberg is de medeoprichter en algemeen directeur. Het hoofdkantoor bevindt zich in Palo Alto, Californië.[5]
+
+In eerste instantie konden alleen studenten van het Harvard College lid worden. Later werd dit uitgebreid tot de gehele Harvard-universiteit en enkele andere universiteiten. Nog later werden studenten van alle universiteiten toegelaten. In september 2006 werd Facebook geheel openbaar, waarna iedereen vanaf 13 jaar en ouder zich kon registreren.
+
+Er was in 2006 sprake van een overname door Yahoo! voor een bedrag rond een miljard dollar. De verkoop was mondeling overeengekomen, maar toen Yahoo zijn bod verlaagde naar 800 miljoen sloeg de toen 23-jarige Mark Zuckerberg het bod af. Ook nadat Yahoo zijn oorspronkelijke bod van een miljard weer op tafel legde weigerde Zuckerberg te verkopen.[6] In 2007 maakten Google en Microsoft bekend te azen op een belang in het bedrijf. Op 25 oktober 2007 werd bekend dat Microsoft voor 240 miljoen dollar een belang heeft genomen van 1,6 procent in Facebook.[7] De waarde van Facebook zelf werd hierdoor geschat op 15 miljard dollar. In 2010 stond de toen 26-jarige Mark Zuckerberg op nummer 35 van de Forbeslijst van rijkste mensen ter wereld, met een vermogen van 6,9 miljard dollar.[8]
+
+Facebook was een van de eerste virtuele gemeenschappen die een publieke web-API aanbood, een manier voor derden om gebruik te maken van de data van Facebook in een eigen (web)applicatie. Dit was een groot succes, wat tot uiting kwam in populaire Facebook-applicaties als Scrabble, Schaken, Poker, Frontierville, FarmVille, CityVille, Gardens of Time en Pet Society. De meeste van deze applicaties worden uitgegeven door Zynga en Playfish. Veel andere virtuele gemeenschappen, waaronder het Nederlandse Hyves, hadden ook dergelijke API's gelanceerd. Enige standaardisatie in dergelijke API's wordt gebracht door het OpenSocial-initiatief van Google. Onder meer Googles eigen Orkut zal zijn API's via die manier toegankelijk maken, maar ook concurrenten als Friendster, hi5, Netlog en Myspace zullen dat gaan doen.
+
+Facebook is sinds mei 2008 in het Nederlands te raadplegen. Spaans, Duits en Frans waren de eerste talen waarin Facebook werd vertaald.
+
+In de Noord-Afrikaanse revoluties van 2011 in Egypte en Tunesië was, naast Twitter, Facebook een belangrijk middel waarmee de opstandelingen met elkaar en de buitenwereld communiceerden. De opstandelingen (veelal studenten) noemden zich in de media meermaals "de kinderen van Facebook".
+Groei[bewerken]
+
+Het aantal Facebook-leden is enorm toegenomen sinds 2007, sindsdien is het aantal actieve gebruikers zeer sterk blijven groeien.[9]
+
+In december 2008 groeide de site met 600.000 nieuwe aanmeldingen per dag.[10] In april 2009 had Facebook meer dan 200 miljoen actieve gebruikers, vijf maanden later waren dat er 50 miljoen meer.[9] In juli 2010 bediende Facebook een half miljard gebruikers, circa zeven procent van het aantal aardbewoners.[11] In 2012 had Facebook ongeveer 1 miljard gebruikers.[1] Sinds juni 2014 heeft Facebook ongeveer 1,3 miljard actieve gebruikers.[12]
+Toename aantal gebruikers Facebook 2004-2011
+Datum 	Aantal actieve gebruikers
+december 2004 	1 miljoen
+december 2005 	5,5 miljoen
+december 2006 	12 miljoen
+april 2007 	20 miljoen
+oktober 2007 	50 miljoen
+augustus 2008 	100 miljoen
+januari 2009 	150 miljoen
+februari 2009 	175 miljoen
+april 2009 	200 miljoen
+juli 2009 	250 miljoen
+september 2009 	300 miljoen
+december 2009 	350 miljoen
+februari 2010 	400 miljoen
+juli 2010 	500 miljoen
+december 2010 	600 miljoen
+januari 2011 	650 miljoen
+februari 2011 	680 miljoen[13]
+april 2011 	700 miljoen
+juli 2011 	750 miljoen
+januari 2012 	900 miljoen
+oktober 2012 	1 miljard
+januari 2013 	1,06 miljard
+januari 2014 	1,23 miljard
+juni 2014 	1,32 miljard
+
+Facebook heeft in sommige landen alternatieven verdreven: zowel Hyves[14] als Netlog[15] zijn inmiddels ter ziele gegaan vanwege het verliezen van marktaandeel aan Facebook.
+Advertentieprogramma Beacon[bewerken]
+
+Begin november 2007 introduceerde Facebook een nieuw onderdeel genaamd Beacon. Het is een advertentieprogramma waarmee advertenties worden getoond op basis van voorkeuren en gedrag van gebruikers en vrienden.[16] Na een paar weken ontstond er commotie bij de gebruikers van Facebook wegens het schenden van de privacy van de gebruikers door deze Beacon-applicatie. De nieuwe toepassing zorgde ervoor dat het aankoopgedrag van de gebruikers bij tientallen andere onlinewinkels aan hun vrienden werd getoond. Dit gebeurde zonder duidelijke aankondiging of toestemming.[17] De onlinegemeenschap stond op zijn achterste benen en startte een online protestactie. Na een korte week van protesten van gebruikers en een petitie van ruim 50.000 gebruikers heeft Facebook eind november het advertentieprogramma Beacon gewijzigd en gebruiksvriendelijker gemaakt.[18]
+Tijdlijn[bewerken]
+
+Tijdlijn kwam beschikbaar in december 2011, eerst als optionele functie.[19][20]
+Functies[bewerken]
+Omslagfoto en profielfoto[bewerken]
+
+Bovenaan de pagina staat een omslagfoto (cover photo), weergegeven met een breedte van 851 pixels en een hoogte van 315 pixels. Als de oorspronkelijke afbeelding een minder langwerpige beeldverhouding heeft dan vallen boven en onder stroken weg. De hele afbeelding wordt zichtbaar door erop te klikken.
+
+De profielfoto (profile picture) wordt vierkant weergegeven met een afmeting van 160 pixels. Deze wordt links onder grotendeels over de omslagfoto weergegeven.[21] De profielfoto wordt steeds op Facebook verkleind bij reacties geplaatst.
+Privacy[bewerken]
+
+Een lid heeft veel mogelijkheden om in te stellen wie onderdelen van door het lid verstrekte informatie kan zien (publiekselectie[22][23]), en in hoeverre hij wordt geconfronteerd met activiteiten van anderen.
+Nieuwsoverzicht[bewerken]
+
+Het Nieuwsoverzicht (News Feed) op de startpagina meldt, afhankelijk van de instellingen, activiteiten van vrienden.
+Tijdlijn[bewerken]
+
+De Tijdlijn (Timeline) is een chronologisch (van nieuw naar oud) overzicht van Facebookgebeurtenissen, zoals berichten en foto's die de gebruiker plaatst, met reacties daarop (waaronder het leuk vinden) en het wijzigen van de profielfoto, met de nieuwe foto. Aan het eind staat de geboortedatum (de geboorte als eerste gebeurtenis).
+Berichten[bewerken]
+
+Leden kunnen elkaar berichten zenden, als een soort e-mail.
+Notities[bewerken]
+
+Een lid kan een tekst, eventueel met afbeeldingen, creëren als Notitie. Er is links op de profielpagina een vak voor Notities, die bij aanklikken de hele paginabreedte beslaat. Er kan worden aangegeven of de Notitie al of niet tevens in de Tijdlijn moet komen. Een notitie kan achteraf bewerkt worden. Dit bewerken is niet als activiteit zichtbaar te maken, en oude versies zijn niet meer te raadplegen. De datum en tijd zijn die van het oorspronkelijke aanmaken.[24] Een alternatief is om voor de nieuwe versie van de inhoud een nieuwe notitie te maken.
+Leuk vinden[bewerken]
+
+Een lid kan aangeven dat hij iets "leuk" vindt (ook bekend als "liken"). Als het geen vrolijk bericht is, betekent het zoiets als interessant, aangrijpend. Anderen kunnen zien wie het "leuk" vonden. Als een lijst niet alles maar alleen hoogtepunten bevat kan het aantal leden die iets "leuk" vinden mede bepalen of het in de lijst wordt opgenomen.
+Pagina[bewerken]
+
+Het woord Pagina heeft op Facebook een speciale betekenis. Pagina's zijn voor bedrijven, merken en organisaties zodat ze hun verslagen kunnen delen en met mensen kunnen communiceren.[25] Alleen officiële vertegenwoordigers kunnen een Pagina maken. De auteur van de Pagina kan vervolgens rollen toewijzen aan andere mensen om te helpen met het beheer.
+Beursgang[bewerken]
+
+Over de beursgang van het bedrijf Facebook is lang gespeculeerd. Door de groei van het bedrijf en de hoge jaarlijkse winst wordt het bedrijf eind 2011 gewaardeerd op bedrag in de richting van 100 miljard dollar. In november 2011 werd bekend dat het door beleggers gewilde bedrijf waarschijnlijk tussen april en juni 2012 naar de beurs zal gaan, zonder gebruik te maken van de diensten van zakenbanken.[26] De beursgang is een van de grootste ooit en staat op de zesde plaats van grootte. Op 18 mei 2012 ging Facebook daadwerkelijk naar de beurs. De eerste dag sloot het aandeel fractioneel hoger in plaats van de verwachte grote stijging op de eerste dag.[27] De handelsdag erna zakte de koers fors onder de uitgifteprijs,[28] waarmee twijfels over de waardering van het bedrijf sterker werden. Deze dalende trend zet door nadat Capstone bekendmaakte dat in de Verenigde Staten en diverse West-Europese landen het gebruik met 1,1 procent is teruggelopen.[29] Het heeft tot 2 augustus 2013 geduurd voor het aandeel weer terug was op de oorspronkelijke introductiekoers.[30]
+Verdienmodel[bewerken]
+
+Facebook slaat alle gegevens op die de gebruikers invoeren op servers in een eigen beheer. Deze gegevens worden gecombineerd in één grote database met alle informatie van adverteerders of sites waarmee Facebook samenwerkt.
+
+Tegen betaling kan Facebook aan een adverteerder uit de database een gedetailleerde geselecteerde groep van Facebookaccounts aanbieden. Voor een nog betere doelgroepselectie kan de adverteerder eventueel de gegevens aanvullen met levering van eigen gegevens zoals koopgeschiedenis van gebruiker of bekeken items. Deze accounts krijgen de advertentie op hun Facebookpagina te zien.
+
+Verder wordt geld verdiend met advertenties die op pagina’s van een grote groep gebruikers worden geplaatst, advertenties die naast zoekopdrachten worden getoond, advertenties waarvoor Facebook een beloning krijgt als een product wordt verkocht en er worden inkomsten gegenereerd als virtuele goederen of cadeaus in de games van Facebook worden gekocht.
+
+Tegen betaling kan een persoonlijk bericht worden gestuurd naar iemand die geen vriend is. Ook tegen betaling wordt een bericht ‘promoted’ en blijft deze langer zichtbaar voor vrienden.
+
+Hoe vaak een bericht verschijnt in de Tijdlijn van vrienden, is afhankelijk van de populariteit van het bericht. Door te betalen kan een bericht toch onder de aandacht gebracht worden van alle vrienden.
+
+Facebook verdient ook geld als gebruikers van andere sites via Facebook inloggen.
+
+Een deel van de clicks op advertenties komt van bots.
+In de media[bewerken]
+
+    De Amerikaanse schrijver Ben Mezrich bracht in juli 2009 een boek uit over Mark Zuckerberg en de oprichting van Facebook, getiteld The Accidental Billionaires: The Founding of Facebook, A Tale of Sex, Money, Genius, and Betrayal.
+    The Social Network is een film uit 2010, gebaseerd op het boek van Ben Mezrich, en geregisseerd door David Fincher.
+    Op 14 januari 2012 werd een moord gepleegd op de 15-jarige Joyce (Winsie) Hau in Arnhem, wat later bekend werd als de Facebookmoord.
+    Op 21 september 2012 kwam het Nederlandse dorp Haren wereldwijd in het nieuws door Project X Haren: Een 'sweet 16'-feest dat per ongeluk via Facebook tienduizenden aanmeldingen kreeg en voor een enorme toeloop vanuit heel Nederland zorgde. De burgemeester had hierdoor een noodverordening afgegeven. Niettemin vonden er op grote schaal vernielingen en plunderingen plaats.
+
+Informatie[bewerken]
+Echtheid van informatie[bewerken]
+
+Facebook schrijft voor dat men zijn eigen naam gebruikt en dat ook de andere persoonsgegevens kloppen.[31] Niet iedereen houdt zich daaraan, de politie ook niet.[32]
+Geboortedatum[bewerken]
+
+Bij inschrijving als lid moet men zijn geboortedatum opgeven. Personen onder de 13 jaar kunnen geen lid worden. Voor wie jonger is kan dit een reden zijn om niet de echte geboortedatum op te geven. Men kan apart kiezen voor wie de verjaardag te zien is, en voor wie het geboortejaar.
+Bewaarduur van informatie[bewerken]
+
+Facebook biedt twee opties: een account deactiveren, of een profiel wissen. Deactiveert een gebruiker zijn account, dan blijft alle informatie op de Facebookservers bewaard. Als een gebruiker zijn profiel wist blijft sommige informatie nog drie maanden op de servers aanwezig. Alles wat een gebruiker ooit op een profiel van iemand anders plaatste blijft echter bestaan. Plaatst een Facebookgebruiker iets in een groep of op het prikbord van een ander, dan verdwijnt dat pas als ook die gebruikers hun profiel verwijderen.
+Verzamelen van informatie[bewerken]
+
+Naast de door de gebruikers ingevoerde gegevens en de gegevens van de adverteerders verzamelt Facebook gegevens zonder interventie van de gebruiker via de smartphones, zoals locatiegegevens, telefoonnummers en foto's, video's en audio via de microfoon en camera van de smartphone.
+
+Facebook kan telefoonnummers zonder interventie van de gebruiker bellen. Dit kan leiden tot onverwachte kosten of telefoongesprekken voor de gebruiker.[bron?]
+Leveringen van informatie[bewerken]
+
+Facebook levert de gegevens van accounts van gebruikers aan de Amerikaanse overheid.
+Internet.org[bewerken]
+
+Internet.org is een initiatief van Facebook dat erop is gericht om samen met technologiebedrijven, non-profitorganisaties en lokale groeperingen internettoegang voor meer mensen in de wereld betaalbaar te maken.[33] Er is wel, onder meer in India, kritiek op mogelijke schending van het principe van netneutraliteit, omdat Internet.org niet het gehele internet aanbiedt, maar een beperkt deel ervan.[34]
+Zie ook[bewerken]
+
+    RockMelt, een webbrowser met diepe Facebook-integratie
+    Zoeken in Facebook-sociogram, een zoekfunctionaliteit die in juli 2013 op Facebook werd geïntroduceerd
+
+Externe link[bewerken]
+
+    Facebook in het Nederlands
+
+Bronnen
+
+Wikimedia Commons 	Zie de categorie Facebook van Wikimedia Commons voor mediabestanden over dit onderwerp.
+Overgenomen van "https://nl.wikipedia.org/w/index.php?title=Facebook&oldid=44902410"
+Categorie:
+
+    Facebook
+
+Verborgen categorieën:
+
+    Wikipedia:Geen afbeelding lokaal en geen op Wikidata
+    Wikipedia:Artikel mist referentie sinds augustus 2014
+    Wikipedia:Commonscat met lokaal zelfde link als op Wikidata
+
+Navigatiemenu
+Persoonlijke instellingen
+
+    Registreren
+    Aanmelden
+
+Naamruimten
+
+    Artikel
+    Overleg
+
+Varianten
+
+Weergaven
+
+    Lezen
+    Bewerken
+    Geschiedenis
+
+Meer
+
+Zoeken
+Navigatie
+
+    Hoofdpagina
+    Vind een artikel
+    Vandaag
+    Etalage
+    Categorieën
+    Recente wijzigingen
+    Nieuwe artikelen
+    Willekeurige pagina
+
+Informatie
+
+    Gebruikersportaal
+    Snelcursus
+    Hulp en contact
+    Donaties
+
+Hulpmiddelen
+
+    Links naar deze pagina
+    Verwante wijzigingen
+    Bestand uploaden
+    Speciale pagina's
+    Permanente koppeling
+    Paginagegevens
+    Wikidata-item
+    Deze pagina citeren
+
+Afdrukken/exporteren
+
+    Boek maken
+    Downloaden als PDF
+    Printervriendelijke versie
+
+In andere talen
+
+Koppelingen bewerken
+
+    Deze pagina is het laatst bewerkt op 15 sep 2015 om 14:58.
+    De tekst is beschikbaar onder de licentie Creative Commons Naamsvermelding/Gelijk delen, er kunnen aanvullende voorwaarden van toepassing zijn. Zie de gebruiksvoorwaarden voor meer informatie.
+     Privacybeleid
+    Over Wikipedia
+    Voorbehoud
+    Ontwikkelaars
+    Mobiele weergave
+
+  

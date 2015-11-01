@@ -3,12 +3,21 @@ FROM seapy/rails-nginx-unicorn-pro:v1.0-ruby2.2.0-nginx1.6.0
 MAINTAINER Meedan - Clarissa Xavier(clarissa@meedan.com)
 
 # Add here your preinstall lib (e.g. imagemagick, mysql lib, pg lib, ssh config)
-RUN apt-get install python libpython-dev vim -y
+RUN apt-get update
+RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim -y
+RUN easy_install pip
+
 
 # Link libraries to the place that RubyPython looks for them
 ADD docker/link-python-libs /bin/link-python-libs
 RUN chmod +x /bin/link-python-libs
 RUN link-python-libs
+
+ADD docker/dysl-install /bin/dysl-install
+RUN chmod +x /bin/dysl-install
+RUN dysl-install
+
+RUN ls
 
 # Nginx config
 ADD docker/nginx.conf /etc/nginx/sites-enabled/default

@@ -1,0 +1,751 @@
+
+Facebook — найпопулярніша соціальна мережа у світі, що почала працювати 4 лютого 2004 року як мережа для студентів деяких американських університетів. Засновником та головою сервісу є Марк Цукерберг. Станом на липень 2015 року кількість користувачів становила 1,5 млрд, з яких 968 млн. відвідує свої аккаунти щодня.[3] За даними сайту Alexa Facebook є 2-им за відвідуваністю сайтом у світі[4] та 6-им за відвідуваністю сайтом в Україні.[5] Кількість українських користувачів Facebook станом на травень 2014 становила близько 6 млн. користувачів.[6]
+
+Головний офіс Facebook розташований в місті Менло-Парк, штат Каліфорнія, США. Основною статтею доходу компанії є реклама. Чистий дохід Facebook за 2014 рік становив 2,94 млрд $, що на 96% більше, ніж роком раніше (1,5 млрд $ у 2013).[1]
+
+Зміст
+
+    1 Історія Facebook'у
+    2 Компанія
+    3 Веб-сайт
+    4 Скандали
+    5 Facebook у кіно
+    6 Див. також
+    7 Нотатки
+    8 Примітки
+    9 Посилання
+
+Історія Facebook'у[ред. • ред. код]
+
+Марк Цукерберг написав сайт «Facemash», попередника Facebook'у, 28 жовтня 2003 року, навчаючись на другому курсі Гарвардського університету. Як повідомила газета The Harvard Crimson, сайт нагадував інший інтернет-ресурс — «Hot or Not»[7] і «використав фотографії, зібрані з он-лайн facebook'ів дев'яти коледжів, розміщуючи їх попарно і пропонуючи користувачам вибрати „найгарячішу“ особу».[8]
+Марк Цукерберг, співзасновник Facebook, у своїй кімнаті гуртожитку Гарварду.
+
+Щоб досягти цього, Цукерберг проник у захищені зони комп'ютерної мережі Гарварду і скопіював фотографії зі студентських посвідчень, розміщених у базі даних гуртожитків коледжів. Гарвард на той час не мав студентського «facebook'у» (каталогу із фотографіями та основною інформацією). Протягом перших чотирьох годин Facemash привернув увагу 450 відвідувачів і було здійснено 22 тисячі фото-переглядів.[8][9]
+
+Веб-сайт швидко потрапив до кількох кампусівських серверів розсилки, однак через декілька днів його заблокувала адміністрація Гарварду. Цукерберга звинуватили в порушенні безпеки, авторських прав і права на особисту інформацію, і йому загрожувало виключення з університету. Тим не менше, звинувачення було знято.[10] Того ж семестру Цукерберг розширив початковий проект, створивши інструмент для соціальних досліджень ще до випускного іспиту з історії мистецтва. Він виставив на веб-сайті 500 зображень пам'яток культури доби Августа, розмістивши на кожній сторінці ілюстрацію та статтю з коментарями до неї.[9] Цукерберг відкрив доступ до сайту своїм однокурсникам, і люди почали ділитися замітками.
+
+Наступного семестру, у січні 2004 року, Цукерберг почав писати код для нового веб-сайту. За його словами, його надихнула стаття у The Harvard Crimson про інцидент із Facemash'ем.[11] 4 лютого 2004 року Цукерберг запустив «Thefacebook», який спочатку знаходився на thefacebook.com.[12]
+
+Через шість днів після відкриття сайту троє гарвардських старшокурсників Камерон Вінклевосс, Тайлер Вінклевосс та Дів'я Нарендра звинуватили Цукерберга в тому, що він начебто пообіцяв допомогти їм створити соціальну мережу HarvardConnection.com, а натомість використав їхні ідеї для створення конкурентного продукту.[13] Вони поскаржились у Harvard Crimson, і газета почала розслідування. Згодом студенти подали на Цукерберга позов, однак невдовзі було досягнуто компромісу.[14]
+
+Спочатку доступ до сайту мали лише студенти Гарвардського коледжу, і впродовж першого місяця зареєструвалася більш ніж половина студентів Гарварду.[15] Згодом до Цукерберга приєдналися Едуардо Саверін (бізнес-менеджер), Дастін Московіц (програміст), Ендрю Мак-Коллум (графічний дизайнер) та Кріс Хьюз, щоб допомогти у просуненні веб-сайту. У березні 2004 року Facebook'ом користувалися в університетах Стенфорда, Колумбії та Єля.[16] Невдовзі він відкрився для студентів інших шкіл Ліги Плюща, Бостонського та Нью-Йоркського університетів, Массачусетського технологічного інституту і поступово для більшості університетів Канади та США.[17][18]
+
+Компанію «Facebook» було засновано влітку 2004 року. Її очолив підприємець Шон Паркер, неофіційний радник Цукерберга.[19] У червні 2004 року компанія Facebook переїхала до Пало-Альто в Каліфорнії.[16] Цього ж місяця вона отримала першу інвестицію від співзасновника системи PayPal Пітера Сайєла.[20] Компанія викинула із назви артикль The після того, як у 2005 році було придбано доменне ім'я facebook.com за $200 тисяч.[21]
+Активних користувачів[N 1] (в мільйонах) Дата 	Користувачів 	Днів пройшло 	Ріст в місяць[N 2]
+26 серпня 2008 	100[22] 	1665 	178.38%
+8 квітня 2009 	200[23] 	225 	13.33%
+15 вересня 2009 	300[24] 	150 	10%
+5 лютого 2010 	400[25] 	143 	6.99%
+21 липня 2010 	500[26] 	166 	4.52%
+30 травня 2011 	700[27] 	145 	3.45%
+22 вересня 2011 	800[28] 	115 	3.73%
+24 квітня 2012 	900[29] 	215 	1.74%
+14 вересня 2012 	1000[30] 	143 	2.33%
+31 березня 2013 	1110[31] 	198 	1.5%
+31 грудня 2013 	1230[32] 	275 	0.97%
+31 грудня 2014 	1390[33] 	365 	0.64%
+
+У вересні 2005 року було відкрито шкільну версію Facebook'у. На думку Цукерберга, це був цілком логічний наступний крок.[34] Для того щоб приєднатися до шкільної мережі, потрібно було запрошення.[35] Згодом Facebook розширив доступ до сервісу працівникам кількох компаній, у тому числі Apple Inc. та Microsoft.[36] 26 вересня 2006 року Facebook став доступним для кожного віком від 13 років і старше з дійсною адресою електронної пошти.[37][38]
+
+24 жовтня 2007 року корпорація Microsoft заявила, що вона придбала 1,6% акцій Facebook за $240 мільйонів, що дозволило вирахувати загальну вартість компанії — близько 15 мільярдів доларів.[39] Microsoft отримав права на розміщення міжнародної реклами на веб-сайті.[40] У жовтні 2008 року компанія Facebook повідомила про відкриття своєї міжнародної штаб-квартири у столиці Ірландії — Дубліні.[41] У вересні 2009 року було оголошено про отримання першого прибутку.[42] У листопаді 2010 року, за даними SecondMarket Inc., ринку акцій приватних компаній, вартість Facebook'у становила $41 мільярд доларів (трохи більше, ніж eBay). Таким чином, вона стала третьою за величиною веб-компанією у США після Google та Amazon.[43]
+
+За даними газети The New York Times, капіталізація Facebook станом на 2 січня 2011 р. склала 50 мільярдів доларів[44]. До 2013 року планується проведення IPO.[45]
+
+Трафік Facebook стабільно зростав після 2009 року. Наприкінці тижня 13 березня 2010 року Facebook відвідало більше людей, ніж Google.[46] Facebook також став найкращою соціальною мережею на кожному з восьми ринків на Філіппінах, в Австралії, Індонезії, Малайзії, Сингапурі, Новій Зеландії, Гонг-Конгу та В'єтнамі, тоді як інші бренди займали високі позиції на окремих ринках, серед них Гуглівський Orkut в Індії, Mixi.jp у Японії, CyWorld у Південній Кореї та продукт Yahoo! Wretch.cc на Тайвані.
+
+2011 року сайт Lovely-Faces.com вкрав фотографії і особисті дані 250 тисяч користувачів мережі Facebook для того, аби продемонструвати інвесторам, наскільки переоцінена соціальна мережа та незахищеність даних зареєстрованих користувачів[47].
+
+За повідомленням Марка Цукерберга, 24 серпня 2015 року вперше в історії існування соціальної мережі її добова відвідуваність перевищила один мільярд осіб, що становить приблизно сьому частину від чисельності усього людства[48].
+Компанія[ред. • ред. код]
+Вхід до головного офісу Facebook'у, Пало-Альто, Каліфорнія.
+
+Більшість своїх прибутків компанія Facebook отримує від реклами. Корпорація Microsoft — єдиний партнер Facebook'у із розміщення банерної реклами.[49] Власне, Facebook розміщує лише ту рекламу, яка входить до рекламного реєстру Microsoft. За даними компанії comScore, яка досліджує інтернет-маркетинг, Facebook збирає стільки ж інформації від своїх користувачів, як Google та Microsoft, але значно менше, ніж Yahoo!.[50] У 2010 році служба безпеки почала протистояти погрозам і терористичним закликам із боку користувачів.[51] 6 листопада 2007 року компанія запустила Facebook Beacon, що зрештою виявилося невдалою спробою рекламування продукції шляхом інформування друзів користувачів про зроблені ними покупки.
+
+Загалом Facebook має нижчий коефіцієнт ефективності банера (КЕБ) у сфері реклами, ніж більшість провідних веб-сайтів. Щодо банерної реклами, компанія отримала п'яту частину від загальної кількості кліків на Facebook порівняно з усією Мережею.[52] Це означає, що порівняно з багатьма іншими великими веб-сайтами, відсоток користувачів Facebook'у, що клікають на рекламу, досить незначний. Так, користувачі Google клікають на першу рекламу для отримання результатів пошуку в середньому 8% від усіх пошуків (80 тис. кліків на мільйон пошуків),[53] тоді як користувачі Facebook'у — 0,04% (400 кліків на мільйон сторінок).[54]
+
+Фінансовий менеджер з онлайн-продажів Facebook'у Сара Сміт підтвердила, що коефіцієнт ефективності банера успішних рекламних кампаній може становити від 0,05% до 0,04%. Окрім того, КЕБ для реклами може знижуватися у перші два тижні.[55] Так, КЕБ соціальної мережі-конкурента MySpace становить 0,1%, що у два з половиною рази перевищує відповідний показник Facebook'у, проте все одно він низький, порівняно з багатьма іншими веб-сайтами. Серед причин низького коефіцієнта ефективності банера Facebook'у, зокрема, хороша технічна обізнаність користувачів, що дозволяє їм використовувати програми із блокування реклами, молодий вік, а отже, вища резистентність до рекламних повідомлень. На відміну від користувачів MySpace, які більшість часу проводять, переглядаючи контент, користувачі Facebook'у спілкуються із друзями і тому їх мало цікавить реклама.[56]
+Прибутки
+(приблизно, в мільйонах US$) Рік 	Прибуток 	Ріст
+2006 	$52[57] 	—
+2007 	$150[58] 	188%
+2008 	$280[59] 	87%
+2009 	$775[60] 	177%
+2010 	$2000[61] 	158%
+2011 	$3711[62] 	86%
+2012 	$5089[63] 	37%
+2013 	$7872[63] 	55%
+
+На сторінках, присвячених брендам і продукції, деякі компанії заявили про високий КЕБ — 6,49% — завдяки постам на «стіні».[64] У липні 2008 року було випущено платформу із соціального маркетингу Involver, яка забезпечила Facebook'у зростання КЕБу до 0,7% (у 10 разів більше, ніж під час звичайних рекламних кампаній). Завдяки їй 1,1 мільйона переглядів перетворилося у 8 тисяч відвідувачів сайту першого клієнта компанії — Serena Software.[65] Згідно з даними дослідження, понад 40% користувачів Facebook'у, які дивилися рекламні відеоролики на сайті, проглядали їх до кінця, тоді як середня тривалість перегляду банерного рекламного відео становить 25%.[66]
+
+Штат компанії Facebook нараховує понад 1700 працівників, а її офіси знаходяться у 12 країнах світу.[67] Співвласниками Facebook'у є Марк Цукерберг, якому належить 24% акцій компанії, Accel Partners — 10%, Digital Sky Technologies — 10%,[68] Дастін Московіц — 6%, Едуардо Саверін — 5%, Шон Паркер — 4%, Пітер Саєл — 3%, Greylock Partners і Meritech Capital Partners володіють від 1 до 2% акцій кожен, Microsoft — 1,3%, Li Ka-shing — 0,75%, Interpublic Group — менш ніж 0,5%, невелика група теперішніх і колишніх працівників, а також знаменитостей, кожен з яких володіє менш ніж 1%, у тому числі Мет Коглер, Джеф Ротшілд, сенатор штату Каліфорнія Барбара Боксер, Кріс Хагс та Овен Ван Натта. Рейд Гоффман і Марк Пінкус володіють чималими пакетами акцій компанії, а решта 30% належить працівникам, знаменитостям та зовнішнім інвесторам.[69] У травні 2008 року з посади головного технолога звільнився друг Цукерберга Адам Ді Анджело. Ходили чутки, що між ними виникла суперечка, і Ді Анджело відмовився від своїх прав власності на компанію.[70]
+
+З 2008-го року головним операційним директором Facebook стала Шеріл Сандберг, яка у 2012 р. стала першою жінкою в складі ради директорів компанії.
+Веб-сайт[ред. • ред. код]
+Домашня сторінка Facebook'у.
+
+Користувачі Facebook'у мають можливість створювати профілі з фотографіями, списками інтересів, контактними даними та іншою особистою інформацією. Вони можуть спілкуватися із друзями та іншими користувачами за допомогою приватних або загальнодоступних повідомлень і чату. Також користувачі можуть створювати і приєднуватися до груп за інтересами та «сторінок уподобань» (до 19 квітня 2010 року вони називалися «фанат-сторінками»). Деякі з цих сторінок підтримують організації як засоби реклами.[71]
+
+Для більшої безпеки Facebook надає своїм користувачам можливість вибирати власні налаштування приватності та осіб, які можуть переглядати окремі частини їхнього профілю.[72] Доступ до веб-сайту безкоштовний, а прибутки надходять від реклами, зокрема банерної.[73] За умовами Facebook'у ім'я користувача та його зображення для профілю (за наявності) будуть загальнодоступними. Налаштування приватності дають змогу користувачам контролювати, хто може бачити інформацію, якою вони діляться, а також хто може знаходити їх у пошуку.[74]
+Профіль Facebook'у починаючи з 2011 року.
+
+Медіа часто порівнюють Facebook із MySpace, але головна відмінність між цими двома сайтами полягає в рівні налаштувань.[75] Крім того Facebook, на відміну від MySpace, вимагає від користувачів надавати їхні справжні особисті дані.[76] MySpace дозволяє користувачам прикрашати свої профілі за допомогою HTML і каскадних таблиць стилю, тоді як Facebook дозволяє лише текстові дані.[77] Серед функцій, які пропонує Facebook, Стіна — простір на профільній сторінці кожного користувача, де друзі можуть розміщувати свої повідомлення;[78] Стусани — користувачі можуть дати віртуального «стусана» один одному (повідомлення про те, що користувача штурхонули);[79] Фотографії — тут користувачі можуть завантажувати альбоми і фотографії;[80] Статус — за його допомогою користувачі можуть повідомляти друзів про своє місцезнаходження та діяльність.[81] Залежно від налаштувань приватності кожен, хто має доступ до профілю користувача, також може переглядати його Стіну. У липні 2007 року Facebook дозволив вивішувати на Стіні не лише тексти, а й посилання та відеоролики.[78]
+Facebook на мобільному телефоні
+
+Згодом Facebook додав функції на свій веб-сайт. 6 вересня 2006 року було випущено Стрічку новин, яка з'являється на сторінці кожного користувача і виділяє інформацію, в тому числі зміни профілю, найближчі події та дні народження друзів користувача.[82] Це уможливило спаммерам та іншим користувачам маніпулювати цими функціями за допомогою несправжніх подій або днів народження, щоб привернути увагу до своїх профілів або діяльності.[83] Спочатку Стрічка новин викликала незадоволення серед користувачів Facebook'у. Одні скаржилися на її невпорядкованість і надмір зайвої інформації, інших турбувало, наскільки легко будь-хто міг простежити особисту діяльність, таку як зміна сімейного статусу, події та спілкування з іншими користувачами.[84]
+
+У відповідь Цукерберг вибачився за відсутність на сайті відповідних налаштувань приватності. Відтоді у користувачів з'явилася можливість контролювати, якими видами інформації вони автоматично діляться із друзями. Тепер користувачі можуть унеможливити певним категоріям друзів перегляд оновлень щодо деяких видів своєї діяльності, у тому числі зміни профілю, постів на «стіні» та нових друзів.[85]
+
+23 лютого 2010 року Facebook отримав патент США 7669123[86] на певні елементи Стрічки новин. Патент розповсюджується на Стрічку новин, у якій є лінки, таким чином один користувач може брати участь у діяльності іншого.[87] Патент може спонукати Facebook вжити заходів щодо веб-сайтів, які порушують його патент, таких, наприклад, як Twitter.[88]
+
+Серед найпопулярніших Facebook-додатків — хостинг фотографій, де користувачі можуть завантажувати альбоми та фотографії.[89] Facebook, на відміну від інших фотохостингів, таких як Photobucket і Flickr, дозволяє користувачам завантажувати необмежену кількість фотографій. У перші роки ліміт становив 60 фотографій для одного альбому, а з травня 2009 року він зріс до 200 фотографій.[90][91][92][93]
+
+Для особистих альбомів можна встановити налаштування приватності, щоб обмежити коло користувачів, які можуть переглядати альбом. Так, один альбом можна зробити доступним для перегляду тільки друзям користувача, тоді як інший — усім користувачам Facebook'у. Ще одна функція фотододатку — можливість «маркування», або позначення користувачів на фотографії. Наприклад, якщо на фотографії є друг користувача, останній може позначити його на фотографії, і тоді тому надійте відповідне повідомлення разом із лінком на це фото.[94]
+Профіль на Thefacebook в 2005 році
+Профіль Facebook'у в 2007
+
+22 серпня 2006 року компанія презентувала Facebook-нотатки — функцію блоггінгу, яка дозволяла використовувати теги та вкладені зображення. Згодом користувачі отримали змогу переносити блоги з Xanga, LiveJournal, Blogger та інших блоггінг-сервісів.[37] 7 квітня 2008 року Facebook випустив у кількох мережах додаток із миттєвого обміну повідомленнями «Чат» на основі моделі Comet.[95][96] Він дозволяє користувачам спілкуватися із друзями і за функціональністю нагадує інтернет-месенджери.
+
+8 лютого 2007 року Facebook випустив додаток «Подарунки», за допомогою якого користувачі можуть надіслати своїм друзям віртуальні подарунки, що з'являються у профілі отримувача. Вартість такого подарунка — $1. Окрім того, до нього може бути прикріплене особисте повідомлення.[97][98] 14 травня 2007 року Facebook випустив новий додаток — Marketplace, завдяки якому користувачі можуть безкоштовно розміщувати рубриковану рекламу.[99] Marketplace порівнюють із Craiglist від CNET. Однак головна відмінність між ними полягає в тому, що оголошення, розміщені користувачем на Marketplace, можуть бачити лише користувачі спільної з ним мережі, тоді як на Craiglist вони доступні всім.[100]
+
+20 липня 2008 року Facebook презентував «Facebook Beta», суттєво змінивши дизайн інтерфейсу користувачів у вибраних мережах. The Mini-Feed та Стіну було об'єднано, профілі поділено на закладки, а також зроблено спробу надати їм «чистішого» вигляду.[101] Спочатку Facebook лише пропонував користувачам змінити свій профіль на новий, а з вересня 2008 року почав переводити всіх користувачів на нову версію.[102] 11 грудня 2008 року з'явилося повідомлення, що Facebook проводить тестування спрощеної процедури реєстрації.[103]
+
+13 червня 2009 року Facebook випустив функцію «Імена користувачів», за допомогою якої сторінки можуть отримати простішу URL-адресу, таку як http://www.facebook.com/facebook, на відміну від http://www.facebook.com/profile.php?id=20531316728.[104] Чимало нових смартфонів пропонують доступ до послуг Facebook'у як за допомогою своїх веб-браузерів, так і додатків. Офіційний додаток Facebook'у доступний для iPhone OS, Android OS і Palm webOS. Компанії Nokia та Research In Motion оснащують свої мобільні пристрої Facebook-додатками. Понад 150 мільйонів користувачів у 60 країнах світу через 200 мобільних операторів заходять до Facebook'у через мобільні пристрої.
+
+15 листопада 2010 року Facebook випустив новий сервіс — «Facebook-повідомлення». Того ж дня, коментуючи цю подію, виконавчий директор компанії Марк Цукерберг заявив: «Це правда, що люди зможуть мати електронні адреси @facebook.com, але це не e-mail». На появу цієї функції очікували задовго до її виходу. Дехто називає її «вбивцею Gmail». Щоб бути доступною для всіх користувачів веб-сайту, система включає службу коротких повідомлень (sms), програми миттєвого обміну повідомленнями, електронну пошту та звичайні повідомлення і міститиме такі ж налаштування приватності, як і інші сервіси Facebook'у. Розробка сервісу «Facebook-повідомлення» під кодовою назвою «Проект Титан» тривала 15 місяців.[105][106]
+Скандали[ред. • ред. код]
+
+    На початку існування Фейсбуку, його засновник Марк Цукерберг використав дані логінів користувачів, щоб зламати їхню електронну пошту[107]
+    У жовтні 2010 виявилося, що деякі розробники плагінів для фейсбуку продавали дані користувачів стороннім компаніям[108]
+    Євросоюз пообіцяв штрафувати сайти, що розміщують кнопку «Мені подобається» («Like») на 50 тис. євро, оскільки натискання цієї кнопки дає змогу слідкувати за інтернет користувачами та передавати їхні персональні дані, пов'язані з веб-серфінгом.[109]
+    У липні 2015 без попереджень та пояснень адміни Фейсбуку видалили сторінку «Азову»[110].
+
+Facebook у кіно[ред. • ред. код]
+
+    Фільм «Соціальна мережа» 2010 року оповідає про створення Фейсбуку.
+    Мультсеріал South Park, епізод «You have 0 friends»
+    Мультсеріал The Simpsons, 22 сезон, 2 серія
+
+Див. також[ред. • ред. код]
+
+    Facebook Credits
+
+Нотатки[ред. • ред. код]
+
+    ↑ "Total active users" is defined by Facebook as a user who has visited the website in the last 30 days.
+    ↑ "Monthly growth" is the average percentage growth rate at which the total number of active users grows each month over the specified period.
+
+Примітки[ред. • ред. код]
+
+    ↑ а б Facebook збільшив прибуток у два рази Економічна правда, 29 січня 2015
+    ↑ Metz, Cade (7 липня 2014). The Next Big Programming Language You’ve Never Heard Of. Wired (англійська). Condé Nast. Процитовано 26 липня 2014. «Today, Alexandrescu is a research scientist at Facebook, where he and a team of coders are using D to refashion small parts of the company’s massive operation.»
+    ↑ Дохід Facebook перевершив очікування euronews, 30.07.2014
+    ↑ Alexa — The top 500 sites on the web. процитовано: 19.08.2015
+    ↑ Alexa — Top Sites in Ukraine процитовано: 19.08.2015
+    ↑ Російські інтернет-сервіси стрімко втрачають популярність в Україні kreschatic.kiev.ua, 16/07/2014
+    ↑ Tabak, Alan J. (February 9, 2004). Hundreds Register for New Facebook Website. Harvard Crimson. Процитовано 2008-11-07.
+    ↑ а б Locke, Laura. «The Future of Facebook», Time Magazine, July 17, 2007. Retrieved November 13, 2009.
+    ↑ а б McGirt, Ellen. "Facebook's Mark Zuckerberg: Hacker. Dropout. CEO. ", Fast Company, May 1, 2007. Retrieved November 5, 2009.
+    ↑ Kaplan, Katherine (2003-11-19). Facemash Creator Survives Ad Board. The Harvard Crimson. Архів оригіналу за 2012-03-02. Процитовано 2009-02-05.
+    ↑ Hoffman, Claire (2008-06-28). The Battle for Facebook. Rolling Stone. Архів оригіналу за July 3, 2008. Процитовано 2009-02-05.
+    ↑ Seward, Zachary M. (2007-07-25). Judge Expresses Skepticism About Facebook Lawsuit. The Wall Street Journal. Процитовано 2008-04-30.
+    ↑ Carlson, Nicolas (2010-03-05). In 2004, Mark Zuckerberg Broke Into A Facebook User's Private Email Account. Business Insider. Процитовано 2010-03-05.
+    ↑ Brad Stone (2008-06-28). Judge Ends Facebook’s Feud With ConnectU. The New York Times.
+    ↑ Phillips, Sarah (2007-07-25). A brief history of Facebook. The Guardian (London). Процитовано 2008-03-07.
+    ↑ а б Press Room. Facebook. 2007-01-01. Процитовано 2008-03-05.
+    ↑ Rosmarin, Rachel (2006-09-11). Open Facebook. Forbes. Процитовано 2008-06-13.
+    ↑ Online network created by Harvard students flourishes. The Tufts Daily. Архів оригіналу за 2012-03-02. Процитовано 2009-08-21.
+    ↑ Rosen, Ellen (2005-05-26). Student's Start-Up Draws Attention and $13 Million. The New York Times. Процитовано 2009-05-18.
+    ↑ Why you should beware of Facebook. The Age (Melbourne). 2008-01-20. Процитовано 2008-04-30.
+    ↑ Williams, Chris (2007-10-01). Facebook wins Manx battle for face-book.com. The Register. Архів оригіналу за 2012-03-02. Процитовано 2008-06-13.|
+    ↑ Zuckerberg, Mark (26 серпня 2008). Our First 100 Million. Facebook. Процитовано 3 травня 2013.
+    ↑ Zuckerberg, Mark (8 квітня 2009). 200 Million Strong. Facebook. Процитовано 3 травня 2013.
+    ↑ Zuckerberg, Mark (15 вересня 2009). 300 Million and On. Facebook. Процитовано 3 травня 2013.
+    ↑ Announcement. Facebook. Процитовано 2010-06-26.
+    ↑ Zuckerberg, Mark (21 липня 2010). 500 Million Stories. Facebook. Процитовано 3 травня 2013.
+    ↑ Socialbakers employee (May 30, 2011). Facebook is globally closing in to 700 million users!. Socialbakers.
+    ↑ Ostrow, Adam (September 22, 2011). Facebook Now Has 800 Million Users. Mashable. Процитовано September 26, 2011.
+    ↑ Cohen, Noam (April 24, 2012). The Breakfast Meeting: Grilling for James Murdoch, and Facebook Tops 900 Million Users. The New York Times. Процитовано April 24, 2012.
+    ↑ Fowler, Geoffrey A. (October 4, 2012). Facebook: One Billion and Counting. The Wall Street Journal (Dow Jones). Процитовано February 7, 2014. «...reached the milestone of one billion monthly active members on Sept. 14.»
+    ↑ Facebook Reports First Quarter 2013 Results. Facebook. May 1, 2013. Процитовано May 2, 2013.
+    ↑ Facebook Reports Fourth Quarter and Full Year 2013 Results. Facebook. January 29, 2014. Процитовано February 7, 2014.
+    ↑ Facebook Reports Fourth Quarter and Full Year 2014 Results. Investor Relations. Facebook. 2015-01-28.
+    ↑ Dempsey, Laura (2006-08-03). Facebook is the go-to Web site for students looking to hook up. Dayton Daily News.
+    ↑ Lerer, Lisa (2007-01-25). Why MySpace Doesn't Card. Forbes. Архів оригіналу за 2008-06-02. Процитовано 2008-06-13.
+    ↑ Lacy, Sarah (2006-09-12). Facebook: Opening the Doors Wider. BusinessWeek. Архів оригіналу за 2013-06-27. Процитовано 2008-03-09.
+    ↑ а б Abram, Carolyn (2006-09-26). Welcome to Facebook, everyone. Facebook. Процитовано 2008-03-08.
+    ↑ Terms of Use. Facebook. 2007-11-15. Процитовано 2008-03-05.
+    ↑ Facebook and Microsoft Expand Strategic Alliance. Microsoft. 2007-10-24. Архів оригіналу за 2012-03-02. Процитовано 2007-11-08.
+    ↑ Facebook Stock For Sale. BusinessWeek. Архів оригіналу за 2012-03-02. Процитовано 2008-08-06.
+    ↑ Press Releases. Facebook. 2008-11-30. Процитовано 2008-11-30.
+    ↑ Facebook 'cash flow positive,' signs 300M users. Cbc.ca. 2009-09-16. Процитовано 2010-03-23.
+    ↑ Facebook Becomes Third Biggest US Web Company http://www.thejakartaglobe.com/technology/facebook-becomes-third-biggest-us-web-company/406751
+    ↑ Facebook стал дороже, чем eBay, Yahoo и Time Warner
+    ↑ http://www.businessinsider.com/google-groupon-deal
+    ↑ Facebook Reaches Top Ranking in US. Архів оригіналу за 2012-03-02.
+    ↑ Сайт знакомств украл лица и имена 250 тысяч пользователей Facebook: Авторы портала скопировали аккаунты для того, чтобы доказать на сколько переоценивают социальную сеть, 07.02.2011, «Комсомольська правда» в Україні
+    ↑ Відвідуваність Facebook вперше досягла мільярда осіб на добу. zaxid.net. 28 серпня2015. Процитовано 28 серпня2015.
+    ↑ Product Overview FAQ: Facebook Ads. Facebook. Процитовано March 10, 2008.[недійсне посилання]
+    ↑ Story, Louise (March 10, 2008). To Aim Ads, Web Is Keeping Closer Eye on You. The New York Times. Процитовано March 9, 2008.
+    ↑ Cluley, Graham (2010-02-01). Revealed: Which social networks pose the biggest risk?. Sophos. Архів оригіналу за 2013-06-27. Процитовано 2010-07-12.
+    ↑ Facebook May Revamp Beacon. BusinessWeek. 2007-11-28. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Google AdWords Click Through Rates Per Position. AccuraCast. 2009-10-09. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Denton, Nick (2007-03-07). Facebook 'consistently the worst performing site'. Gawker. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Facebook Says Click Through Rates Do Not Match Those At Google. TechPulse 360. 2009-08-12. Процитовано 2010-07-18.
+    ↑ Leggatt, Helen (2007-07-16). Advertisers disappointed with Facebook's CTR. BizReport. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Arrington, Michael (2006-04-26). Facebook Goes Beyond College, High School Markets. TechCrunch. Процитовано 2010-07-13.
+    ↑ Schonfeld, Erick (2008-01-31). Facebook Finances Leaked. TechCrunch. Процитовано 2010-07-13.
+    ↑ Arrington, Michael (2009-05-19). Facebook Turns Down $8 billion Valuation Term Sheet, Claims 2009 Revenues Will Be $550 million. TechCrunch. Процитовано 2010-07-13.
+    ↑ Tsotsis, Alexia (2011-01-05). Report: Facebook Revenue Was $777 Million In 2009, Net Income $200 Million. TechCrunch. Процитовано 2011-01-05.
+    ↑ Womack, Brian (2010-12-16). Facebook 2010 Sales Said Likely to Reach $2 Billion, More Than Estimated. Bloomberg. Процитовано 2011-01-05.
+    ↑ Facebook Reports Fourth Quarter and Full Year 2012 Results. Facebook. January 30, 2013. Процитовано February 7, 2014.
+    ↑ а б Facebook Reports Fourth Quarter and Full Year 2013 Results. Facebook. January 29, 2014. Процитовано February 7, 2014.
+    ↑ Klaassen, Abbey (2009-08-13). Facebook's Click-Through Rates Flourish ... for Wall Posts. AdAge. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Involver Delivers Over 10x the Typical Click-Through Rate for Facebook Ad Campaigns. Press release. 2008-07-31. Архів оригіналу за 2013-06-27. Процитовано 2010-07-18.
+    ↑ Walsh, Mark (2010-06-15). Study: Video Ads On Facebook More Engaging Than Outside Sites. MediaPost. Процитовано 2010-07-18.
+    ↑ Facebook Factsheet. Процитовано November 21, 2010.
+    ↑ Facebook's friend in Russia. CNN. October 4, 2010. Процитовано December 18, 2010.
+    ↑ David Kirkpatrick. The Facebook Effect. с. 322. ISBN 1439102112.
+    ↑ McCarthy, Caroline (2008-05-11). As Facebook goes corporate, Mark Zuckerberg loses an early player. CNET.com. Архів оригіналу за 2013-06-27. Процитовано 2010-07-12.
+    ↑ Edit Your Profile. Facebook. Архів оригіналу за February 27, 2008. Процитовано March 7, 2008.
+    ↑ Search Privacy. Facebook. Процитовано June 13, 2009.
+    ↑ Barton, Zoe (April 28, 2006). Facebook goes corporate. ZDNet. Архів оригіналу за May 26, 2008. Процитовано March 9, 2008.
+    ↑ Choose Your Privacy Settings. Facebook. Процитовано September 10, 2009.
+    ↑ Stone, Brad (May 25, 2007). Facebook Expands Into MySpace’s Territory. The New York Times. Процитовано March 8, 2008.
+    ↑ Ciccone, David (2009-05-07). Facebook Connect fully integrated into Mobility Today. Архів оригіналу за 2013-06-27. Процитовано 2010-09-10.
+    ↑ Sullivan, Mark (2007-07-24). Is Facebook the New MySpace?. PC World. Архів оригіналу за 2013-06-27. Процитовано 2008-04-30.
+    ↑ а б Der, Kevin. Facebook is off-the-wall. Facebook. Архів оригіналу за 2013-06-27. Процитовано 2007-07-30.
+    ↑ Inbox, Messages and Pokes. Facebook. Процитовано March 9, 2008.
+    ↑ The Facebook Gifts. Facebook. Архів оригіналу за 2013-06-27. Процитовано 2008-03-05.
+    ↑ Ramadge, Andrew (November 26, 2007). Facebook is ... reconsidering the word "is". News Limited. Архів оригіналу за November 28, 2007. Процитовано March 8, 2008.
+    ↑ Sanghvi, Ruchi (2006-09-06). Facebook Gets a Facelift. Facebook. Архів оригіналу за 2013-06-27. Процитовано 2008-02-11.
+    ↑ Facebook: Celebrate Your Birthday Every Day. Архів оригіналу за 2013-06-27. Процитовано 2010-03-09.
+    ↑ Lacy, Sarah (2006-09-08). Facebook Learns from Its Fumble. BusinessWeek. Архів оригіналу за 2013-06-27. Процитовано 2008-06-28.
+    ↑ Gonsalves, Antone (2006-09-08). Facebook Founder Apologizes In Privacy Flap; Users Given More Control. InformationWeek. Архів оригіналу за 2013-06-27. Процитовано 2008-06-28.
+    ↑ Шаблон:Cite patent
+    ↑ US Patent No. 7669123. Social Media. March 1, 2010. Процитовано March 9, 2010.
+    ↑ «Facebook's news-feed patent could mean lawsuits». CNN. Retrieved July 12, 2010.
+    ↑ Arrington, Michael (2007-05-24). Facebook Launches Facebook Platform; They are the Anti-MySpace. TechCrunch. Архів оригіналу за 2013-06-27. Процитовано 2008-06-28.
+    ↑ Share More Memories with Larger Photo Albums. Архів оригіналу за 2013-06-27. Процитовано 2010-01-04.
+    ↑ Upload: 60 or 200 photos in the same album?. Процитовано January 25, 2009.
+    ↑ How can I add more than 60 photos to an album?. Процитовано January 25, 2009.
+    ↑ Example of album from a regular user with a 200-photo limit. Процитовано January 25, 2009.
+    ↑ Photos. Facebook. Процитовано March 15, 2008.
+    ↑ Facebook (April 6, 2008). "April 6, 2008 Press Release". Прес-реліз. Переглянутий April 11, 2008.
+    ↑ Eugene (May 14, 2008). Facebook Chat. Facebook. Процитовано June 2, 2008.
+    ↑ Give gifts on Facebook!. Facebook. Архів оригіналу за 2013-06-27. Процитовано 2008-03-15.
+    ↑ Gifts. Facebook. Процитовано March 15, 2008.
+    ↑ The Marketplace Is Open... Facebook. Архів оригіналу за 2013-06-27. Процитовано 2008-03-15.
+    ↑ McCarthy, Caroline (2007-05-13). Hands-on with Facebook Marketplace. CNET. Архів оригіналу за 2013-06-27. Процитовано 2008-03-15.
+    ↑ «Facebook Facelift Targets Aging Users and New Competitors». The New York Times. July 21, 2008.
+    ↑ Moving to the new Facebook. Facebook. Процитовано 2008-09-12.
+    ↑ Facebook Testing Even Simpler Sign Up; Closing The Gap With MySpace In The U.S., TechCrunch. Published December 11, 2008.
+    ↑ DiPersia, Blaise (2009-06-09). Coming Soon: Facebook Usernames. Архів оригіналу за 2013-06-27. Процитовано 2009-06-13.
+    ↑ Gabbatt, Adam; Arthur, Charles (November 15, 2010). Facebook mail: it might kill Gmail, but 'it's not email'. The Guardian (London).
+    ↑ Facebook launches new messaging system – San Jose Mercury News. Mercurynews.com. Архів оригіналу за 2013-06-27. Процитовано 2011-01-13.
+    ↑ http://www.mediabusiness.com.ua/content/view/18165/42/lang,ru/
+    ↑ http://www.rian.ru/technology/20101101/291529513.html
+    ↑ http://mignews.com/news/society/world/240811_233949_57415.html За кнопку Like от Facebook будут штрафовать на 50 тыс. євро (рос.)
+    ↑ Facebook видалив сторінку полку «Азов» з соцмережі
+
+Посилання[ред. • ред. код]
+	Вікісховище має мультимедійні дані за темою: Facebook
+
+    Facebook.com
+    facebook стрічка новин на телеканалі euronews
+
+    п
+    о
+    р
+
+Facebook
+Основне 	
+Історія ·  Хронологія ·  Критика
+Веб-сайт 	
+Beacon ·  Особливості ·  Платформа
+Люди 	
+Засновники
+	
+Марк Цукерберг ·  Кріс Г'юз ·  Дастін Московіц ·  Едуардо Саверін
+Співробітники
+	
+Поточні: Марк Цукерберг ·  Кріс Кокс ·  Шеріл Сандберг ·  Пітер Тіл ·  Тед Аллйот  ·  Колишні: Ендрю Макколлум
+ПЗ 	
+HipHop for PHP, Tornado
+Інше 	
+Активність потоку ·  f8 конференція ·  Соціальна діаграма ·  Мільярдери мимоволі (книга) ·  Соціальна мережа (фільм) ·  Wirehog
+
+    п
+    о
+    р
+
+Соціальна мережа
+Кількість активних
+користувачів соцмережі 	
+>1 мільярд
+	
+Facebook
+>200 мільйонів
+	
+QZone • Twitter • LinkedIn • Pinterest • Google+• Instagram • Tumblr
+>100 мільйонів
+	
+Badoo •
+>10 мільйонів
+	
+Odnoklassniki.ru • Vk.com • Contact.meta.ua • Diary.ru • FriendFeed • Hi5 • Jaiku • Juick • Last.fm • LiveInternet.ru • Livemocha • LJ.Rossia.org • Mixi • My Opera • Myspace • Netlog • Nk.pl • Orkut • Parta.by • so.cl • TIKR.ru • Vine • XING • Windows Live Spaces • Mixcloud • SoundCloud • Diaspora
+до 10 мільйонів
+	
+Druzi.org.ua • Weua.info
+Інструменти 	
+Facebook Connect • OpenSocial • Програми аналізу соцмереж • Diaspora (програмне забезпечення)
+Загальне 	
+Порівняння програмного забезпечення • Онлайнова ідентичність • Профайл користувача • Віртуальна спільнота • 100+ мільйонів користувачів
+Застосунки 	
+Рекламування у соцмережах • Сервіси нерухомості у соцмережах • Знайомства (Порівняння сайтів знайомств) • Мобільні
+Інтерфейс користувача 	
+Групи • Хештеґ • Кнопка «Мені подобається» • Петиції • Реблоґґінґ • Інтернет-опитування • Потік активності
+Українські соцмережі 	
+Druzi.org.ua • Weua.info
+Пов'язані значення 	
+Експеримент маленького світу • Мережа маленького світу • Соціальна Мережа • Сервіс соціальної мережі • Паноптикон
+
+    п
+    о
+    р
+
+Найбільші компанії галузі інформаційних технологій
+
+    Список найбільших софтверних компаній
+
+Консультування і
+аутсорсинг 	
+
+    Accenture
+    Atos
+    Booz Allen Hamilton
+    BT
+    CACI
+    Capgemini
+    CGI Group
+    Cognizant
+    CSC
+    Deloitte
+    Dell Services
+    Fujitsu
+    Getronics
+    HCL Technologies
+    Hitachi
+    HP
+    IBM
+    Indra
+    Infosys
+    Logica
+    NEC
+    Northrop Grumman
+    NTT Data
+    Orange Business Services
+    SAIC
+    TCS
+    Tieto
+    T-Systems
+    Unisys
+    Wipro
+
+Обробка зображень 	
+
+    Canon
+    HP
+    Kodak
+    Kyocera
+    Lexmark
+    Ricoh
+    Seiko Epson
+    Sharp
+    Toshiba
+    Xerox
+
+Зберігання інформації 	
+
+    Dell
+    EMC
+    Fujitsu
+    Hitachi
+    HP
+    IBM
+    NetApp
+    Oracle
+    Samsung
+    Seagate
+    Western Digital
+
+Мейнфрейми 	
+
+    IBM
+    Fujitsu
+
+Рухомі пристрої 	
+
+    Apple
+    ASUS
+    HTC
+    Huawei
+    LG
+    Motorola Mobility
+    NEC Casio
+    Nokia
+    RIM
+    Samsung
+    Sony
+    ZTE
+
+Мережеве обладнання 	
+
+    Alcatel-Lucent
+    Avaya
+    Cisco
+    Ericsson
+    Fujitsu
+    HP
+    Huawei
+    Juniper
+    Mitsubishi Electric
+    Motorola Solutions
+    NEC
+    Nokia Siemens
+    ZTE
+
+OEM-и 	
+
+    Celestica
+    Compal Electronics
+    Flextronics
+    Foxconn
+    Jabil
+    Quanta
+    Sanmina-SCI
+    TPV Technology
+    Wistron
+
+Персональні комп'ютери
+і сервери 	
+
+    Acer
+    Apple
+    ASUS
+    Dell
+    Fujitsu
+    HP
+    Lenovo
+    LG
+    NEC
+    Samsung
+    Sony
+    Toshiba
+
+Лише сервери
+	
+
+    IBM
+    Oracle
+    Unisys
+
+Точки продажу 	
+
+    IBM
+    NCR
+
+Напівпровідники 	
+
+    Advanced Micro Devices
+    Broadcom
+    Elpida Memory
+    Freescale Semiconductor
+    Fujitsu
+    SK Hynix
+    Infineon Technologies
+    Intel
+    Marvell Technology Group
+    MediaTek
+    Micron Technology
+    Nvidia
+    NXP
+    Panasonic
+    Qualcomm
+    Renesas Electronics
+    Samsung
+    Sony
+    STMicroelectronics
+    Texas Instruments
+    Toshiba
+    VIA Technologies
+
+Напівпровідникові фабрики
+	
+
+    GlobalFoundries
+    SMIC
+    TowerJazz
+    TSMC
+    United Microelectronics Corporation
+
+Програмне забезпечення 	
+
+    Adobe
+    Apple
+    CA
+    Google
+    HP
+    IBM
+    Intuit
+    Microsoft
+    Oracle
+    SAP
+    Symantec
+    VMware
+
+Телекомунікаційні
+послуги 	
+
+    América Móvil
+    AT&T
+    Bell Canada
+    BT
+    Bharti Airtel
+    CenturyLink
+    China Mobile
+    China Telecom
+    China Unicom
+    Comcast
+    Deutsche Telekom
+    France Télécom
+    Hutchison
+    KDDI
+    KPN
+    KT
+    MTS
+    NTT
+    NTT DoCoMo
+    Reliance Communications
+    Rogers
+    SingTel
+    SK Telecom
+    SoftBank
+    Sprint Nextel
+    Swisscom
+    Telenor
+    Telecom Italia
+    Telefónica
+    TeliaSonera
+    Verizon
+    Vivendi
+    Vodafone
+
+Вебсайти 	
+
+    Amazon.com
+    Baidu
+    eBay
+    Facebook
+    Google
+    Yahoo!
+
+Методологія: FY2010/11 продажі: групи 1-11 і 13 - US$3 мільярди; група 12 - US$10 мільярдів
+
+    п
+    о
+    р
+
+NASDAQ-100
+
+    21st Century Fox
+    Activision Blizzard
+    Adobe Systems
+    Akamai Technologies
+    Alexion Pharmaceuticals
+    Altera
+    Amazon.com
+    American Airlines Group
+    Amgen
+    Analog Devices
+    Apple Inc.
+    Applied Materials
+    Autodesk
+    Automatic Data Processing
+    Avago Technologies
+    Baidu
+    Bed Bath & Beyond
+    Biogen Idec
+    Broadcom
+    C. H. Robinson Worldwide
+    CA, Inc.
+    Catamaran Corporation
+    Celgene
+    Cerner
+    Charter Communications
+    Check Point
+    Cisco Systems
+    Citrix Systems
+    Cognizant
+    Comcast
+    Costco
+    DirecTV
+    Discovery Communications
+    Dish Network
+    Dollar Tree
+    eBay
+    Electronic Arts
+    Expeditors International
+    Express Scripts
+    Facebook
+    Fastenal
+    Fiserv
+    Garmin
+    Gilead Sciences
+    Google
+    Henry Schein
+    Illumina
+    Intel
+    Intuit
+    Intuitive Surgical
+    KLA-Tencor
+    Keurig Green Mountain
+    Kraft Foods
+    Lam Research
+    Liberty Global
+    Liberty Interactive
+    Liberty Media
+    Linear Technology
+    Marriott International
+    Mattel
+    Micron Technology
+    Microsoft
+    Mondelēz International
+    Monster Beverage
+    Mylan
+    NetApp
+    Netflix
+    Nvidia
+    NXP Semiconductors
+    O'Reilly Automotive
+    Paccar
+    Paychex
+    Qualcomm
+    Regeneron
+    Ross Stores
+    SanDisk
+    SBA Communications
+    Seagate Technology
+    Sigma-Aldrich
+    Sirius XM Holdings
+    Staples
+    Starbucks
+    Stericycle
+    Symantec
+    Tesla Motors
+    Texas Instruments
+    The Priceline Group
+    Tractor Supply Company
+    TripAdvisor
+    Verisk Analytics
+    Vertex Pharmaceuticals
+    Viacom
+    VimpelCom Ltd.
+    Vodafone
+    Walgreens Boots Alliance
+    Western Digital
+    Whole Foods Market
+    Wynn Resorts
+    Xilinx
+    Yahoo!
+
+П:  Інформаційні технології П:  Соціологія П:  США
+Отримано з https://uk.wikipedia.org/w/index.php?title=Facebook&oldid=16662883	
+Категорії:
+
+    Компанії, що входять до індексу NASDAQ-100
+    Онлайнові соціальні мережі
+    Веб 2.0
+    Блоги
+    Facebook
+    Програмне забезпечення для Android
+    Програмне забезпечення для BlackBerry
+    Програмне забезпечення для Symbian
+    Програмне забезпечення для Windows Phone
+    Програмне забезпечення для iOS
+    Програмне забезпечення для Bada
+    Компанії Кремнієвої долини
+
+Приховані категорії:
+
+    Статті з нечинними посиланнями
+    Надпопулярні статті
+
+Навігаційне меню
+Особисті інструменти
+
+    Створити обліковий запис
+    Увійти
+
+Простори назв
+
+    Стаття
+    Обговорення
+
+Варіанти
+
+Перегляди
+
+    Читати
+    Редагувати
+    Редагувати код
+    Перегляд історії
+
+Ще
+
+Пошук
+Навігація
+
+    Головна сторінка
+    Поточні події
+    Нові редагування
+    Нові сторінки
+    Випадкова стаття
+
+Участь
+
+    Портал спільноти
+    Кнайпа
+    Довідка
+    Пожертвування
+
+Панель інструментів
+
+    Посилання сюди
+    Пов'язані редагування
+    Спеціальні сторінки
+    Постійне посилання
+    Інформація про сторінку
+    Елемент Вікіданих
+    Цитувати сторінку
+
+Друк/експорт
+
+    Створення книги
+    Завантажити як PDF
+    Версія до друку
+
+Іншими мовами
+
+
+Редагувати посилання
+
+    Цю сторінку востаннє змінено: 09:16, 28 серпня 2015.
+    Текст доступний на умовах ліцензії Creative Commons Attribution/Share-Alike, також можуть діяти додаткові умови. Детальніше див. Умови використання.
+
+    Політика конфіденційності
+    Про Вікіпедію
+    Відмова від відповідальності
+    Зворотний зв'язок
+    Розробники
+    Мобільний вигляд
+

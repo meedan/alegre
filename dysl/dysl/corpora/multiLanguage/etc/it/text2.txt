@@ -1,0 +1,458 @@
+
+Facebook
+Da Wikipedia, l'enciclopedia libera.
+Vai a: navigazione, ricerca
+bussola Disambiguazione – Se stai cercando l'omonima azienda, vedi Facebook Inc..
+Facebook
+Logo
+URL 	facebook.com
+Tipo di sito 	Servizio di rete sociale
+Lingua 	Multilingua
+Registrazione 	Gratuita
+Proprietario 	Facebook, Inc.
+Creato da 	Mark Zuckerberg, Eduardo Saverin, Andrew McCollum, Dustin Moskovitz, Chris Hughes
+Lancio 	4 febbraio 2004
+Stato attuale 	Attivo
+Slogan 	Facebook aiuta a connetterti e rimanere in contatto con le persone della tua vita.
+Scritto in 	C++, linguaggio D[1] e PHP
+
+Facebook è un servizio di rete sociale lanciato nel febbraio 2004, posseduto e gestito dalla società Facebook Inc.[2], basato su una piattaforma software scritta in vari linguaggi di programmazione. Il sito, fondato ad Harvard negli Stati Uniti da Mark Zuckerberg e dai suoi compagni di università Eduardo Saverin, Dustin Moskovitz e Chris Hughes, era originariamente stato progettato esclusivamente per gli studenti dell'Università di Harvard, ma fu presto aperto anche agli studenti di altre scuole della zona di Boston, della Ivy League e della Stanford University.
+
+Successivamente fu aperto anche agli studenti delle scuole superiori e poi a chiunque dichiarasse di avere più di 13 anni di età. Da allora Facebook raggiunse un enorme successo: secondo Alexa dal giugno 2013 è diventato il sito più visitato al mondo, superando Google[3]; ha cambiato profondamente molti aspetti legati alla socializzazione e all'interazione tra individui, sia sul piano privato che quello economico e commerciale[4].
+
+È disponibile in oltre 70 lingue e nel gennaio 2015 contava circa 1,4 miliardi di utenti attivi (745 milioni si collegano via app e 526 milioni via Messenger)[5], che effettuano l'accesso almeno una volta al mese, classificandosi come primo servizio di rete sociale per numero di utenti attivi.[6]
+
+Il nome "Facebook" prende spunto da un elenco con nome e fotografia degli studenti, che alcune università statunitensi distribuiscono all'inizio dell'anno accademico per aiutare gli iscritti a socializzare tra loro[7].
+
+Gli utenti possono accedere al sito previa una registrazione gratuita, durante la quale vengono richiesti dati personali come nome, cognome, data di nascita e indirizzo email. Il sito chiarisce che l'inserimento obbligatorio della data di nascita serve esclusivamente "per favorire una maggiore autenticità e consentire l'accesso ai vari contenuti in base all'età". Completata la registrazione, gli utenti possono creare un profilo personale, includere altri utenti nella propria rete sociale, aggiungendoli come "amici", e scambiarsi messaggi, anche via chat, incluse le notifiche automatiche quando questi aggiornano i propri profili.
+
+Inoltre gli utenti possono fondare e unirsi a gruppi per condividere interessi in comune con altri utenti, organizzati secondo il luogo di lavoro, la scuola, l'università o altre caratteristiche, condividere contenuti multimediali ed utilizzare varie applicazioni presenti sul sito[8]. Per personalizzare il proprio profilo l'utente può caricare una foto, chiamata immagine del profilo, con la quale può rendersi riconoscibile. Può inoltre fornire ulteriori informazioni, come il comune di nascita (esempio: Città natale: Roma) e quello di residenza (esempio: Vive a Torino), la scuola frequentata, il proprio datore di lavoro, l'orientamento religioso e quello politico, la propria situazione sentimentale e molte altre.
+
+Indice
+
+    1 Storia
+    2 Funzionamento
+        2.1 Profilo personale
+        2.2 Funzionalità
+        2.3 Dispositivi mobili
+    3 Piattaforma tecnologica
+    4 Privacy e controversie
+    5 Attacchi hacker
+    6 Dinamiche sociali
+    7 Crescita
+    8 Utenti iscritti a Facebook per paese
+    9 Influenze nella cultura
+        9.1 Cinema
+        9.2 Televisione
+        9.3 Musica
+    10 Note
+    11 Bibliografia
+    12 Voci correlate
+    13 Altri progetti
+    14 Collegamenti esterni
+
+Storia[modifica | modifica wikitesto]
+Mark Zuckerberg, fondatore di Facebook
+Sean Parker, collaboratore di Facebook
+
+L'allora diciannovenne Mark Zuckerberg mandò in rete Facemash, predecessore di Facebook, il 28 ottobre 2003, mentre frequentava il secondo anno all'università di Harvard. Per terminare il progetto, Zuckerberg si introdusse in aree protette della rete universitaria per copiare le foto dei documenti di riconoscimento degli studenti. Facemash registrò più di 450 visitatori e 22.000 foto visualizzate durante le prime quattro ore di visibilità del sito, ma fu chiuso pochi giorni dopo dai responsabili dell'università. Zuckerberg fu accusato di aver violato la sicurezza, i copyright e la privacy individuale, rischiando potenzialmente l'espulsione, ma alla fine non subì alcun provvedimento.
+
+Nel gennaio 2004 Zuckerberg cominciò a programmare un nuovo sito web, che vide la luce il 4 febbraio 2004, anche grazie all'aiuto di Andrew McCollum, che contribuì alla programmazione, e a Eduardo Saverin, che ne curò gli aspetti aziendali. Il sito era raggiungibile all'indirizzo thefacebook.com. Sei giorni dopo altri tre studenti di Harvard, Cameron e Tyler Winklevoss e Divya Narendra, accusarono Zuckerberg di averli truffati, in quanto avrebbe promesso loro di aiutarli a creare un servizio di rete sociale chiamato "HarvardConnection.com" mentre era intenzionato a rubargli l'idea per creare un sito concorrente. L'accusa si tradusse successivamente in una causa legale.
+
+Per la fine del mese di febbraio, più della metà della popolazione universitaria di Harvard era registrata al servizio. A quel tempo, Zuckerberg fu aiutato anche dal grafico Dustin Moskovitz e da Chris Hughes per la promozione del sito e nel marzo 2004 Facebook si espanse all'Università di Stanford, alla Columbia University e all'Università Yale. Ad aprile del 2004 il servizio si allargò al resto della Ivy League, al MIT, alla Boston University e al Boston College. Fu poi la volta di altri istituti negli Stati Uniti e in Canada. A metà del 2004 fu fondata la corporation Facebook, Inc.. L'imprenditore Sean Parker, che fino ad allora era stato un consigliere informale per Zuckerberg, ne divenne presidente. A giugno 2004, terminato l'anno accademico, Zuckerberg e Moskovitz si trasferirono a Palo Alto in California con McCollum, che aveva seguito uno stage estivo alla Electronic Arts. Affittarono una casa vicino all'Università di Stanford dove furono raggiunti da Adam D'Angelo e da Parker. A fine mese ricevettero il primo finanziamento, dal cofondatore di PayPal Peter Thiel.
+
+Tra aprile e agosto del 2005 venne registrato il dominio attuale, facebook.com, per la cifra di 200.000 dollari[9]. Col tempo, persone con un indirizzo di posta elettronica con dominio universitario (per esempio .edu, .ac.uk ed altri) acquisiscono i diritti per diventare utenti. Il 27 febbraio 2006 il servizio fu aperto anche ai licei e ad alcune grandi compagnie, tra cui Apple e Microsoft. Dal 26 settembre 2006 chiunque abbia più di 13 anni può parteciparvi.
+
+Dal settembre 2006 al settembre 2007 la posizione nella graduatoria del traffico dei siti è passata, secondo Alexa, dalla sessantesima alla settima posizione. Dal luglio 2007 figura nella classifica dei 10 siti più visitati al mondo ed è il sito numero uno negli Stati Uniti per foto visualizzabili, con oltre 60 milioni di immagini caricate settimanalmente.
+
+In Italia si è registrato un boom di presenze nel 2008: nel mese di agosto si sono contate oltre un milione e trecentomila visite, con un incremento sull'anno prima del 961%[10]; il terzo trimestre ha poi visto l'Italia in testa alla lista dei paesi con il maggiore incremento del numero di utenti (+135%)[10]. Secondo i dati forniti da Facebook e raccolti nell'Osservatorio Facebook[11], gli utenti italiani nel mese di novembre 2011 sono 21 milioni, di cui 13 milioni si collegano ogni giorno. Coloro che accedono mensilmente da dispositivo mobile sono 7,5 milioni. L'ultima rilevazione di agosto 2013 mostra un'ulteriore crescita: gli utenti attivi nel mese sono 24 milioni, di cui 17 milioni si collegano quotidianamente. Da dispositivo mobile sono 15 milioni su base mensile e 10 su base giornaliera.
+
+Il traffico su Facebook è cresciuto a un ritmo sostenuto, fino a superare per una settimana, nel marzo 2010, il motore di ricerca Google per numero di visite negli Stati Uniti[12].
+
+A marzo 2011 è stato reso noto che Facebook rimuoveva profili personali al passo di circa 20.000 al giorno a causa di varie infrazioni, tra cui spam, contenuti non permessi ed età più bassa del minimo consentito
+Vecchio logo di Facebook, utilizzato fino al 30 giugno 2015
+
+Nel 2011 l'azienda prende spunto da molte caratteristiche introdotte dal suo nuovo rivale Google+ (in risposta al social network di Google), tra cui ad esempio:
+
+    la traduzione automatica del lingua dei post in bacheca;
+    la possibilità di condividere dall'applicazione per dispositivi mobili.
+
+A marzo 2012 Facebook annuncia il lancio di App Center, un negozio online per dispositivi mobili, dedicato alle applicazioni per connettersi a Facebook.
+
+Il 1º giugno 2012 Facebook ha promosso una votazione riguardante la nuova Dichiarazione dei diritti e delle responsabilità e la Normativa sull'utilizzo dei dati, in cui era possibile scegliere i vecchi documenti del 2011 oppure i nuovi del 2012. La votazione si chiuderà l'8 giugno e se avranno votato più 300 milioni di utenti sarà vincolante[13][14].
+Funzionamento[modifica | modifica wikitesto]
+
+Il sito è gratuito per gli utenti e trae guadagno dalla pubblicità, inclusi i banner. Molti analisti invece sostengono che i ricavi monetari di Facebook non sono così elevati rispetto alle potenzialità di un servizio di rete sociale, aggirandosi intorno ai 230 milioni di dollari nel 2009. Infatti solo nel 2009, dopo 5 anni dalla sua nascita, il portale è riuscito a chiudere il primo bilancio in attivo. I ricavi commerciali derivanti dalla pubblicità riescono a coprire solo in parte i costi fissi di gestione del sito (archiviazione, server, ecc.) tanto da rendere necessario l'apporto dei soci (tra cui l'1,6% di Microsoft)[15]. Per migliorare la raccolta pubblicitaria Facebook aveva implementato Beacon, un sistema in grado di tracciare l'attività degli utenti su siti esterni convenzionati, in particolare le loro abitudini di acquisto online, consentendo pubblicità mirate e permettendo agli utenti di condividere tali attività sul News Feed dei propri amici. Beacon fu lanciato il 6 novembre 2007 con 44 siti partner. Il servizio divenne oggetto di una class action per la sua natura invasiva per la privacy, e venne perciò sospeso a settembre del 2009[16].
+Profilo personale[modifica | modifica wikitesto]
+
+Gli utenti creano profili che spesso contengono fotografie e liste di interessi personali, scambiano messaggi privati o pubblici. Possono creare e prendere parte a "Gruppi", in cui si condividono interessi, e a "Pagine" legate a cose o persone che gli piacciono. Secondo TechCrunch, "circa l'85% degli studenti dei college ha un profilo sul sito. Di quelli che sono iscritti il 60% accede al sito quotidianamente. Circa l'85% almeno una volta la settimana, e il 93% almeno una volta al mese". Secondo Chris Hughes, il portavoce per Facebook, "Le persone passano circa 19 minuti al giorno su Facebook"[17].
+
+Gli iscritti a Facebook possono scegliere di aggregarsi a una o più reti, organizzate per città, posto di lavoro, scuola e religione.
+Funzionalità[modifica | modifica wikitesto]
+
+Dal 2006 è attivo sulla homepage del profilo personale il News-feed, un aggregatore che mostra in successione gli aggiornamenti propri e degli amici. Inizialmente questo sistema ha ricevuto delle critiche da parte degli utenti, secondo alcuni i news-feed includevano molte informazioni sgradite e irrilevanti, secondo altri metteva troppo in risalto informazioni personali e potenzialmente sensibili (come il cambiamento della situazione sentimentale, la partecipazione ad eventi e le conversazioni con altri utenti). In risposta a queste critiche è stata data la possibilità di scegliere che tipo di informazioni condividere automaticamente e con chi. Oggi è infatti possibile raggruppare gli amici in categorie e scegliere con quali categorie condividere certe informazioni (come cambiamenti del profilo, post sulla bacheca e l'aggiunta di nuovi amici).
+
+Una delle applicazioni più utilizzate su Facebook è quella delle Foto, dove gli utenti possono caricare un numero illimitato di album di immagini (a differenza di altri servizi di condivisione di immagini come Photobucket e Flickr). Il solo limite è nel numero massimo di 1000 foto per album. Le impostazioni della privacy possono essere cambiate per ogni album, limitandone o meno la visione a certi utenti. Un'altra caratteristica delle Foto è la funzione del tag, con la quale si appone un'"etichetta" su un'immagine segnalando chi è presente nella foto e creando un link al suo profilo se si tratta di un altro utente Facebook. In questo modo si crea automaticamente, per ogni profilo, una raccolta di foto in cui quell'utente è stato taggato.
+
+Facebook offre diversi servizi di messaggistica privata. È possibile inviare privatamente dei messaggi ad altri utenti, se le impostazioni della privacy lo consentono. Ad aprile 2008 è stata lanciata l'applicazione Chat per scambiare messaggi in tempo reale con gli amici collegati al loro profilo Facebook. Il 15 novembre 2010 è stato annunciato un nuovo servizio integrato di gestione dei messaggi. Tramite una sola applicazione è ora possibile gestire contemporaneamente messaggi sms, chat, email e normali messaggi, e regolare le impostazioni della privacy.
+
+La funzione Note, introdotta nell'agosto 2006, permette agli utenti di pubblicare scritti e articoli in maniera simile a un blog. Sono attive le funzioni di tag e di inserimento immagini.
+
+Dal maggio 2007 su Facebook è disponibile il Marketplace, che consente agli utenti di inserire gratuitamente annunci che risultano visibili solo da utenti presenti nella stessa rete.
+
+Nel giugno 2009 è stata introdotta la funzionalità username, che rende i profili accessibili tramite indirizzi semplificati, come ad esempio "http://www.facebook.com/facebook", invece del precedente formato "http://www.facebook.com/profile.php?id=20531316728".
+
+Il 21 aprile 2010 è stato lanciato il tasto Mi piace, con il quale gli utenti possono esprimere apprezzamento su dei singoli contenuti.
+
+Dall'aprile 2011 la chat è stata arricchita da una funzione per effettuare chiamate vocali, che permette anche di lasciare messaggi in una segreteria vocale. Il 6 luglio 2011 è stato lanciato il servizio di videochiamate che utilizza la tecnologia di Skype.
+
+Oltre alle attività di servizio di rete sociale, sono state sviluppate numerosi videogiochi gratuiti che hanno coinvolto milioni di utenti. Tra questi ci sono FarmVille, sviluppato dal produttore di software Zynga, che ha raggiunto 11 milioni di utenti attivi (cioè non occasionali) quotidianamente[18]; sempre di Zynga, Mafia Wars è arrivato a 5 milioni di utenti[19], mentre Pet Society, sviluppato da Playfish, è stato classificato come l'applicazione Facebook più popolare nell'aprile 2009[20][21]. Da dicembre 2010 sono presenti anche due nuovi giochi prodotti da Square Enix: Knights of the Crystals e Chocobo's Crystal Tower[22]. Candy Crush Saga, invece, nel 2013 è divenuto il gioco più popolare di Facebook superando FarmVille.
+
+Il 15 gennaio 2013 è stata annunciata la nuova funzione di ricerca Graph Search, che intende rispondere alle domande degli utenti con la lingua naturale, invece che con un elenco di link, sfruttando le informazioni presenti sui profili dei loro amici.[23] Questa funzionalità, inizialmente disponibile solo per gli utenti in lingua inglese, verrà in seguito esteso anche agli utenti delle altre nazionalità. Ad aprile 2013, viene resa disponibile una nuova versione di Messenger for Android, famosa applicazione ideata direttamente dai developers di Facebook, grazie alla quale è possibile chattare con un proprio amico anche se la suddetta applicazione non è aperta in primo piano, facendo uso delle Chat Heads. Per i dispositivi iOS, questa novità è altamente limitata per seguire la politica delineata da Apple, dunque le Chat Heads sono state introdotte solamente se l'applicazione è aperta in primo piano. Se si desidera usufruire di tale funzionalità anche al di fuori dell'app stessa, è possibile installare tramite l'applicazione Cydia, disponibile solamente su dispositivi Jailbroken, il pacchetto MessageBox. Nello stesso mese, precisamente il 4 aprile 2013, il CEO Mark Zuckerberg annuncia il lancio, previsto per il 12 aprile, di Facebook Home, app multifunzione disponibile in esclusiva sugli smartphone Android. Si tratta di un'interfaccia grafica che permette in ogni momento di accedere a tutti i contenuti pubblicati dai propri amici e di chattare con loro, il tutto durante il normale utilizzo dello smartphone.[24] L'applicazione è attualmente disponibile solo per HTC One, HTC One X+, HTC One X, Samsung Galaxy S3, Samsung Galaxy S4 e Samsung Galaxy Note, mentre le versioni per altri dispositivi verranno rilasciate in un secondo momento. Il 13 novembre 2013 viene rilasciata la nuova versione 3.0 dell'app Facebook Messenger[25], sia per Android che per iOS. La nuova versione, oltre ad una grafica totalmente rivisitata consente di utilizzare il numero di telefono per inviare messaggi a tutti i numeri senza dover necessariamente essere amici su Facebook, richiamando la funzione di altre popolari app di messaggistica istantanea come WhatsApp.
+Dispositivi mobili[modifica | modifica wikitesto]
+
+Facebook integra alcune delle suddette funzionalità sulle sue applicazioni per dispositivi mobili, come la possibilità di caricare contenuti, di ricevere e rispondere ai messaggi, di mandare e ricevere "poke" (cioè richiamare l'attenzione di un utente toccandolo simbolicamente sulla spalla), scrivere sulla bacheca degli utenti o semplicemente la possibilità di navigare sul sito.
+Piattaforma tecnologica[modifica | modifica wikitesto]
+
+Le pagine Facebook sono scritte in linguaggio PHP e sono poi tradotte in C++ dal convertitore HipHop for PHP, ideato appositamente da Facebook. Grazie a questa tecnologia, Facebook dichiara un risparmio del 50% nell'utilizzo del processore dei propri server.
+
+Facebook è programmato come un'unica applicazione. Secondo quanto dichiarato dall'ingegnere di Facebook Chuck Rossi, Facebook consiste in 1,5 GB di codice binario che viene distribuito ai server tramite il protocollo BitTorrent.
+
+Nell'autunno 2008 è stato reso disponibile un sistema di API ideato per l'integrazione di siti esterni. Usando Connect è possibile collegare il proprio account Facebook con un account su un sito internet esterno utilizzato per inserire commenti o articoli, come ad esempio un blog. In pratica è possibile utilizzare le proprie credenziali di Facebook per accedere in tutti i siti che supportano Facebook Connect.
+
+Dal punto di vista tecnico Connect è reso possibile da una particolare libreria Javascript rilasciata da Facebook e da una estensione del linguaggio XHTML chiamata FBML. Questo linguaggio permette agli sviluppatori di inserire sulle pagine di un sito degli elementi dinamici come pulsanti, form, elementi multimediali e molto altro. Il linguaggio FBML viene poi parsato dallo stesso Facebook che "traduce" i suoi tag speciali con l'HTML e gli stili necessari[26]. Le pagine Facebook utilizzano inoltre la tecnologia AJAX.
+
+Facebook è paragonabile a Myspace, ma una significativa differenza tra le due piattaforme è il livello di personalizzazione della pagina personale. Mentre Myspace consente agli utenti di arricchire lo stile delle pagine usando i linguaggi HTML e CSS, su Facebook è possibile inserire solo del testo.
+
+Il 20 luglio 2008 Facebook ha introdotto un rinnovamento sull'interfaccia utente detto Facebook Beta, che è stato applicato gradualmente in tutte le pagine del sito. I profili personali sono stati suddivisi in schede secondo le diverse sezioni ("Amici", "Foto", eccetera...) e in generale la grafica è diventata più minimale.
+Privacy e controversie[modifica | modifica wikitesto]
+Voce da controllare
+	Questa voce o sezione sull'argomento internet è ritenuta da controllare.
+Motivo: La sezione sta diventando una collezione di fatti scollegati l'uno dall'altro, perlopiù in un'ottica soltanto italiana. Sarebbe più utile limitarsi all'analisi della normativa sulla privacy e della sua evoluzione nel tempo.
+Partecipa alla discussione e/o correggi la voce.
+
+Diversi problemi[27] sono sorti riguardo l'uso di Facebook come un mezzo di controllo e come miniera di dati.
+
+Inizialmente non esisteva un controllo che definiva "chi-può-vedere-cosa". Dal 31 maggio 2010 è possibile applicare le impostazioni di privacy anche ai singoli post o ai singoli commenti[28]. Inoltre è stata estesa la lista dei "livelli", aggiungendo anche un livello personalizzato. I livelli disponibili sono:
+
+    Solo Io
+    Amici
+    Amici di amici
+    Amici e reti
+    Tutti
+    Personalizzato
+
+Questi livelli possono essere impostati indipendentemente per ciascuna "categoria" di informazioni del profilo, sui singoli dati (commenti, post, ecc.) oppure sui dati personali (come "Data di nascita", "Orientamento politico e religioso", "Istruzione e lavoro", ecc.)[29][30].
+
+Agendo opportunamente sulle impostazioni del profilo è quindi possibile limitare la diffusione dei dati personali. In particolare nel menù Impostazioni è disponibile la voce Impostazioni sulla privacy, dalla quale sarà possibile agire sulle categorie di dati tra cui: profilo, ricerca, notizie e bacheca. Naturalmente tali impostazioni non limitano l'accesso ai dati di coloro cui i gestori del sito attribuiscono privilegi di amministrazione, per motivi di ordine e legali.
+
+Inizialmente Facebook consentiva solamente di disattivare l'account in modo che non fosse più visibile nel sito e nei motori di ricerca. A partire dal 28 febbraio 2008 l'utente ha anche a disposizione un'opzione che cancella in modo permanente i suoi dati dai server del sito.
+
+Tuttavia si pensi a foto e video ripresi nella bacheca di altri utenti, o alle foto pubblicate da terzi in cui un utente è taggato, al limite dietro suo consenso. Una volta taggato in una foto, non appena un testo foto o video è stato copiato nel profilo di altri utenti, questo materiale non può essere eliminato (se non espressamente richiesto), anche quando l'interessato decide di cancellare il suo profilo. La cancellazione è limitata al profilo personale, ma non a tutto ciò che è stato copiato da terzi o condiviso con altri.
+
+Inoltre, i contenuti pubblicati dagli iscritti (come fotografie, video e commenti) sono proprietà del sito. Caso raro in giurisprudenza, il sito si dichiara proprietario, ma non responsabile dei contenuti, e, come molti altri content provider, rifiuta di censurare o limitare la visibilità di contenuti e gruppi, respinge le critiche in merito a contenuti diffamatori, che istigano alla commissione di reati[mi risulta che non sia più così, almeno non in modo indefinito], e alle richieste di risarcimento dei danni che possono essere mosse in tali circostanze.
+
+Secondo il codice italiano della protezione dei dati personali, la proprietà dei contenuti non estingue i diritti soggettivi degli interessati. Se questi sono autori dei contenuti, il passaggio di proprietà al sito al momento della pubblicazione, di nuovo, estingue i diritti inerenti al copyright, non quelli soggettivi. L'utente ha il diritto di ottenere informazioni in merito al trattamento dei propri dati personali, dei soggetti terzi che ne sono entrati in possesso, di vietarne la pubblicazione, e di rendere definitiva la propria cancellazione dal sito, che è tenuto a distruggere ogni copia dei dati personali in suo possesso, e a divulgare la richiesta di cancellazione ai soggetti terzi che per suo tramite abbiano acquisito tali dati[31].
+
+Le critiche e l'attenzione internazionale di diversi soggetti sia nazionali che associazioni hanno portato a maggio 2010 ad una revisione della gestione della privacy che aumenta leggermente la definizione ma con certezza la precisione e la chiarezza con cui l'utente con l'uso e la visione di una sola griglia accederà all'impostazione dei diversi aspetti della privacy del proprio profilo[32].
+
+Due studenti del Massachusetts Institute of Technology riuscirono a scaricare più di 70.000 profili di Facebook utilizzando uno shell script automatico. Nel maggio del 2008 un programma della BBC, Click, mostrò che era possibile sottrarre i dati personali di un utente e dei suoi amici con delle applicazioni malware[33].
+
+Facebook è inoltre soggetto al fenomeno di creazione di falsi profili di personaggi famosi e non solo[34][35].
+
+Numerosi i casi in Italia di violazione della privacy per la pubblicazione di foto "scomode". Il 14 maggio 2009 vengono scoperte foto di pazienti intubati visibili sul sito; l'infermiera che le aveva pubblicate non si era accorta che fossero alla portata di tutti[36].
+
+Alla fine di ottobre 2009 su Facebook, sono comparse ingiurie ed insulti da parte di un gruppo di discussione intitolato "Uccidiamo Berlusconi". In seguito al risalto mediatico il ministro Maroni ha promesso di denunciare chi è intervenuto e di procedere penalmente[37][38].
+
+Sul sito sono stati creati vari gruppi che in passato hanno inneggiato a Salvatore Riina e al massacro di Srebrenica[39][40].
+
+Nel maggio 2010 il Pakistan e l'Afghanistan hanno deciso l'oscuramento di Facebook e YouTube per evitare la diffusione delle caricature di Maometto[41].
+
+Nel settembre 2010 su Facebook, dopo uno studio effettuato nei laboratori di sicurezza di AVG Technologies, sono state riscontrate circa 11.000 pagine infette che mettono a rischio gli utenti, esposti soprattutto al furto di identità[42].
+
+Recentemente Facebook ha attivato l'opzione di riconoscimento facciale delle immagini pubblicate dagli utenti, causando alcune polemiche per la privacy[43].
+Attacchi hacker[modifica | modifica wikitesto]
+Exquisite-kfind.png 	Lo stesso argomento in dettaglio: Attacchi hacker a Facebook.
+
+Nel corso della sua esistenza Facebook ha subito diversi attacchi informatici: celebre è quello del 2005, effettuato dallo studente americano Chris Putnam che con l'aiuto di alcuni compagni creò un worm in grado, tra le altre cose, di convertire la grafica dei profili Facebook e Myspace; Mark Zuckerberg in persona notò il ragazzo, arrivando addirittura ad assumerlo.[44] Successivamente il social subì attacchi più pesanti, che minarono la sicurezza degli account dei diversi utenti: nel 2013 furono rubate per 318.000 credenziali d'accesso[45], mentre nel 2015 il server rimase down per quasi un'ora facendo temere a tutti un altro attacco, quando probabilmente invece si trattava solamente di un semplice intervento di manutenzione.[46]
+Dinamiche sociali[modifica | modifica wikitesto]
+
+In un articolo pubblicato sul suo blog personale, il sociologo ingaggiato da Facebook, Cameron Marlow[47], ha reso pubblici i dettagli di uno studio[48] condotto dal Facebook Data Team sulle dinamiche sociali degli utenti iscritti. Lo scopo della ricerca era stabilire se Facebook accresce la dimensione della rete personale di un individuo[49]. Per rispondere a questa domanda, nello studio si è creata una distinzione qualitativa degli amici su Facebook in tre sottogruppi interni ad un gruppo generale.
+
+Il gruppo generale si riferisce a “tutti gli amici”[50], ovvero alla lista di persone che un utente di Facebook considera come tali. Secondo Marlow, la parola “amici” in questo contesto appare un po’ ambigua. Alla curiosità di utenti che gli chiedono di valutare se hanno abbastanza amici su Facebook o se ne hanno pochi, il sociologo risponde che il linguaggio usato potrebbe indurre a commettere un errore. Infatti, quelli che nel linguaggio in uso vengono considerati come amici, potrebbero essere più semplicemente persone che un individuo ha incontrato ad un certo punto della sua vita. Riguardo al numero di questa rete sociale, i dati ufficiali di Facebook[51] riproposti da Marlow parlano di 120 amici per l'utente medio. Lo stesso Marlow afferma però che questo dato può non essere significativo per stimare la dimensione della rete sociale di una persona. Innanzitutto perché il sito è ancora abbastanza giovane e il numero di iscritti è ancora relativamente basso. Il che vuol dire che non tutte le persone conosciute da un utente registrato su Facebook potrebbero essere iscritte al sito e questo minerebbe la possibilità dell'individuo di costruire una sua rete sociale corrispondente a quella che potrebbe costruire con altri mezzi. A tal proposito, Marlow cita un altro strumento di stima della dimensione della rete sociale di un individuo: è stato citato dallo scrittore Malcolm Gladwell all'interno del suo libro Il punto critico e fa riferimento agli studi di Peter Killworth e dei suoi collaboratori[52]. Questi studiosi usarono una lista di nomi e cognomi presi da un elenco telefonico e stimarono la dimensione della rete sociale di un individuo sulla sua capacità di riconoscere i nomi presenti nella lista come persone incontrate. Questo metodo condusse a una stima della rete sociale maturata durante la vita che va da 300 fino a 3000 persone.
+
+I dati relativi ai tre sottogruppi sono stati elaborati monitorando per 30 giorni l'attività di un campione casuale di utenti[48]. Le attività monitorate fanno riferimento ai tipi di comunicazione che Facebook mette a disposizione dell'utente per mantenersi in contatto con gli appartenenti della sua rete sociale personale.
+
+Il primo sottogruppo fa riferimento alle relazioni mantenute in maniera passiva con l'uso di strumenti quali il News Feed o gli RSS readers. La ricerca include questi strumenti tecnologici nella gestione della relazione perché, a detta di Marlow, il consumo di contenuti fruibili con questi mezzi può tramutarsi in altre forme di comunicazione[53]. Ad esempio, se la ex compagna di classe alle scuole superiori pubblica su Facebook una foto del suo nuovo cagnolino, si può cliccare sulla notizia, dare un'occhiata a molte altre foto e scoprire tra l'altro che si è fidanzata, o ha avuto un bambino, e ciò potrebbe indurre a mettersi in contatto con lei. Nel misurare la dimensione di questo sottogruppo, i ricercatori si sono limitati a registrare il numero di amici che un utente ha visitato con una certa ripetizione, più di due volte nell'arco dei trenta giorni della ricerca, cliccando sul News Feed o visualizzando il profilo.
+
+Il secondo sottogruppo viene costruito attorno all'uso di tecnologie di comunicazione a “senso unico” (one-way communication) come lo sono i commenti alle foto, ai messaggi di status o post sul wall di un amico.
+
+Il terzo sottogruppo viene costruito attorno all'uso di tecnologie basate su una comunicazione reciproca, o su uno scambio attivo di informazioni tra due persone: chat o scambio di messaggi tramite posta elettronica.
+
+La tendenza generale degli utenti[48][54], indistintamente considerati sul piano sessuale, dimostra che la gente su Facebook usa le varie forme di comunicazione manifestando un impegno diverso a seconda del tipo di tecnologia. Rapportato alla propria lista di amici, gli utenti si mantengono informati (cliccando sul News Feed o sull'RSS, oppure visitando il profilo) con un numero meno cospicuo di amici. Il numero scende ulteriormente quando si tratta di usare una tecnologia a “senso unico” (commenti a foto o a messaggi di status, o post sul wall), fino a ridursi ulteriormente con l'uso di una comunicazione reciproca (chat e scambio di e-mail).
+
+I dati in base al tipo di sesso dell'utente dimostrano una diversa propensione dei due sessi[48][55][56] nell'uso di queste tecnologie: le donne sarebbero mediamente più attive degli uomini nel loro uso.
+
+Quando gli utenti, maschi e femmine, hanno una lista di 500 amici, le donne in media si tengono informate per mezzo di RSS, News Feed e visite al profilo di 47 componenti della loro rete sociale; gli uomini, d'altro canto, utilizzano questa tecnologia per mantenersi informati in media su 39 dei loro 500 amici su Facebook. Le donne utilizzano la comunicazione a “senso unico” con in media 26 dei loro amici; gli uomini con 17. L’uso della tecnologia reciproca (chat e scambio di messaggi tramite e-mail) è ancora più ridotto: rispetto ai 500 amici le donne s’intrattengono tramite questo tipo di comunicazione con 16 amici, gli uomini con 10.
+
+Gli utenti con una lista composta da 150 amici costruiscono attorno a sé un sottoinsieme di rapporti tramite Facebook che per le donne è in media di 22 su 150 per le relazioni mantenute, 19 per gli uomini; le donne inviano le comunicazioni a “senso unico” a 11 dei loro 150 amici, gli uomini a 7; 7 su 150 sono in media le comunicazioni reciproche con gli amici per le donne, 5 per gli uomini.
+
+Nel gennaio del 2013 un esperimento sulle emozioni degli utenti[57] ha cercato di capire se riducendo il numero di aggiornamenti “positivi” nel flusso dei feed pubblicati sulle bacheche le persone che li avessero letti avrebbero ridotto la produzione o la condivisione di contenuti positivi. Il campione, composto da 689.003 persone, è stato diviso in due gruppi, per un totale di oltre tre milioni di aggiornamenti. Ad alcuni utenti sono stati forniti aggiornamenti dal neutrale al positivo mentre ad altri sono stati dati aggiornamenti dal neutrale al negativo: in uno venivano mostrati post positivi, con parole come “amore”, “bello”, “dolce”; all’altro invece apparivano post negativi, con parole come “antipatico”, “dolore”, “brutto”. Concluso questo passaggio preliminare sono stati poi analizzati i post di queste persone valutandone il sentimento . I risultati hanno dimostrato che le emozioni si possono trasmettere per un fenomeno di contagio, inducendo altre persone (fino a tre stadi di contatto : dalla persona A a B,a C,a D) a provare le stesse emozioni senza che ne siano coscienti.
+
+Nel 2012 uno studio di ricercatori della Stanford University guidato da Roy Pea ha testato l'effetto dell'uso di facebook di 3461 ragazze tra gli 8 e i 12 anni rispetto ai valori e alle emozioni in evoluzione . Nello studio si è evidenziato come l'uso frequente si ripercuota in maniera negativa sulla capacità di instaurare rapporti sociali inoltre l'uso di più media digitali contemporaneo , detto multitasking, provoca una diminuzione delle ore di sonno[58].
+Crescita[modifica | modifica wikitesto]
+Data 	Utenti 	Raggiunti in (giorni) 	Crescita mensile
+26 agosto 2008 	100 milioni[59] 	1665 	178,38%
+8 aprile 2009 	200 milioni[60] 	225 	13,33%
+15 settembre 2009 	300 milioni[61] 	160 	9,38%
+5 febbraio 2010 	400 milioni 	143 	6,99%
+21 luglio 2010 	500 milioni[62] 	166 	4,52%
+5 gennaio 2011 	600 milioni[63] 	168 	3,57%
+30 maggio 2011 	700 milioni[64] 	145 	3,45%
+22 settembre 2011 	800 milioni[65] 	115 	3,73%
+24 aprile 2012 	900 milioni[66] 	215 	1,74%
+4 ottobre 2012 	1 miliardo[67] 	163 	1,63%
+31 dicembre 2013 	1 miliardo e 230 milioni[68] 	275 	0,97%
+31 dicembre 2014 	1 miliardo e 390 milioni[69] 	365 	0,64%
+Utenti iscritti a Facebook per paese[modifica | modifica wikitesto]
+I siti di rete sociale più famosi per nazione
+
+
+Dati aggiornati a dicembre 2011[70] Pos. 	Paese 	Iscritti 	Percentuale della popolazione iscritta a Facebook
+1ª 	Stati Uniti 	157 milioni 	51%
+2ª 	Indonesia 	42 milioni 	18%
+3ª 	India 	41 milioni 	4%
+4ª 	Brasile 	35 milioni 	18%
+5ª 	Messico 	31 milioni 	28%
+6ª 	Turchia 	31 milioni 	39%
+7ª 	Regno Unito 	30 milioni 	46%
+8ª 	Filippine 	27 milioni 	29%
+9ª 	Francia 	24 milioni 	37%
+10ª 	Germania 	22 milioni 	27%
+Influenze nella cultura[modifica | modifica wikitesto]
+Cinema[modifica | modifica wikitesto]
+
+    L'8 maggio 2009 è stato proiettato per la prima volta nelle sale cinematografiche italiane un film dedicato al mondo di Facebook e dei social network, intitolato Feisbum[71].
+    Il 12 novembre 2010 è la data della prima proiezione nelle sale cinematografiche italiane del film The Social Network (diretto da David Fincher, sceneggiato da Aaron Sorkin e interpretato, tra gli altri, da Jesse Eisenberg, Andrew Garfield e Justin Timberlake) incentrato sui fondatori di Facebook e sul fenomeno popolare che ha creato. L'anteprima del film è stata organizzata tre giorni prima a Milano da Radio Bocconi, la webradio degli studenti dell'Università Bocconi[72].
+
+Televisione[modifica | modifica wikitesto]
+
+    L'episodio di Camera Café "Social network" della quinta stagione è interamente basato su Facebook.
+    L'episodio di The Middle "Grazie, Facebook" della quarta stagione Frankie scopre che le amiche di Sue la tradiscono grazie a Facebook.
+    In un episodio di Life Bites - Pillole di Vita, la protagonista Giulia usa "Faccialibro", una variante usata nel programma, in cui la si vede cambiare la propria foto profilo.
+    Nell'episodio de I Simpson "Il D'oh-cial Network" della XXIII stagione, Lisa per farsi degli amici crea un social network chiamato Springface, simile a quello creato da Zuckerberg.
+
+Musica[modifica | modifica wikitesto]
+
+    La cantante sammarinese Valentina Monetta nel 2012 ha pubblicato il brano The Social Network Song (Oh Oh-Uh-Oh Oh), brano riguardante appunto Facebook (tanto che ne esiste una versione intitolata Facebook Uh Oh Oh) che ha rappresentato San Marino all'Eurovision Song Contest 2012 a Baku, in Azerbaigian.
+    Nel film Che bella giornata uscito nel 2011, Checco Zalone canta "Se mi aggiungerai", una canzone che racconta del desiderio del protagonista di trovare e avere come amica su Facebook Farah, ragazza di cui è innamorato. Nel film, quando Checco canta la canzone, si vede chiaramente che sta utilizzando Facebook e lo dice anche nel testo della canzone, in cui dichiara che, se fosse stato lui a inventare il social network, avrebbe introdotto una regola secondo cui chi è brutto non mette la foto sul profilo.
+    La colonna sonora del film Feisbum contiene la canzone omonima, scritta dal cantautore romano Gabriele Ortenzi, in arte Areamag, che ironizza sui comportamenti più tipici degli utenti del social network
+    I Duran Duran citano facebook nella canzone Networker Nation (you know how its gonna end looking for the real world with my facebook friends) contenuta nell'album All You Need Is Now
+    Il cantautore Max Pezzali cita Facebook ed il suo inventore Zuckerberg ("più forte di Zuckerberg (Zookerberg) quello di Facebook sarò") nella canzone Il presidente di tutto il mondo, tratta dal suo album Max 20, del 2013.
+
+Note[modifica | modifica wikitesto]
+
+    ^ (EN) Cade Metz, The Next Big Programming Language You’ve Never Heard Of in Wired, 7 luglio 2014. URL consultato il 19 luglio 2014.
+    ^ (EN) 2008 Growth Puts Facebook In Better Position to Make Money in VentureBeat, 8 dicembre 2008. URL consultato il 19 febbraio 2012.
+    ^ (EN) alexa.com, Alexa Top 500 Global Sites. URL consultato il 19 febbraio 2012.
+    ^ notizie-news.it, Come ha cambiato le nostre vite Facebook?. URL consultato il 13 luglio 2013.
+    ^ http://www.wired.it/internet/social-network/2015/01/29/facebook-1-4-miliardi-utenti-attivi-mese/
+    ^ Secondo una stima di ConsumersReports.org 7,5 milioni di utenti hanno un'età inferiore ai 13 anni, violando pertanto i termini di servizio del sito.
+    ^ Si veda in proposito la definizione di "facebook" su Wikizionario.
+    ^ Francesco Napoletano, Facebook, il re dei social. Cosa si può fare? in Il giornale, 2 ottobre 2008. URL consultato il 19 febbraio 2012.
+    ^ Prime versione di Facebook.com su Archive.org
+    ^ a b Internet, in Italia boom di Facebook. In un anno cresce del 963% - L'Unità
+    ^ Osservatorio Facebook, osservatorio indipendente Facebook in Italia
+    ^ Facebook supera Google
+    ^ ufficiale della votazione su Facebook
+    ^ Corriere della Sera, 4 giugno 2012, http://www.corriere.it/scienze_e_tecnologie/12_giugno_04/facebook-900-milioni-voto-severgnini_d5342570-ae06-11e1-bd42-307990543816.shtml . URL consultato il 5 giugno 2012.
+    ^ Facebook: 5 anni, 150 milioni di utenti ma i ricavi non decollano Il Sole 24 Ore URL consultato il 12 dicembre 2009
+    ^ (EN) Leading websites offer Facebook Beacon for social distribution. URL consultato il 3 dicembre 2007.
+    ^ Michael Arrington, 85% of College Students use FaceBook, TechCrunch, 2005. URL consultato il 3 aprile 2006.
+    ^ Statistiche sull'uso di FarmVille
+    ^ Mafia Wars, Mobsters Meet in Court in Virtual Worlds News, 23 giugno 2009. URL consultato il 24 giugno 2009.
+    ^ Top Applications, DeveloperAnalytics, 17 aprile 2009. URL consultato il 17 aprile 2009 (archiviato dall'url originale il 17 aprile 2009).
+    ^ Pet Society, DeveloperAnalytics, 17 aprile 2009. URL consultato il 17 aprile 2009 (archiviato dall'url originale il 17 aprile 2009).
+    ^ Introduzione di due giochi Square Enix
+    ^ Facebook's Graph Search Makes It Official: You Are Its Product su Forbes (link rotto)
+    ^ Facebook Home, rivoluzione social. Ma aumentano i rischi per la privacy. su La Repubblica.it
+    ^ Facebook Messenger 3.0, sempre più simile a WhatsApp. su InsideHardware.it
+    ^ Facebook Markup Language (FBML) - Facebook Developers
+    ^ PI: Facebook e privacy, Senato USA chiede trasparenza
+    ^ Nuove impostazioni privacy
+    ^ Impostazioni sulla privacy di Facebook
+    ^ Guida all'uso delle impostazioni sulla privacy di Facebook
+    ^ Risoluzione sulla tutela della privacy nei servizi di social network. Raccomandazioni, punto 7
+    ^ PI: Facebook, ritorno alla privacy
+    ^ "Facebook: Threats to Privacy" Massachusetts Institute of Technology, 2008
+    ^ Ranieri: "Nel finale siamo usciti alla grande" - La Gazzetta dello Sport, 5 febbraio 2009
+    ^ Chiuso il «finto Bersani» su Facebook - Corriere della Sera, 10 marzo 2009
+    ^ I pazienti intubati finiscono su Facebook - Corriere della Sera, 14 maggio 2009
+    ^ notizie.yahoo Maroni: chiuderemo gruppo e denunceremo chi è intervenuto
+    ^ "Uccidiamo Berlusconi", le pagine da chiudere sono più d'una - PubblicaAmministrazione.net 23 ottobre 2009
+    ^ Chiuso il gruppo pro genocidio di Srebrenica
+    ^ Nessuna censura per i gruppi pro Totò Riina
+    ^ Caricature di Maometto anche il Bangladesh blocca Facebook la Repubblica 30 maggio 2010
+    ^ Facebook, 11 mila pagine infette
+    ^ Riconoscimento facciale su Facebook
+    ^ Chris Putnam attacca Facebook e Zuckerberg lo assume, una favola tech. URL consultato il 31 Marzo 2015.
+    ^ Attacco hacker globale rubati 2 milioni di credenziali tra facebook, twitter, google e yahoo. URL consultato il 31 Marzo 2015.
+    ^ Facebook, Instagram: blackout 40 minuti non si tratta di attacco hacker. URL consultato il 31 Marzo 2015.
+    ^ About me: Cameron Marlow (ENG).
+    ^ a b c d Maintained Relationships on Facebook (ENG).
+    ^ Social Network: Primates on Facebook - Even online the neocortex is the limit on Economist.com Feb 26th 2009 (ENG).
+    ^ Maintained Relationships on Facebook (ENG).
+    ^ Facebook's statistics page (ENG).
+    ^ Estimating the size of personal networks (PDF)(ENG).
+    ^ Time.com Does Facebook Replace Face Time or Enhance It? (ENG).
+    ^ Active Network Sizes (ENG).
+    ^ The maintained relationship of a Facebook user: gender comparison (ENG).
+    ^ Adolescenti su Facebook, nonluoghi, centri commerciali, piazze virtuali: Uso di strumenti di comunicazione telematica fra gli adolescenti - Marco Lazzari
+    ^ Facebook: tra post manipolati e emozioni contagiose in TechEconomy.gennaio del 2013 un esperimento sulle emozioni degli utenti
+    ^ Pea Roy et al. |2012 | Media use , face-to-face comunication ,media multitasking , and social well-being among 8- to 12-year-old girl | Developmental Psychology
+    ^ Our First 100 Million | Facebook
+    ^ 200 Million Strong | Facebook
+    ^ 300 Million and On | Facebook
+    ^ 500 Million Stories | Facebook
+    ^ Goldman: Facebook has 600 million users - Technology & science - Tech and gadgets - Business Insider - NBCNews.com
+    ^ Facebook is globally closing in to 700 million users! - Socialbakers
+    ^ Facebook Now Has 800 Million Users
+    ^ The Breakfast Meeting: Grilling for James Murdoch, and Facebook Tops 900 Million Users - NYTimes.com
+    ^ Facebook: traguardo 1 miliardo utenti
+    ^ Facebook: traguardo 1 miliardo utenti
+    ^ Facebook: traguardo 1 miliardo utenti
+    ^ Facebook Statistics by country
+    ^ Scheda di Feisbum sull' Internet Movie Database
+    ^ Anteprima Del Film "The Social Network"
+
+Bibliografia[modifica | modifica wikitesto]
+
+    Il marketing con facebook, di Dan Zarrella e Alison Zarrella, Tecniche Nuove Editore, Milano 2011 ISBN 978-88-481-2630-4
+
+Voci correlate[modifica | modifica wikitesto]
+
+    Mark Zuckerberg
+    Playfish
+    Zynga
+    Koobface
+    Google+
+    DIASPORA*
+    Edgerank
+    Comunità virtuale
+
+Altri progetti[modifica | modifica wikitesto]
+
+    Collabora a Wikiquote Wikiquote contiene citazioni su Facebook
+    Collabora a Wikimedia Commons Wikimedia Commons contiene immagini o altri file su Facebook
+    Collabora a Wikinotizie Articolo su Wikinotizie: Web designer rivendica l'84% delle azioni di Facebook 14 luglio 2010
+    Collabora a Wikinotizie Articolo su Wikinotizie: Rissa in strada dopo rimozione dagli amici di Facebook 26 maggio 2012
+
+Collegamenti esterni[modifica | modifica wikitesto]
+
+    Sito ufficiale
+
+V · D · M
+Reti sociali
+Piattaforme per reti sociali 	Ning
+Reti sociali per intrattenimento 	aNobii · Ask.fm · Badoo · Bebo · Cloob · Dodgeball · Facebook · Foursquare · FriendFeed · Friendster · PlanetRomeo · Goodreads · Google+ · Grindr · Hi5 · Jaiku · Netlog · Nk · Orkut · Renren · Sina Weibo · Skyrock · Snapchat · Spaces · Spring.me · Tagged · Twitter · VK · Xat.com
+Reti sociali artistiche 	Dailymotion · deviantART · Flickr · Instagram · Myspace · Pheed · Pinterest · SoundCloud · Vimeo · Vine · YouTube
+Reti sociali per lavoro 	LinkedIn · Viadeo · XING · ProZ.com
+Reti sociali libere 	Diaspora · Friendica · identi.ca
+Controllo di autorità 	GND: (DE) 7679337-0
+internet Portale Internet
+	
+sociologia Portale Sociologia
+	
+telematica Portale Telematica
+Estratto da "https://it.wikipedia.org/w/index.php?title=Facebook&oldid=75056927"
+Categorie:
+
+    Facebook
+    Comunità virtuali
+    Software per Android
+    Software per iOS
+    Software per Windows Phone
+    Software per Firefox OS
+
+Categorie nascoste:
+
+    Errori del modulo citazione - citazioni con URL nudi
+    Controllare - Internet
+    Controllare - settembre 2010
+    Chiarire
+    Voci con codice GND
+    Voci non biografiche con codici di controllo di autorità
+    Voci di qualità su kk.wiki
+
+Menu di navigazione
+Strumenti personali
+
+    Registrati
+    Entra
+
+Namespace
+
+    Voce
+    Discussione
+
+Varianti
+
+Visite
+
+    Leggi
+    Modifica
+    Modifica wikitesto
+    Cronologia
+
+Altro
+
+Ricerca
+Navigazione
+
+    Pagina principale
+    Ultime modifiche
+    Una voce a caso
+    Vetrina
+    Aiuto
+
+Comunità
+
+    Portale Comunità
+    Bar
+    Il Wikipediano
+    Fai una donazione
+    Contatti
+
+Strumenti
+
+    Puntano qui
+    Modifiche correlate
+    Pagine speciali
+    Link permanente
+    Informazioni sulla pagina
+    Elemento Wikidata
+    Cita questa voce
+
+Stampa/esporta
+
+    Crea un libro
+    Scarica come PDF
+    Versione stampabile
+
+Altri progetti
+
+    Wikiquote
+
+In altre lingue
+
+Modifica collegamenti
+
+    Questa pagina è stata modificata per l'ultima volta l'8 set 2015 alle 23:35.
+    Il testo è disponibile secondo la licenza Creative Commons Attribuzione-Condividi allo stesso modo; possono applicarsi condizioni ulteriori. Vedi le Condizioni d'uso per i dettagli. Wikipedia® è un marchio registrato della , Inc.
+
+    Politica sulla privacy
+    Informazioni su Wikipedia
+    Avvertenze
+    Sviluppatori
+    Versione mobile
+
