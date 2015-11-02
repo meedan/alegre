@@ -1,6 +1,6 @@
 #!/bin/bash
-git clone https://github.com/meedan/dysl.git
-cd dysl
+git clone https://github.com/meedan/dysl.git /opt/dysl
+cd /opt/dysl
 git checkout develop
 pip install -r requirements.txt
 easy_install numpy
