@@ -1,6 +1,6 @@
 development: &default
   secret_token: somethingsecret
-  dysl: /path/to/dysl
+  dysl: /opt/dysl
 
 test:
   <<: *default
