@@ -4,7 +4,7 @@ MAINTAINER Meedan - Clarissa Xavier(clarissa@meedan.com)
 
 # Add here your preinstall lib (e.g. imagemagick, mysql lib, pg lib, ssh config)
 RUN apt-get update
-RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim -y
+RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev -y
 RUN easy_install pip
 
 # Link libraries to the place that RubyPython looks for them
