@@ -30,7 +30,7 @@ RUN dysl-install
 #
 
 # nginx for api-mlg
-COPY ./nginx.conf /etc/nginx/sites-available/api-mlg
+COPY docker/nginx.conf /etc/nginx/sites-available/api-mlg
 RUN ln -s /etc/nginx/sites-available/api-mlg /etc/nginx/sites-enabled/api-mlg
 RUN rm /etc/nginx/sites-enabled/default
 
@@ -54,10 +54,10 @@ RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
 WORKDIR ${DEPLOYDIR}
 RUN mkdir ./api-mlg-$(date -I)
-ADD Gemfile /api-mlg-$(date -I)/Gemfile
-ADD Gemfile.lock /api-mlg-$(date -I)/Gemfile.lock
+ADD Gemfile ./api-mlg-$(date -I)/Gemfile
+ADD Gemfile.lock ./api-mlg-$(date -I)/Gemfile.lock
 RUN bundle install --without development test
-ADD . /api-mlg-$(date -I)
+ADD . ./api-mlg-$(date -I)
 RUN bundle exec rake db:migrate
 RUN ln -s ./api-mlg-$(date -I) ./current
 
