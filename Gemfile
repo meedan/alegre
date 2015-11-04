@@ -61,5 +61,5 @@ gem 'protected_attributes'
 gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
-
 gem 'unicorn'
+gem 'mysql2', git: 'https://github.com/brianmario/mysql2.git'

@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/brianmario/mysql2.git
+  revision: 45ba8d998f0f05be8096f66783ef460f2758573d
+  specs:
+    mysql2 (0.4.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -237,6 +243,7 @@ DEPENDENCIES
   jquery-rails
   logstasher
   mocha
+  mysql2!
   protected_attributes
   railroady
   rails (= 4.2.4)
@@ -254,3 +261,6 @@ DEPENDENCIES
   unicorn
   web-console (~> 2.0)
   webmock
+
+BUNDLED WITH
+   1.10.6
