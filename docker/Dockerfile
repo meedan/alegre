@@ -65,6 +65,5 @@ RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./current && bundle install -
 # expose, cmd
 
 USER root
-ONBUILD EXPOSE 80
 WORKDIR ${DEPLOYDIR}/current
-CMD ["/opt/bin/start.sh"]
+CMD ["nginx"]
