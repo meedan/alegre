@@ -12,7 +12,7 @@ ENV DEPLOYDIR /var/www/api-mlg
 ENV RAILS_ENV production
 ENV GITREPO git@github.com:meedan/api-mlg.git
 
-RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev -y
+RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs -y
 RUN easy_install pip
 
 # Link libraries to the place that RubyPython looks for them
@@ -49,19 +49,16 @@ RUN mkdir -p $DEPLOYDIR
 RUN chown www-data:www-data /var/www
 RUN chmod 775 /var/www
 RUN chmod g+s /var/www
-RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 
-USER ${DEPLOYUSER}
 WORKDIR ${DEPLOYDIR}
-RUN mkdir ./api-mlg-$(date -I)
-ADD Gemfile ./api-mlg-$(date -I)/Gemfile
-ADD Gemfile.lock ./api-mlg-$(date -I)/Gemfile.lock
-RUN bundle install --without development test
-ADD . ./api-mlg-$(date -I)
-RUN bundle exec rake db:migrate
-RUN ln -s ./api-mlg-$(date -I) ./current
+RUN mkdir ./latest
+ADD . ./latest
 
-RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./current && bundle install --deployment
+RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
+USER ${DEPLOYUSER}
+RUN mv ./latest ./api-mlg-$(date -I) && ln -s ./api-mlg-$(date -I) ./current
+
+RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./current && bundle install --deployment --without test development && bundle exec rake db:migrate
 
 #
 # RUNTIME ELEMENTS
