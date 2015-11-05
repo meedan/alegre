@@ -12,16 +12,16 @@ ENV DEPLOYDIR /var/www/api-mlg
 ENV RAILS_ENV production
 ENV GITREPO git@github.com:meedan/api-mlg.git
 
-RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs -y
+RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs libmysqlclient-dev -y
 RUN easy_install pip
 
 # Link libraries to the place that RubyPython looks for them
-ADD docker/link-python-libs /bin/link-python-libs
+COPY docker/link-python-libs /bin/link-python-libs
 RUN chmod +x /bin/link-python-libs
 RUN link-python-libs
 
 # Install DYSL
-ADD docker/dysl-install /bin/dysl-install
+COPY docker/dysl-install /bin/dysl-install
 RUN chmod +x /bin/dysl-install
 RUN dysl-install
 
@@ -52,10 +52,14 @@ RUN chmod g+s /var/www
 
 WORKDIR ${DEPLOYDIR}
 RUN mkdir ./latest
-ADD . ./latest
+COPY . ./latest
 
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
+RUN cd ./latest/config && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml && cd -
+RUN cd ./latest/config && rm -f ./config.yml && ln -s ${DEPLOYDIR}/shared/config/config.yml ./config.yml && cd -
+RUN cd ./latest/config/initializers && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb && cd -
+RUN cd ./latest/config/initializers && rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb && cd -
 RUN mv ./latest ./api-mlg-$(date -I) && ln -s ./api-mlg-$(date -I) ./current
 
 RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./current && bundle install --deployment --without test development && bundle exec rake db:migrate
