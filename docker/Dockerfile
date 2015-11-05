@@ -56,10 +56,13 @@ COPY . ./latest
 
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
-RUN cd ./latest/config && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml && cd -
-RUN cd ./latest/config && rm -f ./config.yml && ln -s ${DEPLOYDIR}/shared/config/config.yml ./config.yml && cd -
-RUN cd ./latest/config/initializers && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb && cd -
-RUN cd ./latest/config/initializers && rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb && cd -
+
+# config
+RUN cd ./latest/config && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml && \
+    rm -f ./config.yml && ln -s ${DEPLOYDIR}/shared/config/config.yml ./config.yml && \
+    cd ./initializers && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb && \
+    rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb
+
 RUN mv ./latest ./api-mlg-$(date -I) && ln -s ./api-mlg-$(date -I) ./current
 
 RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./current && bundle install --deployment --without test development && bundle exec rake db:migrate

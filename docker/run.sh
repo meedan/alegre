@@ -10,7 +10,7 @@ docker build -t lapis/api_mlg .
 
 # Run
 secret=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-docker run -d -p 80:80 --name api_mlg -e SECRET_KEY_BASE=$secret lapis/api_mlg
+docker run -d -p 80:80 --name api_mlg lapis/api_mlg
 
 echo
 docker ps | grep 'api_mlg'
