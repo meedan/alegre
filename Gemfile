@@ -48,11 +48,11 @@ end
 
 gem 'webmock'
 gem 'mocha'
-gem 'simplecov', require: false, group: :test
+gem 'simplecov'
 gem 'railroady'
 gem 'airbrake'
-gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'awesome_print', require: false, group: :development
+gem 'codeclimate-test-reporter'
+gem 'awesome_print'
 gem 'gem-licenses'
 gem 'logstasher'
 gem 'auto_localize', '0.1'
@@ -62,4 +62,3 @@ gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
 gem 'unicorn'
-gem 'mysql2', '~> 0.3.13'
