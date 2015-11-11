@@ -62,4 +62,7 @@ gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
 gem 'unicorn'
-gem 'mysql2', '~> 0.3.13'
+
+group :production do
+  gem 'mysql2', '~> 0.3.13'
+end
