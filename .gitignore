@@ -14,3 +14,6 @@ config/initializers/secret_token.rb
 *.sw*
 *~
 dysl
+vendor/bundle
+doc/*
+!doc/Makefile

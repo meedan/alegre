@@ -8,7 +8,17 @@
       "path": "api/tm/tuple",
       "operations": [
         {
+          "summary": "POST: Add tuple in Translation Memory (TM); GET: Search TM",
           "notes": "Use this method in order to add tuple in Translation Memory (TM)",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "data",
+              "type": "string",
+              "description": "POST: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", \"l2\":\"portuguese\", \"c2\":\"pt\", \"sentence2\":\"oi mundo\", \"source\":\"test site\", \"time-zone\": \"PDT / MST\"} ; GET: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", context:{ \"source\":\"test site\", \"time-zone\": \"PDT / MST\"}}",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -26,16 +36,6 @@
               "message": "Access denied"
             }
           ],
-          "summary": "POST: Add tuple in Translation Memory (TM); GET: Search TM",
-          "parameters": [
-            {
-              "paramType": "query",
-              "name": "data",
-              "type": "string",
-              "description": "POST: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", \"l2\":\"portuguese\", \"c2\":\"pt\", \"sentence2\":\"oi mundo\", \"source\":\"test site\", \"time-zone\": \"PDT / MST\"} ; GET: {\"l1\":\"english\", \"c1\":\"en\",\"sentence1\":\"hello world\", context:{ \"source\":\"test site\", \"time-zone\": \"PDT / MST\"}}",
-              "required": true
-            }
-          ],
           "method": "post",
           "nickname": "Api::V1::Tm#tuple"
         }
@@ -45,6 +45,7 @@
       "path": "api/tm/source",
       "operations": [
         {
+          "summary": "Get sources in TM",
           "notes": "Use this method in order to get sources in TM",
           "responseMessages": [
             {
@@ -63,7 +64,6 @@
               "message": "Access denied"
             }
           ],
-          "summary": "Get sources in TM",
           "method": "get",
           "nickname": "Api::V1::Tm#source"
         }
