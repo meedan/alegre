@@ -34,7 +34,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  #gem 'byebug'
 end
 
 group :development do
@@ -62,6 +62,9 @@ gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
 gem 'unicorn'
+gem 'elasticsearch', git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
+
+gem 'json'
 
 group :production do
   gem 'mysql2', '~> 0.3.13'
