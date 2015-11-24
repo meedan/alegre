@@ -64,6 +64,8 @@ namespace :lapis do
 
        api[:operations].each do |op|
 
+         next if op[:response_messages].first[:responseModel].nil?
+
          apicall = "#{op[:method].upcase} /#{api[:path]}"
          method = "#{op[:method]}_#{path}"
          request_methods_sigs << "#{method} (`#{apicall}`)"
@@ -84,6 +86,7 @@ namespace :lapis do
            mock_method = "mock_#{path}_returns_#{r[:message].parameterize.gsub('-', '_')}"
            mock_methods_sigs << mock_method
            example = r[:responseModel]
+
            app = ActionDispatch::Integration::Session.new(Rails.application)
            response = app.send(op[:method], '/' + api[:path], example[:query], example[:headers])
            json = app.body.chomp
