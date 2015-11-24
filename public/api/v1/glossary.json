@@ -54,7 +54,7 @@
             {
               "code": 400,
               "responseModel": null,
-              "message": "Parameters missing (data was not provided)"
+              "message": "Error"
             },
             {
               "code": 401,
@@ -67,7 +67,7 @@
               "paramType": "query",
               "name": "data",
               "type": "string",
-              "description": " {\"lang\": \"en\", \"definition\": \"test definition\",\"term\": \"test\",\"translations\": [ {\"lang\": \"pt\",\"definition\": \"definição de teste\",\"term\": \"teste\"}],\"context\": {\"post\": \"post\", \"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"},\"post\": \"xxxx\",\"data_source\": \"dictionary\",\"time-zone\": \"PDT / MST\"},\"page_id\":\"test\", \"data_source\": \"dictionary\" }",
+              "description": "{\"term\": \"test\", \"lang\": \"en\", \"definition\": \"test definition\",\"translations\": [ {\"lang\": \"pt\",\"definition\": \"definição de teste\",\"term\": \"teste\"}],\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"},\"page_id\":\"test\", \"post\": \"xxxx\",\"data_source\": \"dictionary\",\"time-zone\": \"PDT / MST\"}}",
               "required": true
             }
           ],
@@ -75,6 +75,43 @@
           "notes": "Use this method in order to add a new term to glossary",
           "method": "post",
           "nickname": "Api::V1::Glossary#term"
+        }
+      ]
+    },
+    {
+      "path": "api/glossary/delete",
+      "operations": [
+        {
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Error"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "id",
+              "type": "string",
+              "description": " {\"id\": \"1234567898\" }",
+              "required": true
+            }
+          ],
+          "summary": "Delete term from glossary",
+          "notes": "Use this method in order to delete a term from glossary",
+          "method": "post",
+          "nickname": "Api::V1::Glossary#delete"
         }
       ]
     }

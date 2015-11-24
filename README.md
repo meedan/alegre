@@ -1,14 +1,20 @@
 ## MLG REST API design
 
-A REST API for MLG
+A REST API to Meedan's linguistic functionality.
 
 ### Current features
 
-DYSL:
+### Language identification
 
-* Add training sample to a model file
 * List supported languages
 * Language Identification
+* Add training sample to a model file
+
+### Glossary
+
+* Get term from glossary
+* Add term to glossary
+* Delete term from glossary
 
 
 #### Add training sample to a model file
@@ -94,7 +100,19 @@ Returns:
   "data": true
 }`
 
-A REST API to Meedan's linguistic functionality.
+#### Delete term to glossary
+
+Format: POST /api/glossary/delete
+
+`curl -X POST http://localhost:3000/api/glossary/delete -d '{"id": "ef3327927388e480149e719836d0ce03" }' -H "Content-Type: application/json"`
+
+Returns:
+
+`{
+  "type": "success",
+  "data": true
+}`
+
 
 ## Installation
 
@@ -110,21 +128,15 @@ A REST API to Meedan's linguistic functionality.
 * Run `rails s` and access API at http://localhost:3000/api
 
 
-### Language identification
-
-* Identify the language of a given text
-* List supported languages
-* Add training sample to a model file
-
 ### Configuration
 * Update api-mlg/config/initializers/train.rb: 
 	Add model file, stopwords files and DYSL paths
 
-### How to use it (development)
+### How to use while development
 
 
 :~/api-mlg$ sudo rake lapis:api_keys:create
-e55ce9121c773868e48d08c453fd4897
+21aa7da6813466e4a4bc2f339a68d3d1
 
 key will be used in the web interface
 
