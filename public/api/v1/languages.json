@@ -11,17 +11,33 @@
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "Returns text language"
+              "responseModel": {
+                "query": {
+                  "text": "The book is on the table"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Text language"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Parameters missing (text was not provided)"
+              "responseModel": {
+                "query": null,
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Parameter \"text\" is missing"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "text": "Test"
+                }
+              },
               "message": "Access denied"
             }
           ],

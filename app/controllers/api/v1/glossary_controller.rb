@@ -9,13 +9,15 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
 
   GLOSSARY_INDEX = CONFIG['glossary_index'] 
   GLOSSARY_TYPE  = CONFIG['glossary_type'] 
+  ES_SERVER = CONFIG['elasticsearch_server']+':'+CONFIG['elasticsearch_port'].to_s
   LANG_WITH_ANALYZER = ['ar', 'hy', 'eu', 'pt', 'bg', 'ca', 'zh', 'cs', 'da', 'nl', 'en', 'fi', 'fr', 'gl', 'de', 'el', 'hi', 'hu', 'id', 'ga', 'it', 'lv', 'no', 'fa', 'pt', 'ro', 'ru', 'ckb', 'sp', 'sv', 'tr', 'th'] #languages with stem and stop analyzers in elasticsearch index
 
   def term #POST
     if params[:data].blank?
       render_parameters_missing
     else
-	client = Elasticsearch::Client.new log: true
+      Elasticsearch::Client.new url: ES_SERVER
+      client = Elasticsearch::Client.new log: true
 
 	begin
 		str = params[:data].to_s
@@ -24,7 +26,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
 		if validationInsert(data_hash)
 			data_hash = updateTermName (data_hash)
 			_id = generate_id_for_glossary_term(data_hash)
-			if !exist_glossary_term_from_id(_id)
+			if !client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
 				str = data_hash.to_s.gsub("=>", ':')
 
 
@@ -55,7 +57,8 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     if params[:data].blank?
       render_parameters_missing
     else
-	client = Elasticsearch::Client.new log: true
+       Elasticsearch::Client.new url: ES_SERVER
+       client = Elasticsearch::Client.new log: true
 
 	begin
 		str = params[:data].to_s
@@ -79,12 +82,12 @@ def delete #POST
     if params[:id].blank?
       render_parameters_missing
     else
-	client = Elasticsearch::Client.new log: true
+        Elasticsearch::Client.new url: ES_SERVER
+   	client = Elasticsearch::Client.new log: true
 
 	begin
 		_id = params[:id].to_s
-		if exist_glossary_term_from_id(_id)
-			
+		if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
 			client.delete index: GLOSSARY_INDEX,
 				      type: GLOSSARY_TYPE,
 				      id: _id
@@ -149,26 +152,6 @@ def delete #POST
 
     end
 
-
-   def exist_glossary_term_from_id(_id)
-	client = Elasticsearch::Client.new log: true
-
-	begin
-		query ='{"query":{ "ids":{ "values": ["'+_id+'"] } } }'
-		ret = client.search index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, body: query
-		if (ret['hits']['hits'].length  > 0)
-			return true
-		else
-			return false
-		end
-
-	rescue Exception => msg  
-		return false
-	end  
-
-
-
-    end
 
     def buildQuery (jsonCtx)
 	dQuery = []	

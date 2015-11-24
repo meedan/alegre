@@ -29,7 +29,7 @@ module GlossaryDoc
     swagger_api :delete do
       summary 'Delete term from glossary'
       notes 'Use this method in order to delete a term from glossary'
-      param :query, :id, :string, :required, ' {"id": "1234567898" }'
+      param :query, :id, :string, :required, '1234567898'
       response :ok, 'Success'
       response 400, 'Error'
       response 401, 'Access denied'
