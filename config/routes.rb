@@ -6,12 +6,13 @@ Rails.application.routes.draw do
 	get 'languages/identification', to: 'languages#identification'
 	post 'languages/sample', to: 'languages#sample'
 	get 'languages/language', to: 'languages#language'
-	post 'tm/tuple', to: 'tm#tuple'
-	get 'tm/tuple', to: 'tm#tuple'
-	get 'tm/language_tm', to: 'tm#language_tm'
-	get 'tm/source', to: 'tm#source'
+	get 'glossary/terms', to: 'glossary#terms'
 	post 'glossary/term', to: 'glossary#term'
-	get 'glossary/term', to: 'glossary#term'
+	post 'glossary/delete', to: 'glossary#delete'
+	#post 'tm/tuple', to: 'tm#tuple'
+	#get 'tm/tuple', to: 'tm#tuple'
+	#get 'tm/language_tm', to: 'tm#language_tm'
+	#get 'tm/source', to: 'tm#source'
     end
   end
 end
