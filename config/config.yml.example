@@ -1,6 +1,10 @@
 development: &default
   secret_token: somethingsecret
-  dysl: /path/to/dysl
+  dysl: /home/ccx/work/dysl
+  glossary_index: glossary_mlg
+  glossary_type: glossary
+  elasticsearch_server: localhost
+  elasticsearch_port: 9200
 
 test:
   <<: *default
