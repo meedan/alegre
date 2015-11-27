@@ -104,7 +104,7 @@
               "paramType": "query",
               "name": "id",
               "type": "string",
-              "description": " {\"id\": \"1234567898\" }",
+              "description": "1234567898",
               "required": true
             }
           ],

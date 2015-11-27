@@ -6,6 +6,10 @@
     {
       "path": "api/v1/languages.{format}",
       "description": "Languages"
+    },
+    {
+      "path": "api/v1/glossary.{format}",
+      "description": "Glossary"
     }
   ],
   "info": {
