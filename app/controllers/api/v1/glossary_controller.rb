@@ -9,7 +9,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
 
   GLOSSARY_INDEX = CONFIG['glossary_index'] 
   GLOSSARY_TYPE  = CONFIG['glossary_type'] 
-  ES_SERVER = CONFIG['elasticsearch_server']+':'+CONFIG['elasticsearch_port'].to_s
+  ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
   LANG_WITH_ANALYZER = ['ar', 'hy', 'eu', 'pt', 'bg', 'ca', 'zh', 'cs', 'da', 'nl', 'en', 'fi', 'fr', 'gl', 'de', 'el', 'hi', 'hu', 'id', 'ga', 'it', 'lv', 'no', 'fa', 'pt', 'ro', 'ru', 'ckb', 'sp', 'sv', 'tr', 'th'] #languages with stem and stop analyzers in elasticsearch index
 
   def term #POST
