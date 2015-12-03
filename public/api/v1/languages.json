@@ -8,25 +8,39 @@
       "path": "api/languages/identification",
       "operations": [
         {
-          "notes": "Use this method in order to identify the language of a given text",
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "Returns text language"
+              "responseModel": {
+                "query": {
+                  "text": "The book is on the table"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Text language"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Parameters missing (text was not provided)"
+              "responseModel": {
+                "query": null,
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Parameter \"text\" is missing"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "text": "Test"
+                }
+              },
               "message": "Access denied"
             }
           ],
-          "summary": "Identify the language of a given text",
           "parameters": [
             {
               "paramType": "query",
@@ -36,6 +50,8 @@
               "required": true
             }
           ],
+          "summary": "Identify the language of a given text",
+          "notes": "Use this method in order to identify the language of a given text",
           "method": "get",
           "nickname": "Api::V1::Languages#identification"
         }
@@ -45,7 +61,6 @@
       "path": "api/languages/sample",
       "operations": [
         {
-          "notes": "Use this method in order to add training sample to the model",
           "responseMessages": [
             {
               "code": 200,
@@ -63,7 +78,6 @@
               "message": "Access denied"
             }
           ],
-          "summary": "Add training sample to the model",
           "parameters": [
             {
               "paramType": "query",
@@ -80,6 +94,8 @@
               "required": true
             }
           ],
+          "summary": "Add training sample to the model",
+          "notes": "Use this method in order to add training sample to the model",
           "method": "post",
           "nickname": "Api::V1::Languages#sample"
         }
@@ -89,7 +105,6 @@
       "path": "api/languages/language",
       "operations": [
         {
-          "notes": "Use this method in order to list supported languages",
           "responseMessages": [
             {
               "code": 200,
@@ -108,6 +123,7 @@
             }
           ],
           "summary": "List supported languages",
+          "notes": "Use this method in order to list supported languages",
           "method": "get",
           "nickname": "Api::V1::Languages#language"
         }

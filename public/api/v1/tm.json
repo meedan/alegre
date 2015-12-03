@@ -8,7 +8,6 @@
       "path": "api/tm/tuple",
       "operations": [
         {
-          "notes": "Use this method in order to add tuple in Translation Memory (TM)",
           "responseMessages": [
             {
               "code": 200,
@@ -26,7 +25,6 @@
               "message": "Access denied"
             }
           ],
-          "summary": "POST: Add tuple in Translation Memory (TM); GET: Search TM",
           "parameters": [
             {
               "paramType": "query",
@@ -36,6 +34,8 @@
               "required": true
             }
           ],
+          "summary": "POST: Add tuple in Translation Memory (TM); GET: Search TM",
+          "notes": "Use this method in order to add tuple in Translation Memory (TM)",
           "method": "post",
           "nickname": "Api::V1::Tm#tuple"
         }
@@ -45,7 +45,6 @@
       "path": "api/tm/source",
       "operations": [
         {
-          "notes": "Use this method in order to get sources in TM",
           "responseMessages": [
             {
               "code": 200,
@@ -64,6 +63,7 @@
             }
           ],
           "summary": "Get sources in TM",
+          "notes": "Use this method in order to get sources in TM",
           "method": "get",
           "nickname": "Api::V1::Tm#source"
         }

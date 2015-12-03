@@ -34,7 +34,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
-  gem 'debugger'
+  #gem 'byebug'
 end
 
 group :development do
@@ -48,11 +48,11 @@ end
 
 gem 'webmock'
 gem 'mocha'
-gem 'simplecov', require: false, group: :test
+gem 'simplecov'
 gem 'railroady'
 gem 'airbrake'
-gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'awesome_print', require: false, group: :development
+gem 'codeclimate-test-reporter'
+gem 'awesome_print'
 gem 'gem-licenses'
 gem 'logstasher'
 gem 'auto_localize', '0.1'
@@ -61,5 +61,11 @@ gem 'protected_attributes'
 gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
-
 gem 'unicorn'
+gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
+
+gem 'json'
+
+group :production do
+  gem 'mysql2', '~> 0.3.13'
+end

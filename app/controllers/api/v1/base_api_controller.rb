@@ -63,7 +63,7 @@ module Api
         render json: { type: 'error',
                        data: {
                          message: message,
-                         code: MeedanConstants::ErrorCodes::const_get(code)
+                         code: LapisConstants::ErrorCodes::const_get(code)
                        }
                      },
                      status: status

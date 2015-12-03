@@ -8,10 +8,6 @@
       "description": "Languages"
     },
     {
-      "path": "api/v1/tm.{format}",
-      "description": "TM"
-    },
-    {
       "path": "api/v1/glossary.{format}",
       "description": "Glossary"
     }
