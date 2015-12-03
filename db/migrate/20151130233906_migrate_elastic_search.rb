@@ -14,9 +14,9 @@ class MigrateElasticSearch < ActiveRecord::Migration
 	Elasticsearch::Client.new url: ES_SERVER
 	client = Elasticsearch::Client.new log: true
 
-	ret = client.search index: OLD_GLOSSARY_INDEX, type: OLD_GLOSSARY_TYPE, body: { query: { match_all: {} } }
-
-        p "JKJMKJK"
+	ret = client.search index: OLD_GLOSSARY_INDEX, type: OLD_GLOSSARY_TYPE,  size: 10000, body: { query: { match_all: {} } }
+	
+	n = 1
 	for doc in ret['hits']['hits']
 		new_data = Hash.new
 		new_data['context']  = Hash.new
@@ -41,7 +41,8 @@ class MigrateElasticSearch < ActiveRecord::Migration
 
 		str = new_data.to_s.gsub("=>", ':')
 
-		p str
+		#p n
+		n = n + 1
 		client.index index: GLOSSARY_INDEX,
 			     type: GLOSSARY_TYPE,
 			     id: _id,
