@@ -5,6 +5,9 @@ development: &default
   glossary_type: glossary
   elasticsearch_server: localhost
   elasticsearch_port: 9200
+  glossary_index_old: glossary_old
+  elasticsearch_server_old: localhost
+  elasticsearch_port_old: 9200
 
 test:
   <<: *default

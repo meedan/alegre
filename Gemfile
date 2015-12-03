@@ -62,7 +62,7 @@ gem 'swagger-docs'
 gem 'responders'
 gem 'rubypython'
 gem 'unicorn'
-gem 'elasticsearch', git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
+gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
 
 gem 'json'
 
