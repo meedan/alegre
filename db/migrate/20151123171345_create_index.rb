@@ -2,10 +2,11 @@ require 'elasticsearch'
 
 GLOSSARY_INDEX = CONFIG['glossary_index'] 
 GLOSSARY_TYPE  = CONFIG['glossary_type'] 
-ES_SERVER = CONFIG['elasticsearch_server']+':'+CONFIG['elasticsearch_port'].to_s
+ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
 
 class CreateIndex < ActiveRecord::Migration
   def change
+    return if ES_SERVER === ':'
 
     Elasticsearch::Client.new url: ES_SERVER
     client = Elasticsearch::Client.new log: true
