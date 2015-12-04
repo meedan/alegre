@@ -2,7 +2,7 @@ require 'elasticsearch'
 
 GLOSSARY_INDEX = CONFIG['glossary_index'] 
 GLOSSARY_TYPE  = CONFIG['glossary_type'] 
-ES_SERVER = CONFIG['elasticsearch_server']+':'+CONFIG['elasticsearch_port'].to_s
+ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
 OLD_GLOSSARY_INDEX = CONFIG['glossary_index_old'] 
 OLD_GLOSSARY_TYPE  = '.percolator' 
 OLD_ES_SERVER = CONFIG['elasticsearch_server_old'].to_s + ':' + CONFIG['elasticsearch_port_old'].to_s
