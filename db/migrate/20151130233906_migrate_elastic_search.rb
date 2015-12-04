@@ -5,12 +5,12 @@ GLOSSARY_TYPE  = CONFIG['glossary_type']
 ES_SERVER = CONFIG['elasticsearch_server']+':'+CONFIG['elasticsearch_port'].to_s
 OLD_GLOSSARY_INDEX = CONFIG['glossary_index_old'] 
 OLD_GLOSSARY_TYPE  = '.percolator' 
-OLD_ES_SERVER = CONFIG['elasticsearch_server_old']+':'+CONFIG['elasticsearch_port_old'].to_s
+OLD_ES_SERVER = CONFIG['elasticsearch_server_old'].to_s + ':' + CONFIG['elasticsearch_port_old'].to_s
 
 
 class MigrateElasticSearch < ActiveRecord::Migration
   def change
-
+  return if ES_SERVER === ':'
 	Elasticsearch::Client.new url: ES_SERVER
 	client = Elasticsearch::Client.new log: true
 
