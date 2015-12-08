@@ -39,7 +39,6 @@ class MigrateElasticSearch < ActiveRecord::Migration
 			end
 		}
 
-		new_data[new_data['lang']] = new_data['term']
 		str = new_data.to_s.gsub("=>", ':')
 
 		#p n
