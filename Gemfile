@@ -65,6 +65,7 @@ gem 'unicorn'
 gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
 
 gem 'json'
+gem 'retriable', '~> 2.1'
 
 group :production do
   gem 'mysql2', '~> 0.3.13'
