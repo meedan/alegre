@@ -1,0 +1,59 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "dictionary",
+  "apis": [
+    {
+      "path": "api/dictionary/execute",
+      "operations": [
+        {
+          "summary": "Search terms in babelfy and insert it in dictionary",
+          "notes": "Use this method in order to search terms in babelfy and insert it in dictionary",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "language",
+              "type": "string",
+              "description": "Language",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be searched",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "postid",
+              "type": "string",
+              "description": "Post id",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Error"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "method": "post",
+          "nickname": "Api::V1::Dictionary#execute"
+        }
+      ]
+    }
+  ]
+}

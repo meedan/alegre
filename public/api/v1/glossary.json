@@ -8,6 +8,17 @@
       "path": "api/glossary/terms",
       "operations": [
         {
+          "summary": "Get terms from a post",
+          "notes": "Use this method in order to get terms from glossary",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "data",
+              "type": "string",
+              "description": "{\"post\":\"test the app\",\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"}}}",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -25,17 +36,6 @@
               "message": "Access denied"
             }
           ],
-          "parameters": [
-            {
-              "paramType": "query",
-              "name": "data",
-              "type": "string",
-              "description": "{\"post\":\"test the app\",\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"}}}",
-              "required": true
-            }
-          ],
-          "summary": "Get terms from a post",
-          "notes": "Use this method in order to get terms from glossary",
           "method": "get",
           "nickname": "Api::V1::Glossary#terms"
         }
@@ -45,23 +45,8 @@
       "path": "api/glossary/term",
       "operations": [
         {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Success"
-            },
-            {
-              "code": 400,
-              "responseModel": null,
-              "message": "Error"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "Access denied"
-            }
-          ],
+          "summary": "Add term to glossary",
+          "notes": "Use this method in order to add a new term to glossary",
           "parameters": [
             {
               "paramType": "query",
@@ -71,17 +56,6 @@
               "required": true
             }
           ],
-          "summary": "Add term to glossary",
-          "notes": "Use this method in order to add a new term to glossary",
-          "method": "post",
-          "nickname": "Api::V1::Glossary#term"
-        }
-      ]
-    },
-    {
-      "path": "api/glossary/delete",
-      "operations": [
-        {
           "responseMessages": [
             {
               "code": 200,
@@ -99,6 +73,17 @@
               "message": "Access denied"
             }
           ],
+          "method": "post",
+          "nickname": "Api::V1::Glossary#term"
+        }
+      ]
+    },
+    {
+      "path": "api/glossary/delete",
+      "operations": [
+        {
+          "summary": "Delete term from glossary",
+          "notes": "Use this method in order to delete a term from glossary",
           "parameters": [
             {
               "paramType": "query",
@@ -108,8 +93,23 @@
               "required": true
             }
           ],
-          "summary": "Delete term from glossary",
-          "notes": "Use this method in order to delete a term from glossary",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Success"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Error"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
           "method": "post",
           "nickname": "Api::V1::Glossary#delete"
         }
