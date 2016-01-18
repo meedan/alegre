@@ -14,17 +14,13 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     if params[:data].blank?
       render_parameters_missing
     else
-	begin
-		str = params[:data].to_s
-		retES = Mlg::ElasticSearch.add_glossary(params[:data].to_s)
-		if retES
-			render_success 'success', true
-		else
-		      render_error("ES Error", 'MISSING_PARAMETERS', status = 400)
-		end
-	rescue Exception => msg  
-	      render_error(msg, 'INVALID_VALUE', status = 400)
-	end  
+      str = params[:data].to_s
+      retES = Mlg::ElasticSearch.add_glossary(params[:data].to_s)
+      if retES
+        render_success 'success', true
+      else
+        render_error("ES Error", 'MISSING_PARAMETERS', status = 400)
+      end
     end
   end
 
@@ -32,40 +28,29 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     if params[:data].blank?
       render_parameters_missing
     else
-       Elasticsearch::Client.new url: ES_SERVER
-       client = Elasticsearch::Client.new log: true
+      Elasticsearch::Client.new url: ES_SERVER
+      client = Elasticsearch::Client.new log: true
 
-	begin
-		@glossary = Mlg::ElasticSearch.get_glossary(params[:data].to_s)
-		if Array === @glossary
-			render_success 'term', @glossary
-		else
-			render_error(msg, 'INVALID_VALUE', status = 400)
-		end
-	rescue Exception => msg  
-		render_error(msg, 'INVALID_VALUE', status = 400)
-	end  
-    end
-   end
-
-def delete #POST
-    if params[:id].blank?
-      render_parameters_missing
-    else
-	begin
-		ret = false
-		ret = Mlg::ElasticSearch.delete_glossary(params[:id].to_s)
-		if ret
-		        render_success 'delete', true
-		else
-	 	        render_error(false, 'INVALID_VALUE', status = 400)
-		end
-	rescue Exception => msg  
-	      render_error(msg, 'INVALID_VALUE', status = 400)
-	end  
-
-
+      @glossary = Mlg::ElasticSearch.get_glossary(params[:data].to_s)
+      if Array === @glossary
+        render_success 'term', @glossary
+      else
+        render_error('Unexpected return', 'INVALID_VALUE', status = 400)
+      end
     end
   end
 
+  def delete #POST
+    if params[:id].blank?
+      render_parameters_missing
+    else
+      ret = false
+      ret = Mlg::ElasticSearch.delete_glossary(params[:id].to_s)
+      if ret
+        render_success 'delete', true
+      else
+        render_error('Could not delete', 'INVALID_VALUE', status = 400)
+      end
+    end
+  end
 end

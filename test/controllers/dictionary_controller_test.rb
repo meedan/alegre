@@ -44,6 +44,7 @@ class DictionaryControllerTest < ActionController::TestCase
   test "dict - should return sucess with 3 parameters" do
     authenticate_with_token
     post :execute, language: 'en', text: 'This is a test '+Time.now.to_s, postid: '0000'
+    puts response.body
     assert_response :success
   end
 
