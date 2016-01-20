@@ -1,0 +1,13 @@
+Roteador é um dispositivo que encaminha pacotes de dados entre redes de computadores, criando um conjunto de redes de sobreposição. Um roteador é conectado a duas ou mais linhas de dados de redes diferentes. Quando um pacote de dados chega, em uma das linhas, o roteador lê a informação de endereço no pacote para determinar o seu destino final. Em seguida, usando a informação na sua política tabela de roteamento ou encaminhamento, ele direciona o pacote para a rede de próxima em sua viagem. Os roteadores são os responsáveis pelo "tráfego" na Internet. Um pacote de dados é normalmente encaminhado de um roteador para outro através das redes que constituem a internetwork até atingir o nó destino. E portanto o roteador é tipicamente um dispositivo da camada 3 do Modelo OSI.
+
+Os roteadores mais modernos necessitam de um cabo de banda larga ligado a um modem como entrada, e geralmente transmitem o sinal de internet atraves de conectividade sem fio e 4 cabos banda larga. Eles utilizam tabelas de rotas para decidir sobre o encaminhamento de cada pacote de dados recebido. 
+
+Existem dois tipos de roteadores os estáticos e os dinâmicos. Roteadores modernos de grande porte assemelham-se a centrais telefônicas, cuja tecnologias actualmente estão sendo convergidas, e que no futuro os roteadores podem até mesmo substituir por completo.
+
+Entre meados da década de 1970 e a década de 1980, microcomputadores eram usados para fornecer roteamento. Apesar de computadores pessoais poderem ser usados como roteadores, os equipamentos dedicados ao roteamento são atualmente bastante especializados, e o uso de hack também pode afetar geralmente com hardware extra para acelerar suas funções como envio de pacotes e encriptação Protocolo de Segurança IP.
+
+A camada de aplicação é um termo utilizado em redes de computadores. É responsável por prover serviços para aplicações de modo a separar a existência de comunicação em rede entre processos de diferentes computadores. Hipertexto é o texto estruturado que utiliza ligações lógicas entre nós contendo texto. 
+
+Em empresas menores, o administrador de sistemas pode também desempenhar diversas funções que em outras são associadas com outros campos como: Técnico de apoio ao usuário. Administrador de Banco de Dados. Analista de sistemas. Analista de Segurança da Informação. Programador. 
+
+O termo administrador ou root pode também ser usado para descrever um privilégio que o dono de uma máquina deve obter para realizar certas ações como instalações, mesmo que o computador não faça parte de um sistema maior.

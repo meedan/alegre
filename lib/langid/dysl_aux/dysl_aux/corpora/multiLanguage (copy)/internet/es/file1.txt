@@ -1,0 +1,34 @@
+Python es un lenguaje de programación interpretado cuya filosofía hace hincapié en una sintaxis muy limpia y que favorezca un código legible.
+
+Un lenguaje de programación es un lenguaje formal diseñado para expresar procesos que pueden ser llevados a cabo por máquinas como las computadoras.
+
+A la forma visible de un lenguaje de programación se le conoce como sintaxis. La mayoría de los lenguajes de programación son puramente textuales, es decir, utilizan secuencias de texto que incluyen palabras, números y puntuación, de manera similar a los lenguajes naturales escritos. Por otra parte, hay algunos lenguajes de programación que son más gráficos en su naturaleza, utilizando relaciones visuales entre símbolos para especificar un programa.
+
+Se trata de un lenguaje de programación multiparadigma, ya que soporta orientación a objetos, programación imperativa y, en menor medida, programación funcional. Es un lenguaje interpretado, usa tipado dinámico y es multiplataforma.
+
+El nombre del lenguaje proviene de la afición de su creador por los humoristas británicos.
+
+Ella es un lenguaje de programación multiparadigma. Esto significa que más que forzar a los programadores a adoptar un estilo particular de programación, permite varios estilos: programación orientada a objetos, programación imperativa y programación funcional. Otros paradigmas están soportados mediante el uso de extensiones. Ella usa tipado dinámico y conteo de referencias para la administración de memoria.
+
+Bello es mejor que feo.
+Explícito es mejor que implícito.
+Simple es mejor que complejo.
+Complejo es mejor que complicado.
+Plano es mejor que anidado.
+Disperso es mejor que denso.
+La legibilidad cuenta.
+Los casos especiales no son tan especiales como para quebrantar las reglas.
+Aunque lo práctico gana a la pureza.
+Los errores nunca deberían dejarse pasar silenciosamente.
+A menos que hayan sido silenciados explícitamente.
+Frente a la ambiguedad, rechaza la tentación de adivinar.
+Debería haber una - y preferiblemente sólo una - manera obvia de hacerlo.
+Aunque esa manera puede no ser obvia al principio a menos que usted sea holandés.
+Ahora es mejor que nunca.
+Aunque nunca es a menudo mejor que ya mismo.
+Si la implementación es difícil de explicar, es una mala idea.
+Si la implementación es fácil de explicar, puede que sea una buena idea.
+Los espacios de nombres (namespaces) son una gran idea ¡Hagamos más de esas cosas!
+
+En este lenguaje, el programador solo se ocupa de los aspectos del objeto que van a usarse, y no del tipo de objeto que se trata. Cuando veo un ave que camina como un pato, nada como un pato y suena como un pato, a esa ave yo la llamo un pato.
+

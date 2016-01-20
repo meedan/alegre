@@ -1,0 +1,794 @@
+pt	pt	[('pt', 0.17537), ('es', 0.10951), ('fr', 0.04086), ('en', 0.03363), ('ar', 0.0)]	     uma seleção de boas histórias com obras de referência em ficção e nãoficção 
+pt	es	[('es', 0.2038), ('pt', 0.18177), ('en', 0.04801), ('fr', 0.02103), ('ar', 0.0)]	 a dandara criada por jarid nos inspira a sermos guerreiras todos os dias  
+pt	pt	[('pt', 0.20949), ('es', 0.20608), ('fr', 0.10313), ('en', 0.07194), ('ar', 0.0)]	 esse cunha comeu coco menina i  anos  sobre notícia da proposta parlamentar de precisar provas concretas pra denúncia de estupro 
+pt	pt	[('pt', 0.1887), ('es', 0.14601), ('fr', 0.08714), ('en', 0.05306), ('ar', 0.0)]	 gerações seguidas de afrobrasileiros cresceram sem fazer ideia do ponto de partida da saga familiar   …
+pt	pt	[('pt', 0.19296), ('es', 0.17947), ('fr', 0.0267), ('en', 0.02544), ('ar', 0.0)]	 os textos     com desrespeito aos direitos humanos  também serão avaliados com nota zero   …
+pt	pt	[('pt', 0.14339), ('es', 0.09962), ('fr', 0.07128), ('en', 0.04944), ('ar', 0.0)]	 porque mudar de ideia  evoluir e aprender são processos  e o processo  ele é lento  
+pt	pt	[('pt', 0.07196), ('es', 0.06996), ('fr', 0.03751), ('en', 0.03111), ('ar', 0.0)]	 prometemos solenemente nunca compactuar com isso 
+pt	pt	[('pt', 0.09328), ('es', 0.06616), ('en', 0.01319), ('fr', 0.00565), ('ar', 0.0)]	 qq vc ta fazendo da vida nada mas é temporário né não
+pt	es	[('es', 0.0616), ('pt', 0.04638), ('fr', 0.0358), ('en', 0.01667), ('ar', 0.0)]	 quase da família   sobre que horas ela volta
+pt	pt	[('pt', 0.14606), ('es', 0.11483), ('fr', 0.05347), ('en', 0.04211), ('ar', 0.0)]	 uma mulher tem sofrido ameaças por causa de um site fake e ninguém faz nada sobre o apoio que  precisa  …
+pt	pt	[('pt', 0.08262), ('es', 0.06008), ('fr', 0.03053), ('en', 0.02937), ('ar', 0.0)]	 você tirou o véu q cobriam meus olhos mensagens assim fazem tudo valer a pena  '
+pt	pt	[('pt', 0.10714), ('es', 0.06616), ('fr', 0.06169), ('en', 0.05415), ('ar', 0.0)]	 vou escrever um texto menor dessa vez  eu disse  e  mais uma vez  falhei miseravelmente 
+pt	pt	[('pt', 0.04104), ('es', 0.03042), ('fr', 0.01363), ('en', 0.00934), ('ar', 0.0)]	 sempre com muitos gifs
+pt	pt	[('pt', 0.10608), ('es', 0.08061), ('fr', 0.05154), ('en', 0.02393), ('ar', 0.0)]	  oi  querida  td bem hj vamos fazer um tuitaço às h   vc pode divulgar e participar bjo
+pt	pt	[('pt', 0.05011), ('es', 0.02205), ('en', 0.01696), ('fr', 0.01237), ('ar', 0.0)]	  sp tá virando uma distopia
+pt	pt	[('pt', 0.07143), ('es', 0.06236), ('fr', 0.03661), ('en', 0.01555), ('ar', 0.0)]	  é tarde demais para nos calar  …  
+pt	pt	[('pt', 0.04424), ('es', 0.02281), ('en', 0.01178), ('fr', 0.00602), ('ar', 0.0)]	 a  redefiniu ti pra tecnologia da imaginação 👽
+pt	pt	[('pt', 0.16258), ('es', 0.14373), ('fr', 0.0695), ('en', 0.04006), ('ar', 0.0)]	 a  falando sobre  abusos e sobre a necessidade de fazermos um escândalo sobre isso  …
+pt	pt	[('pt', 0.06557), ('es', 0.04411), ('en', 0.02851), ('fr', 0.01924), ('ar', 0.0)]	 a cenoura eu comi  mas a vida continuou  
+pt	pt	[('pt', 0.17324), ('es', 0.09125), ('en', 0.04931), ('fr', 0.03923), ('ar', 0.0)]	 a escravidão tirou das pessoas o direito à sua própria história  e disso tbm fala a introdução do livro da  aliás  leiam
+pt	pt	[('pt', 0.15139), ('es', 0.13156), ('fr', 0.09682), ('en', 0.06201), ('ar', 0.0)]	 a jout jout me fez lembrar as vezes em que pegaram na minha cintura indevidamente  e eu não pude fazer nada  
+pt	pt	[('pt', 0.08209), ('es', 0.08061), ('en', 0.02697), ('fr', 0.0143), ('ar', 0.0)]	 a lógica do vamos punir as vítimas corre solta 
+pt	pt	[('pt', 0.21429), ('es', 0.18479), ('fr', 0.08749), ('en', 0.07043), ('ar', 0.0)]	 a mídia tem usado em manchetes a palavra guerra para falar dessa perseguição dos machistas às feministas  mas não é guerra  é ataque 
+pt	pt	[('pt', 0.14446), ('es', 0.10418), ('en', 0.07982), ('fr', 0.04561), ('ar', 0.0)]	 a mulher aborta e vai procurar atendimento manda o hospital chamar a polícia  oras  …
+pt	es	[('es', 0.03422), ('pt', 0.02825), ('en', 0.02461), ('fr', 0.02139), ('ar', 0.0)]	 acabei de agendar  hehe 
+pt	pt	[('pt', 0.2484), ('es', 0.23118), ('fr', 0.10887), ('en', 0.07772), ('ar', 0.0)]	 acabo de presenciar um homem de uns anos e hétero usando o meme meu óculos   ninguém sai na vida real  ta de muito parabéns a internet
+pt	pt	[('pt', 0.07783), ('es', 0.05627), ('en', 0.03644), ('fr', 0.01901), ('ar', 0.0)]	 adoro quando a newsletter da  chega na sexta a noite
+pt	es	[('es', 0.06236), ('pt', 0.04158), ('fr', 0.02364), ('en', 0.01256), ('ar', 0.0)]	 agora é de sigilo policial   
+pt	pt	[('pt', 0.10821), ('es', 0.05856), ('fr', 0.03738), ('en', 0.03524), ('ar', 0.0)]	 ai meu corassaum abro a carta da  e começa logo com gif de gatinho piscando   
+pt	pt	[('pt', 0.14126), ('es', 0.11483), ('fr', 0.06749), ('en', 0.02081), ('ar', 0.0)]	 aliás  ontem recebi o email de uma garota de anos que me fez chorar  sorrir e rodopiar
+pt	pt	[('pt', 0.11087), ('es', 0.07072), ('en', 0.05475), ('fr', 0.05216), ('ar', 0.0)]	 aliás  se vc ainda não ouviu o  sobre violência contra a mulher  aproveita o momento   …
+pt	pt	[('pt', 0.05917), ('es', 0.05703), ('fr', 0.03934), ('en', 0.03223), ('ar', 0.0)]	 ansioso pra ler a newsletter de amanhã da  sobre o 
+pt	pt	[('pt', 0.19989), ('es', 0.1346), ('fr', 0.10708), ('en', 0.06141), ('ar', 0.0)]	 antes eu via treta explodindo na timeline e eu ia lá dar meus pitacos hoje eu já pondero mais e vejo se realmente vale a pena
+pt	pt	[('pt', 0.17751), ('es', 0.16198), ('fr', 0.0778), ('en', 0.02364), ('ar', 0.0)]	 ao analisar um grupo de   tweets  descobrimos que a idade média do  é de   anos  
+pt	es	[('es', 0.24563), ('pt', 0.20789), ('fr', 0.12113), ('en', 0.08726), ('ar', 0.0)]	 aos novos seguidores aviso q neste perfil trabalhamos com os seguintes temas  feminismo  literatura  meu trabalho  bobeiras  coisas leves
+pt	pt	[('pt', 0.08582), ('fr', 0.07882), ('es', 0.07757), ('en', 0.0509), ('ar', 0.0)]	 apenas grandes construções da humanid    pera 
+pt	pt	[('pt', 0.08582), ('en', 0.05309), ('es', 0.03422), ('fr', 0.0299), ('ar', 0.0)]	 aqui em sp a brincadeira é  adivinhe a próxima coisa a entrar em sigilo 
+pt	pt	[('pt', 0.01972), ('fr', 0.01497), ('es', 0.01369), ('en', 0.00346), ('ar', 0.0)]	 arrume um mozão que  
+pt	es	[('es', 0.12091), ('pt', 0.10928), ('en', 0.05049), ('fr', 0.05007), ('ar', 0.0)]	 as adolescentes são minhas novas heroínas  por     
+pt	pt	[('pt', 0.09382), ('es', 0.073), ('fr', 0.04368), ('en', 0.03321), ('ar', 0.0)]	 as coisas que a  escreve sempre me deixam meio 'aahhh e não é que é verdade' 
+pt	pt	[('pt', 0.10128), ('es', 0.0981), ('fr', 0.03543), ('en', 0.03446), ('ar', 0.0)]	 as contas  migas  elas não dão um mês de descanso 💸
+pt	pt	[('pt', 0.09115), ('es', 0.08821), ('fr', 0.06277), ('en', 0.04279), ('ar', 0.0)]	 assédio  cultura do estupro e adolescentes feministas   …
+pt	pt	[('pt', 0.24414), ('es', 0.16122), ('fr', 0.08423), ('en', 0.06861), ('ar', 0.0)]	 auto celebração e amor próprio não vem de comparação com terceiros  você é independente de todo resto  dá um trabalhão virar a chavinha 
+pt	pt	[('pt', 0.15192), ('es', 0.11179), ('fr', 0.07127), ('en', 0.04929), ('ar', 0.0)]	 bora financiar a ciência ♥︎ sabia q cês podem contribuir com o trabalho da equipe de uma neurocientista brasileira  …
+pt	pt	[('pt', 0.11247), ('es', 0.09506), ('fr', 0.05623), ('en', 0.0302), ('ar', 0.0)]	 brasileiro tem um troço com carro que é só tu falar que não sabe dirigir que a galera te olha com pena 
+pt	pt	[('pt', 0.02239), ('en', 0.01678), ('es', 0.00608), ('fr', 0.00475), ('ar', 0.0)]	 café e pamonha what a lovely day  
+pt	pt	[('pt', 0.11834), ('es', 0.11027), ('fr', 0.09113), ('en', 0.04588), ('ar', 0.0)]	 chateadíssima q ainda não possuo a funcionalidade de enquetes no tuirer
+pt	pt	[('pt', 0.02399), ('es', 0.01977), ('fr', 0.0078), ('en', 0.00583), ('ar', 0.0)]	 cogumelo na manteiga 🍄🍄🍄  
+pt	pt	[('pt', 0.02292), ('es', 0.01749), ('fr', 0.00846), ('en', 0.00819), ('ar', 0.0)]	 como cês passaram do mega gengar
+pt	pt	[('pt', 0.01439), ('es', 0.00837), ('en', 0.00252), ('fr', 0.00025), ('ar', 0.0)]	 credo
+pt	pt	[('pt', 0.11994), ('es', 0.08061), ('fr', 0.04112), ('en', 0.0297), ('ar', 0.0)]	 criadora de campanha sobre assédio considera tema do enem uma vitória    …
+pt	pt	[('pt', 0.03358), ('fr', 0.0205), ('en', 0.01483), ('es', 0.00989), ('ar', 0.0)]	 dá follow e depois não aguenta
+pt	pt	[('pt', 0.02186), ('es', 0.01369), ('en', 0.0123), ('fr', 0.00825), ('ar', 0.0)]	 débora  a deborista 
+pt	pt	[('pt', 0.02026), ('es', 0.00684), ('fr', 0.00626), ('en', 0.00609), ('ar', 0.0)]	 deixa tocar essa bosta
+pt	pt	[('pt', 0.18603), ('es', 0.16502), ('fr', 0.12275), ('en', 0.06614), ('ar', 0.0)]	 dia desses eu chamei a  de minha heroína da produtividade  depois da newsletter dela sobre a experiência do nanowrimo  então   
+pt	es	[('es', 0.02814), ('pt', 0.02772), ('fr', 0.01828), ('en', 0.0046), ('ar', 0.0)]	 diogo batalha ‏ de out
+pt	pt	[('pt', 0.20256), ('es', 0.14297), ('fr', 0.06611), ('en', 0.04206), ('ar', 0.0)]	 dito isso  amor próprio não é achar que o resto do mundo  ou um grupo de pessoas  está abaixo de você  isso é tóxico  cuidado 
+pt	pt	[('pt', 0.05117), ('fr', 0.03745), ('es', 0.03574), ('en', 0.01933), ('ar', 0.0)]	 e aqui ela escreve um desabafo  pq é foda enfrentar isso sozinha  …
+pt	pt	[('pt', 0.121), ('es', 0.09354), ('fr', 0.07222), ('en', 0.04143), ('ar', 0.0)]	 e o gif do começo da newsletter da  que eu pensei que era o ventinho daqui que passou na folha tô imersa no email já haha
+pt	pt	[('pt', 0.20203), ('es', 0.14753), ('fr', 0.09798), ('en', 0.05751), ('ar', 0.0)]	 e quando você esta quase pirando pq não avança na escrita de uns projetos de pesquisa eis que surge uma newsletter da 
+pt	pt	[('pt', 0.1226), ('es', 0.10494), ('fr', 0.06116), ('en', 0.02104), ('ar', 0.0)]	 é tarde demais para nos calar    toda nossa solidariedade à    
+pt	pt	[('pt', 0.1871), ('es', 0.16274), ('fr', 0.08027), ('en', 0.05681), ('ar', 0.0)]	 ela conta a história  eu desenho  vídeo ilustrado com  lendo trechinho de as lendas de dandara  …
+pt	es	[('es', 0.01825), ('fr', 0.01149), ('pt', 0.01013), ('en', 0.00255), ('ar', 0.0)]	 ela reclama 
+pt	es	[('es', 0.02205), ('fr', 0.01251), ('pt', 0.00373), ('en', 0.00289), ('ar', 0.0)]	 ela vai embora 
+pt	es	[('es', 0.03498), ('fr', 0.03367), ('en', 0.01774), ('pt', 0.01706), ('ar', 0.0)]	 ele diz  ela está um pouco hormonal   …
+pt	fr	[('fr', 0.0167), ('es', 0.01293), ('pt', 0.00906), ('en', 0.00715), ('ar', 0.0)]	 ele repete 
+pt	pt	[('pt', 0.1162), ('es', 0.09125), ('fr', 0.04507), ('en', 0.04357), ('ar', 0.0)]	 espero aprender a lidar com o tempo de duração q temos para viver 
+pt	pt	[('pt', 0.11567), ('es', 0.0654), ('fr', 0.05609), ('en', 0.02924), ('ar', 0.0)]	 esse vídeo faz parte da campanha do filme o olmo e a gaivota  e vc pode ler mais aqui  …
+pt	pt	[('pt', 0.18977), ('es', 0.16502), ('en', 0.0451), ('fr', 0.04233), ('ar', 0.0)]	 estamos fazendo isso crescer  fazendo com q ouçam nossa voz  claro q isso gera raiva e  acima de tudo  medo em algumas pessoas
+pt	pt	[('pt', 0.0549), ('es', 0.04411), ('fr', 0.0369), ('en', 0.01126), ('ar', 0.0)]	 etimologia    indivíduo  aquilo que não se divide 
+pt	pt	[('pt', 0.14819), ('es', 0.12548), ('fr', 0.06961), ('en', 0.04432), ('ar', 0.0)]	 etimologia    apartamento  estado de quem está apartado  em geral do espaço público 
+pt	pt	[('pt', 0.08369), ('es', 0.05171), ('en', 0.04419), ('fr', 0.04144), ('ar', 0.0)]	 eu nunca colocava meu email pessoal em site nenhum até encontrar a newsletter da 
+pt	pt	[('pt', 0.00373), ('fr', 0.00142), ('en', 0.00018), ('ar', 0.0), ('es', 0.0)]	 eu vou  
+pt	pt	[('pt', 0.07729), ('es', 0.05551), ('fr', 0.03585), ('en', 0.01917), ('ar', 0.0)]	 eu  nos vestibulares e enem da vida 
+pt	pt	[('pt', 0.15299), ('es', 0.1308), ('fr', 0.07586), ('en', 0.05582), ('ar', 0.0)]	 fácil é escrever receita de bolo  todo o resto cai naquela área perigosa fora da zona de conforto   …
+pt	es	[('es', 0.07985), ('fr', 0.05339), ('pt', 0.04744), ('en', 0.00715), ('ar', 0.0)]	 falta de rola  excesso de rola 
+pt	pt	[('pt', 0.20203), ('es', 0.19544), ('fr', 0.08213), ('en', 0.05493), ('ar', 0.0)]	 fazem comentários pedófilos sobre menina de anos em programa de tv  solução esconder a menina  oras  …
+pt	pt	[('pt', 0.03092), ('es', 0.02053), ('en', 0.00874), ('fr', 0.00477), ('ar', 0.0)]	 feliz dia do professor 
+pt	pt	[('pt', 0.14339), ('es', 0.12015), ('fr', 0.07778), ('en', 0.03246), ('ar', 0.0)]	 gente  saiu nova edição da  com artigo meu sobre o verdadeiro legado de simone de beauvoir  …
+pt	pt	[('pt', 0.08049), ('fr', 0.0464), ('es', 0.04563), ('en', 0.02317), ('ar', 0.0)]	 gentes  me tirem uma dúvida  o enem é obrigatório
+pt	pt	[('pt', 0.11407), ('es', 0.10342), ('fr', 0.0764), ('en', 0.0572), ('ar', 0.0)]	 haha o pior é que não dá pra encher mão com as personagens femininas q conheço q não tem algum desses abaixo 
+pt	fr	[('fr', 0.02769), ('pt', 0.02452), ('en', 0.01964), ('es', 0.01521), ('ar', 0.0)]	 hashtag transformação  mil tweets sobre o   …
+pt	pt	[('pt', 0.03038), ('fr', 0.02822), ('es', 0.02662), ('en', 0.01079), ('ar', 0.0)]	 hj vejo que nunca vale a pena 
+pt	pt	[('pt', 0.1807), ('es', 0.17338), ('en', 0.06916), ('fr', 0.0471), ('ar', 0.0)]	 já assina minha newsletter pra receber os textos q só mando por email aproveita  é de graça vagas limitadas  
+pt	pt	[('pt', 0.15885), ('es', 0.12471), ('fr', 0.05584), ('en', 0.03436), ('ar', 0.0)]	 já falei que acho lindo o site da  então  acho lindo o site da alinevalek  além do conteúdo  claro  
+pt	pt	[('pt', 0.15672), ('es', 0.1308), ('fr', 0.08784), ('en', 0.04383), ('ar', 0.0)]	 lição de casa antes de dormir  ler  as ~bobagens imperdíveis~ da  e o texto dessa semana do  ️
+pt	pt	[('pt', 0.03465), ('es', 0.01825), ('en', 0.00749), ('fr', 0.00135), ('ar', 0.0)]	 lindo texto da   …
+pt	pt	[('pt', 0.02505), ('en', 0.00432), ('fr', 0.00327), ('es', 0.00228), ('ar', 0.0)]	 macarrão com feijão  eu digo sim
+pt	pt	[('pt', 0.14286), ('es', 0.10875), ('en', 0.05647), ('fr', 0.04947), ('ar', 0.0)]	 mas depois na frente dazamiga vai dizer q é contra o machismo  q é aliado  a porra toda  começa com vc  fera 
+pt	es	[('es', 0.09125), ('pt', 0.07942), ('fr', 0.06777), ('en', 0.03787), ('ar', 0.0)]	 mas por que só para mulheres – lugar de mulher  …
+pt	fr	[('fr', 0.00373), ('en', 0.00338), ('es', 0.00228), ('pt', 0.00213), ('ar', 0.0)]	 me dá mó orgulhinho alheio   
+pt	pt	[('pt', 0.03518), ('fr', 0.02167), ('en', 0.0147), ('es', 0.01141), ('ar', 0.0)]	 me olham como se eu ainda fosse criança 
+pt	es	[('es', 0.18783), ('pt', 0.15512), ('en', 0.08183), ('fr', 0.07882), ('ar', 0.0)]	 meninas  viram meu último textinho as adolescentes são minhas novas heroínas  meninas  vocês não têm que agradar ninguém  … 
+pt	pt	[('pt', 0.02079), ('fr', 0.01858), ('es', 0.01369), ('en', 0.00936), ('ar', 0.0)]	 metrópole estadão 
+pt	pt	[('pt', 0.13486), ('es', 0.11331), ('fr', 0.05068), ('en', 0.03831), ('ar', 0.0)]	 meu corpo  minhas regras  um vídeo em resposta às imposições e ofensas que nos fazem  …
+pt	es	[('es', 0.02966), ('pt', 0.02878), ('en', 0.0147), ('fr', 0.01093), ('ar', 0.0)]	 mina intergaláctica  …
+pt	fr	[('fr', 0.0599), ('pt', 0.05864), ('es', 0.05247), ('en', 0.03199), ('ar', 0.0)]	 mulheres contra cunha – lugar de mulher
+pt	pt	[('pt', 0.13006), ('es', 0.0943), ('en', 0.04461), ('fr', 0.04263), ('ar', 0.0)]	 na fila do mercado lendo a newsletter da    transformando um tempo inútil em algo útil
+pt	es	[('es', 0.12091), ('pt', 0.11674), ('en', 0.04926), ('fr', 0.0444), ('ar', 0.0)]	 na nossa realidade  as heroínas têm a internet como superpoder  por     
+pt	pt	[('pt', 0.27878), ('es', 0.25856), ('fr', 0.17495), ('en', 0.13197), ('ar', 0.0)]	 na vdd eu fico triste qdo entro nas mentions e as interações é só um monte de rt  fav  gente citando tuítes  mas conversa mesmo nada
+pt	pt	[('pt', 0.01333), ('es', 0.01141), ('en', 0.00642), ('fr', 0.00365), ('ar', 0.0)]	 nao atenda
+pt	pt	[('pt', 0.03838), ('en', 0.02536), ('fr', 0.0236), ('es', 0.01369), ('ar', 0.0)]	 não consigo me ver como essa pessoa corajosa q dizem q sou
+pt	pt	[('pt', 0.08102), ('es', 0.07376), ('fr', 0.03491), ('en', 0.01025), ('ar', 0.0)]	 não lembro desse episódio de cavaleiros do zodíaco 
+pt	pt	[('pt', 0.03838), ('es', 0.03346), ('fr', 0.00958), ('en', 0.00952), ('ar', 0.0)]	 no  eu indico hipersonia crônica da  
+pt	pt	[('pt', 0.17324), ('es', 0.13612), ('fr', 0.05137), ('en', 0.04898), ('ar', 0.0)]	 nos últimos dias  o feminismo tem avançado  foi tema do enem  conscientização sobre   protesto em sp
+pt	pt	[('pt', 0.05917), ('en', 0.03688), ('es', 0.03574), ('fr', 0.01855), ('ar', 0.0)]	 nossa  homeland voltou uma série q já podia ter acabado né
+pt	pt	[('pt', 0.05277), ('es', 0.02205), ('en', 0.0103), ('fr', 0.00375), ('ar', 0.0)]	 o cara toca o peito da colega na tv 
+pt	pt	[('pt', 0.1823), ('es', 0.17414), ('en', 0.03251), ('fr', 0.02783), ('ar', 0.0)]	 o clube da escrita na  é um sucesso enorme os próximos encontros também serão mediados por mim vamos 
+pt	pt	[('pt', 0.07676), ('es', 0.05095), ('en', 0.03501), ('fr', 0.02529), ('ar', 0.0)]	 o jeito é pedir desculpas e devolver tudo à sopa primordial 
+pt	pt	[('pt', 0.25053), ('es', 0.20152), ('fr', 0.14814), ('en', 0.07881), ('ar', 0.0)]	 o problema de alguns religiosos é quando eles já se crêem salvos só por crer  as piores atrocidades se justificam se deus está do seu lado
+pt	pt	[('pt', 0.09275), ('es', 0.07376), ('fr', 0.04845), ('en', 0.02211), ('ar', 0.0)]	 o ruim de acordar cedo é q só tem tuítes da madrugada pra ler
+pt	pt	[('pt', 0.12953), ('es', 0.11939), ('fr', 0.06929), ('en', 0.04003), ('ar', 0.0)]	 obrigada  por me dar o fôlego que faltava para entrar de cabeça no nanowrimo  minha meta é a badge do bobagens ♡
+pt	pt	[('pt', 0.06663), ('en', 0.03886), ('es', 0.03194), ('fr', 0.02506), ('ar', 0.0)]	 ok eu assinei a newsletter da  essa semana e levei um susto com isso  sério 
+pt	pt	[('pt', 0.0629), ('es', 0.05399), ('fr', 0.01951), ('en', 0.01795), ('ar', 0.0)]	 olar  cês já me seguem no medium publico uns textos por lá  
+pt	pt	[('pt', 0.03465), ('en', 0.0329), ('fr', 0.02527), ('es', 0.02357), ('ar', 0.0)]	 olhe para você  o outro é o outro  deixe ele lá 
+pt	es	[('es', 0.01065), ('pt', 0.00959), ('fr', 0.00344), ('en', 0.00299), ('ar', 0.0)]	 omg omg omg enviei  agora foi  agora vai 
+pt	es	[('es', 0.22814), ('pt', 0.1791), ('en', 0.02653), ('fr', 0.0221), ('ar', 0.0)]	 paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência 
+pt	pt	[('pt', 0.14179), ('es', 0.12471), ('en', 0.05142), ('fr', 0.0456), ('ar', 0.0)]	 podem picotar minha carteirinha feminista de novo  mas essas fotos da carrie fisher são maravilhosas 
+pt	pt	[('pt', 0.09275), ('es', 0.07909), ('fr', 0.05287), ('en', 0.02403), ('ar', 0.0)]	 por que tem um celular flip no clipe de hello  da cantora adele  …
+pt	pt	[('pt', 0.11194), ('es', 0.07909), ('fr', 0.06038), ('en', 0.03849), ('ar', 0.0)]	 por que tentar esconder uma vítima de assédio não faz o problema sumir  
+pt	pt	[('pt', 0.1338), ('es', 0.09962), ('fr', 0.06531), ('en', 0.04591), ('ar', 0.0)]	 portanto  tua estratégia de fragmentação pra ser um aqui  outro ali  é furada 
+pt	pt	[('pt', 0.0581), ('es', 0.03498), ('en', 0.01615), ('fr', 0.01435), ('ar', 0.0)]	 portanto  vê se sai na rua e berra 
+pt	pt	[('pt', 0.07996), ('es', 0.0654), ('fr', 0.01832), ('en', 0.00903), ('ar', 0.0)]	 poucos sabem mas o s em sp é de sigilo
+pt	pt	[('pt', 0.06023), ('es', 0.04335), ('en', 0.02913), ('fr', 0.02722), ('ar', 0.0)]	 projeto pode dificultar aborto legal  …
+pt	pt	[('pt', 0.00906), ('es', 0.0076), ('en', 0.0032), ('fr', 0.00059), ('ar', 0.0)]	 q horror 
+pt	pt	[('pt', 0.25533), ('es', 0.21749), ('fr', 0.08235), ('en', 0.05553), ('ar', 0.0)]	 qdo um animal fica acuado  ele ataca  e é isso o q tá acontecendo  estão morrendo de medo  desesperados  então escolheram alvos para atacar
+pt	es	[('es', 0.06844), ('pt', 0.06663), ('fr', 0.04147), ('en', 0.0186), ('ar', 0.0)]	 qual foi a primeira coisa que te fez sorrir de vdd hoje
+pt	pt	[('pt', 0.15512), ('es', 0.14297), ('fr', 0.0859), ('en', 0.06521), ('ar', 0.0)]	 quando eu crescer definitivamente quero ter a força de vontade da menina 
+pt	es	[('es', 0.04639), ('pt', 0.02505), ('fr', 0.02304), ('en', 0.00905), ('ar', 0.0)]	 que horas ela volta  …
+pt	es	[('es', 0.08745), ('pt', 0.08529), ('fr', 0.059), ('en', 0.03709), ('ar', 0.0)]	 que morte horrível pesquisar sobre evolução e cair em site criacionista
+pt	pt	[('pt', 0.19883), ('es', 0.13232), ('fr', 0.05986), ('en', 0.04989), ('ar', 0.0)]	 quem acha q o q está acontecendo com  é caso isolado ou menor  não poderia errar mais  e hj ela é o alvo  mas a mira é móvel 
+pt	pt	[('pt', 0.17004), ('es', 0.16046), ('fr', 0.07928), ('en', 0.06926), ('ar', 0.0)]	 receba uma newsletter quentinha  totalmente grátis  cheia de amor toda semana no seu email ♡ vagas limitadas  
+pt	pt	[('pt', 0.07996), ('es', 0.07605), ('en', 0.0366), ('fr', 0.02936), ('ar', 0.0)]	 redação do  machistas literalmente  
+pt	pt	[('pt', 0.12313), ('es', 0.11255), ('en', 0.0574), ('fr', 0.04538), ('ar', 0.0)]	 respirar oxigênio acelera o envelhecimento das células  a recomendação agora é respirar hélio
+pt	pt	[('pt', 0.15139), ('es', 0.1057), ('fr', 0.04094), ('en', 0.03732), ('ar', 0.0)]	 sábado de manhã é o meu momento eu  vc  filhos e cachorro  o vc  no caso  é a newsletter da 
+pt	pt	[('pt', 0.13166), ('es', 0.09734), ('en', 0.06281), ('fr', 0.0306), ('ar', 0.0)]	 scrivener e coletor menstrual  duas coisas q melhoraram minha vida e fico indicando prazamiga usarem tb
+pt	es	[('es', 0.12548), ('pt', 0.12473), ('fr', 0.09339), ('en', 0.0366), ('ar', 0.0)]	 se o feminismo avança  eles atacam  criminosos criam site de ódio para difamar a  ela explica aqui   …
+pt	pt	[('pt', 0.15085), ('es', 0.14601), ('en', 0.04625), ('fr', 0.039), ('ar', 0.0)]	 se temos esse poder para deixálos com medo  vamos usar esse poder pra reagir  não vão nos calar  força  
+pt	pt	[('pt', 0.16098), ('es', 0.127), ('fr', 0.07993), ('en', 0.07324), ('ar', 0.0)]	 se voce atende o telefone quando te ligam entao voce esta ajudando a perpetuar esta prática grotesca
+pt	pt	[('pt', 0.18817), ('es', 0.10342), ('en', 0.06939), ('fr', 0.05754), ('ar', 0.0)]	 sei q email não tem isso visualizada e ñ respondida ainda  mas ñ precisa ficar mandando o mesmo email se a pessoa ainda não respondeu
+pt	pt	[('pt', 0.17964), ('es', 0.11711), ('fr', 0.10266), ('en', 0.05535), ('ar', 0.0)]	 sempre me pergunto quem é que achou uma boa ideia chamar o controle de videogame de vara da alegria joystick
+pt	pt	[('pt', 0.17324), ('es', 0.14449), ('fr', 0.05967), ('en', 0.05561), ('ar', 0.0)]	 sou dessas que tenta  com muito custo e todos os dias  não ser parte do problema   …
+pt	pt	[('pt', 0.16898), ('es', 0.12091), ('fr', 0.0823), ('en', 0.0566), ('ar', 0.0)]	 sp  estado impõe sigilo a dado da pm e barra comparação entre crimes e policiamento  
+pt	pt	[('pt', 0.05224), ('es', 0.0327), ('en', 0.02567), ('fr', 0.01233), ('ar', 0.0)]	 tá acabando  aline  tá acabando
+pt	pt	[('pt', 0.23134), ('es', 0.20989), ('fr', 0.14916), ('en', 0.09912), ('ar', 0.0)]	 tempo para realmente construir algo  bem  talvez seja o caso de rever nossas prioridades  marotamente jogando verdades na cara
+pt	pt	[('pt', 0.23348), ('es', 0.15741), ('fr', 0.08533), ('en', 0.06479), ('ar', 0.0)]	 tenho pouco tempo de vida comparando com a idade da terra  e uso esse tempo lendo newsletters da  pra vida valer a pena
+pt	pt	[('pt', 0.14392), ('es', 0.13764), ('fr', 0.06163), ('en', 0.04765), ('ar', 0.0)]	 terminei o livro de contos da  pequenas tiranias  é incrível correr lá e compre sua cópia  …
+pt	pt	[('pt', 0.05117), ('es', 0.04335), ('fr', 0.02349), ('en', 0.02148), ('ar', 0.0)]	 textinho da  quentinho igual o café recémpassado 
+pt	pt	[('pt', 0.03358), ('es', 0.01445), ('en', 0.01238), ('fr', 0.00582), ('ar', 0.0)]	 texto novo lá no blog a escolha pelo difícil  … 
+pt	pt	[('pt', 0.14286), ('es', 0.13992), ('fr', 0.04402), ('en', 0.02531), ('ar', 0.0)]	 tô só de olho nos amigos publiças curtindo piada machista de redatorzão 
+pt	pt	[('pt', 0.129), ('es', 0.08897), ('fr', 0.04), ('en', 0.03881), ('ar', 0.0)]	 todo mundo precisa colocar a mão na consciência e ver q faz parte do problema   …
+pt	pt	[('pt', 0.1967), ('es', 0.14144), ('en', 0.06253), ('fr', 0.05616), ('ar', 0.0)]	 uma leitora agradecendo por eu ter indicado o podcast do  sobre violência contra a mulher  q ajudou ela na redação do enem 
+pt	pt	[('pt', 0.07036), ('es', 0.06236), ('en', 0.02754), ('fr', 0.01522), ('ar', 0.0)]	 valeu pelas dicas   agora vai nanowrimo já virou meu rolê favorito 
+pt	pt	[('pt', 0.15778), ('es', 0.13536), ('fr', 0.07273), ('en', 0.05639), ('ar', 0.0)]	 vamos ler mais mulheres as lendas de dandara é da  e tem arte da   …
+pt	pt	[('pt', 0.18337), ('es', 0.14829), ('en', 0.05397), ('fr', 0.05336), ('ar', 0.0)]	 varrer as mulheres pra debaixo do tapete não vai acabar com o machismo  nós  nossos corpos e nossas vidas não são o problema 
+pt	pt	[('pt', 0.15991), ('es', 0.14981), ('fr', 0.07759), ('en', 0.05626), ('ar', 0.0)]	 vocês todos deviam assinar a newsletter da  porque olha  melhor coisa que entra na minha vida pelo meu email em uns bons anos já
+pt	pt	[('pt', 0.12846), ('es', 0.09886), ('fr', 0.08245), ('en', 0.03152), ('ar', 0.0)]	 vontade de problematizar esse coração que apareceu no lugar da estrelinha do fav
+ar	ar	[('ar', 0.01317), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  التقليد    عربون الفشل
+ar	ar	[('ar', 0.06005), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 هذا القلب المتغيّر   الرواية الفائزة بجائزة لوموند الأدبية 
+ar	ar	[('ar', 0.00581), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 هل سبق لك أن غرقت؟  حسام منصور 
+ar	ar	[('ar', 0.02247), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  عادات ستغير حياتك للأبد  سماح صافي 
+ar	ar	[('ar', 0.00852), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أميرة القلوب  
+ar	ar	[('ar', 0.05657), ('en', 0.01766), ('fr', 0.01108), ('es', 0.00684), ('pt', 0.0016)]	 أميركا في ميانمار  ديموقراطية جيم كرو العنصرية  clayton swisher
+ar	ar	[('ar', 0.01511), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أنا لاجئ، هل يزعجكم هذا اللقب؟ تدوينة علياء كيوان   
+ar	ar	[('ar', 0.01085), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 إلى متى سنظل إناثاً؟
+ar	ar	[('ar', 0.04843), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 إمبراطورية الكاكي بين الثروة والثورة
+ar	ar	[('ar', 0.03332), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 إنها الحبيبة التي تحتضر عن  تدون نجلاء العمري   
+ar	ar	[('ar', 0.08291), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الاختيار التركي واستعادة المكانة على الساحة السياسية
+ar	ar	[('ar', 0.0155), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 البرد  كالرصاص قاتل  زهراء عبدالله 
+ar	ar	[('ar', 0.07865), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 التطورات الاستراتيجية المتوقعة بعد التدخل الروسي
+ar	ar	[('ar', 0.04146), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الحركة القومية يخسر نحو نصف مقاعده في البرلمان التركي
+ar	ar	[('ar', 0.06548), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 العصفورة قالت لي  تلك الأسطورة التي ربتنا عليها أمهاتنا،الآن تحولت إلى حقيقة 
+ar	ar	[('ar', 0.03719), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الفساد الذي سكن جامعتي عن حادث دهس طالبة داخل الحرم الجامعي يدون محمد عادل طه   
+ar	ar	[('ar', 0.06509), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 المخاوف الأمنية تدفع السعودية للانسحاب من مواجهة فلسطين
+ar	ar	[('ar', 0.03565), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 النقش على الذكريات  ربيع أبو شحات 
+ar	ar	[('ar', 0.09802), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الوضعية الإنكارية لمبرري السلطوية المصرية
+ar	ar	[('ar', 0.00271), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بائع الفرح  محمد نشبت 
+ar	ar	[('ar', 0.0585), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 برد الشتاء وأمطاره   شبح جديد يواجه المواطن واللاجئ العراقي  أحمد محمود دللي 
+ar	ar	[('ar', 0.07361), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بندر الزهراني  عن  والحاجة لحيازة المعلومة والتفنن في تحليلها   
+ar	ar	[('ar', 0.06277), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 جيش الإسلام يرغب في التعاون مع  لمواجهة المسلحين الكرد في
+ar	ar	[('ar', 0.04417), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 حتى لا تصبح الثورة سلة مهملات لنفايات النظام
+ar	ar	[('ar', 0.03836), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 حسن عوف يكتب  مستقبل التعليم العربي في خطر قريب   لكن إليكم الحل   
+ar	ar	[('ar', 0.03565), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 حفلة سمر مع الصدر الأعظم حافظ الأسد  بسام جعارة
+ar	ar	[('ar', 0.07749), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 حينما يفرح العربي بالإنتخابات التركية تدوينة عبدالرحمن الشهري 
+ar	ar	[('ar', 0.00155), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 دموع 
+ar	ar	[('ar', 0.01395), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 ضع ثقتك فى الله، لأنه لن يخونك أبداً تدوينة مونيكا جميل   
+ar	ar	[('ar', 0.0062), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 عسل إسود و منيل
+ar	ar	[('ar', 0.03642), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 غزة وتركيا   العشق المحمود  محمد الشريف 
+ar	ar	[('ar', 0.01898), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 فتاة مقاومة ومجتمع طاغية
+ar	ar	[('ar', 0.03371), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 لماذا يتأخرون دائماً في الرد على رسائلي النصية؟ هل هم غاضبون مني؟   
+ar	ar	[('ar', 0.02092), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 مجرد محاولات فاشلة  جواد عبادة
+ar	ar	[('ar', 0.0802), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 مجموعة الفن المغربية  الأثرية تباع مقابل   مليون يورو   تعرف عليها
+ar	ar	[('ar', 0.01589), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 معركة لن تنتهي   آية أحمد 
+ar	ar	[('ar', 0.02131), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 نيازك الهالوين تسقط من السماء مصحوبة بضوء أخضر
+ar	ar	[('ar', 0.04339), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  تدفع مصريين للمطالبة بالعودة إلى 
+ar	ar	[('ar', 0.0217), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  أقل دول فى حرية    
+ar	ar	[('ar', 0.05502), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الشعوب الأكثر والأقل تسامحا مع المهاجرين
+ar	ar	[('ar', 0.01395), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  ترفض التعاون مع  حول    
+ar	ar	[('ar', 0.01201), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  مهندس غزو     أهم محطات حياته   
+ar	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	  
+ar	ar	[('ar', 0.03913), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  حملة فلسطينية لمقاطعة البضائع الإسرائيلية   
+ar	ar	[('ar', 0.03061), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يعزز قواته في  اليمنية استعداداً لمعركة فاصلة
+ar	ar	[('ar', 0.03913), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  صحة الشرقية تنفي التعرض لمذهب ممرضة الآذان الشيعي   
+ar	ar	[('ar', 0.01744), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يدعو الحلف الأطلسي للتدخل في ليبيا
+ar	ar	[('ar', 0.07361), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  العزوف عن المشاركة في الانتخابات ليس دليلاً على اليأس من حكمي
+ar	ar	[('ar', 0.01279), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  تواجه مخاوفها برقم ساخن للإبلاغ عن الجواسيس   
+ar	ar	[('ar', 0.02518), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يدعو لتوحيد  و  لمواجهة روسيا وأميركا وإيران في    
+ar	ar	[('ar', 0.00349), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يقود  بمفرده مجدداً
+ar	ar	[('ar', 0.00504), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	   إذا لم تفشل فافعل ما شئت
+ar	ar	[('ar', 0.00426), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	   تعلمت برمجة مصيري
+ar	ar	[('ar', 0.02092), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الصراع من أجل الذات
+ar	ar	[('ar', 0.01589), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يُعلن   وماليزيا تلعبان مع  بملعب محايد
+ar	ar	[('ar', 0.0616), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  أكبر المستفيدين من انقسامات الحزب الحاكم في 
+ar	ar	[('ar', 0.01356), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يعتذر عن طريقة احتفال لاعبيه بالـ 
+ar	ar	[('ar', 0.01356), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يعتذر عن طريقة احتفال لاعبيه بالـ    
+ar	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	  
+ar	ar	[('ar', 0.01356), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  في معقل القاعدة
+ar	ar	[('ar', 0.05269), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الشرطة تتظاهر لتحسين أوضاعها المالية   
+ar	ar	[('ar', 0.06238), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  القلب رمز عالمي يتجاوز اللغات والثقافات، ويسهِّل التواصل بين الناس   
+ar	ar	[('ar', 0.01317), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  تتصدر تويتر وسط رفض البعض   
+ar	ar	[('ar', 0.02828), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  وزواج الرسول   حملة لتكفير ناشطة كويتية محجبة على    
+ar	ar	[('ar', 0.01976), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  أفضل مدينة للاحتفال برأس سنة    فماذا تزور؟
+ar	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	 
+ar	ar	[('ar', 0.0279), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يشعل روح الثورة في  مرة أخرى
+ar	ar	[('ar', 0.0279), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  يشعل روح الثورة في  مرة أخرى
+ar	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	 
+ar	ar	[('ar', 0.06819), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  طعن إسرائيليين قرب تل أبيب والشرطة الإسرائيلية تعتقل الشاب الفلسطيني منفذ العملية
+ar	ar	[('ar', 0.09764), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الاستخبارات الأميركية  لا مؤشرات حتى الآن على تحطم الطائرة الروسية في سيناء بسبب عمل إرهابي 
+ar	ar	[('ar', 0.07013), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الشرطة الإسرائيلية تطلق النار على فلسطيني بعد أن طعن إسرائيلياً في مدينة 
+ar	ar	[('ar', 0.07555), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  سيارة المستقبل تراقب الطريق وإشارة المرور وتكشف الأمطار والرياح
+ar	ar	[('ar', 0.07749), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  أفغانية في الرابع عشر من العمر تناضل لحقوق الأطفال رُشحت لجائزة دولية   هذه قصتها
+ar	ar	[('ar', 0.04533), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  إعصار  يباغت أهالي جزيرة سقطرى اليمنية ويخلف أضراراً مادية كبيرة
+ar	ar	[('ar', 0.03371), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  ابتكارات مذهلة بمعرض بكين الدولي للثقافة والإبداع الصناعي   
+ar	ar	[('ar', 0.11158), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الأزهارُ مكوِّن أساسيٌّ في المأكولات الراقية   هكذا تنقل من المزارع إلى المطابخ
+ar	ar	[('ar', 0.0616), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  البولنديون يزورون القبور حاملين آلاف الشموع المضاءة احتفالاً بالهالوين
+ar	ar	[('ar', 0.02635), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الصناديق السوداء داخل طائرات النقل   فيديو بياني
+ar	ar	[('ar', 0.0554), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الفضاء الدوليةمحطة لمراقبة العالم من بعيد  تعرف عليها
+ar	ar	[('ar', 0.02131), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  القمر الدامي العظيم ستحظى بمشاهدته بعد عاما   شرح تفصيلي
+ar	ar	[('ar', 0.04339), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  تغلب على إدمان المخدرات بسهولة  شاهد
+ar	ar	[('ar', 0.01782), ('fr', 0.00232), ('es', 0.00228), ('pt', 0.00213), ('en', 0.00195)]	  تقليد شرقي غير كوميدي لأغنية hello
+ar	ar	[('ar', 0.01395), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  ثلاثة شباب يقدمون عرضا مُدهشا لمهارة ألعاب الخفة   شاهد
+ar	ar	[('ar', 0.02673), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  حشود  تعبر حدود كرواتيا وسلوفينيا سيراً على الأقدام   
+ar	ar	[('ar', 0.02131), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  رائد فضاء أميركي يحيي  من خارج الأرض
+ar	ar	[('ar', 0.02712), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  رسوم مُدهشة على ثمرة اليقطين بمناسبة عيد الهالوين
+ar	ar	[('ar', 0.01395), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  شاهد اختراق عقل  في دقيقتين
+ar	ar	[('ar', 0.06858), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  شاهد   أول فيديو مسرب من مدينة  الأثرية التي يسيطر عليها 
+ar	ar	[('ar', 0.09492), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  عكاشة يسب مقاطعي الانتخابات المصرية بكلمات نابية بعد عودة مفاجئة لـالفراعين
+ar	ar	[('ar', 0.01782), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  غواصة ترقص مع أسماك القرش قرب سواحل باهاما
+ar	ar	[('ar', 0.02867), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  كارثة  تدفع  لاعتماد نظام طاقة طموح جداً يعتمد على الهيدروجين
+ar	ar	[('ar', 0.02441), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  كيف تخطط رحلةً سياحيةً مميزة بميزانية معقولة؟
+ar	ar	[('ar', 0.07516), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  لأول مرة   هجوم ونقد متبادلان بين  ومذيعي الفضائيات المصرية
+ar	ar	[('ar', 0.0031), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  لماذا خسر  أمام  برباعية؟
+ar	ar	[('ar', 0.02247), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  ما سرّ كراهية الكوميديان السعودي لاتحاد 
+ar	ar	[('ar', 0.08175), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  من القات في اليمن إلى القنب الهندي   كيف اكتشف الإنسان المخدرات؟
+ar	ar	[('ar', 0.02015), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  نحن من أسقطها   تسجيل صوتي لـ يؤكد مسؤوليته عن إسقاط  
+ar	ar	[('ar', 0.02286), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  هل الدعوات للتخلص من الكرش منطقية؟
+ar	ar	[('ar', 0.03061), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  وداعاً للتحرش اكسسوار يُخيف المعتدي ويستغيث بعائلتك
+ar	ar	[('ar', 0.01821), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  تعتزم تقليل نفقاتها لمواجهة انخفاض أسعار    
+ar	ar	[('ar', 0.0585), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  الإسكندرية تغرق من جديد
+ar	ar	[('ar', 0.01937), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	  مصرع أشخاص وإصابة جراء أمطار غزيرة   
+ar	ar	[('ar', 0.04068), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أجهزة الاستخبارات لا تريدك أن تنام بشكل جيد، لأنها لا تستطيع مراقبة أحلامك   
+ar	ar	[('ar', 0.03913), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أحمد حلمي يحتفي بطفلة اعتبرته مثلها الأعلى
+ar	ar	[('ar', 0.05386), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أردوغان يدعو لدستور مدني بعد فوز  في الانتخابات البرلمانية
+ar	ar	[('ar', 0.07245), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أغرب المشاهد في الانتخابات التركية ـ أكبر ناخب تركي عاماً
+ar	ar	[('ar', 0.07052), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أغرب المشاهد في الانتخابات التركية  أردوغان وأوغلو وغول   الجاكيت نفسه
+ar	ar	[('ar', 0.06587), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أغرب المشاهد في الانتخابات التركية  انتخبوا ثم تزوجوا
+ar	ar	[('ar', 0.08446), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أغرب المشاهد في الانتخابات التركية  على عربة الإسعاف يدلي بصوته
+ar	ar	[('ar', 0.02906), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أكثر من خبير روسي في  يواصلون فحص حطام  
+ar	ar	[('ar', 0.05579), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أميركي يترك حفيدته مع مسدس وسط الصحراء ويحرضها على القتل   ذاهباً لتناول الشراب والبرجر
+ar	ar	[('ar', 0.10887), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أهم شركات الطيران العربية تمتنع عن العبور فوق شبه الجزيرة المصرية
+ar	ar	[('ar', 0.04998), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أوباما ساخراً من الجمهوريين  لا يستطيعون الوقوف أمام الكاميرات كيف سيواجهون بوتين؟
+ar	ar	[('ar', 0.10267), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 أولسيلفي لرئيس الوزراء التركي أحمد داود أوغلو مع زوجته وابنتيه عقب فوز حزب العدالة والتنمية بالانتخابات البرلمانية 
+ar	ar	[('ar', 0.0616), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 إعصار  يدفع آلاف أسرة للنزوح شرق  والمواطنون يستعدون لأمطار شديدة قادمة
+ar	ar	[('ar', 0.00852), ('es', 0.00076), ('en', 0.00068), ('pt', 0.00053), ('fr', 7e-05)]	 إعلان مميز لـ ikea ماليزيا    
+ar	ar	[('ar', 0.02325), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 إنذار بوجود قنابل في أربعين مدرسة في    
+ar	ar	[('ar', 0.04301), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 احترام الخصوصية تساعدك في الحفاظ على رومانسيتك و نصائح أخرى   
+ar	ar	[('ar', 0.06664), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 ارتفاع كبير في الاقتصاد التركي غداة إعلان نتائج الانتخابات البرلمانية
+ar	ar	[('ar', 0.03138), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 اشتباك بالأسلحة في ملهى ليلي ببيروت ومقتل بينهم عسكريان وفتاتان
+ar	ar	[('ar', 0.02015), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الأقل منها  و 
+ar	ar	[('ar', 0.08408), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الإسكندرية تغرق كل عام   والمتهم هيئة غير موجودة
+ar	ar	[('ar', 0.02286), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الإعصار يقتل يمنيين ويتجه صوب  حيث يسيطر التنظيم
+ar	ar	[('ar', 0.03487), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الإفراج عن الأسير الفلسطيني  الساعات القادمة
+ar	ar	[('ar', 0.0926), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الاستخبارات الأميركية  لا مؤشرات إلى عمل إرهابي تسبب في سقوط الطائرة الروسية   
+ar	ar	[('ar', 0.0616), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 البرلمان العراقي يحظر على العبادي إقرار إصلاحات دون موافقة النواب
+ar	ar	[('ar', 0.00697), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 التفاصيل    
+ar	ar	[('ar', 0.10771), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 التوتر يتفاقم في مدينة  والحكومة الفلسطينية تقر مجموعة من المساعدات لها   
+ar	ar	[('ar', 0.03758), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الجريني  شريكة حياتي بلا مواصفات   ولن أتحدث عن المجّرد   
+ar	ar	[('ar', 0.05424), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الحزب الحاكم في  يتفكك   والنهضة أكبر المستفيدين
+ar	ar	[('ar', 0.03022), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الحقيقة وراء محاولة اختطاف سعودية أثناء صلاة الفجر
+ar	ar	[('ar', 0.03874), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الرجل الثاني في حكومة ميركل مخاطباً اللاجئين  ألمانيا ليست بلداً سهلاً
+ar	ar	[('ar', 0.07865), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 السلطات الإسرائيلية تهدم منزلا في  دون سابق إنذار بداعي البناء غير المرخص 
+ar	ar	[('ar', 0.03836), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 السيسي  تبني  إسقاط  دعاية هدفها الإضرار بسمعة 
+ar	ar	[('ar', 0.05076), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الشرطة الإسرائيلية تطلق النار على فلسطيني بعد أن طعن إسرائيلياً   
+ar	ar	[('ar', 0.05889), ('en', 0.00029), ('fr', 0.0), ('pt', 0.0), ('es', 0.0)]	 الصاوي يدافع عن التلفزيون المصري   وسلامة يؤيد mbc مصر   
+ar	ar	[('ar', 0.03603), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الطالب كان يرغب في تناول وجبة الغداء فقط، لكن الثلاجة لم تسمح له 
+ar	ar	[('ar', 0.03603), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الطالب كان يرغب في تناول وجبة الغداء فقط، لكن الثلاجة لم تسمح له   
+ar	ar	[('ar', 0.02053), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الظواهري يدعو لتوحيد  و  لمواجهة روسيا وأميركا وإيران
+ar	ar	[('ar', 0.04804), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 الكنيست الإسرائيلي يصادق على قانون تشديد العقوبات ضد راشقي الحجارة
+ar	ar	[('ar', 0.05037), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 المصدر ولمشاهدة المزيد من الصور    
+ar	ar	[('ar', 0.06897), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 النرجسية والاكتئاب   أكثر المشاكل النفسية شيوعاً لدى فناني 
+ar	ar	[('ar', 0.03371), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 اليونان تبدأ بتوزيع اللاجئين على سائر دول الاتحاد الأوروبي
+ar	ar	[('ar', 0.06122), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 انتكاسة لكاميرون   لجنة بالبرلمان البريطاني ترفض الضربات الجوية في 
+ar	ar	[('ar', 0.03526), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 انفوغرافيك  أفضل وأسوأ دول فيما يخص حرية الانترنت
+ar	ar	[('ar', 0.0341), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 انهيار أرضي كبير على حدود  و  بعد ضخ الجيش مياهاً بالأنفاق
+ar	ar	[('ar', 0.06664), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بالصور   ورشات تصنيع الأسلحة في  تزدهر والمعارضة تسعى لتطويرها
+ar	ar	[('ar', 0.09221), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بدء تفريغ الصندوقين الأسودين للطائرة الروسية المنكوبة في مصر وموسكو تمدد الحداد إلى أيام
+ar	ar	[('ar', 0.03526), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بريطانيا تمنح حصانة دبلوماسية لمرافقي  لمنع ملاحقتهم ومحاكمتهم
+ar	ar	[('ar', 0.02518), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بعد فوز  بوصلة المستثمر الخليجي تتجه نحو تركيا
+ar	ar	[('ar', 0.04223), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بنك ألماني يدفع مليون دولار غرامة لانتهاكه حظراً أميركيا على سوريا و 
+ar	ar	[('ar', 0.0155), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 بين ما حدث وما ينبغي أن يكون، ما تعليقكم؟
+ar	ar	[('ar', 0.02751), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تحالف نسائي بمصر يدعو لـهبة شعبية للإفراج عن امرأة
+ar	ar	[('ar', 0.03797), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تخفيف أحكام بالسجن بحق معارضين مصريين بينهم البلتاجي وحجازي
+ar	ar	[('ar', 0.04068), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدهور احتياطي  من العملة الأجنبية
+ar	ar	[('ar', 0.02131), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدهور الحالة الصحية لطرابيك   وزوجته تنتظر خبراً سعيداً   
+ar	ar	[('ar', 0.00891), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة إياد سليمان
+ar	ar	[('ar', 0.00659), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة جهاد بريكي  
+ar	ar	[('ar', 0.01821), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة محمد حليم بركات 
+ar	ar	[('ar', 0.00969), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة وائل خليل شديد
+ar	ar	[('ar', 0.01279), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـأمينة بن ابراهيم
+ar	ar	[('ar', 0.01007), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـإبراهيم كالين
+ar	ar	[('ar', 0.01317), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـحكم البابا
+ar	ar	[('ar', 0.00581), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـرؤى خضر
+ar	ar	[('ar', 0.00969), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـرحاب هاني 
+ar	ar	[('ar', 0.00659), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـسعيد بوكرامي
+ar	ar	[('ar', 0.00659), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـعمرو حمزاوي 
+ar	ar	[('ar', 0.00814), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـمحمد ثابت
+ar	ar	[('ar', 0.01162), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـنوار السعيد
+ar	ar	[('ar', 0.0124), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـوفاء نزيه
+ar	ar	[('ar', 0.01356), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 تدوينة لـيزن التركاوي
+ar	ar	[('ar', 0.03681), ('fr', 0.0), ('en', 0.0), ('pt', 0.0), ('es', 0.0)]	 ترغب في خسارة وزنك؟ السر يكمن فى النشويات   
+ar	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	 
+en	en	[('en', 0.23666), ('fr', 0.11981), ('pt', 0.05011), ('es', 0.04639), ('ar', 0.0)]	 % chance of rain in the next minutes  % chance of rain in the next minutes  gee  weather app  whatever would i do without you
+en	es	[('es', 0.01825), ('en', 0.0167), ('pt', 0.01546), ('fr', 0.01193), ('ar', 0.0)]	 even that greedo shot first
+en	en	[('en', 0.10838), ('fr', 0.04996), ('pt', 0.03945), ('es', 0.03042), ('ar', 0.0)]	 fixed my neighbour's wireless router by telling her to turn it off and back on  i am a tech herofraud 
+en	en	[('en', 0.01852), ('es', 0.00913), ('fr', 0.00783), ('pt', 0.0048), ('ar', 0.0)]	 it's true  all of it 
+en	en	[('en', 0.01287), ('fr', 0.01141), ('es', 0.00608), ('pt', 0.0048), ('ar', 0.0)]	 no  that part's bullshit 
+en	en	[('en', 0.06934), ('fr', 0.04661), ('es', 0.01901), ('pt', 0.01652), ('ar', 0.0)]	 there are stories about what happened 
+en	fr	[('fr', 0.10008), ('en', 0.08542), ('pt', 0.06663), ('es', 0.06236), ('ar', 0.0)]	 “please watch your inbox for important information about your employment status tomorrow ”    …
+en	en	[('en', 0.15853), ('fr', 0.07771), ('pt', 0.05171), ('es', 0.05095), ('ar', 0.0)]	  glad to hear it  there were three stations at mine  i was lucky to have the short line number 
+en	en	[('en', 0.09395), ('fr', 0.02215), ('es', 0.01521), ('pt', 0.008), ('ar', 0.0)]	  god forbid  i ordered the one with rubber ducks on it 
+en	en	[('en', 0.05387), ('fr', 0.02406), ('es', 0.0076), ('pt', 0.00267), ('ar', 0.0)]	  there's one key one that's missing yet  
+en	en	[('en', 0.04796), ('fr', 0.00493), ('pt', 0.0016), ('ar', 0.0), ('es', 0.0)]	  the holy grail  
+en	en	[('en', 0.03509), ('fr', 0.03374), ('pt', 0.02559), ('es', 0.01825), ('ar', 0.0)]	   congrats handsome gent 
+en	en	[('en', 0.06268), ('fr', 0.049), ('pt', 0.04424), ('es', 0.04106), ('ar', 0.0)]	  walkers keep left  standees keep right  deciders pick which you're going to be  
+en	en	[('en', 0.08804), ('fr', 0.05814), ('es', 0.0365), ('pt', 0.03412), ('ar', 0.0)]	    hah we were having exactly that discussion this morning  extra points for simpsons ref 
+en	en	[('en', 0.04588), ('es', 0.0365), ('pt', 0.03198), ('fr', 0.02276), ('ar', 0.0)]	      i would like to see a between periods game of mayoral oneonone  
+en	en	[('en', 0.00234), ('fr', 0.0009), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	   happy birthday
+en	en	[('en', 0.08146), ('fr', 0.03745), ('es', 0.02966), ('pt', 0.02079), ('ar', 0.0)]	   you know you've got it going on when you could still look that regal sitting in a really big cardboard box 
+en	en	[('en', 0.06424), ('fr', 0.04579), ('es', 0.04259), ('pt', 0.03625), ('ar', 0.0)]	    or yay  process if you're not comfortable with that level of overt enthusiasm…
+en	en	[('en', 0.01194), ('fr', 0.00691), ('es', 0.00304), ('pt', 0.00053), ('ar', 0.0)]	  i think we like shane koyczan okay 
+en	en	[('en', 0.14472), ('fr', 0.04587), ('pt', 0.03358), ('es', 0.02738), ('ar', 0.0)]	  clearly it's time to embark on a crime spree before they get their heightmeasuring act together 
+en	fr	[('fr', 0.10993), ('es', 0.09202), ('pt', 0.07196), ('en', 0.06729), ('ar', 0.0)]	  women people who aren't white women who aren't white people who do actual science  economics  etc  clutches pearls
+en	en	[('en', 0.03308), ('pt', 0.02452), ('es', 0.02205), ('fr', 0.01306), ('ar', 0.0)]	  can't think of any pork or scone that should be grey…
+en	en	[('en', 0.01324), ('fr', 0.00378), ('pt', 0.0032), ('es', 0.00152), ('ar', 0.0)]	  slightly overcooked…
+en	es	[('es', 0.02814), ('pt', 0.02345), ('en', 0.0148), ('fr', 0.01352), ('ar', 0.0)]	  true  or a weird greyish green 
+en	en	[('en', 0.14004), ('es', 0.07757), ('pt', 0.06343), ('fr', 0.04593), ('ar', 0.0)]	  i have a s which was updated with the latest os version yesterday  whadda you have
+en	en	[('en', 0.18847), ('fr', 0.03504), ('pt', 0.03038), ('es', 0.02129), ('ar', 0.0)]	  no  i've used it plugged in  with the aux in the car  and entirely unplugged 
+en	fr	[('fr', 0.06547), ('en', 0.04414), ('es', 0.03802), ('pt', 0.02559), ('ar', 0.0)]	  say  hey siri  ask question  siri talks back  perhaps siri does not love you
+en	en	[('en', 0.08386), ('fr', 0.05456), ('pt', 0.03092), ('es', 0.02814), ('ar', 0.0)]	  so an s change  maybe the differences from my s are… significant  
+en	en	[('en', 0.04944), ('fr', 0.03448), ('pt', 0.03038), ('es', 0.02433), ('ar', 0.0)]	  took me a minute to figure out what you were talking about  
+en	en	[('en', 0.12597), ('pt', 0.09009), ('es', 0.05627), ('fr', 0.03425), ('ar', 0.0)]	    i might need a future  to do that  too  i waited a decade to read shake hands w the devil…
+en	en	[('en', 0.04765), ('fr', 0.02987), ('pt', 0.02026), ('es', 0.01445), ('ar', 0.0)]	     haven't read it yet  from what i've heard i need to prepare myself  
+en	en	[('en', 0.07283), ('fr', 0.05869), ('es', 0.04791), ('pt', 0.02559), ('ar', 0.0)]	     if you get a good book discussion going  you'll forget all about social mediaing it  
+en	en	[('en', 0.0534), ('fr', 0.01523), ('pt', 0.01226), ('es', 0.00989), ('ar', 0.0)]	  not to be done still  they've all be sworn in now  
+en	en	[('en', 0.03277), ('pt', 0.01013), ('fr', 0.00897), ('es', 0.00532), ('ar', 0.0)]	   obviously  it's going to here   …
+en	en	[('en', 0.13798), ('fr', 0.07578), ('es', 0.04943), ('pt', 0.03945), ('ar', 0.0)]	  yeah  people have been telling me their stories all day  should have a round table with whiskey as therapy  
+en	en	[('en', 0.05207), ('fr', 0.03752), ('es', 0.01445), ('pt', 0.0064), ('ar', 0.0)]	  spanish inquisition birthday cake… unexpected 
+en	fr	[('fr', 0.0876), ('en', 0.0876), ('pt', 0.06823), ('es', 0.06464), ('ar', 0.0)]	   yeah  because feminism doesn't have anything more important to revile or focus attention on…
+en	en	[('en', 0.08841), ('pt', 0.04957), ('es', 0.0289), ('fr', 0.01212), ('ar', 0.0)]	   \m going to try to make it down  and chat with you and  as well 
+en	en	[('en', 0.06893), ('es', 0.01825), ('pt', 0.01599), ('fr', 0.00535), ('ar', 0.0)]	   at the firkin as previously
+en	en	[('en', 0.12633), ('fr', 0.07919), ('pt', 0.07569), ('es', 0.06236), ('ar', 0.0)]	  the problem with batshit's entertainment value is it's temporary  it gets very tiresome quickly 
+en	en	[('en', 0.11871), ('fr', 0.07564), ('es', 0.04563), ('pt', 0.02772), ('ar', 0.0)]	  true  makes digestion easier than the unfiltered pipeline 
+en	en	[('en', 0.01548), ('fr', 0.00418), ('es', 0.00076), ('pt', 0.00053), ('ar', 0.0)]	  least it's not tps weekly  
+en	fr	[('fr', 0.05376), ('en', 0.04159), ('pt', 0.02399), ('es', 0.01825), ('ar', 0.0)]	  i hope you get to put up your feet with a pint at some point today  
+en	en	[('en', 0.19013), ('pt', 0.04584), ('fr', 0.03875), ('es', 0.02357), ('ar', 0.0)]	  need to get a shot like that over waterloo park  it's lovely  and they put in the barrels of mums this morning  
+en	fr	[('fr', 0.08119), ('en', 0.05623), ('pt', 0.04264), ('es', 0.03954), ('ar', 0.0)]	   would if i could  took me a year to get one  i think k said new ones are imminent  though 
+en	en	[('en', 0.06063), ('fr', 0.05104), ('es', 0.0327), ('pt', 0.02292), ('ar', 0.0)]	  but i did get wolfhound belly rub time as compensation 
+en	en	[('en', 0.11582), ('pt', 0.03305), ('fr', 0.03157), ('es', 0.01901), ('ar', 0.0)]	  if you have to actually lay hands on the hardware  something is very wrong 
+en	en	[('en', 0.17778), ('fr', 0.0844), ('es', 0.06312), ('pt', 0.04158), ('ar', 0.0)]	  she asked me when we were at dog play group  so i fixed it without even entering her apartment  also  i'm the baker  
+en	en	[('en', 0.10776), ('fr', 0.03263), ('pt', 0.02559), ('es', 0.01369), ('ar', 0.0)]	  i'll share with mom  i can't eat a whole batch  and it'll keep me in the will  
+en	en	[('en', 0.06705), ('fr', 0.06179), ('es', 0.04867), ('pt', 0.03571), ('ar', 0.0)]	  made an installation of monkeys at  be still my heart  
+en	en	[('en', 0.19169), ('es', 0.04487), ('pt', 0.04051), ('fr', 0.03704), ('ar', 0.0)]	   one weird thing was how early the big kids came around  usually they're late  think they were trying to blend in…
+en	en	[('en', 0.2473), ('fr', 0.13169), ('es', 0.08365), ('pt', 0.08049), ('ar', 0.0)]	   the nieces clearly do not yet understand the adult facilitation tax and tried to fight me on confiscations  hah 
+en	en	[('en', 0.08911), ('fr', 0.04655), ('pt', 0.03678), ('es', 0.02281), ('ar', 0.0)]	   we had piles of kids  but i also brought backup candy that wasn't opened  i think my sil is taking it to work 
+en	en	[('en', 0.07626), ('es', 0.04487), ('fr', 0.04408), ('pt', 0.03731), ('ar', 0.0)]	  chad actually was pennywise last year  which many parents remembered vividly  
+en	en	[('en', 0.08758), ('pt', 0.02132), ('fr', 0.01895), ('es', 0.01217), ('ar', 0.0)]	  ooh  yeah  might tell her to wrap the router in tinfoil next time…
+en	en	[('en', 0.09423), ('pt', 0.02186), ('fr', 0.02095), ('es', 0.00989), ('ar', 0.0)]	  but give it a few years and the skin will come off  too
+en	en	[('en', 0.02513), ('fr', 0.01666), ('es', 0.01369), ('pt', 0.00533), ('ar', 0.0)]	    indeed  dogs often like pumpkins  too  
+en	pt	[('pt', 0.02079), ('en', 0.02), ('es', 0.01673), ('fr', 0.01198), ('ar', 0.0)]	  totally worth a squee
+en	en	[('en', 0.08243), ('fr', 0.07048), ('es', 0.05856), ('pt', 0.02559), ('ar', 0.0)]	  well  who among us hasn't worn a snowsuit on hallowe'en at some point  so certainly traditional  
+en	en	[('en', 0.08253), ('fr', 0.02566), ('es', 0.01445), ('pt', 0.01439), ('ar', 0.0)]	  congrats on the new digs loving home ownership so far
+en	en	[('en', 0.08001), ('fr', 0.0268), ('es', 0.01749), ('pt', 0.01386), ('ar', 0.0)]	  i didn't find helped much that way  home ownership would  doing well  oct  is slightly more calm than sept…
+en	en	[('en', 0.03483), ('fr', 0.00992), ('es', 0.0038), ('pt', 0.00373), ('ar', 0.0)]	  i see what you did there 
+en	en	[('en', 0.09785), ('pt', 0.03625), ('es', 0.03346), ('fr', 0.0262), ('ar', 0.0)]	  is the trench for anything interesting
+en	en	[('en', 0.07917), ('es', 0.04639), ('fr', 0.03656), ('pt', 0.01439), ('ar', 0.0)]	   or better yet  cut it in half  roast it  then make something delicious  
+en	en	[('en', 0.01147), ('es', 0.01141), ('fr', 0.00993), ('pt', 0.00586), ('ar', 0.0)]	  been far too long  
+en	en	[('en', 0.06385), ('pt', 0.02932), ('es', 0.02814), ('fr', 0.02554), ('ar', 0.0)]	  having worked at a country vet clinic  amen to that…
+en	en	[('en', 0.09725), ('fr', 0.05037), ('pt', 0.03198), ('es', 0.02966), ('ar', 0.0)]	  holler at me once you're full of bbq and back with tractor parts and we'll grab coffee 
+en	en	[('en', 0.12643), ('fr', 0.11955), ('pt', 0.07303), ('es', 0.0692), ('ar', 0.0)]	  rice and pumpkin are recommended for tummy troubles  but more veggies  etc  are good for anyone now that she's better 
+en	en	[('en', 0.01834), ('fr', 0.00421), ('pt', 0.0032), ('es', 0.00152), ('ar', 0.0)]	  including goats 
+en	en	[('en', 0.01004), ('fr', 0.00918), ('pt', 0.008), ('es', 0.00456), ('ar', 0.0)]	  congrats
+en	en	[('en', 0.06489), ('es', 0.03878), ('pt', 0.03518), ('fr', 0.00596), ('ar', 0.0)]	  as god as my witness… oh  the humanity
+en	en	[('en', 0.11621), ('fr', 0.04468), ('es', 0.02281), ('pt', 0.01173), ('ar', 0.0)]	  begs the question  what kind of beer would i thought turkeys could fly be…
+en	en	[('en', 0.05498), ('fr', 0.03586), ('pt', 0.03092), ('es', 0.01445), ('ar', 0.0)]	  naturally  maybe a gose  since turkey is best brined
+en	en	[('en', 0.03098), ('es', 0.02129), ('pt', 0.01972), ('fr', 0.0089), ('ar', 0.0)]	  shouldn't that be a review for lady friend ipa 
+en	en	[('en', 0.11954), ('fr', 0.06358), ('pt', 0.04371), ('es', 0.03954), ('ar', 0.0)]	  accident or just the construction and crap
+en	en	[('en', 0.0831), ('fr', 0.06399), ('pt', 0.06077), ('es', 0.05551), ('ar', 0.0)]	  i live near caroline and erb  do not talk to me about infinite construction 
+en	en	[('en', 0.01118), ('pt', 0.00853), ('es', 0.00456), ('fr', 0.00135), ('ar', 0.0)]	  that's a paddlin' 
+en	en	[('en', 0.2145), ('fr', 0.12667), ('es', 0.07757), ('pt', 0.07676), ('ar', 0.0)]	  this particular election was centred on who had the best hair  the president business look is so passe 
+en	fr	[('fr', 0.0289), ('en', 0.01342), ('pt', 0.01226), ('es', 0.01065), ('ar', 0.0)]	  shakes fist
+en	en	[('en', 0.09314), ('pt', 0.0533), ('es', 0.03954), ('fr', 0.02979), ('ar', 0.0)]	  can't sign off on that  has to be cheese curds  not shredded  and aren't you from wisconsin 
+en	en	[('en', 0.09413), ('fr', 0.06398), ('pt', 0.02665), ('es', 0.02433), ('ar', 0.0)]	  excuse me there are no onions in poutine  i think someone slipped you a hotdish 
+en	fr	[('fr', 0.0728), ('en', 0.07158), ('pt', 0.06557), ('es', 0.05932), ('ar', 0.0)]	  heh  poutine is street food or pub grub  it's also about as french as gin  i like this restaurant  
+en	en	[('en', 0.11447), ('pt', 0.06983), ('fr', 0.06142), ('es', 0.05703), ('ar', 0.0)]	  it implies you can ask cats to do entertaining things  and they will  i call bullshit 
+en	en	[('en', 0.13918), ('fr', 0.06112), ('es', 0.06084), ('pt', 0.03465), ('ar', 0.0)]	  it's amazing what the world will just trust white women with especially once you're of a certain age 
+en	en	[('en', 0.06958), ('fr', 0.01456), ('pt', 0.01439), ('es', 0.00989), ('ar', 0.0)]	  mine have a heated bedpad in their room  
+en	en	[('en', 0.0271), ('fr', 0.01377), ('es', 0.01217), ('pt', 0.00533), ('ar', 0.0)]	  she's canadian  clearly  be free  kidlet  be free 
+en	en	[('en', 0.20922), ('fr', 0.04677), ('pt', 0.04638), ('es', 0.02966), ('ar', 0.0)]	  the cats would love to roam freely  but not when the dog is around  and the dog is a jealous little bitch 
+en	fr	[('fr', 0.02404), ('es', 0.01065), ('pt', 0.00906), ('en', 0.0064), ('ar', 0.0)]	  umm  yes 
+en	en	[('en', 0.00169), ('fr', 0.00125), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	  lookin' swank
+en	en	[('en', 0.08534), ('fr', 0.01213), ('pt', 0.00853), ('es', 0.00152), ('ar', 0.0)]	  what kind of beer is in the keg
+en	en	[('en', 0.10232), ('pt', 0.03731), ('es', 0.02662), ('fr', 0.01877), ('ar', 0.0)]	  can loan you some dog if you'd like to infiltrate them and learn their ways  
+en	en	[('en', 0.10758), ('fr', 0.04457), ('es', 0.03194), ('pt', 0.02985), ('ar', 0.0)]	  that's a chuckit  very handy  but can start fights if there's too much competition 
+en	en	[('en', 0.16298), ('pt', 0.0629), ('es', 0.06084), ('fr', 0.04132), ('ar', 0.0)]	  yep  and your arm doesn't get nearly as tired  and your hands stay off the slimed up ball  which i appreciate 
+en	en	[('en', 0.10958), ('pt', 0.03891), ('fr', 0.03783), ('es', 0.03118), ('ar', 0.0)]	    some of the best stuff i've read recently was ebooks  will have to give it some thought 
+en	en	[('en', 0.01745), ('fr', 0.01433), ('es', 0.00532), ('pt', 0.0032), ('ar', 0.0)]	   already on my list  
+en	en	[('en', 0.07239), ('pt', 0.03305), ('fr', 0.0291), ('es', 0.01673), ('ar', 0.0)]	   hmm  i'm a maybe at best  got some work stuff  and coordinating with nz is tricky 
+en	en	[('en', 0.04903), ('fr', 0.00722), ('es', 0.00304), ('pt', 0.00213), ('ar', 0.0)]	   when's the next one
+en	pt	[('pt', 0.06557), ('en', 0.06471), ('es', 0.0403), ('fr', 0.02067), ('ar', 0.0)]	  do you keep up with this podcast some great recos and a lot of fun   …
+en	en	[('en', 0.0992), ('pt', 0.03731), ('es', 0.02662), ('fr', 0.02239), ('ar', 0.0)]	  and a northerner  not just defaulting to east coast 
+en	en	[('en', 0.03501), ('es', 0.01673), ('pt', 0.01599), ('fr', 0.01365), ('ar', 0.0)]	  and cat lady spinsters  
+en	en	[('en', 0.11088), ('fr', 0.04757), ('pt', 0.02345), ('es', 0.01825), ('ar', 0.0)]	    could you please remove my name what whatever the hell you strangers are talking about
+en	fr	[('fr', 0.07506), ('en', 0.05998), ('pt', 0.03518), ('es', 0.02433), ('ar', 0.0)]	    makes liege style  rise  shine is only bagels  and only rare hours  no
+en	en	[('en', 0.07288), ('es', 0.04183), ('fr', 0.02819), ('pt', 0.02452), ('ar', 0.0)]	   no  the bagel place on bridgeport near peppler 
+en	en	[('en', 0.07774), ('fr', 0.02642), ('es', 0.01141), ('pt', 0.00959), ('ar', 0.0)]	   we are definitely not talking about the same place 
+en	en	[('en', 0.05449), ('pt', 0.04957), ('es', 0.02662), ('fr', 0.02334), ('ar', 0.0)]	  are we getting into  it's a privilege  not a right territory
+en	en	[('en', 0.10721), ('es', 0.03194), ('pt', 0.02985), ('fr', 0.02119), ('ar', 0.0)]	  i live next to waterloo park  they have two llamas  just give the signal…
+en	en	[('en', 0.03452), ('es', 0.01673), ('fr', 0.01259), ('pt', 0.00693), ('ar', 0.0)]	  i've been waiting all day for that  
+en	en	[('en', 0.03337), ('pt', 0.01066), ('fr', 0.00834), ('es', 0.00456), ('ar', 0.0)]	  i've used that  it works a treat 
+en	fr	[('fr', 0.02048), ('en', 0.01558), ('es', 0.00608), ('pt', 0.00267), ('ar', 0.0)]	  your hair still looks nice  though  
+en	en	[('en', 0.1179), ('fr', 0.04426), ('pt', 0.03145), ('es', 0.02281), ('ar', 0.0)]	  i asked her if she preferred pie or cake  she said she'd never had cake  apple  you monsters
+en	en	[('en', 0.06211), ('fr', 0.03764), ('pt', 0.01493), ('es', 0.01369), ('ar', 0.0)]	  quiet now  of course  being near caroline these days is… fun 
+en	fr	[('fr', 0.00211), ('pt', 0.00107), ('en', 0.00034), ('ar', 0.0), ('es', 0.0)]	  siri says  
+en	en	[('en', 0.13616), ('fr', 0.05702), ('es', 0.05475), ('pt', 0.05011), ('ar', 0.0)]	  that's been the topic of half my twitter feed re  our new prime minister this week  i would like more cat photos now  plz 
+en	en	[('en', 0.07033), ('es', 0.02662), ('fr', 0.02254), ('pt', 0.00267), ('ar', 0.0)]	  have you seen the maori black on black jerseys really cool  too 
+en	en	[('en', 0.07642), ('fr', 0.0368), ('pt', 0.03198), ('es', 0.02129), ('ar', 0.0)]	  i've had to bring a couple back on each of my trips to wellington  
+en	en	[('en', 0.16464), ('fr', 0.04877), ('pt', 0.01919), ('es', 0.00837), ('ar', 0.0)]	  at least with feline overlords we'd still get rid of first past the post  the cats would stop to scratch it 
+en	en	[('en', 0.13988), ('es', 0.04335), ('fr', 0.04294), ('pt', 0.03571), ('ar', 0.0)]	  because there's no internet voting and only dog people actually leave the house  
+en	fr	[('fr', 0.00383), ('pt', 0.00213), ('en', 0.00198), ('es', 0.00076), ('ar', 0.0)]	    yay  lisa
+en	pt	[('pt', 0.04904), ('es', 0.0403), ('en', 0.03517), ('fr', 0.01047), ('ar', 0.0)]	  alas  my dog needs to go for a run  not a beer  
+en	en	[('en', 0.0329), ('es', 0.01065), ('fr', 0.00894), ('pt', 0.0064), ('ar', 0.0)]	  nah  genetic engineering  dogs can't really metabolize alcohol  
+en	fr	[('fr', 0.01386), ('en', 0.0089), ('pt', 0.00267), ('es', 0.00076), ('ar', 0.0)]	  smile  nod  back away slowly…
+en	en	[('en', 0.10209), ('es', 0.02586), ('pt', 0.02345), ('fr', 0.0136), ('ar', 0.0)]	  the throat singer girls breaking off for giggling was awesome  
+en	fr	[('fr', 0.04754), ('en', 0.04648), ('pt', 0.03465), ('es', 0.02281), ('ar', 0.0)]	  with great analysis comes great responsibility 
+en	en	[('en', 0.01977), ('pt', 0.00746), ('fr', 0.00698), ('es', 0.00304), ('ar', 0.0)]	  you silvertongued devil  you…
+en	en	[('en', 0.13902), ('fr', 0.06171), ('pt', 0.04957), ('es', 0.04563), ('ar', 0.0)]	  i dressed up as the monty python lumberjack a few years back  definitely more cleavage with my costume  but yours is cuter  
+en	en	[('en', 0.03355), ('pt', 0.02878), ('es', 0.02357), ('fr', 0.0122), ('ar', 0.0)]	  i dunno how sexy it was  but i did look pretty good in a beard 
+en	en	[('en', 0.09504), ('fr', 0.04899), ('pt', 0.02665), ('es', 0.02357), ('ar', 0.0)]	   in case you have hosting duties at the conference…  …
+en	en	[('en', 0.13939), ('fr', 0.0589), ('es', 0.03726), ('pt', 0.02825), ('ar', 0.0)]	  i've only had pony stuck in my head since the weekend  blame magic mike xxl… literary version is better  
+en	en	[('en', 0.03587), ('fr', 0.02195), ('es', 0.01749), ('pt', 0.01386), ('ar', 0.0)]	  let us begin planning for book riot live … 
+en	en	[('en', 0.13567), ('fr', 0.10884), ('es', 0.06996), ('pt', 0.05011), ('ar', 0.0)]	  literary characterthemed stripper performances  mr  darcy would finally get those wet clothes off  
+en	en	[('en', 0.11993), ('es', 0.0251), ('fr', 0.02033), ('pt', 0.01706), ('ar', 0.0)]	  might even be enough to diffuse the psychotic misogyny of the brontës' heroes…
+en	en	[('en', 0.09392), ('fr', 0.07259), ('es', 0.04639), ('pt', 0.02878), ('ar', 0.0)]	  ahh  ok  must have missed that section  was missing from some obvious ones 
+en	en	[('en', 0.08484), ('fr', 0.05125), ('es', 0.02586), ('pt', 0.02559), ('ar', 0.0)]	  arguably the canadianest songperformance is this one   …
+en	en	[('en', 0.14061), ('es', 0.07148), ('fr', 0.05849), ('pt', 0.03838), ('ar', 0.0)]	  chocolate chips vs  raisins is the tesla vs  edison of the internets world…
+en	en	[('en', 0.08016), ('fr', 0.05666), ('es', 0.01977), ('pt', 0.01919), ('ar', 0.0)]	  yeah  but have greater populations of groundhogs than people 
+en	en	[('en', 0.08549), ('fr', 0.06096), ('pt', 0.05917), ('es', 0.05171), ('ar', 0.0)]	  was right  having your mp in cabinet feels a bit like having a batphone to parliament  
+en	en	[('en', 0.04547), ('fr', 0.00433), ('es', 0.00076), ('ar', 0.0), ('pt', 0.0)]	   two words  the sun  
+en	es	[('es', 0.08669), ('pt', 0.08529), ('en', 0.0811), ('fr', 0.06098), ('ar', 0.0)]	  my interview with sun media now defunct for voices carrycosby was most entertaining  
+en	en	[('en', 0.13434), ('fr', 0.06253), ('es', 0.05932), ('pt', 0.05864), ('ar', 0.0)]	  soak up as much of the love and awesome memories as possible  big hugs from over here 
+en	es	[('es', 0.07985), ('en', 0.07683), ('pt', 0.06823), ('fr', 0.05413), ('ar', 0.0)]	   bit too much product today  but soon as grey shows up we'll get a slew of silver fox social media commentary…
+en	en	[('en', 0.14001), ('pt', 0.05864), ('es', 0.04183), ('fr', 0.03765), ('ar', 0.0)]	  i forgot that they did that now  and triggered it by accident and was confused  
+en	fr	[('fr', 0.01805), ('en', 0.01592), ('es', 0.00989), ('pt', 0.00533), ('ar', 0.0)]	  better tell violet  
+en	en	[('en', 0.07205), ('fr', 0.03389), ('pt', 0.01706), ('es', 0.00913), ('ar', 0.0)]	  some people just want to watch the world burn 
+en	en	[('en', 0.04999), ('fr', 0.02236), ('pt', 0.01706), ('es', 0.01369), ('ar', 0.0)]	   also  you really should have come to wellington with us today 
+en	es	[('es', 0.03118), ('en', 0.02328), ('pt', 0.01919), ('fr', 0.01103), ('ar', 0.0)]	   if you mean dead now  toronto boy  it’s delicious 
+en	en	[('en', 0.03194), ('fr', 0.01333), ('pt', 0.00906), ('es', 0.0076), ('ar', 0.0)]	   it’s on tomorrow  too  but we will be drinking whiskey 
+en	en	[('en', 0.0341), ('es', 0.01673), ('pt', 0.01333), ('fr', 0.01051), ('ar', 0.0)]	   not a dead later fan at all 
+en	en	[('en', 0.15081), ('es', 0.0616), ('pt', 0.05064), ('fr', 0.04675), ('ar', 0.0)]	  alas  as noted  dead now  on the other hand  is excellent 
+en	en	[('en', 0.08396), ('fr', 0.03457), ('pt', 0.02239), ('es', 0.01749), ('ar', 0.0)]	  i really hope the if you happen to see… line in here is sarcasm   …
+en	en	[('en', 0.03259), ('fr', 0.02721), ('es', 0.02662), ('pt', 0.01386), ('ar', 0.0)]	  larger than mouse poop  let us not speculate 
+en	en	[('en', 0.1424), ('es', 0.04183), ('fr', 0.03723), ('pt', 0.03145), ('ar', 0.0)]	  police have determined that the dude with the arrow in him did not shoot himself   …
+en	en	[('en', 0.09767), ('es', 0.04867), ('fr', 0.03842), ('pt', 0.01919), ('ar', 0.0)]	  precisely  let us not speculate  fling the offending specimen away 
+en	en	[('en', 0.12797), ('es', 0.05019), ('pt', 0.04957), ('fr', 0.04626), ('ar', 0.0)]	  probably actually nerds  so they're as afraid of you as you are of them  etc  evens out w goodwill  awkwardness for all
+en	en	[('en', 0.26949), ('fr', 0.06584), ('es', 0.06464), ('pt', 0.06397), ('ar', 0.0)]	  something's killing your birds  dead roosters the other morning  and a head and clump of feathers outside the fence today  
+en	en	[('en', 0.20522), ('fr', 0.03727), ('pt', 0.02719), ('es', 0.02586), ('ar', 0.0)]	  the facelift the boardwalk is getting looks great  now just need all those dead lightbulbs therein victorian garden fixed  
+en	en	[('en', 0.087), ('fr', 0.03982), ('es', 0.0327), ('pt', 0.02878), ('ar', 0.0)]	    too bad you can't get your lederhosen at goudies' then wear them to dinner at golf's 
+en	en	[('en', 0.07111), ('fr', 0.01498), ('pt', 0.00853), ('es', 0.0038), ('ar', 0.0)]	  ooh  love the multicoloured one
+en	en	[('en', 0.09405), ('fr', 0.08063), ('pt', 0.05277), ('es', 0.05019), ('ar', 0.0)]	  lionsgate plans hunger games theme parks for atlanta and macau  
+en	en	[('en', 0.1577), ('es', 0.11559), ('pt', 0.09062), ('fr', 0.0761), ('ar', 0.0)]	  has officially tendered his resignation as prime minister after meeting with governor general  
+en	en	[('en', 0.14979), ('fr', 0.11902), ('pt', 0.11354), ('es', 0.08973), ('ar', 0.0)]	 a government that has a multibillion  contract to sell armoured vehicles to saudi arabia just pledged a  tip line
+en	pt	[('pt', 0.04638), ('es', 0.04183), ('fr', 0.04181), ('en', 0.0264), ('ar', 0.0)]	 accelerator centre ‏ de out
+en	es	[('es', 0.03118), ('pt', 0.03038), ('fr', 0.02568), ('en', 0.0115), ('ar', 0.0)]	 adam christie ‏ de out
+en	en	[('en', 0.26377), ('fr', 0.09786), ('es', 0.06008), ('pt', 0.05011), ('ar', 0.0)]	 ahh yes  the panicky dilemma of all canadians  which parts of the national anthem are we singing in english and which in french 
+en	en	[('en', 0.14251), ('fr', 0.12674), ('pt', 0.09595), ('es', 0.09278), ('ar', 0.0)]	 all y'all  what're your favourite startupcentric blogs  sites  voices  news  commentary these days asking for a friend  no  really 
+en	en	[('en', 0.02976), ('es', 0.02053), ('pt', 0.01493), ('fr', 0.0144), ('ar', 0.0)]	 alright  electoral reform  like  yesterday 
+en	es	[('es', 0.02814), ('pt', 0.02719), ('fr', 0.02538), ('en', 0.01079), ('ar', 0.0)]	 anthony reinhart ‏ de out
+en	en	[('en', 0.06789), ('fr', 0.04183), ('es', 0.04183), ('pt', 0.02239), ('ar', 0.0)]	 apparently now even oktoberfest needs fireworks  my dog may be having words with waterloo council…
+en	en	[('en', 0.11494), ('pt', 0.02559), ('es', 0.02053), ('fr', 0.02051), ('ar', 0.0)]	 because it's thanksgiving  and the power of nessman compels me   …
+en	en	[('en', 0.01914), ('fr', 0.01266), ('pt', 0.00586), ('es', 0.00532), ('ar', 0.0)]	 best clown photobomb ever  
+en	en	[('en', 0.09374), ('pt', 0.0629), ('fr', 0.05915), ('es', 0.05399), ('ar', 0.0)]	 bracing for spate of pmilf comments in     … this is canada's new prime minister  
+en	en	[('en', 0.15273), ('pt', 0.07516), ('fr', 0.07097), ('es', 0.06996), ('ar', 0.0)]	 breaking  conservative leader stephen harper is stepping down  cp is reporting  he will stay on as mp of calgary heritage 
+en	en	[('en', 0.15791), ('fr', 0.07313), ('pt', 0.03678), ('es', 0.0327), ('ar', 0.0)]	 can't find the bent elbow in the  reader awards nominees  did  spank everyone too hard last year 
+en	es	[('es', 0.03194), ('pt', 0.02932), ('fr', 0.02186), ('en', 0.00746), ('ar', 0.0)]	 communitech ‏ de nov
+en	es	[('es', 0.08517), ('en', 0.08331), ('pt', 0.07303), ('fr', 0.03821), ('ar', 0.0)]	 complete with personalized note  now all i need is paas pita as a service  thanks  
+en	en	[('en', 0.21656), ('fr', 0.0976), ('pt', 0.06876), ('es', 0.06084), ('ar', 0.0)]	 dad wanted to know the jays’ score  so told him to ask siri  think that just answered the question of what my phone does that his doesn’t…
+en	es	[('es', 0.04791), ('fr', 0.03343), ('pt', 0.02612), ('en', 0.01579), ('ar', 0.0)]	 daniel arenson ‏ de out
+en	en	[('en', 0.03675), ('fr', 0.03424), ('pt', 0.01386), ('es', 0.00837), ('ar', 0.0)]	 dear europe  kindly help this douchenugget go out of business  …
+en	fr	[('fr', 0.06914), ('en', 0.0508), ('es', 0.04943), ('pt', 0.04264), ('ar', 0.0)]	 dear moles  bechtel dog park is a really bad place to build your nests  
+en	en	[('en', 0.09075), ('pt', 0.06343), ('fr', 0.05236), ('es', 0.04487), ('ar', 0.0)]	 dear sir  a man walking a dog named poochie does not get to judge naming a dog statler  i say good day 
+en	en	[('en', 0.15941), ('pt', 0.02026), ('fr', 0.01503), ('es', 0.00989), ('ar', 0.0)]	 did they read the books i have to wonder if maybe they didn't read the books  
+en	en	[('en', 0.07975), ('fr', 0.03654), ('pt', 0.01706), ('es', 0.01521), ('ar', 0.0)]	 dog will not touch canned pumpkin  dog can't get enough roasted  pumpkin  dog is ultimate  shill  
+en	en	[('en', 0.13372), ('fr', 0.03559), ('es', 0.0327), ('pt', 0.02772), ('ar', 0.0)]	 double rainbow at the dog park just as the dog was pooping  so now we know what it means…
+en	en	[('en', 0.11213), ('fr', 0.05594), ('es', 0.03498), ('pt', 0.03358), ('ar', 0.0)]	 expressing faith is not uncanadian  assaulting women is  mt  woman assaulted while wearing niqab  
+en	fr	[('fr', 0.0176), ('en', 0.01472), ('es', 0.01369), ('pt', 0.00586), ('ar', 0.0)]	 first promise broken 
+en	en	[('en', 0.15192), ('es', 0.0981), ('pt', 0.09115), ('fr', 0.0911), ('ar', 0.0)]	 foliage at snyder’s flats shows ndp  green  and libertarian leanings  with pockets of liberal support  conservatives not represented  
+en	en	[('en', 0.18532), ('pt', 0.0709), ('fr', 0.06421), ('es', 0.05779), ('ar', 0.0)]	 going outside sans coat in november simultaneously feels like a gift from the gods and somehow pulling a fast one on them 
+en	fr	[('fr', 0.06617), ('en', 0.05777), ('es', 0.03954), ('pt', 0.03465), ('ar', 0.0)]	 heh  trudeau's cabinet  including trudeau  is  dudes and women 
+en	en	[('en', 0.08365), ('pt', 0.02878), ('fr', 0.02395), ('es', 0.00989), ('ar', 0.0)]	 hey  i've got a photo exhibit at the  this month  pairs well with   
+en	en	[('en', 0.11897), ('pt', 0.04691), ('fr', 0.04469), ('es', 0.03574), ('ar', 0.0)]	 i fail to understand how the animal alliance party didn't win a seat 
+en	en	[('en', 0.13166), ('fr', 0.0835), ('es', 0.07224), ('pt', 0.06343), ('ar', 0.0)]	 i never saw those trudeaubrazeau charity boxing match photos this many times when the actual event happened 
+en	en	[('en', 0.1611), ('es', 0.08897), ('pt', 0.08209), ('fr', 0.06322), ('ar', 0.0)]	 i'm looking forward to a pm who immediately calls for a national inquiry into missing and murdered aboriginal women  
+en	en	[('en', 0.13777), ('es', 0.04791), ('pt', 0.04424), ('fr', 0.04307), ('ar', 0.0)]	 i'm looking forward to hearing what canadian scientists have been up to for the last years 
+en	en	[('en', 0.12513), ('fr', 0.0509), ('es', 0.04867), ('pt', 0.04318), ('ar', 0.0)]	 if you get to  before they close for the season tomorrow  you might get hugs  or maybe that's just for me  
+en	en	[('en', 0.09996), ('es', 0.07376), ('pt', 0.06823), ('fr', 0.06201), ('ar', 0.0)]	 kaydublians friend is looking for someone who works in permacultureedible gardening design  ideas recos
+en	en	[('en', 0.04976), ('pt', 0.00586), ('fr', 0.00231), ('ar', 0.0), ('es', 0.0)]	 layoffs  they suck don't screw them up   …
+en	en	[('en', 0.05977), ('fr', 0.0557), ('es', 0.05475), ('pt', 0.05171), ('ar', 0.0)]	 let's do more than imagine a new world for women entrepreneurs by    
+en	en	[('en', 0.01548), ('fr', 0.01278), ('pt', 0.00533), ('es', 0.00304), ('ar', 0.0)]	 lotta sirens in uptown…
+en	en	[('en', 0.16571), ('pt', 0.04424), ('es', 0.02662), ('fr', 0.02305), ('ar', 0.0)]	 lunchtime read   talks about layoffs in the tech industry  and if mishandled how they can go from bad to worse  
+en	fr	[('fr', 0.03606), ('en', 0.03321), ('es', 0.03194), ('pt', 0.03145), ('ar', 0.0)]	 mayor nenshi does make one proud to be canadian  
+en	en	[('en', 0.17265), ('fr', 0.13548), ('es', 0.0692), ('pt', 0.0597), ('ar', 0.0)]	 media  please keep the pressure on  to get answers on why so many first nations communities ran out of ballots  please rt
+en	en	[('en', 0.10495), ('pt', 0.07676), ('es', 0.06084), ('fr', 0.05451), ('ar', 0.0)]	 mexico's president also handsome  dammit  world  why didn't you tell us how much harper was holding back north america's leadership hotness
+en	en	[('en', 0.18082), ('fr', 0.15205), ('pt', 0.10181), ('es', 0.09506), ('ar', 0.0)]	 minister of immigration  citizenship and refugees  minister of environment and climate change  words  people  important words 
+en	en	[('en', 0.10469), ('es', 0.04411), ('fr', 0.04393), ('pt', 0.02665), ('ar', 0.0)]	 no free lunch   weighs in on the hidden costs of abundant perks for  workers   … 
+en	en	[('en', 0.17169), ('es', 0.08821), ('pt', 0.07783), ('fr', 0.07106), ('ar', 0.0)]	 no kitten ever looked as happy as my dog this morning after frolicking around my apartment and unwinding a ball of rainbow yarn   \
+en	fr	[('fr', 0.03672), ('en', 0.03275), ('pt', 0.03198), ('es', 0.02738), ('ar', 0.0)]	 offices canada is electing today 
+en	pt	[('pt', 0.03038), ('es', 0.01977), ('en', 0.01405), ('fr', 0.00848), ('ar', 0.0)]	 oh  rwanda  how i do  your coffee 
+en	pt	[('pt', 0.03145), ('es', 0.02129), ('en', 0.01207), ('fr', 0.00771), ('ar', 0.0)]	 ok  canada  let's do this  
+en	fr	[('fr', 0.04301), ('en', 0.01888), ('pt', 0.01333), ('es', 0.01065), ('ar', 0.0)]	 people love cat memes 
+en	en	[('en', 0.01004), ('fr', 0.00793), ('es', 0.00532), ('pt', 0.00053), ('ar', 0.0)]	 publisherslunch 
+en	en	[('en', 0.07244), ('fr', 0.05239), ('pt', 0.03785), ('es', 0.0289), ('ar', 0.0)]	 raising that journalistic bar… tell us about a time you literally shit your pants
+en	en	[('en', 0.16628), ('fr', 0.09756), ('pt', 0.07463), ('es', 0.07376), ('ar', 0.0)]	 breaking  jays leading or elected in star wars trailers  cbc projects a bautista government with a stormtrooper opposition
+en	en	[('en', 0.07478), ('fr', 0.07391), ('es', 0.06996), ('pt', 0.06183), ('ar', 0.0)]	 so will oktoberfest be finishing up with nationwide schadenfreude every year now
+en	en	[('en', 0.13122), ('fr', 0.06652), ('pt', 0.06557), ('es', 0.05856), ('ar', 0.0)]	 somewhere in canada  margaret atwood enjoys a whisky  a maple donut as the harper voodoo doll burns to ash in her fireplace 
+en	es	[('es', 0.02966), ('fr', 0.01818), ('pt', 0.01706), ('en', 0.01592), ('ar', 0.0)]	 stephen lautens ‏ hhá horas
+en	en	[('en', 0.0779), ('pt', 0.04424), ('fr', 0.03662), ('es', 0.02357), ('ar', 0.0)]	 team   is growing if you are a  and can  reach out to us more here   … 
+en	en	[('en', 0.05639), ('pt', 0.03092), ('es', 0.03042), ('fr', 0.00382), ('ar', 0.0)]	 thanks for the tech recos  folks  
+en	fr	[('fr', 0.07676), ('en', 0.07348), ('es', 0.06692), ('pt', 0.0645), ('ar', 0.0)]	 that last comment made no sense  shoulda been cookie world  my raisin rage clouded my thoughts 
+en	en	[('en', 0.06047), ('fr', 0.02856), ('pt', 0.01173), ('es', 0.01065), ('ar', 0.0)]	 that place must be a zoo  p s  if there's still spice cake  eat it 
+en	en	[('en', 0.085), ('fr', 0.04849), ('es', 0.03346), ('pt', 0.01439), ('ar', 0.0)]	 the person who bags up your dismembered corpses 
+en	en	[('en', 0.07319), ('pt', 0.04318), ('fr', 0.01995), ('es', 0.01521), ('ar', 0.0)]	 the toronto sun is about to have a stroke   …  
+en	en	[('en', 0.1185), ('fr', 0.05795), ('pt', 0.03998), ('es', 0.0289), ('ar', 0.0)]	 there's already some pretty stiff competition  but if you're serious and seriously awesome  you might have a shot…  
+en	en	[('en', 0.08716), ('fr', 0.06107), ('pt', 0.04797), ('es', 0.03346), ('ar', 0.0)]	 this picture puts it into perspective  this storm is scary    prayers for everyone in its pathway  
+en	es	[('es', 0.01369), ('pt', 0.01226), ('en', 0.00593), ('fr', 0.00439), ('ar', 0.0)]	 tobi lütke e michael litt
+en	en	[('en', 0.11265), ('pt', 0.08849), ('fr', 0.07584), ('es', 0.07072), ('ar', 0.0)]	 today canada decides who it wants to be prime minister  young mandy patinkin or old mandy patinkin    
+en	en	[('en', 0.07702), ('fr', 0.03712), ('es', 0.03498), ('pt', 0.02719), ('ar', 0.0)]	 voted polling station was busy  flex that democracy  
+en	en	[('en', 0.07072), ('es', 0.0365), ('fr', 0.03476), ('pt', 0.02985), ('ar', 0.0)]	 waterloo mp  named small business minister in federal cabinet
+en	en	[('en', 0.13138), ('fr', 0.048), ('es', 0.02738), ('pt', 0.02132), ('ar', 0.0)]	 what’s with all the helicopter action over waterloo this morning
+en	en	[('en', 0.16053), ('es', 0.06616), ('pt', 0.06237), ('fr', 0.04059), ('ar', 0.0)]	 with the new phone  now that i can just start talking to siri whenever  i can level up as a randomly muttering coot  
+en	es	[('es', 0.01749), ('pt', 0.01652), ('en', 0.00957), ('fr', 0.00334), ('ar', 0.0)]	 wr record ‏ hhá horas
+en	en	[('en', 0.07873), ('es', 0.05323), ('pt', 0.04424), ('fr', 0.02469), ('ar', 0.0)]	 zebras  first sighting of poppy fallen off jacket… and christmas march  sigh
+es	es	[('es', 0.14144), ('pt', 0.11994), ('fr', 0.05398), ('en', 0.04151), ('ar', 0.0)]	 ¿qué se necesita para ser astronauta nasa aclara mitos sobre los requerimientos   
+es	es	[('es', 0.21293), ('pt', 0.14819), ('fr', 0.1258), ('en', 0.04679), ('ar', 0.0)]	 % de los jóvenes siente que su vida es influenciada por la internet   
+es	pt	[('pt', 0.16151), ('es', 0.16122), ('fr', 0.07674), ('en', 0.03995), ('ar', 0.0)]	 abogado de benzema asegura que delantero no está implicado en presunto chantaje de video   
+es	es	[('es', 0.11787), ('pt', 0.06183), ('fr', 0.05254), ('en', 0.04682), ('ar', 0.0)]	 adimark  aprobación a reforma educacional logra su mayor alza desde junio y llega al %   
+es	es	[('es', 0.13688), ('pt', 0.0645), ('fr', 0.05286), ('en', 0.04757), ('ar', 0.0)]	 adimark  identificación con el gobierno llega a % y supera a la oposición   
+es	es	[('es', 0.11179), ('fr', 0.03412), ('pt', 0.02985), ('en', 0.02819), ('ar', 0.0)]	 adimark  sube aprobación del gobierno sobre el empleo y la reforma laboral   
+es	es	[('es', 0.16958), ('pt', 0.10394), ('fr', 0.04376), ('en', 0.04021), ('ar', 0.0)]	 ahora  continúa el paro del registro civil  pero los turnos éticos siguen  dice nelly díaz 
+es	es	[('es', 0.15361), ('pt', 0.11727), ('en', 0.05545), ('fr', 0.04691), ('ar', 0.0)]	 ahora  nelly díaz  amenazar a los funcionarios ya no dio resultado con el registro civil
+es	es	[('es', 0.08137), ('pt', 0.07676), ('en', 0.05166), ('fr', 0.03046), ('ar', 0.0)]	 ahora  nelly díaz  con amenazas no vamos a volver a trabajar
+es	es	[('es', 0.1673), ('pt', 0.12953), ('fr', 0.06056), ('en', 0.03631), ('ar', 0.0)]	 ahora  nelly díaz  falta todavía para llegar a un acuerdo     no hemos negociado nada más que la parte económica
+es	es	[('es', 0.14373), ('pt', 0.11141), ('fr', 0.07447), ('en', 0.05444), ('ar', 0.0)]	 ahora  nelly díaz  que no venga con tantas amenazas la ministra de justicia
+es	es	[('es', 0.09049), ('pt', 0.08635), ('fr', 0.03967), ('en', 0.03293), ('ar', 0.0)]	 ahora  nelly díaz  todavía no llegamos a un punto de encuentro
+es	es	[('es', 0.15437), ('pt', 0.13166), ('fr', 0.0961), ('en', 0.06596), ('ar', 0.0)]	 andrés pennycook es el nuevo superintendente de insolvencia y reemprendimiento  
+es	es	[('es', 0.07376), ('pt', 0.07036), ('fr', 0.04374), ('en', 0.03813), ('ar', 0.0)]	 angela merkel anima a bolivia y chile a conversar por tema marítimo   
+es	es	[('es', 0.14373), ('pt', 0.14019), ('fr', 0.08076), ('en', 0.05085), ('ar', 0.0)]	 autoridades afganas condenan inhumana lapidación de mujer acusada de adulterio   
+es	es	[('es', 0.17414), ('pt', 0.11567), ('fr', 0.10392), ('en', 0.05259), ('ar', 0.0)]	 autoridades alertan sobre fuertes marejadas en el borde costero del país   
+es	es	[('es', 0.1673), ('pt', 0.08316), ('fr', 0.05873), ('en', 0.02276), ('ar', 0.0)]	 avión de carga se estrella en sudán del sur y deja al menos muertos   
+es	es	[('es', 0.14981), ('fr', 0.10351), ('pt', 0.07196), ('en', 0.04073), ('ar', 0.0)]	 bachelet tras acuerdo en codelco  el diálogo es la vía que le hace bien a nuestro país   
+es	es	[('es', 0.23118), ('pt', 0.17591), ('fr', 0.07663), ('en', 0.06232), ('ar', 0.0)]	 benítez se defiende de las críticas al madrid  estamos invictos y con la portería a cero   
+es	es	[('es', 0.09202), ('pt', 0.07249), ('fr', 0.05753), ('en', 0.05535), ('ar', 0.0)]	 bravo se quedaría sin competencia  liverpool quiere llevarse a un frustrado ter stegen   
+es	es	[('es', 0.15057), ('pt', 0.09968), ('fr', 0.07807), ('en', 0.0592), ('ar', 0.0)]	 canciller y declaración de merkel por demanda marítima es un mensaje al gobierno boliviano   
+es	es	[('es', 0.14905), ('pt', 0.12793), ('fr', 0.07841), ('en', 0.06149), ('ar', 0.0)]	 canciller y llamado a diálogo de merkel por demanda marítima  es un mensaje al gobierno boliviano  
+es	es	[('es', 0.12015), ('pt', 0.11194), ('fr', 0.09132), ('en', 0.03165), ('ar', 0.0)]	 caravana de la teletón ya se dirige a arica para actividades de su gira   
+es	es	[('es', 0.11863), ('fr', 0.11692), ('pt', 0.09648), ('en', 0.0599), ('ar', 0.0)]	 ce urge a volkswagen a aclarar las irregularidades sobre emisiones de co   
+es	es	[('es', 0.05779), ('pt', 0.03785), ('fr', 0.0234), ('en', 0.01446), ('ar', 0.0)]	 cine  los chicago boys defienden su modelo   
+es	es	[('es', 0.18935), ('fr', 0.14007), ('pt', 0.11034), ('en', 0.04874), ('ar', 0.0)]	 claves de la desmunicipalización  se crean servicios locales e iniciará en magallanes   
+es	es	[('es', 0.12319), ('pt', 0.09701), ('fr', 0.06047), ('en', 0.01789), ('ar', 0.0)]	 cobre sube  % impulsado por una fuerte alza de la bolsa de china   
+es	es	[('es', 0.18327), ('pt', 0.15938), ('fr', 0.11147), ('en', 0.04957), ('ar', 0.0)]	 codelco  de no ejecutar proyectos estructurales dejaríamos de ser mayor productor de cobre   
+es	es	[('es', 0.16502), ('pt', 0.11674), ('fr', 0.05717), ('en', 0.03855), ('ar', 0.0)]	 colusión de papeleras  abogados concuerdan en que caso podría ir a justicia antigua  
+es	es	[('es', 0.12776), ('pt', 0.11514), ('en', 0.06659), ('fr', 0.0594), ('ar', 0.0)]	 consejos y datos prácticos para quienes asistan a pearl jam esta noche   
+es	es	[('es', 0.14449), ('pt', 0.10128), ('fr', 0.06413), ('en', 0.04224), ('ar', 0.0)]	 crecimiento económico y cambio climático  expertos exponen en chile sobre los desafíos   
+es	es	[('es', 0.17414), ('pt', 0.13433), ('fr', 0.10567), ('en', 0.0908), ('ar', 0.0)]	 denuncian a ministro de salud argentino por polémicas publicaciones en twiitter contra macri   
+es	es	[('es', 0.13384), ('pt', 0.10341), ('fr', 0.03565), ('en', 0.03545), ('ar', 0.0)]	 diputados aprueban crear comisión investigadora por colusión de papeleras   
+es	es	[('es', 0.19163), ('pt', 0.11034), ('fr', 0.1087), ('en', 0.07265), ('ar', 0.0)]	 el gran presente deiguras de la roja  bravo  medel  vidal y sánchez son líderes en sus ligas   
+es	es	[('es', 0.17414), ('pt', 0.10554), ('fr', 0.09062), ('en', 0.05171), ('ar', 0.0)]	 el parejo rendimiento de manuel pellegrini en sus duelos dirigidos en champions league   
+es	es	[('es', 0.12243), ('pt', 0.09115), ('fr', 0.04917), ('en', 0.03818), ('ar', 0.0)]	 estado islámico insiste en que derribó avión ruso siniestrado en egipto   
+es	es	[('es', 0.17719), ('pt', 0.14339), ('fr', 0.1065), ('en', 0.06997), ('ar', 0.0)]	 estudio sobre aerolíneas  no existe relación entre felicidad de clientes y éxito comercial   
+es	es	[('es', 0.17034), ('pt', 0.12207), ('fr', 0.08385), ('en', 0.0394), ('ar', 0.0)]	 gobierno asegura que registro civil ha perdido us   millones en los días de paro   
+es	es	[('es', 0.09886), ('pt', 0.07942), ('en', 0.05857), ('fr', 0.05095), ('ar', 0.0)]	 gobierno turco asegura que cualquier cambio constitucional será sometido a referendum   
+es	es	[('es', 0.16502), ('pt', 0.13113), ('fr', 0.06174), ('en', 0.04981), ('ar', 0.0)]	 gobierno valora cambio de tendencia a favor de las reformas en encuesta adimark  
+es	es	[('es', 0.10722), ('pt', 0.08955), ('fr', 0.0691), ('en', 0.03418), ('ar', 0.0)]	 hallan en londres cortometraje de disney perdido hace años   
+es	es	[('es', 0.18935), ('pt', 0.13486), ('fr', 0.04863), ('en', 0.02372), ('ar', 0.0)]	 infografía  los efectos de los días de paro del registro civil   
+es	es	[('es', 0.12928), ('pt', 0.10608), ('fr', 0.06357), ('en', 0.03454), ('ar', 0.0)]	 justicia fija fecha para anuncio de no perseverar en caso de senador quintana   
+es	pt	[('pt', 0.05437), ('es', 0.05323), ('en', 0.04986), ('fr', 0.02932), ('ar', 0.0)]	 justin bieber no logra superar a selena gomez  fue mi auténtico primer amor   
+es	es	[('es', 0.05932), ('pt', 0.05917), ('fr', 0.04074), ('en', 0.03719), ('ar', 0.0)]	 justin trudeau toma posesión como nuevo primer ministro de canadá   
+es	es	[('es', 0.13232), ('pt', 0.08529), ('fr', 0.06924), ('en', 0.03074), ('ar', 0.0)]	 kale  la verdura milagrosa que gana terreno por sus beneficios para la salud   
+es	es	[('es', 0.15741), ('pt', 0.11834), ('fr', 0.10165), ('en', 0.05548), ('ar', 0.0)]	 lanzamiento de satélite en hawai fracasa tras falla de cohete experimental   
+es	es	[('es', 0.13232), ('pt', 0.07516), ('en', 0.04112), ('fr', 0.04005), ('ar', 0.0)]	 loas por clasificación del city  ¿para qué guardiola si pellegrini sigue triunfando   
+es	es	[('es', 0.18327), ('pt', 0.13486), ('fr', 0.11608), ('en', 0.07179), ('ar', 0.0)]	 los chicago boys defienden sin anestesia modelo económico en documental de carola fuentes   
+es	es	[('es', 0.14144), ('pt', 0.11301), ('fr', 0.10225), ('en', 0.06424), ('ar', 0.0)]	 mark hamill apoya a paciente terminal que ruega ver episodio vii antes de estreno   
+es	es	[('es', 0.1346), ('pt', 0.11674), ('fr', 0.09364), ('en', 0.04872), ('ar', 0.0)]	 ministra blanco a funcionarios de registro civil  mes que no se trabaja  no se paga   
+es	es	[('es', 0.14829), ('pt', 0.12473), ('fr', 0.10067), ('en', 0.05228), ('ar', 0.0)]	 ministra blanco advierte a funcionarios de registro civil  mes que no se trabaja  no se paga  
+es	fr	[('fr', 0.1398), ('es', 0.13384), ('pt', 0.09488), ('en', 0.04965), ('ar', 0.0)]	 ministra javiera blanco sobre paro  el principio es uno solo  mes que no se trabaja  mes que no se paga  
+es	es	[('es', 0.04791), ('fr', 0.02789), ('pt', 0.02559), ('en', 0.02008), ('ar', 0.0)]	 ministra javiera blanco  el paro se debe acabar ya  
+es	es	[('es', 0.11483), ('pt', 0.09009), ('fr', 0.08128), ('en', 0.05012), ('ar', 0.0)]	 muñoz dice que embajador ibarra permanecerá en santiago hasta que se estime conveniente  
+es	es	[('es', 0.17643), ('pt', 0.11834), ('fr', 0.07391), ('en', 0.02645), ('ar', 0.0)]	 nasa anunciará mañana nuevos hallazgos sobre el destino de la atmósfera de marte   
+es	es	[('es', 0.12624), ('pt', 0.09701), ('fr', 0.04222), ('en', 0.04097), ('ar', 0.0)]	 nelly díaz y continuidad del paro  seguimos topando en la oferta económica   
+es	es	[('es', 0.10342), ('pt', 0.07623), ('en', 0.05376), ('fr', 0.03887), ('ar', 0.0)]	 nelly díaz  con amenazas no vamos a solucionar problemas   
+es	es	[('es', 0.12167), ('pt', 0.11034), ('fr', 0.07946), ('en', 0.03514), ('ar', 0.0)]	 ocde asegura que la economía de brasil pasa por un momento crítico   
+es	es	[('es', 0.16198), ('pt', 0.12793), ('fr', 0.10679), ('en', 0.05982), ('ar', 0.0)]	 os busca a mujer que distraía con su belleza a dueños de casa para que cómplices robaran   
+es	pt	[('pt', 0.13273), ('es', 0.1308), ('fr', 0.07231), ('en', 0.05212), ('ar', 0.0)]	 penta  fiscalía pide audiencia para discutir procedimiento abreviado contra ex senador novoa   
+es	es	[('es', 0.22586), ('pt', 0.1855), ('fr', 0.10964), ('en', 0.05743), ('ar', 0.0)]	 presidenta de la fed afirma que bancos aún tienen numerosos problemas de manejo de riesgos   
+es	es	[('es', 0.07909), ('fr', 0.02041), ('pt', 0.02026), ('en', 0.01368), ('ar', 0.0)]	 próxima generación del iphone incluiría un nuevo modelo más pequeño   
+es	es	[('es', 0.1711), ('pt', 0.1274), ('fr', 0.10141), ('en', 0.07519), ('ar', 0.0)]	 putin encabeza por tercer año consecutivo la lista de personas más poderosas de forbes   
+es	es	[('es', 0.14981), ('pt', 0.08689), ('en', 0.04586), ('fr', 0.03524), ('ar', 0.0)]	 rafael nadal vence a lukas rosol y avanza a los octavos del masters parísbercy   
+es	pt	[('pt', 0.16045), ('es', 0.15817), ('fr', 0.09248), ('en', 0.08138), ('ar', 0.0)]	 rajoy se reúne con empresarios y sindicatos buscando apoyo contra independentistas catalanes   
+es	es	[('es', 0.1057), ('pt', 0.04318), ('fr', 0.03911), ('en', 0.01688), ('ar', 0.0)]	 reviva en tiempo real el inicio de la gira teletón   
+es	es	[('es', 0.1057), ('pt', 0.04318), ('fr', 0.03911), ('en', 0.01688), ('ar', 0.0)]	 reviva en tiempo real el inicio de la gira teletón   
+es	es	[('es', 0.15589), ('fr', 0.10683), ('pt', 0.10448), ('en', 0.03054), ('ar', 0.0)]	 santi cazorla llena de elogios a alexis  la ambición que tiene es un espectáculo   
+es	es	[('es', 0.07909), ('pt', 0.07249), ('fr', 0.06619), ('en', 0.04734), ('ar', 0.0)]	 sean connery  ¿el mejor james bond de la historia   
+es	es	[('es', 0.14449), ('pt', 0.11887), ('fr', 0.06584), ('en', 0.06084), ('ar', 0.0)]	 turquía detiene a nueve yihadistas que iban atentar contra medios y partidos   
+es	es	[('es', 0.14525), ('pt', 0.09968), ('fr', 0.0685), ('en', 0.03051), ('ar', 0.0)]	 u  de talca abre inédita carrera para admisión   ingeniería en desarrollo de videojuegos   
+es	es	[('es', 0.1749), ('pt', 0.15885), ('fr', 0.13226), ('en', 0.0657), ('ar', 0.0)]	 un barco con inmigrantes ilegales a bordo fue rescatado en las costas de chipre   
+es	es	[('es', 0.11787), ('pt', 0.09009), ('fr', 0.058), ('en', 0.04115), ('ar', 0.0)]	 vaticano  mujer acusada de filtrarción afirma que sacerdote español grabó al papa en secreto   
+es	es	[('es', 0.13308), ('fr', 0.07829), ('pt', 0.07569), ('en', 0.04494), ('ar', 0.0)]	 vidal y sánchez se vuelven a medir en duelo clave de chilenos en la champions   
+es	fr	[('fr', 0.0), ('en', 0.0), ('ar', 0.0), ('pt', 0.0), ('es', 0.0)]	 
+pt	pt	[('pt', 0.17537), ('es', 0.10951), ('fr', 0.04086), ('en', 0.03363), ('ar', 0.0)]	     uma seleção de boas histórias com obras de referência em ficção e nãoficção 
+pt	es	[('es', 0.2038), ('pt', 0.18177), ('en', 0.04801), ('fr', 0.02103), ('ar', 0.0)]	 a dandara criada por jarid nos inspira a sermos guerreiras todos os dias  
+pt	pt	[('pt', 0.20949), ('es', 0.20608), ('fr', 0.10313), ('en', 0.07194), ('ar', 0.0)]	 esse cunha comeu coco menina i  anos  sobre notícia da proposta parlamentar de precisar provas concretas pra denúncia de estupro 
+pt	pt	[('pt', 0.1887), ('es', 0.14601), ('fr', 0.08714), ('en', 0.05306), ('ar', 0.0)]	 gerações seguidas de afrobrasileiros cresceram sem fazer ideia do ponto de partida da saga familiar   …
+pt	pt	[('pt', 0.19296), ('es', 0.17947), ('fr', 0.0267), ('en', 0.02544), ('ar', 0.0)]	 os textos     com desrespeito aos direitos humanos  também serão avaliados com nota zero   …
+pt	pt	[('pt', 0.14339), ('es', 0.09962), ('fr', 0.07128), ('en', 0.04944), ('ar', 0.0)]	 porque mudar de ideia  evoluir e aprender são processos  e o processo  ele é lento  
+pt	pt	[('pt', 0.07196), ('es', 0.06996), ('fr', 0.03751), ('en', 0.03111), ('ar', 0.0)]	 prometemos solenemente nunca compactuar com isso 
+pt	pt	[('pt', 0.09328), ('es', 0.06616), ('en', 0.01319), ('fr', 0.00565), ('ar', 0.0)]	 qq vc ta fazendo da vida nada mas é temporário né não
+pt	es	[('es', 0.0616), ('pt', 0.04638), ('fr', 0.0358), ('en', 0.01667), ('ar', 0.0)]	 quase da família   sobre que horas ela volta
+pt	pt	[('pt', 0.14606), ('es', 0.11483), ('fr', 0.05347), ('en', 0.04211), ('ar', 0.0)]	 uma mulher tem sofrido ameaças por causa de um site fake e ninguém faz nada sobre o apoio que  precisa  …
+pt	pt	[('pt', 0.08262), ('es', 0.06008), ('fr', 0.03053), ('en', 0.02937), ('ar', 0.0)]	 você tirou o véu q cobriam meus olhos mensagens assim fazem tudo valer a pena  '
+pt	pt	[('pt', 0.10714), ('es', 0.06616), ('fr', 0.06169), ('en', 0.05415), ('ar', 0.0)]	 vou escrever um texto menor dessa vez  eu disse  e  mais uma vez  falhei miseravelmente 
+pt	pt	[('pt', 0.04104), ('es', 0.03042), ('fr', 0.01363), ('en', 0.00934), ('ar', 0.0)]	 sempre com muitos gifs
+pt	pt	[('pt', 0.10608), ('es', 0.08061), ('fr', 0.05154), ('en', 0.02393), ('ar', 0.0)]	  oi  querida  td bem hj vamos fazer um tuitaço às h   vc pode divulgar e participar bjo
+pt	pt	[('pt', 0.05011), ('es', 0.02205), ('en', 0.01696), ('fr', 0.01237), ('ar', 0.0)]	  sp tá virando uma distopia
+pt	pt	[('pt', 0.07143), ('es', 0.06236), ('fr', 0.03661), ('en', 0.01555), ('ar', 0.0)]	  é tarde demais para nos calar  …  
+pt	pt	[('pt', 0.04424), ('es', 0.02281), ('en', 0.01178), ('fr', 0.00602), ('ar', 0.0)]	 a  redefiniu ti pra tecnologia da imaginação 👽
+pt	pt	[('pt', 0.16258), ('es', 0.14373), ('fr', 0.0695), ('en', 0.04006), ('ar', 0.0)]	 a  falando sobre  abusos e sobre a necessidade de fazermos um escândalo sobre isso  …
+pt	pt	[('pt', 0.06557), ('es', 0.04411), ('en', 0.02851), ('fr', 0.01924), ('ar', 0.0)]	 a cenoura eu comi  mas a vida continuou  
+pt	pt	[('pt', 0.17324), ('es', 0.09125), ('en', 0.04931), ('fr', 0.03923), ('ar', 0.0)]	 a escravidão tirou das pessoas o direito à sua própria história  e disso tbm fala a introdução do livro da  aliás  leiam
+pt	pt	[('pt', 0.15139), ('es', 0.13156), ('fr', 0.09682), ('en', 0.06201), ('ar', 0.0)]	 a jout jout me fez lembrar as vezes em que pegaram na minha cintura indevidamente  e eu não pude fazer nada  
+pt	pt	[('pt', 0.08209), ('es', 0.08061), ('en', 0.02697), ('fr', 0.0143), ('ar', 0.0)]	 a lógica do vamos punir as vítimas corre solta 
+pt	pt	[('pt', 0.21429), ('es', 0.18479), ('fr', 0.08749), ('en', 0.07043), ('ar', 0.0)]	 a mídia tem usado em manchetes a palavra guerra para falar dessa perseguição dos machistas às feministas  mas não é guerra  é ataque 
+pt	pt	[('pt', 0.14446), ('es', 0.10418), ('en', 0.07982), ('fr', 0.04561), ('ar', 0.0)]	 a mulher aborta e vai procurar atendimento manda o hospital chamar a polícia  oras  …
+pt	es	[('es', 0.03422), ('pt', 0.02825), ('en', 0.02461), ('fr', 0.02139), ('ar', 0.0)]	 acabei de agendar  hehe 
+pt	pt	[('pt', 0.2484), ('es', 0.23118), ('fr', 0.10887), ('en', 0.07772), ('ar', 0.0)]	 acabo de presenciar um homem de uns anos e hétero usando o meme meu óculos   ninguém sai na vida real  ta de muito parabéns a internet
+pt	pt	[('pt', 0.07783), ('es', 0.05627), ('en', 0.03644), ('fr', 0.01901), ('ar', 0.0)]	 adoro quando a newsletter da  chega na sexta a noite
+pt	es	[('es', 0.06236), ('pt', 0.04158), ('fr', 0.02364), ('en', 0.01256), ('ar', 0.0)]	 agora é de sigilo policial   
+pt	pt	[('pt', 0.10821), ('es', 0.05856), ('fr', 0.03738), ('en', 0.03524), ('ar', 0.0)]	 ai meu corassaum abro a carta da  e começa logo com gif de gatinho piscando   
+pt	pt	[('pt', 0.14126), ('es', 0.11483), ('fr', 0.06749), ('en', 0.02081), ('ar', 0.0)]	 aliás  ontem recebi o email de uma garota de anos que me fez chorar  sorrir e rodopiar
+pt	pt	[('pt', 0.11087), ('es', 0.07072), ('en', 0.05475), ('fr', 0.05216), ('ar', 0.0)]	 aliás  se vc ainda não ouviu o  sobre violência contra a mulher  aproveita o momento   …
+pt	pt	[('pt', 0.05917), ('es', 0.05703), ('fr', 0.03934), ('en', 0.03223), ('ar', 0.0)]	 ansioso pra ler a newsletter de amanhã da  sobre o 
+pt	pt	[('pt', 0.19989), ('es', 0.1346), ('fr', 0.10708), ('en', 0.06141), ('ar', 0.0)]	 antes eu via treta explodindo na timeline e eu ia lá dar meus pitacos hoje eu já pondero mais e vejo se realmente vale a pena
+pt	pt	[('pt', 0.17751), ('es', 0.16198), ('fr', 0.0778), ('en', 0.02364), ('ar', 0.0)]	 ao analisar um grupo de   tweets  descobrimos que a idade média do  é de   anos  
+pt	es	[('es', 0.24563), ('pt', 0.20789), ('fr', 0.12113), ('en', 0.08726), ('ar', 0.0)]	 aos novos seguidores aviso q neste perfil trabalhamos com os seguintes temas  feminismo  literatura  meu trabalho  bobeiras  coisas leves
+pt	pt	[('pt', 0.08582), ('fr', 0.07882), ('es', 0.07757), ('en', 0.0509), ('ar', 0.0)]	 apenas grandes construções da humanid    pera 
+pt	pt	[('pt', 0.08582), ('en', 0.05309), ('es', 0.03422), ('fr', 0.0299), ('ar', 0.0)]	 aqui em sp a brincadeira é  adivinhe a próxima coisa a entrar em sigilo 
+pt	pt	[('pt', 0.01972), ('fr', 0.01497), ('es', 0.01369), ('en', 0.00346), ('ar', 0.0)]	 arrume um mozão que  
+pt	es	[('es', 0.12091), ('pt', 0.10928), ('en', 0.05049), ('fr', 0.05007), ('ar', 0.0)]	 as adolescentes são minhas novas heroínas  por     
+pt	pt	[('pt', 0.09382), ('es', 0.073), ('fr', 0.04368), ('en', 0.03321), ('ar', 0.0)]	 as coisas que a  escreve sempre me deixam meio 'aahhh e não é que é verdade' 
+pt	pt	[('pt', 0.10128), ('es', 0.0981), ('fr', 0.03543), ('en', 0.03446), ('ar', 0.0)]	 as contas  migas  elas não dão um mês de descanso 💸
+pt	pt	[('pt', 0.09115), ('es', 0.08821), ('fr', 0.06277), ('en', 0.04279), ('ar', 0.0)]	 assédio  cultura do estupro e adolescentes feministas   …
+pt	pt	[('pt', 0.24414), ('es', 0.16122), ('fr', 0.08423), ('en', 0.06861), ('ar', 0.0)]	 auto celebração e amor próprio não vem de comparação com terceiros  você é independente de todo resto  dá um trabalhão virar a chavinha 
+pt	pt	[('pt', 0.15192), ('es', 0.11179), ('fr', 0.07127), ('en', 0.04929), ('ar', 0.0)]	 bora financiar a ciência ♥︎ sabia q cês podem contribuir com o trabalho da equipe de uma neurocientista brasileira  …
+pt	pt	[('pt', 0.11247), ('es', 0.09506), ('fr', 0.05623), ('en', 0.0302), ('ar', 0.0)]	 brasileiro tem um troço com carro que é só tu falar que não sabe dirigir que a galera te olha com pena 
+pt	pt	[('pt', 0.02239), ('en', 0.01678), ('es', 0.00608), ('fr', 0.00475), ('ar', 0.0)]	 café e pamonha what a lovely day  
+pt	pt	[('pt', 0.11834), ('es', 0.11027), ('fr', 0.09113), ('en', 0.04588), ('ar', 0.0)]	 chateadíssima q ainda não possuo a funcionalidade de enquetes no tuirer
+pt	pt	[('pt', 0.02399), ('es', 0.01977), ('fr', 0.0078), ('en', 0.00583), ('ar', 0.0)]	 cogumelo na manteiga 🍄🍄🍄  
+pt	pt	[('pt', 0.02292), ('es', 0.01749), ('fr', 0.00846), ('en', 0.00819), ('ar', 0.0)]	 como cês passaram do mega gengar
+pt	pt	[('pt', 0.01439), ('es', 0.00837), ('en', 0.00252), ('fr', 0.00025), ('ar', 0.0)]	 credo
+pt	pt	[('pt', 0.11994), ('es', 0.08061), ('fr', 0.04112), ('en', 0.0297), ('ar', 0.0)]	 criadora de campanha sobre assédio considera tema do enem uma vitória    …
+pt	pt	[('pt', 0.03358), ('fr', 0.0205), ('en', 0.01483), ('es', 0.00989), ('ar', 0.0)]	 dá follow e depois não aguenta
+pt	pt	[('pt', 0.02186), ('es', 0.01369), ('en', 0.0123), ('fr', 0.00825), ('ar', 0.0)]	 débora  a deborista 
+pt	pt	[('pt', 0.02026), ('es', 0.00684), ('fr', 0.00626), ('en', 0.00609), ('ar', 0.0)]	 deixa tocar essa bosta
+pt	pt	[('pt', 0.18603), ('es', 0.16502), ('fr', 0.12275), ('en', 0.06614), ('ar', 0.0)]	 dia desses eu chamei a  de minha heroína da produtividade  depois da newsletter dela sobre a experiência do nanowrimo  então   
+pt	es	[('es', 0.02814), ('pt', 0.02772), ('fr', 0.01828), ('en', 0.0046), ('ar', 0.0)]	 diogo batalha ‏ de out
+pt	pt	[('pt', 0.20256), ('es', 0.14297), ('fr', 0.06611), ('en', 0.04206), ('ar', 0.0)]	 dito isso  amor próprio não é achar que o resto do mundo  ou um grupo de pessoas  está abaixo de você  isso é tóxico  cuidado 
+pt	pt	[('pt', 0.05117), ('fr', 0.03745), ('es', 0.03574), ('en', 0.01933), ('ar', 0.0)]	 e aqui ela escreve um desabafo  pq é foda enfrentar isso sozinha  …
+pt	pt	[('pt', 0.121), ('es', 0.09354), ('fr', 0.07222), ('en', 0.04143), ('ar', 0.0)]	 e o gif do começo da newsletter da  que eu pensei que era o ventinho daqui que passou na folha tô imersa no email já haha
+pt	pt	[('pt', 0.20203), ('es', 0.14753), ('fr', 0.09798), ('en', 0.05751), ('ar', 0.0)]	 e quando você esta quase pirando pq não avança na escrita de uns projetos de pesquisa eis que surge uma newsletter da 
+pt	pt	[('pt', 0.1226), ('es', 0.10494), ('fr', 0.06116), ('en', 0.02104), ('ar', 0.0)]	 é tarde demais para nos calar    toda nossa solidariedade à    
+pt	pt	[('pt', 0.1871), ('es', 0.16274), ('fr', 0.08027), ('en', 0.05681), ('ar', 0.0)]	 ela conta a história  eu desenho  vídeo ilustrado com  lendo trechinho de as lendas de dandara  …
+pt	es	[('es', 0.01825), ('fr', 0.01149), ('pt', 0.01013), ('en', 0.00255), ('ar', 0.0)]	 ela reclama 
+pt	es	[('es', 0.02205), ('fr', 0.01251), ('pt', 0.00373), ('en', 0.00289), ('ar', 0.0)]	 ela vai embora 
+pt	es	[('es', 0.03498), ('fr', 0.03367), ('en', 0.01774), ('pt', 0.01706), ('ar', 0.0)]	 ele diz  ela está um pouco hormonal   …
+pt	fr	[('fr', 0.0167), ('es', 0.01293), ('pt', 0.00906), ('en', 0.00715), ('ar', 0.0)]	 ele repete 
+pt	pt	[('pt', 0.1162), ('es', 0.09125), ('fr', 0.04507), ('en', 0.04357), ('ar', 0.0)]	 espero aprender a lidar com o tempo de duração q temos para viver 
+pt	pt	[('pt', 0.11567), ('es', 0.0654), ('fr', 0.05609), ('en', 0.02924), ('ar', 0.0)]	 esse vídeo faz parte da campanha do filme o olmo e a gaivota  e vc pode ler mais aqui  …
+pt	pt	[('pt', 0.18977), ('es', 0.16502), ('en', 0.0451), ('fr', 0.04233), ('ar', 0.0)]	 estamos fazendo isso crescer  fazendo com q ouçam nossa voz  claro q isso gera raiva e  acima de tudo  medo em algumas pessoas
+pt	pt	[('pt', 0.0549), ('es', 0.04411), ('fr', 0.0369), ('en', 0.01126), ('ar', 0.0)]	 etimologia    indivíduo  aquilo que não se divide 
+pt	pt	[('pt', 0.14819), ('es', 0.12548), ('fr', 0.06961), ('en', 0.04432), ('ar', 0.0)]	 etimologia    apartamento  estado de quem está apartado  em geral do espaço público 
+pt	pt	[('pt', 0.08369), ('es', 0.05171), ('en', 0.04419), ('fr', 0.04144), ('ar', 0.0)]	 eu nunca colocava meu email pessoal em site nenhum até encontrar a newsletter da 
+pt	pt	[('pt', 0.00373), ('fr', 0.00142), ('en', 0.00018), ('ar', 0.0), ('es', 0.0)]	 eu vou  
+pt	pt	[('pt', 0.07729), ('es', 0.05551), ('fr', 0.03585), ('en', 0.01917), ('ar', 0.0)]	 eu  nos vestibulares e enem da vida 
+pt	pt	[('pt', 0.15299), ('es', 0.1308), ('fr', 0.07586), ('en', 0.05582), ('ar', 0.0)]	 fácil é escrever receita de bolo  todo o resto cai naquela área perigosa fora da zona de conforto   …
+pt	es	[('es', 0.07985), ('fr', 0.05339), ('pt', 0.04744), ('en', 0.00715), ('ar', 0.0)]	 falta de rola  excesso de rola 
+pt	pt	[('pt', 0.20203), ('es', 0.19544), ('fr', 0.08213), ('en', 0.05493), ('ar', 0.0)]	 fazem comentários pedófilos sobre menina de anos em programa de tv  solução esconder a menina  oras  …
+pt	pt	[('pt', 0.03092), ('es', 0.02053), ('en', 0.00874), ('fr', 0.00477), ('ar', 0.0)]	 feliz dia do professor 
+pt	pt	[('pt', 0.14339), ('es', 0.12015), ('fr', 0.07778), ('en', 0.03246), ('ar', 0.0)]	 gente  saiu nova edição da  com artigo meu sobre o verdadeiro legado de simone de beauvoir  …
+pt	pt	[('pt', 0.08049), ('fr', 0.0464), ('es', 0.04563), ('en', 0.02317), ('ar', 0.0)]	 gentes  me tirem uma dúvida  o enem é obrigatório
+pt	pt	[('pt', 0.11407), ('es', 0.10342), ('fr', 0.0764), ('en', 0.0572), ('ar', 0.0)]	 haha o pior é que não dá pra encher mão com as personagens femininas q conheço q não tem algum desses abaixo 
+pt	fr	[('fr', 0.02769), ('pt', 0.02452), ('en', 0.01964), ('es', 0.01521), ('ar', 0.0)]	 hashtag transformação  mil tweets sobre o   …
+pt	pt	[('pt', 0.03038), ('fr', 0.02822), ('es', 0.02662), ('en', 0.01079), ('ar', 0.0)]	 hj vejo que nunca vale a pena 
+pt	pt	[('pt', 0.1807), ('es', 0.17338), ('en', 0.06916), ('fr', 0.0471), ('ar', 0.0)]	 já assina minha newsletter pra receber os textos q só mando por email aproveita  é de graça vagas limitadas  
+pt	pt	[('pt', 0.15885), ('es', 0.12471), ('fr', 0.05584), ('en', 0.03436), ('ar', 0.0)]	 já falei que acho lindo o site da  então  acho lindo o site da alinevalek  além do conteúdo  claro  
+pt	pt	[('pt', 0.15672), ('es', 0.1308), ('fr', 0.08784), ('en', 0.04383), ('ar', 0.0)]	 lição de casa antes de dormir  ler  as ~bobagens imperdíveis~ da  e o texto dessa semana do  ️
+pt	pt	[('pt', 0.03465), ('es', 0.01825), ('en', 0.00749), ('fr', 0.00135), ('ar', 0.0)]	 lindo texto da   …
+pt	pt	[('pt', 0.02505), ('en', 0.00432), ('fr', 0.00327), ('es', 0.00228), ('ar', 0.0)]	 macarrão com feijão  eu digo sim
+pt	pt	[('pt', 0.14286), ('es', 0.10875), ('en', 0.05647), ('fr', 0.04947), ('ar', 0.0)]	 mas depois na frente dazamiga vai dizer q é contra o machismo  q é aliado  a porra toda  começa com vc  fera 
+pt	es	[('es', 0.09125), ('pt', 0.07942), ('fr', 0.06777), ('en', 0.03787), ('ar', 0.0)]	 mas por que só para mulheres – lugar de mulher  …
+pt	fr	[('fr', 0.00373), ('en', 0.00338), ('es', 0.00228), ('pt', 0.00213), ('ar', 0.0)]	 me dá mó orgulhinho alheio   
+pt	pt	[('pt', 0.03518), ('fr', 0.02167), ('en', 0.0147), ('es', 0.01141), ('ar', 0.0)]	 me olham como se eu ainda fosse criança 
+pt	es	[('es', 0.18783), ('pt', 0.15512), ('en', 0.08183), ('fr', 0.07882), ('ar', 0.0)]	 meninas  viram meu último textinho as adolescentes são minhas novas heroínas  meninas  vocês não têm que agradar ninguém  … 
+pt	pt	[('pt', 0.02079), ('fr', 0.01858), ('es', 0.01369), ('en', 0.00936), ('ar', 0.0)]	 metrópole estadão 
+pt	pt	[('pt', 0.13486), ('es', 0.11331), ('fr', 0.05068), ('en', 0.03831), ('ar', 0.0)]	 meu corpo  minhas regras  um vídeo em resposta às imposições e ofensas que nos fazem  …
+pt	es	[('es', 0.02966), ('pt', 0.02878), ('en', 0.0147), ('fr', 0.01093), ('ar', 0.0)]	 mina intergaláctica  …
+pt	fr	[('fr', 0.0599), ('pt', 0.05864), ('es', 0.05247), ('en', 0.03199), ('ar', 0.0)]	 mulheres contra cunha – lugar de mulher
+pt	pt	[('pt', 0.13006), ('es', 0.0943), ('en', 0.04461), ('fr', 0.04263), ('ar', 0.0)]	 na fila do mercado lendo a newsletter da    transformando um tempo inútil em algo útil
+pt	es	[('es', 0.12091), ('pt', 0.11674), ('en', 0.04926), ('fr', 0.0444), ('ar', 0.0)]	 na nossa realidade  as heroínas têm a internet como superpoder  por     
+pt	pt	[('pt', 0.27878), ('es', 0.25856), ('fr', 0.17495), ('en', 0.13197), ('ar', 0.0)]	 na vdd eu fico triste qdo entro nas mentions e as interações é só um monte de rt  fav  gente citando tuítes  mas conversa mesmo nada
+pt	pt	[('pt', 0.01333), ('es', 0.01141), ('en', 0.00642), ('fr', 0.00365), ('ar', 0.0)]	 nao atenda
+pt	pt	[('pt', 0.03838), ('en', 0.02536), ('fr', 0.0236), ('es', 0.01369), ('ar', 0.0)]	 não consigo me ver como essa pessoa corajosa q dizem q sou
+pt	pt	[('pt', 0.08102), ('es', 0.07376), ('fr', 0.03491), ('en', 0.01025), ('ar', 0.0)]	 não lembro desse episódio de cavaleiros do zodíaco 
+pt	pt	[('pt', 0.03838), ('es', 0.03346), ('fr', 0.00958), ('en', 0.00952), ('ar', 0.0)]	 no  eu indico hipersonia crônica da  
+pt	pt	[('pt', 0.17324), ('es', 0.13612), ('fr', 0.05137), ('en', 0.04898), ('ar', 0.0)]	 nos últimos dias  o feminismo tem avançado  foi tema do enem  conscientização sobre   protesto em sp
+pt	pt	[('pt', 0.05917), ('en', 0.03688), ('es', 0.03574), ('fr', 0.01855), ('ar', 0.0)]	 nossa  homeland voltou uma série q já podia ter acabado né
+pt	pt	[('pt', 0.05277), ('es', 0.02205), ('en', 0.0103), ('fr', 0.00375), ('ar', 0.0)]	 o cara toca o peito da colega na tv 
+pt	pt	[('pt', 0.1823), ('es', 0.17414), ('en', 0.03251), ('fr', 0.02783), ('ar', 0.0)]	 o clube da escrita na  é um sucesso enorme os próximos encontros também serão mediados por mim vamos 
+pt	pt	[('pt', 0.07676), ('es', 0.05095), ('en', 0.03501), ('fr', 0.02529), ('ar', 0.0)]	 o jeito é pedir desculpas e devolver tudo à sopa primordial 
+pt	pt	[('pt', 0.25053), ('es', 0.20152), ('fr', 0.14814), ('en', 0.07881), ('ar', 0.0)]	 o problema de alguns religiosos é quando eles já se crêem salvos só por crer  as piores atrocidades se justificam se deus está do seu lado
+pt	pt	[('pt', 0.09275), ('es', 0.07376), ('fr', 0.04845), ('en', 0.02211), ('ar', 0.0)]	 o ruim de acordar cedo é q só tem tuítes da madrugada pra ler
+pt	pt	[('pt', 0.12953), ('es', 0.11939), ('fr', 0.06929), ('en', 0.04003), ('ar', 0.0)]	 obrigada  por me dar o fôlego que faltava para entrar de cabeça no nanowrimo  minha meta é a badge do bobagens ♡
+pt	pt	[('pt', 0.06663), ('en', 0.03886), ('es', 0.03194), ('fr', 0.02506), ('ar', 0.0)]	 ok eu assinei a newsletter da  essa semana e levei um susto com isso  sério 
+pt	pt	[('pt', 0.0629), ('es', 0.05399), ('fr', 0.01951), ('en', 0.01795), ('ar', 0.0)]	 olar  cês já me seguem no medium publico uns textos por lá  
+pt	pt	[('pt', 0.03465), ('en', 0.0329), ('fr', 0.02527), ('es', 0.02357), ('ar', 0.0)]	 olhe para você  o outro é o outro  deixe ele lá 
+pt	es	[('es', 0.01065), ('pt', 0.00959), ('fr', 0.00344), ('en', 0.00299), ('ar', 0.0)]	 omg omg omg enviei  agora foi  agora vai 
+pt	es	[('es', 0.22814), ('pt', 0.1791), ('en', 0.02653), ('fr', 0.0221), ('ar', 0.0)]	 paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência  paciência 
+pt	pt	[('pt', 0.14179), ('es', 0.12471), ('en', 0.05142), ('fr', 0.0456), ('ar', 0.0)]	 podem picotar minha carteirinha feminista de novo  mas essas fotos da carrie fisher são maravilhosas 
+pt	pt	[('pt', 0.09275), ('es', 0.07909), ('fr', 0.05287), ('en', 0.02403), ('ar', 0.0)]	 por que tem um celular flip no clipe de hello  da cantora adele  …
+pt	pt	[('pt', 0.11194), ('es', 0.07909), ('fr', 0.06038), ('en', 0.03849), ('ar', 0.0)]	 por que tentar esconder uma vítima de assédio não faz o problema sumir  
+pt	pt	[('pt', 0.1338), ('es', 0.09962), ('fr', 0.06531), ('en', 0.04591), ('ar', 0.0)]	 portanto  tua estratégia de fragmentação pra ser um aqui  outro ali  é furada 
+pt	pt	[('pt', 0.0581), ('es', 0.03498), ('en', 0.01615), ('fr', 0.01435), ('ar', 0.0)]	 portanto  vê se sai na rua e berra 
+pt	pt	[('pt', 0.07996), ('es', 0.0654), ('fr', 0.01832), ('en', 0.00903), ('ar', 0.0)]	 poucos sabem mas o s em sp é de sigilo
+pt	pt	[('pt', 0.06023), ('es', 0.04335), ('en', 0.02913), ('fr', 0.02722), ('ar', 0.0)]	 projeto pode dificultar aborto legal  …
+pt	pt	[('pt', 0.00906), ('es', 0.0076), ('en', 0.0032), ('fr', 0.00059), ('ar', 0.0)]	 q horror 
+pt	pt	[('pt', 0.25533), ('es', 0.21749), ('fr', 0.08235), ('en', 0.05553), ('ar', 0.0)]	 qdo um animal fica acuado  ele ataca  e é isso o q tá acontecendo  estão morrendo de medo  desesperados  então escolheram alvos para atacar
+pt	es	[('es', 0.06844), ('pt', 0.06663), ('fr', 0.04147), ('en', 0.0186), ('ar', 0.0)]	 qual foi a primeira coisa que te fez sorrir de vdd hoje
+pt	pt	[('pt', 0.15512), ('es', 0.14297), ('fr', 0.0859), ('en', 0.06521), ('ar', 0.0)]	 quando eu crescer definitivamente quero ter a força de vontade da menina 
+pt	es	[('es', 0.04639), ('pt', 0.02505), ('fr', 0.02304), ('en', 0.00905), ('ar', 0.0)]	 que horas ela volta  …
+pt	es	[('es', 0.08745), ('pt', 0.08529), ('fr', 0.059), ('en', 0.03709), ('ar', 0.0)]	 que morte horrível pesquisar sobre evolução e cair em site criacionista
+pt	pt	[('pt', 0.19883), ('es', 0.13232), ('fr', 0.05986), ('en', 0.04989), ('ar', 0.0)]	 quem acha q o q está acontecendo com  é caso isolado ou menor  não poderia errar mais  e hj ela é o alvo  mas a mira é móvel 
+pt	pt	[('pt', 0.17004), ('es', 0.16046), ('fr', 0.07928), ('en', 0.06926), ('ar', 0.0)]	 receba uma newsletter quentinha  totalmente grátis  cheia de amor toda semana no seu email ♡ vagas limitadas  
+pt	pt	[('pt', 0.07996), ('es', 0.07605), ('en', 0.0366), ('fr', 0.02936), ('ar', 0.0)]	 redação do  machistas literalmente  
+pt	pt	[('pt', 0.12313), ('es', 0.11255), ('en', 0.0574), ('fr', 0.04538), ('ar', 0.0)]	 respirar oxigênio acelera o envelhecimento das células  a recomendação agora é respirar hélio
+pt	pt	[('pt', 0.15139), ('es', 0.1057), ('fr', 0.04094), ('en', 0.03732), ('ar', 0.0)]	 sábado de manhã é o meu momento eu  vc  filhos e cachorro  o vc  no caso  é a newsletter da 
+pt	pt	[('pt', 0.13166), ('es', 0.09734), ('en', 0.06281), ('fr', 0.0306), ('ar', 0.0)]	 scrivener e coletor menstrual  duas coisas q melhoraram minha vida e fico indicando prazamiga usarem tb
+pt	es	[('es', 0.12548), ('pt', 0.12473), ('fr', 0.09339), ('en', 0.0366), ('ar', 0.0)]	 se o feminismo avança  eles atacam  criminosos criam site de ódio para difamar a  ela explica aqui   …
+pt	pt	[('pt', 0.15085), ('es', 0.14601), ('en', 0.04625), ('fr', 0.039), ('ar', 0.0)]	 se temos esse poder para deixálos com medo  vamos usar esse poder pra reagir  não vão nos calar  força  
+pt	pt	[('pt', 0.16098), ('es', 0.127), ('fr', 0.07993), ('en', 0.07324), ('ar', 0.0)]	 se voce atende o telefone quando te ligam entao voce esta ajudando a perpetuar esta prática grotesca
+pt	pt	[('pt', 0.18817), ('es', 0.10342), ('en', 0.06939), ('fr', 0.05754), ('ar', 0.0)]	 sei q email não tem isso visualizada e ñ respondida ainda  mas ñ precisa ficar mandando o mesmo email se a pessoa ainda não respondeu
+pt	pt	[('pt', 0.17964), ('es', 0.11711), ('fr', 0.10266), ('en', 0.05535), ('ar', 0.0)]	 sempre me pergunto quem é que achou uma boa ideia chamar o controle de videogame de vara da alegria joystick
+pt	pt	[('pt', 0.17324), ('es', 0.14449), ('fr', 0.05967), ('en', 0.05561), ('ar', 0.0)]	 sou dessas que tenta  com muito custo e todos os dias  não ser parte do problema   …
+pt	pt	[('pt', 0.16898), ('es', 0.12091), ('fr', 0.0823), ('en', 0.0566), ('ar', 0.0)]	 sp  estado impõe sigilo a dado da pm e barra comparação entre crimes e policiamento  
+pt	pt	[('pt', 0.05224), ('es', 0.0327), ('en', 0.02567), ('fr', 0.01233), ('ar', 0.0)]	 tá acabando  aline  tá acabando
+pt	pt	[('pt', 0.23134), ('es', 0.20989), ('fr', 0.14916), ('en', 0.09912), ('ar', 0.0)]	 tempo para realmente construir algo  bem  talvez seja o caso de rever nossas prioridades  marotamente jogando verdades na cara
+pt	pt	[('pt', 0.23348), ('es', 0.15741), ('fr', 0.08533), ('en', 0.06479), ('ar', 0.0)]	 tenho pouco tempo de vida comparando com a idade da terra  e uso esse tempo lendo newsletters da  pra vida valer a pena
+pt	pt	[('pt', 0.14392), ('es', 0.13764), ('fr', 0.06163), ('en', 0.04765), ('ar', 0.0)]	 terminei o livro de contos da  pequenas tiranias  é incrível correr lá e compre sua cópia  …
+pt	pt	[('pt', 0.05117), ('es', 0.04335), ('fr', 0.02349), ('en', 0.02148), ('ar', 0.0)]	 textinho da  quentinho igual o café recémpassado 
+pt	pt	[('pt', 0.03358), ('es', 0.01445), ('en', 0.01238), ('fr', 0.00582), ('ar', 0.0)]	 texto novo lá no blog a escolha pelo difícil  … 
+pt	pt	[('pt', 0.14286), ('es', 0.13992), ('fr', 0.04402), ('en', 0.02531), ('ar', 0.0)]	 tô só de olho nos amigos publiças curtindo piada machista de redatorzão 
+pt	pt	[('pt', 0.129), ('es', 0.08897), ('fr', 0.04), ('en', 0.03881), ('ar', 0.0)]	 todo mundo precisa colocar a mão na consciência e ver q faz parte do problema   …
+pt	pt	[('pt', 0.1967), ('es', 0.14144), ('en', 0.06253), ('fr', 0.05616), ('ar', 0.0)]	 uma leitora agradecendo por eu ter indicado o podcast do  sobre violência contra a mulher  q ajudou ela na redação do enem 
+pt	pt	[('pt', 0.07036), ('es', 0.06236), ('en', 0.02754), ('fr', 0.01522), ('ar', 0.0)]	 valeu pelas dicas   agora vai nanowrimo já virou meu rolê favorito 
+pt	pt	[('pt', 0.15778), ('es', 0.13536), ('fr', 0.07273), ('en', 0.05639), ('ar', 0.0)]	 vamos ler mais mulheres as lendas de dandara é da  e tem arte da   …
+pt	pt	[('pt', 0.18337), ('es', 0.14829), ('en', 0.05397), ('fr', 0.05336), ('ar', 0.0)]	 varrer as mulheres pra debaixo do tapete não vai acabar com o machismo  nós  nossos corpos e nossas vidas não são o problema 
+pt	pt	[('pt', 0.15991), ('es', 0.14981), ('fr', 0.07759), ('en', 0.05626), ('ar', 0.0)]	 vocês todos deviam assinar a newsletter da  porque olha  melhor coisa que entra na minha vida pelo meu email em uns bons anos já
+pt	pt	[('pt', 0.12846), ('es', 0.09886), ('fr', 0.08245), ('en', 0.03152), ('ar', 0.0)]	 vontade de problematizar esse coração que apareceu no lugar da estrelinha do fav
