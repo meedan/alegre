@@ -1,0 +1,4 @@
+python==2.7
+NumPy>=1.3
+SciPy>=0.7
+gensim==0.12.2
