@@ -32,11 +32,8 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
       client = Elasticsearch::Client.new log: true
 
       @glossary = Mlg::ElasticSearch.get_glossary(params[:data].to_s)
-      if Array === @glossary
-        render_success 'term', @glossary
-      else
-        render_error('Unexpected return', 'INVALID_VALUE', status = 400)
-      end
+      
+      render_success 'term', @glossary
     end
   end
 

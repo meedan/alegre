@@ -12,90 +12,100 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
   include DictionaryDoc
 
-  def execute() #POST
-
+  def terms
     if params[:language].blank? or params[:text].blank?
       render_parameters_missing
     elsif params[:language].length != 2
-      render_error('invalid value', 'INVALID_VALUE', status = 400)
+      render_error('invalid value', 'INVALID_VALUE', 400)
     else
-      text = params[:text].to_s
-      codesource = params[:language].to_s
+      Elasticsearch::Client.new url: ES_SERVER
+      client = Elasticsearch::Client.new log: true
+      context = { 'data_source' => 'dictionary' }
+      context[:postid] = params[:postid] unless params[:postid].blank?
+      data = { lang: params[:language], term: params[:text], context: context }
 
-      if !params[:postid].nil?
-        postid = params[:postid]
-      else
-        postid = ""
+      @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+      @babelfy_requested = false
+      
+      if @dictionary.empty?
+        request_terms
+        @babelfy_requested = true
+        @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       end
+        
+      render_success 'term', @dictionary
+    end    
+  end
 
-      uri = URI("https://babelfy.io/v1/disambiguate?")
+  private
 
-      #segments have three attributes: text, language and offset
+  def request_terms
+    text = params[:text].to_s
+    codesource = params[:language].to_s
 
-      params = {
-        :text => text,
-        :lang  => codesource,
-        :key  => 'KEY'
-      }
+    uri = URI("https://babelfy.io/v1/disambiguate?")
 
-      uri.query = URI.encode_www_form(params)
+    #segments have three attributes: text, language and offset
 
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+    params = {
+      :text => text,
+      :lang  => codesource,
+      :key  => 'KEY'
+    }
 
-      Retriable.retriable do  
-        response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    uri.query = URI.encode_www_form(params)
 
-        if response.is_a?(Net::HTTPSuccess)
-          json = JSON.parse(response.body)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-          json.each do |annotation|
+    Retriable.retriable do  
+      response = http.request(Net::HTTP::Get.new(uri.request_uri))
 
-            sourceterm = text[annotation["charFragment"]["start"]..annotation["charFragment"]["end"]+1]
-            sourcedefinition= ""
-            translations = []
-            LANGCODES.each do |lang|
-              by = GetSynset(annotation['babelSynsetID'], lang)
-              bs = GetMainSense(by,lang) 
-              definition  = term = ""
-              if bs.length > 0
-                term = bs["simpleLemma"]
-                g = GetMainGloss(by,lang) 
-                if g.length > 0
-                  definition = g["gloss"]
-                end
+      if response.is_a?(Net::HTTPSuccess)
+        json = JSON.parse(response.body)
+
+        json.each do |annotation|
+
+          sourceterm = text[annotation["charFragment"]["start"]..annotation["charFragment"]["end"]+1]
+          sourcedefinition= ""
+          translations = []
+          LANGCODES.each do |lang|
+            by = GetSynset(annotation['babelSynsetID'], lang)
+            bs = GetMainSense(by,lang) 
+            definition  = term = ""
+            if bs.length > 0
+              term = bs["simpleLemma"]
+              g = GetMainGloss(by,lang) 
+              if g.length > 0
+                definition = g["gloss"]
               end
-
-
-              # Source
-              if (lang.upcase  == codesource.upcase ) 
-                sourcedefinition = definition;    
-              elsif term.length > 0
-                translation = {}
-                translation["lang"] = lang.downcase 
-                translation["definition"] = definition
-                translation["term"] = term
-                if (term != "")
-                  translations << translation
-                end  
-              end
-
-            end
-            retES = false
-            if sourcedefinition.length > 0
-              payload = ""
-              payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations, postid)
-              retES = Mlg::ElasticSearch.add_glossary(payload)
             end
 
+
+            # Source
+            if (lang.upcase  == codesource.upcase ) 
+              sourcedefinition = definition;    
+            elsif term.length > 0
+              translation = {}
+              translation["lang"] = lang.downcase 
+              translation["definition"] = definition
+              translation["term"] = term
+              if (term != "")
+                translations << translation
+              end  
+            end
 
           end
+          retES = false
+          if sourcedefinition.length > 0
+            payload = ""
+            payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations)
+            retES = Mlg::ElasticSearch.add_glossary(payload)
+          end
         end
-        render_success 'success', true
       end
     end
   end
-
 
   def GetSynset(id, lang)
     uri = URI("https://babelnet.io/v2/getSynset?")
@@ -142,12 +152,8 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     end
   end
 
-  def generatePayload(codesource, sourceterm, sourcedefinition, translations, postid)
-    if postid.length > 0
-      contextStr =  '{"post": "'+postid+'","data_source": "dictionary"}'
-    else
-      contextStr =  '{"data_source": "dictionary"}'
-    end
+  def generatePayload(codesource, sourceterm, sourcedefinition, translations)
+    contextStr =  '{"data_source": "dictionary"}'
     strTranslations = translations.to_s.gsub("=>",":")
     strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr+'}'
     return strJson

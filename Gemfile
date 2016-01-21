@@ -60,7 +60,7 @@ gem 'thin'
 gem 'protected_attributes'
 gem 'swagger-docs'
 gem 'responders'
-gem 'rubypython'
+gem 'rubypython', '0.6.2'
 gem 'unicorn'
 gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
 

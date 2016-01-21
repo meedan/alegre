@@ -27,22 +27,20 @@ module Mlg
   def self.get_glossary(str) 
     Elasticsearch::Client.new url: ES_SERVER
     client = Elasticsearch::Client.new log: true
+    glossary = []
+    data_hash = JSON.parse(str)
+    query = self.buildQuery(data_hash)
 
     begin
-      data_hash = JSON.parse(str)
-      query = self.buildQuery (data_hash)
       ret = client.search index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, body: query
-
-      glossary = Array.new
-
       for doc in ret['hits']['hits']
-        glossary << doc.to_s
+        glossary << doc
       end
-
-      return glossary
     rescue Exception => e
-      return false
-    end  
+      puts 'Exception in get_glossary: ' + e.message
+    end
+
+    return glossary
   end
 
   def self.add_glossary(jsonStr)
@@ -60,8 +58,6 @@ module Mlg
                  type: GLOSSARY_TYPE,
                  id: _id,
                  body: str
-                
-
         
           client.indices.refresh index: GLOSSARY_INDEX
 
