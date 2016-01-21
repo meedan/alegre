@@ -250,7 +250,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   responders
   retriable (~> 2.1)
-  rubypython (= 0.6.2)
+  rubypython
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   simplecov
