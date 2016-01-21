@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       get 'languages/language', to: 'languages#language'
       get 'glossary/terms', to: 'glossary#terms'
       post 'glossary/term', to: 'glossary#term'
-      post 'glossary/delete', to: 'glossary#delete'
+      delete 'glossary/delete', to: 'glossary#delete'
       get 'dictionary/terms', to: 'dictionary#terms'
     end
   end

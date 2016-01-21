@@ -37,7 +37,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     end
   end
 
-  def delete #POST
+  def delete #DELETE
     if params[:id].blank?
       render_parameters_missing
     else

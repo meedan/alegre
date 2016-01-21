@@ -60,7 +60,7 @@ class GlossaryControllerTest < ActionController::TestCase
     Mlg::ElasticSearch.add_glossary json
     get :terms, data: '{"lang": "en", "term": "test3", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]
-    post :delete, id: data_hash["_id"]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -69,7 +69,7 @@ class GlossaryControllerTest < ActionController::TestCase
     Mlg::ElasticSearch.add_glossary '{"lang": "ar", "definition": "test definition","term": "حكمة","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx", "page_id": "xxxx", "data_source": "dictionary","time-zone": "PDT / MST"} }'
     get :terms, data: '{"lang": "ar", "term":  "حكمة", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]
-    post :delete, id: data_hash["_id"]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -80,7 +80,7 @@ class GlossaryControllerTest < ActionController::TestCase
     sleep 1
     get :terms, data: '{"lang": "pt", "term":  "teste", "context":{"tags":["T1","T2"], "source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]
-    post :delete, id: data_hash["_id"]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -106,7 +106,7 @@ class GlossaryControllerTest < ActionController::TestCase
 
     get :terms, data: '{"lang": "pt", "term":  "teste"}'
     data_hash = assigns(:glossary)[0]
-    post :delete, id: data_hash["_id"]
+    delete :delete, id: data_hash["_id"]
 
   end
 
@@ -149,19 +149,19 @@ class GlossaryControllerTest < ActionController::TestCase
 
   test "delete - should return error if invalid id" do
     authenticate_with_token
-    post :delete, id:'00000000'
+    delete :delete, id:'00000000'
     assert_response 400
   end
 
   test "delete - should return error if data is empty" do
     authenticate_with_token
-    post :delete, data:''
+    delete :delete, data:''
     assert_response 400
   end
 
   test "delete - should return error if data was not provided" do
     authenticate_with_token
-    post :delete
+    delete :delete
     assert_response 400
   end
 
