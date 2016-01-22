@@ -16,13 +16,11 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     if params[:language].blank? or params[:text].blank?
       render_parameters_missing
     elsif params[:language].length != 2
-      render_error('invalid value', 'INVALID_VALUE', 400)
+      render_error('Language must be in 2-letters format', 'INVALID_VALUE', 400)
     else
       Elasticsearch::Client.new url: ES_SERVER
       client = Elasticsearch::Client.new log: true
-      context = { 'data_source' => 'dictionary' }
-      context[:postid] = params[:postid] unless params[:postid].blank?
-      data = { lang: params[:language], term: params[:text], context: context }
+      data = { lang: params[:language], term: params[:text], context: { 'data_source' => 'dictionary' } }
 
       @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       @babelfy_requested = false

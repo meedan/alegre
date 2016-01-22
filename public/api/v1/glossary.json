@@ -15,24 +15,41 @@
               "paramType": "query",
               "name": "data",
               "type": "string",
-              "description": "{\"post\":\"test the app\",\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"}}}",
+              "description": "JSON string that represents the input text",
               "required": true
             }
           ],
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "{ \"type\": \"term\", \"data\": [{ \"_score\" : \"6.837847\", \"_id\" : \"312826213161669685473612972876928820074\", \"_source:\", \"lang\" : \"en\", \"definition\" : \"test definition\", \"term\" : \"test\", \"translations:[\"lang\" : \"pt\", \"definition\" : \"definição de teste\", \"term\" : \"teste\"], \"context: {\"source:\"{\"url\" : \"testSite.url\", \"name\" : \"test site\"}, \"time-zone\" : \"PDT / MST\", \"tags:[\"greetings\", \"hello\"], \"post\" : \"xxxx\", \"page_id\" : \"test\", \"data_source\" : \"dictionary\"}, \"_index\" : \"glossary_mlg , \"_type\" : \"glossary\"}]}"
+              "responseModel": {
+                "query": {
+                  "data": "{\"lang\":\"en\",\"term\":\"This is just a test\",\"context\":{\"page_id\":\"foo\"}}"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Terms from the glossary for the given input"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Parameters missing (data was not provided)"
+              "responseModel": {
+                "query": {
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Missing parameters"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "data": "{\"lang\":\"en\",\"term\":\"This is just a test\",\"context\":{\"page_id\":\"foo\"}}"
+                }
+              },
               "message": "Access denied"
             }
           ],
@@ -45,31 +62,48 @@
       "path": "api/glossary/term",
       "operations": [
         {
-          "summary": "Add term to glossary",
-          "notes": "Use this method in order to add a new term to glossary",
+          "summary": "Add term to the glossary",
+          "notes": "Use this method in order to add a new term to the glossary",
           "parameters": [
             {
               "paramType": "query",
               "name": "data",
               "type": "string",
-              "description": "{\"term\": \"test\", \"lang\": \"en\", \"definition\": \"test definition\",\"translations\": [ {\"lang\": \"pt\",\"definition\": \"definição de teste\",\"term\": \"teste\"}],\"context\": {\"source\": {\"url\": \"testSite.url\",\"name\": \"test site\"},\"page_id\":\"test\", \"post\": \"xxxx\",\"data_source\": \"dictionary\",\"time-zone\": \"PDT / MST\"}}",
+              "description": "JSON string that represents the term",
               "required": true
             }
           ],
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "Success"
+              "responseModel": {
+                "query": {
+                  "data": "{\"term\":\"Test\",\"lang\":\"en\",\"definition\":\"An experiment\",\"translations\":[{\"lang\":\"pt\",\"definition\":\"Um experimento\",\"term\":\"Teste\"},{\"lang\":\"es\",\"definition\":\"Un experimento\",\"term\":\"Teste\"}],\"context\":{\"page_id\":\"foo\",\"data_source\":\"glossary\"}}"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Term was added successfully"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Error"
+              "responseModel": {
+                "query": {
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Missing parameters"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "data": "{\"term\":\"Test\",\"lang\":\"en\",\"definition\":\"An experiment\",\"translations\":[{\"lang\":\"pt\",\"definition\":\"Um experimento\",\"term\":\"Teste\"},{\"lang\":\"es\",\"definition\":\"Un experimento\",\"term\":\"Teste\"}],\"context\":{\"page_id\":\"foo\",\"data_source\":\"glossary\"}}"
+                }
+              },
               "message": "Access denied"
             }
           ],
@@ -82,35 +116,52 @@
       "path": "api/glossary/delete",
       "operations": [
         {
-          "summary": "Delete term from glossary",
-          "notes": "Use this method in order to delete a term from glossary",
+          "summary": "Delete term from the glossary",
+          "notes": "Use this method in order to delete a term from the glossary",
           "parameters": [
             {
               "paramType": "query",
               "name": "id",
               "type": "string",
-              "description": "1234567898",
+              "description": "The term ID as assigned by ElasticSearch",
               "required": true
             }
           ],
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "Success"
+              "responseModel": {
+                "query": {
+                  "id": "2c94a1c8dc37c8c90338739f3c779c28"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Terms from the glossary for the given input"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Error"
+              "responseModel": {
+                "query": {
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Missing parameters"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "id": "2c94a1c8dc37c8c90338739f3c779c28"
+                }
+              },
               "message": "Access denied"
             }
           ],
-          "method": "post",
+          "method": "delete",
           "nickname": "Api::V1::Glossary#delete"
         }
       ]

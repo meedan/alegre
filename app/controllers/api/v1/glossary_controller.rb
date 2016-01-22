@@ -10,7 +10,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
   ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
   LANG_WITH_ANALYZER = CONFIG['lang_with_analyzer']  #languages with stem and stop analyzers in elasticsearch index
 
-  def term #POST
+  def term # POST
     if params[:data].blank?
       render_parameters_missing
     else
@@ -24,7 +24,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     end
   end
 
-  def terms #GET
+  def terms # GET
     if params[:data].blank?
       render_parameters_missing
     else
@@ -37,7 +37,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     end
   end
 
-  def delete #DELETE
+  def delete # DELETE
     if params[:id].blank?
       render_parameters_missing
     else

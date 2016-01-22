@@ -165,13 +165,38 @@ class GlossaryControllerTest < ActionController::TestCase
     assert_response 400
   end
 
-  #test "should return error if something strange happens in delete" do
-  #  this.any_instance.expects(:delete).raises(RuntimeError)
-  #  authenticate_with_token
-  #  post :delete
-  #  assert_response 400
-  #end
- 
+  test "should add, get and delete term (sequence)" do
+    authenticate_with_token
+
+    # The term
+    term = {
+      term: 'Test',
+      lang: 'en', 
+      definition: 'An experiment',
+      translations: [
+        { lang: 'pt', definition: 'Um experimento', term: 'Teste' },
+        { lang: 'es', definition: 'Un experimento', term: 'Teste' }
+      ],
+      context: { page_id: 'foo', 'data_source' => 'glossary' }
+    }.to_json
+
+    # Add
+    post :term, data: term
+    assert_response :success
+
+    # Get
+    get :terms, data: { lang: 'en', term: 'This is just a test', context: { page_id: 'foo' } }.to_json
+    assert_equal ['Test'], JSON.parse(@response.body)['data'].collect{ |t| t['_source']['term'].strip }.sort
+    id = JSON.parse(@response.body)['data'][0]['_id']
+    
+    # Delete
+    delete :delete, id: id
+    assert_response :success
+
+    # Get
+    get :terms, data: { lang: 'en', term: 'This is just a test', context: { page_id: 'foo' } }.to_json
+    assert_equal [], JSON.parse(@response.body)['data']
+  end
 end
 
 
