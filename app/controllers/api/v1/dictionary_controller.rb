@@ -20,7 +20,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     else
       Elasticsearch::Client.new url: ES_SERVER
       client = Elasticsearch::Client.new log: true
-      data = { lang: params[:language], term: params[:text], context: { 'data_source' => 'dictionary' } }
+      data = { lang: params[:language], term: params[:text], context: { source_id: params[:source_id].to_s } }
 
       @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       @babelfy_requested = false
@@ -30,7 +30,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
         @babelfy_requested = true
         @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       end
-        
+
       render_success 'term', @dictionary
     end    
   end
@@ -151,9 +151,10 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
   end
 
   def generatePayload(codesource, sourceterm, sourcedefinition, translations)
-    contextStr =  '{"data_source": "dictionary"}'
+    contextStr =  { 'data_source' => 'dictionary' }
+    contextStr['source_id'] = params[:source_id] unless params[:source_id].blank?
     strTranslations = translations.to_s.gsub("=>",":")
-    strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr+'}'
+    strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr.to_json+'}'
     return strJson
   end
 end
