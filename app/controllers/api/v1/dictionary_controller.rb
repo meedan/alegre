@@ -48,7 +48,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     params = {
       :text => text,
       :lang  => codesource,
-      :key  => 'KEY'
+      :key  => KEY
     }
 
     uri.query = URI.encode_www_form(params)
@@ -125,8 +125,6 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
       if response.is_a?(Net::HTTPSuccess)
         json = JSON.parse(response.body)
-        #p json
-
       end
     end
     return json
@@ -135,6 +133,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
   #return the first sense in the language as main
   def GetMainSense(by,lang) 
+    by['senses'] ||= []
     by['senses'].each do |entry|
       if entry['language'] == lang
         return entry
