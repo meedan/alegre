@@ -125,10 +125,10 @@ module Mlg
     end
 
     sQuery = dQuery.to_s
-    sQuery = sQuery.gsub! '", "', ','
-    sQuery = sQuery.gsub! '["{', '[{'
-    sQuery = sQuery.gsub! '}"]', '}]'
-    sQuery = sQuery.gsub! "\\",""
+    sQuery = sQuery.gsub '", "', ','
+    sQuery = sQuery.gsub '["{', '[{'
+    sQuery = sQuery.gsub '}"]', '}]'
+    sQuery = sQuery.gsub "\\",""
 
     if (dQuery.length  > 0)
       dc = '{"query": { "bool": { "must": '+ sQuery +'}}}'
