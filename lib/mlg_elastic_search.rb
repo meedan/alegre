@@ -182,8 +182,7 @@ module Mlg
 
     return if es_server === ':'
 
-    Elasticsearch::Client.new url: es_server
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: es_server
     
     if client.indices.exists? index: index
       client.indices.delete index: index
