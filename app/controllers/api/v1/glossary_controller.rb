@@ -28,8 +28,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     if params[:data].blank?
       render_parameters_missing
     else
-      Elasticsearch::Client.new url: ES_SERVER
-      client = Elasticsearch::Client.new log: true
+      client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
       @glossary = Mlg::ElasticSearch.get_glossary(params[:data].to_s)
       

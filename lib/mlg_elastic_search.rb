@@ -12,8 +12,7 @@ module Mlg
    class ElasticSearch
 
   def self.delete_glossary (_id) #POST
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
     if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
       client.delete index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
@@ -25,8 +24,7 @@ module Mlg
   end
 
   def self.get_glossary(str) 
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
     glossary = []
     data_hash = JSON.parse(str)
     query = self.buildQuery(data_hash)
@@ -44,8 +42,7 @@ module Mlg
   end
 
   def self.add_glossary(jsonStr)
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
     begin
       data_hash = JSON.parse(jsonStr)
       if self.validationInsert(data_hash)

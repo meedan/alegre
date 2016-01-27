@@ -18,8 +18,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     elsif params[:language].length != 2
       render_error('Language must be in 2-letters format', 'INVALID_VALUE', 400)
     else
-      Elasticsearch::Client.new url: ES_SERVER
-      client = Elasticsearch::Client.new log: true
+      client = Elasticsearch::Client.new log: true, url: ES_SERVER
       data = { lang: params[:language], term: params[:text], context: { source_id: params[:source_id].to_s } }
 
       @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
