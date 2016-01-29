@@ -1249,7 +1249,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       }
       url = this.options.url;
       if (url.indexOf("http") !== 0) {
-        url = this.buildUrl(window.location.href.toString(), url);
+        url = window.location.origin + '/' + url;
       }
       this.options.url = url;
       this.headerView.update(url);
