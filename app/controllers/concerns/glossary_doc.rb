@@ -2,39 +2,54 @@
 # :nocov:
 module GlossaryDoc
   extend ActiveSupport::Concern
+
+  TERM = {
+    term: 'Test',
+    lang: 'en', 
+    definition: 'An experiment',
+    translations: [
+      { lang: 'pt', definition: 'Um experimento', term: 'Teste' },
+      { lang: 'es', definition: 'Un experimento', term: 'Teste' }
+    ],
+    context: { page_id: 'foo', 'data_source' => 'glossary' }
+  }.to_json
+
+  TERM_ID = '2c94a1c8dc37c8c90338739f3c779c28'
+
+  TERM_QUERY = { lang: 'en', term: 'This is just a test', context: { page_id: 'foo' } }.to_json
  
   included do
     swagger_controller :glossary, 'Glossary'
- #### Get terms from glossary
+
+    swagger_api :term do
+      summary 'Add term to the glossary'
+      notes 'Use this method in order to add a new term to the glossary'
+      param :query, :data, :string, :required, 'JSON string that represents the term'
+      authed = { 'Authorization' => 'Token token="test"' }
+      response :ok, 'Term was added successfully', { query: { data: TERM }, headers: authed }
+      response 400, 'Missing parameters', { query: { }, headers: authed }
+      response 401, 'Access denied', { query: { data: TERM } }
+    end
+    
     swagger_api :terms do
       summary 'Get terms from a post'
       notes 'Use this method in order to get terms from glossary'
-      param :query, :data, :string, :required, '{"post":"test the app","context": {"source": {"url": "testSite.url","name": "test site"}}}'
-      response :ok, '{ "type": "term", "data": [{ "_score" : "6.837847", "_id" : "312826213161669685473612972876928820074", "_source:", "lang" : "en", "definition" : "test definition", "term" : "test", "translations:["lang" : "pt", "definition" : "definição de teste", "term" : "teste"], "context: {"source:"{"url" : "testSite.url", "name" : "test site"}, "time-zone" : "PDT / MST", "tags:["greetings", "hello"], "post" : "xxxx", "page_id" : "test", "data_source" : "dictionary"}, "_index" : "glossary_mlg , "_type" : "glossary"}]}'
-      response 400, 'Parameters missing (data was not provided)'
-      response 401, 'Access denied'
+      param :query, :data, :string, :required, 'JSON string that represents the input text'
+      authed = { 'Authorization' => 'Token token="test"' }
+      response :ok, 'Terms from the glossary for the given input', { query: { data: TERM_QUERY }, headers: authed }
+      response 400, 'Missing parameters', { query: { }, headers: authed }
+      response 401, 'Access denied', { query: { data: TERM_QUERY } }
     end
 
-    #### Add term to glossary
-    swagger_api :term do
-      summary 'Add term to glossary'
-      notes 'Use this method in order to add a new term to glossary'
-      param :query, :data, :string, :required, '{"term": "test", "lang": "en", "definition": "test definition","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": {"source": {"url": "testSite.url","name": "test site"},"page_id":"test", "post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"}}'
-      response :ok, 'Success'
-      response 400, 'Error'
-      response 401, 'Access denied'
-    end
-
-    #### Delete term to glossary
     swagger_api :delete do
-      summary 'Delete term from glossary'
-      notes 'Use this method in order to delete a term from glossary'
-      param :query, :id, :string, :required, '1234567898'
-      response :ok, 'Success'
-      response 400, 'Error'
-      response 401, 'Access denied'
+      summary 'Delete term from the glossary'
+      notes 'Use this method in order to delete a term from the glossary'
+      param :query, :id, :string, :required, 'The term ID as assigned by ElasticSearch'
+      authed = { 'Authorization' => 'Token token="test"' }
+      response :ok, 'Terms from the glossary for the given input', { query: { id: TERM_ID }, headers: authed }
+      response 400, 'Missing parameters', { query: { }, headers: authed }
+      response 401, 'Access denied', { query: { id: TERM_ID } }
     end
-
   end
 end
 # :nocov:

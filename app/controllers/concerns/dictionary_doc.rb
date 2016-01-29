@@ -6,17 +6,17 @@ module DictionaryDoc
   included do
     swagger_controller :dictionary, 'Dictionary'
 
- #### Insert term in Dictionary
-    swagger_api :execute do
-      summary 'Search terms in babelfy and insert it in dictionary'
-      notes 'Use this method in order to search terms in babelfy and insert it in dictionary'
-      param :query, :language, :string, :required, 'Language'
+    swagger_api :terms do
+      summary 'Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language'
+      notes 'Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language'
       param :query, :text, :string, :required, 'Text to be searched'
-      param :query, :postid, :string, :optional, 'Post id'
+      param :query, :language, :string, :required, 'Source language of the text'
+      param :query, :source_id, :string, :optional, 'An identifier of the input text (e.g., a post ID on Bridge)'
       authed = { 'Authorization' => 'Token token="test"' }
-      response :ok, 'Success'
-      response 400, 'Error'
-      response 401, 'Access denied'
+      response :ok, 'Terms from the dictionary', { query: { text: 'The book is on the table', language: 'en', source_id: 'x' }, headers: authed }
+      response 400, 'Missing parameters', { query: nil, headers: authed }
+      response 400, 'Invalid language format', { query: { text: 'Test', language: 'en_US', source_id: 'x' }, headers: authed }
+      response 401, 'Access denied', { query: { text: 'Test', language: 'en', source_id: 'x' } }
     end
 
   end

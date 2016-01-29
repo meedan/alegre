@@ -5,6 +5,7 @@ STOPWORDS_PATH = CONFIG['dysl'] + '/dysl/corpora/stopwords'
 
 RubyPython.stop
 RubyPython.start
+RubyPython.import 'mafan'
 s = RubyPython.import 'sys'
 s.path.insert(0, CONFIG['dysl']).rubify
 dysl = RubyPython.import 'dysl.langid'

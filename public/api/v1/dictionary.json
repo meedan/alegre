@@ -5,19 +5,12 @@
   "resourcePath": "dictionary",
   "apis": [
     {
-      "path": "api/dictionary/execute",
+      "path": "api/dictionary/terms",
       "operations": [
         {
-          "summary": "Search terms in babelfy and insert it in dictionary",
-          "notes": "Use this method in order to search terms in babelfy and insert it in dictionary",
+          "summary": "Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language",
+          "notes": "Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language",
           "parameters": [
-            {
-              "paramType": "query",
-              "name": "language",
-              "type": "string",
-              "description": "Language",
-              "required": true
-            },
             {
               "paramType": "query",
               "name": "text",
@@ -27,31 +20,72 @@
             },
             {
               "paramType": "query",
-              "name": "postid",
+              "name": "language",
               "type": "string",
-              "description": "Post id",
+              "description": "Source language of the text",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "source_id",
+              "type": "string",
+              "description": "An identifier of the input text (e.g., a post ID on Bridge)",
               "required": false
             }
           ],
           "responseMessages": [
             {
               "code": 200,
-              "responseModel": null,
-              "message": "Success"
+              "responseModel": {
+                "query": {
+                  "text": "The book is on the table",
+                  "lang": "en",
+                  "sourceId": "x"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Terms from dictionary"
             },
             {
               "code": 400,
-              "responseModel": null,
-              "message": "Error"
+              "responseModel": {
+                "query": null,
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Missing parameters"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": {
+                  "text": "Test",
+                  "lang": "en_US",
+                  "sourceId": "x"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Invalid language format"
             },
             {
               "code": 401,
-              "responseModel": null,
+              "responseModel": {
+                "query": {
+                  "text": "Test",
+                  "lang": "en",
+                  "sourceId": "x"
+                }
+              },
               "message": "Access denied"
             }
           ],
-          "method": "post",
-          "nickname": "Api::V1::Dictionary#execute"
+          "method": "get",
+          "nickname": "Api::V1::Dictionary#terms"
         }
       ]
     }

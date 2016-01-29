@@ -12,90 +12,97 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
   include DictionaryDoc
 
-  def execute() #POST
-
+  def terms
     if params[:language].blank? or params[:text].blank?
       render_parameters_missing
     elsif params[:language].length != 2
-      render_error('invalid value', 'INVALID_VALUE', status = 400)
+      render_error('Language must be in 2-letters format', 'INVALID_VALUE', 400)
     else
-      text = params[:text].to_s
-      codesource = params[:language].to_s
+      client = Elasticsearch::Client.new log: true, url: ES_SERVER
+      data = { lang: params[:language], term: params[:text], context: { source_id: params[:source_id].to_s } }
 
-      if !params[:postid].nil?
-        postid = params[:postid]
-      else
-        postid = ""
+      @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+      @babelfy_requested = false
+      
+      if @dictionary.empty?
+        request_terms
+        @babelfy_requested = true
+        @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       end
 
-      uri = URI("https://babelfy.io/v1/disambiguate?")
+      render_success 'term', @dictionary
+    end    
+  end
 
-      #segments have three attributes: text, language and offset
+  private
 
-      params = {
-        :text => text,
-        :lang  => codesource,
-        :key  => 'KEY'
-      }
+  def request_terms
+    text = params[:text].to_s
+    codesource = params[:language].to_s
 
-      uri.query = URI.encode_www_form(params)
+    uri = URI("https://babelfy.io/v1/disambiguate?")
 
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+    #segments have three attributes: text, language and offset
 
-      Retriable.retriable do  
-        response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    params = {
+      :text => text,
+      :lang  => codesource,
+      :key  => KEY
+    }
 
-        if response.is_a?(Net::HTTPSuccess)
-          json = JSON.parse(response.body)
+    uri.query = URI.encode_www_form(params)
 
-          json.each do |annotation|
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-            sourceterm = text[annotation["charFragment"]["start"]..annotation["charFragment"]["end"]+1]
-            sourcedefinition= ""
-            translations = []
-            LANGCODES.each do |lang|
-              by = GetSynset(annotation['babelSynsetID'], lang)
-              bs = GetMainSense(by,lang) 
-              definition  = term = ""
-              if bs.length > 0
-                term = bs["simpleLemma"]
-                g = GetMainGloss(by,lang) 
-                if g.length > 0
-                  definition = g["gloss"]
-                end
+    Retriable.retriable do  
+      response = http.request(Net::HTTP::Get.new(uri.request_uri))
+
+      if response.is_a?(Net::HTTPSuccess)
+        json = JSON.parse(response.body)
+
+        json.each do |annotation|
+
+          sourceterm = text[annotation["charFragment"]["start"]..annotation["charFragment"]["end"]+1]
+          sourcedefinition= ""
+          translations = []
+          LANGCODES.each do |lang|
+            by = GetSynset(annotation['babelSynsetID'], lang)
+            bs = GetMainSense(by,lang) 
+            definition  = term = ""
+            if bs.length > 0
+              term = bs["simpleLemma"]
+              g = GetMainGloss(by,lang) 
+              if g.length > 0
+                definition = g["gloss"]
               end
-
-
-              # Source
-              if (lang.upcase  == codesource.upcase ) 
-                sourcedefinition = definition;    
-              elsif term.length > 0
-                translation = {}
-                translation["lang"] = lang.downcase 
-                translation["definition"] = definition
-                translation["term"] = term
-                if (term != "")
-                  translations << translation
-                end  
-              end
-
-            end
-            retES = false
-            if sourcedefinition.length > 0
-              payload = ""
-              payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations, postid)
-              retES = Mlg::ElasticSearch.add_glossary(payload)
             end
 
+
+            # Source
+            if (lang.upcase  == codesource.upcase ) 
+              sourcedefinition = definition;    
+            elsif term.length > 0
+              translation = {}
+              translation["lang"] = lang.downcase 
+              translation["definition"] = definition
+              translation["term"] = term
+              if (term != "")
+                translations << translation
+              end  
+            end
 
           end
+          retES = false
+          if sourcedefinition.length > 0
+            payload = ""
+            payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations)
+            retES = Mlg::ElasticSearch.add_glossary(payload)
+          end
         end
-        render_success 'success', true
       end
     end
   end
-
 
   def GetSynset(id, lang)
     uri = URI("https://babelnet.io/v2/getSynset?")
@@ -117,8 +124,6 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
       if response.is_a?(Net::HTTPSuccess)
         json = JSON.parse(response.body)
-        #p json
-
       end
     end
     return json
@@ -127,6 +132,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
   #return the first sense in the language as main
   def GetMainSense(by,lang) 
+    by['senses'] ||= []
     by['senses'].each do |entry|
       if entry['language'] == lang
         return entry
@@ -142,14 +148,11 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     end
   end
 
-  def generatePayload(codesource, sourceterm, sourcedefinition, translations, postid)
-    if postid.length > 0
-      contextStr =  '{"post": "'+postid+'","data_source": "dictionary"}'
-    else
-      contextStr =  '{"data_source": "dictionary"}'
-    end
+  def generatePayload(codesource, sourceterm, sourcedefinition, translations)
+    contextStr =  { 'data_source' => 'dictionary' }
+    contextStr['source_id'] = params[:source_id] unless params[:source_id].blank?
     strTranslations = translations.to_s.gsub("=>",":")
-    strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr+'}'
+    strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr.to_json+'}'
     return strJson
   end
 end

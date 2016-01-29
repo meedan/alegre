@@ -16,23 +16,25 @@ module LanguagesDoc
       response 401, 'Access denied', { query: { text: 'Test' } }
     end
 
-    swagger_api :sample do
-      summary 'Add training sample to the model'
-      notes 'Use this method in order to add training sample to the model'
-      param :query, :language, :string, :required, 'Language'
-      param :query, :text, :string, :required, 'Text to be inserted'
-      response :ok, 'Returns ok'
-      response 400, 'Parameters missing (text was not provided)'
-      response 401, 'Access denied'
-    end
+    # Not used right now
+    # swagger_api :sample do
+    #   summary 'Add training sample to the model'
+    #   notes 'Use this method in order to add training sample to the model'
+    #   param :query, :language, :string, :required, 'Language'
+    #   param :query, :text, :string, :required, 'Text to be inserted'
+    #   response :ok, 'Returns ok'
+    #   response 400, 'Parameters missing (text was not provided)'
+    #   response 401, 'Access denied'
+    # end
 
-    swagger_api :language do
-      summary 'List supported languages'
-      notes 'Use this method in order to list supported languages'
-      response :ok, 'Returns list'
-      response 400, 'Parameters missing (text was not provided)'
-      response 401, 'Access denied'
-    end
+    # Not used right now
+    # swagger_api :language do
+    #   summary 'List supported languages'
+    #   notes 'Use this method in order to list supported languages'
+    #   response :ok, 'Returns list'
+    #   response 400, 'Parameters missing (text was not provided)'
+    #   response 401, 'Access denied'
+    # end
 
   end
 end

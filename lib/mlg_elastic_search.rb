@@ -12,8 +12,7 @@ module Mlg
    class ElasticSearch
 
   def self.delete_glossary (_id) #POST
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
     if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
       client.delete index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
@@ -25,29 +24,25 @@ module Mlg
   end
 
   def self.get_glossary(str) 
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
+    glossary = []
+    data_hash = JSON.parse(str)
+    query = self.buildQuery(data_hash)
 
     begin
-      data_hash = JSON.parse(str)
-      query = self.buildQuery (data_hash)
       ret = client.search index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, body: query
-
-      glossary = Array.new
-
       for doc in ret['hits']['hits']
-        glossary << doc.to_s
+        glossary << doc
       end
-
-      return glossary
     rescue Exception => e
-      return false
-    end  
+      puts 'Exception in get_glossary: ' + e.message
+    end
+
+    return glossary
   end
 
   def self.add_glossary(jsonStr)
-    Elasticsearch::Client.new url: ES_SERVER
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
     begin
       data_hash = JSON.parse(jsonStr)
       if self.validationInsert(data_hash)
@@ -60,8 +55,6 @@ module Mlg
                  type: GLOSSARY_TYPE,
                  id: _id,
                  body: str
-                
-
         
           client.indices.refresh index: GLOSSARY_INDEX
 
@@ -104,7 +97,7 @@ module Mlg
 
     jsonCtx.each do |key, value|
       #2 levels {u'source': {u'url': u'testSite.url', u'name': u'test site'}, u'post': u'lala lala', u'data_source': u'dictionary'}
-      if (!value.nil?)
+      if (!value.nil? && !key.nil?)
         object = value
         if String === object
           if (key != "context") or !(value.class is Int)
@@ -129,10 +122,10 @@ module Mlg
     end
 
     sQuery = dQuery.to_s
-    sQuery = sQuery.gsub! '", "', ','
-    sQuery = sQuery.gsub! '["{', '[{'
-    sQuery = sQuery.gsub! '}"]', '}]'
-    sQuery = sQuery.gsub! "\\",""
+    sQuery = sQuery.gsub '", "', ','
+    sQuery = sQuery.gsub '["{', '[{'
+    sQuery = sQuery.gsub '}"]', '}]'
+    sQuery = sQuery.gsub "\\",""
 
     if (dQuery.length  > 0)
       dc = '{"query": { "bool": { "must": '+ sQuery +'}}}'
@@ -186,8 +179,7 @@ module Mlg
 
     return if es_server === ':'
 
-    Elasticsearch::Client.new url: es_server
-    client = Elasticsearch::Client.new log: true
+    client = Elasticsearch::Client.new log: true, url: es_server
     
     if client.indices.exists? index: index
       client.indices.delete index: index

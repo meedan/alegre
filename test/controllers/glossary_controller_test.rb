@@ -59,10 +59,8 @@ class GlossaryControllerTest < ActionController::TestCase
     json = '{"lang": "en", "definition": "test definition","term": "test3","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"tags":["tag1","tag2"],"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }'
     Mlg::ElasticSearch.add_glossary json
     get :terms, data: '{"lang": "en", "term": "test3", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
-    str = assigns(:glossary)[0]
-    str =  str.gsub! '=>', ':'
-    data_hash = JSON.parse(str)
-    post :delete, id: data_hash["_id"]
+    data_hash = assigns(:glossary)[0]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -70,10 +68,8 @@ class GlossaryControllerTest < ActionController::TestCase
     authenticate_with_token
     Mlg::ElasticSearch.add_glossary '{"lang": "ar", "definition": "test definition","term": "حكمة","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx", "page_id": "xxxx", "data_source": "dictionary","time-zone": "PDT / MST"} }'
     get :terms, data: '{"lang": "ar", "term":  "حكمة", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
-    str = assigns(:glossary)[0]
-    str =  str.gsub! '=>', ':'
-    data_hash = JSON.parse(str)
-    post :delete, id: data_hash["_id"]
+    data_hash = assigns(:glossary)[0]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -83,10 +79,8 @@ class GlossaryControllerTest < ActionController::TestCase
     Mlg::ElasticSearch.add_glossary '{"term": "teste", "lang": "pt", "definition": "teste definition","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": {"tags":["T1","T2"], "source": {"url": "testSite.url","name": "test site"},"page_id":"test", "post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"}}'
     sleep 1
     get :terms, data: '{"lang": "pt", "term":  "teste", "context":{"tags":["T1","T2"], "source":{"url":"testSite.url", "name":"test site"}}}'
-    str = assigns(:glossary)[0]
-    str =  str.gsub! '=>', ':'
-    data_hash = JSON.parse(str)	
-    post :delete, id: data_hash["_id"]
+    data_hash = assigns(:glossary)[0]
+    delete :delete, id: data_hash["_id"]
     assert_response 200
   end
 
@@ -111,10 +105,8 @@ class GlossaryControllerTest < ActionController::TestCase
     sleep 1
 
     get :terms, data: '{"lang": "pt", "term":  "teste"}'
-    str = assigns(:glossary)[0]
-    str =  str.gsub! '=>', ':'
-    data_hash = JSON.parse(str)
-    post :delete, id: data_hash["_id"]
+    data_hash = assigns(:glossary)[0]
+    delete :delete, id: data_hash["_id"]
 
   end
 
@@ -150,35 +142,61 @@ class GlossaryControllerTest < ActionController::TestCase
 
   test "terms - should return error if invalid json" do
     authenticate_with_token
-    get :terms, data:'{lang:en, term:empty}'
-    assert_response 400
+    assert_raises JSON::ParserError do
+      get :terms, data:'{lang:en, term:empty}'
+    end
   end
 
   test "delete - should return error if invalid id" do
     authenticate_with_token
-    post :delete, id:'00000000'
+    delete :delete, id:'00000000'
     assert_response 400
   end
 
   test "delete - should return error if data is empty" do
     authenticate_with_token
-    post :delete, data:''
+    delete :delete, data:''
     assert_response 400
   end
 
   test "delete - should return error if data was not provided" do
     authenticate_with_token
-    post :delete
+    delete :delete
     assert_response 400
   end
 
-  #test "should return error if something strange happens in delete" do
-  #  this.any_instance.expects(:delete).raises(RuntimeError)
-  #  authenticate_with_token
-  #  post :delete
-  #  assert_response 400
-  #end
- 
+  test "should add, get and delete term (sequence)" do
+    authenticate_with_token
+
+    # The term
+    term = {
+      term: 'Test',
+      lang: 'en', 
+      definition: 'An experiment',
+      translations: [
+        { lang: 'pt', definition: 'Um experimento', term: 'Teste' },
+        { lang: 'es', definition: 'Un experimento', term: 'Teste' }
+      ],
+      context: { page_id: 'foo', 'data_source' => 'glossary' }
+    }.to_json
+
+    # Add
+    post :term, data: term
+    assert_response :success
+
+    # Get
+    get :terms, data: { lang: 'en', term: 'This is just a test', context: { page_id: 'foo' } }.to_json
+    assert_equal ['Test'], JSON.parse(@response.body)['data'].collect{ |t| t['_source']['term'].strip }.sort
+    id = JSON.parse(@response.body)['data'][0]['_id']
+    
+    # Delete
+    delete :delete, id: id
+    assert_response :success
+
+    # Get
+    get :terms, data: { lang: 'en', term: 'This is just a test', context: { page_id: 'foo' } }.to_json
+    assert_equal [], JSON.parse(@response.body)['data']
+  end
 end
 
 
