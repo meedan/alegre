@@ -101,6 +101,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.3)
     kgio (2.10.0)
+    literate_randomizer (0.4.0)
     logstash-event (1.2.02)
     logstasher (0.6.5)
       logstash-event (~> 1.2.0)
@@ -242,6 +243,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   json
+  literate_randomizer
   logstasher
   mocha
   mysql2 (~> 0.3.13)
