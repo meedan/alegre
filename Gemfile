@@ -43,14 +43,17 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # Generate random sentences for testing
+  gem 'literate_randomizer'
 end
 
 
 gem 'webmock'
 gem 'mocha'
-gem 'simplecov'
+gem 'simplecov', '~> 0.10.0'
 gem 'railroady'
-gem 'airbrake'
+gem 'airbrake', '4.3.3'
 gem 'codeclimate-test-reporter'
 gem 'awesome_print'
 gem 'gem-licenses'
