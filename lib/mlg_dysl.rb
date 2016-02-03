@@ -17,8 +17,8 @@ module Mlg
         self.classify(text)
       rescue Exception => e
         Rails.logger.info "MlgDyslLib: An error of type #{e.class} happened, message is: #{e.message}"
-        # self.start
-        # self.classify(text)
+        self.start
+        self.classify(text)
       end
     end
 
@@ -33,7 +33,7 @@ module Mlg
     protected
 
     def classify(text)
-   	  @@dysl.classifyReturnAll(text, STOPWORDS_PATH).rubify
+      @@dysl.classifyReturnAll(text, STOPWORDS_PATH).rubify
     end
   end
 end
