@@ -9,25 +9,17 @@ class Api::V1::TmController < Api::V1::BaseApiController
     if params[:data].blank?
       render_parameters_missing
     else
-	str = params[:data].to_s
-	p str
-	render_success 'tuple', '@language'
+      str = params[:data].to_s
+      render_success 'tuple', '@language'
     end
   end
 
-
-
   def language
-	#@list =  DYSL.listLanguages().rubify
-	render_success 'language', '@list'
+    render_success 'language', '@list'
   end
-
 
   def source
-	#@list =  DYSL.listLanguages().rubify
-	render_success 'source', '@list'
+    render_success 'source', '@list'
   end
-
-
 
 end

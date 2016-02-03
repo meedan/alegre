@@ -82,7 +82,7 @@ module Mlg
     end
 
     if !jsonCtx.has_key?('lang')
-      lang = DYSL.classifyReturnAll(jsonCtx["term"],STOPWORDS_PATH).rubify
+      lang = Mlg::Dysl.new.try_to_classify(jsonCtx["term"])
       if lang.length > 0
         jsonCtx['lang'] =  lang[0][1]
       end

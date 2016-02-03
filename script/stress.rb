@@ -5,6 +5,8 @@ require 'literate_randomizer'
 
 while true do
   str = LiterateRandomizer.sentence
-  language = DYSL.classifyReturnAll(str, STOPWORDS_PATH).rubify
+  language = Mlg::Dysl.new.try_to_classify(str)
+  puts str
   puts language.inspect
+  puts '-------------------------------------------------------------------'
 end

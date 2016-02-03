@@ -10,11 +10,11 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
     if params[:text].blank?
       render_parameters_missing
     else
-	Retriable.retriable do
-	    	str = params[:text].to_s
-	    	@language =  DYSL.classifyReturnAll(str,STOPWORDS_PATH).rubify
-	    	render_success 'language', @language
-	end
+      str = params[:text].to_s
+      Retriable.retriable do
+        @language = Mlg::Dysl.new.try_to_classify(str)
+      end
+      render_success 'language', @language
     end
   end
 
@@ -22,20 +22,19 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
     if params[:text].blank? or params[:language].blank?
       render_parameters_missing
     else
-	Retriable.retriable do
-	    	str = params[:text].to_s
-	    	lang = params[:language].to_s
-	    	@ret = DYSL.add_sample(str, lang, MODEL_FILE).rubify
-	    	render_success 'success', @ret
-	end
+      str = params[:text].to_s
+      lang = params[:language].to_s
+      Retriable.retriable do
+        @ret = Mlg::Dysl.new.add_sample(str, lang)
+      end
+      render_success 'success', @ret
     end
   end
 
   def language
-	Retriable.retriable do
-	  	@list =  DYSL.listLanguages().rubify
-	  	render_success 'language', @list
-	end
+    Retriable.retriable do
+      @list = Mlg::Dysl.new.list_languages
+    end
+    render_success 'language', @list
   end
-
 end

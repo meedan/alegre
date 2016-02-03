@@ -51,7 +51,7 @@ end
 
 gem 'webmock'
 gem 'mocha'
-gem 'simplecov'
+gem 'simplecov', '~> 0.10.0'
 gem 'railroady'
 gem 'airbrake'
 gem 'codeclimate-test-reporter'
