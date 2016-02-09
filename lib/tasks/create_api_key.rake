@@ -8,8 +8,9 @@ namespace :lapis do
     end
 
     task create: :environment do
-      api_key = ApiKey.create!
-      puts "Created a new API key with access token #{api_key.access_token} and that expires at #{api_key.expire_at}"
+      app = ENV['application']
+      api_key = ApiKey.create! application: app
+      puts "Created a new API key for #{app} with access token #{api_key.access_token} and that expires at #{api_key.expire_at}"
     end
   end
 end

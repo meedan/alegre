@@ -14,7 +14,7 @@ module SampleData
     rand(max) + 1
   end
 
-  def create_api_key
-    ApiKey.create! 
+  def create_api_key(options = {})
+    ApiKey.create! options
   end
 end

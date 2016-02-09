@@ -4,7 +4,6 @@ require 'json'
 require 'mlg_elastic_search'
 require 'retriable'
 
-
 KEY = CONFIG['babelfy_key'] 
 LANGCODES = CONFIG['langcodes'] 
 
@@ -19,7 +18,9 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
       render_error('Language must be in 2-letters format', 'INVALID_VALUE', 400)
     else
       client = Elasticsearch::Client.new log: true, url: ES_SERVER
-      data = { lang: params[:language], term: params[:text], context: { source_id: params[:source_id].to_s } }
+      context = { source_id: params[:source_id].to_s }
+      context[:target_languages] = params[:target_languages] unless params[:target_languages].blank?
+      data = { lang: params[:language], term: params[:text], context: context }
 
       @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
       @babelfy_requested = false
@@ -39,6 +40,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
   def request_terms
     text = params[:text].to_s
     codesource = params[:language].to_s
+    codetargets = params[:target_languages].blank? ? LANGCODES : (params[:target_languages].upcase.split(',') | [codesource.upcase])
 
     uri = URI("https://babelfy.io/v1/disambiguate?")
 
@@ -66,7 +68,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
           sourceterm = text[annotation["charFragment"]["start"]..annotation["charFragment"]["end"]+1]
           sourcedefinition= ""
           translations = []
-          LANGCODES.each do |lang|
+          codetargets.each do |lang|
             by = GetSynset(annotation['babelSynsetID'], lang)
             bs = GetMainSense(by,lang) 
             definition  = term = ""
@@ -151,8 +153,10 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
   def generatePayload(codesource, sourceterm, sourcedefinition, translations)
     contextStr =  { 'data_source' => 'dictionary' }
     contextStr['source_id'] = params[:source_id] unless params[:source_id].blank?
+    contextStr['target_languages'] = params[:target_languages] unless params[:target_languages].blank?
     strTranslations = translations.to_s.gsub("=>",":")
     strJson = '{"term": "'+sourceterm+'", "lang": "'+codesource+'", "definition": "'+sourcedefinition+'","translations": '+strTranslations+',"context":'+contextStr.to_json+'}'
+    Rails.logger.info "Generated payload #{strJson}"
     return strJson
   end
 end

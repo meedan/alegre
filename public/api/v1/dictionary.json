@@ -31,7 +31,14 @@
               "type": "string",
               "description": "An identifier of the input text (e.g., a post ID on Bridge)",
               "required": false
-            }
+            },
+            {
+              "paramType": "query",
+              "name": "target_languages",
+              "type": "string",
+              "description": "List of comma-separated target languages in 2-letters code (defaults to all languages in config.yml)",
+              "required": false
+             }
           ],
           "responseMessages": [
             {

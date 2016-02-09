@@ -135,19 +135,7 @@ module Mlg
   end
 
   def self.generate_id_for_glossary_term(data_hash)
-    str = 'glossary'+":"+  data_hash[data_hash["lang"]]+":"+ data_hash["lang"]
-    if data_hash.has_key?("context")
-      if data_hash["context"].has_key?("source")
-        if data_hash["context"]["source"].has_key?("name")
-          str = str + ":"+  data_hash["context"]["source"]["name"]
-        end
-      end
-      if data_hash["context"].has_key?("page_id")
-        str = str + ":"+  data_hash["context"]["page_id"]
-      end
-    end
-    id = Digest::MD5.hexdigest(str)
-    return id
+    return Digest::MD5.hexdigest(data_hash.inspect)
   end
 
   def self.updateTermName (jsonDoc)

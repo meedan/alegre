@@ -23,4 +23,15 @@ class ApiKeyTest < ActiveSupport::TestCase
     assert_kind_of Integer, random_number
     assert_kind_of String, random_email
   end
+
+  test "should have application" do
+    ApiKey.stubs(:applications).returns([nil, 'test'])
+    k1 = create_api_key
+    assert_nil k1.application
+    k2 = create_api_key application: 'test'
+    assert_equal 'test', k2.application
+    assert_raises ActiveRecord::RecordInvalid do
+      create_api_key application: 'invalid'
+    end
+  end
 end
