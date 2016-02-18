@@ -100,14 +100,30 @@ class GlossaryControllerTest < ActionController::TestCase
     authenticate_with_token
     post :term, data: '{"lang": "pt", "term":"teste", "definition": "test definition","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }'
     sleep 1
-    post :term, data: '{"lang": "pt", "term":"teste", "definition": "test definition","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }'
-    assert_response 400
+    post :term, data: '{"lang": "pt", "term":"teste", "definition": "test definition replaced","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }', should_replace: "0"
+    assert_response 200
     sleep 1
 
     get :terms, data: '{"lang": "pt", "term":  "teste"}'
     data_hash = assigns(:glossary)[0]
     delete :delete, id: data_hash["_id"]
+    assert_equal 1, assigns(:glossary).size
+    assert_equal 'test definition', data_hash['_source']['definition']
+  end
 
+  test "should replace term" do
+    authenticate_with_token
+    post :term, data: '{"lang": "pt", "term":"teste", "definition": "test definition","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }'
+    sleep 1
+    post :term, data: '{"lang": "pt", "term":"teste", "definition": "test definition replaced","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }', should_replace: "1"
+    assert_response 200
+    sleep 1
+
+    get :terms, data: '{"lang": "pt", "term":  "teste"}'
+    data_hash = assigns(:glossary)[0]
+    delete :delete, id: data_hash["_id"]
+    assert_equal 1, assigns(:glossary).size
+    assert_equal 'test definition replaced', data_hash['_source']['definition']
   end
 
   test "term - should return error if data was not provided" do

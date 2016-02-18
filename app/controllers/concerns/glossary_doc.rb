@@ -25,6 +25,7 @@ module GlossaryDoc
       summary 'Add term to the glossary'
       notes 'Use this method in order to add a new term to the glossary'
       param :query, :data, :string, :required, 'JSON string that represents the term'
+      param :query, :should_replace, :integer, :optional, '0 or 1 telling whether an existing term should be replaced'
       authed = { 'Authorization' => 'Token token="test"' }
       response :ok, 'Term was added successfully', { query: { data: TERM }, headers: authed }
       response 400, 'Missing parameters', { query: { }, headers: authed }
