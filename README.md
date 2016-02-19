@@ -21,3 +21,6 @@ A REST API to Meedan's linguistic functionality.
 * Language identification
 * Glossary
 * Dictionary
+* Machine Translation
+
+Check details, documentation and experiment the API by going to `/api`.

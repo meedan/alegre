@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       post 'glossary/term', to: 'glossary#term'
       delete 'glossary/delete', to: 'glossary#delete'
       get 'dictionary/terms', to: 'dictionary#terms'
+      get 'mt', to: 'mt#index'
+      get 'mt/languages', to: 'mt#languages'
     end
   end
 end

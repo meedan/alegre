@@ -14,8 +14,13 @@
     {
       "path": "api/v1/dictionary.{format}",
       "description": "Dictionary"
+    },
+    {
+      "path": "api/v1/mt.{format}",
+      "description": "Machine Translation"
     }
   ],
+  "authorizations": null,
   "info": {
     "title": "",
     "description": ""
