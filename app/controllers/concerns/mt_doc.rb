@@ -12,7 +12,7 @@ module MtDoc
       param :query, :text, :string, :required, 'Original text'
       param :query, :from, :string, :required, 'Source language (two-letters code)'
       param :query, :to, :string, :required, 'Target languages (two-letters code)'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Machine translation', { query: { text: 'This is a test', from: 'en', to: 'pt' }, headers: authed }
       response 400, 'Some parameter is missing', { query: { text: 'This is a test', to: 'pt' }, headers: authed }
       response 400, 'Language not supported', { query: { text: 'This is a test', from: 'xy', to: 'pt' }, headers: authed }
@@ -22,7 +22,7 @@ module MtDoc
     swagger_api :languages do
       summary 'Get supported languages'
       notes 'Use this method in order to get a list of all languages supported for machine translation, in two-letters code'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Supported languages', { headers: authed }
       response 401, 'Access denied', {}
     end

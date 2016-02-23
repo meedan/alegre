@@ -13,6 +13,7 @@ development: &default
   langcodes: ['EN','PT','AR','ES','ID','HI','FA','TL','TR','ZH']
   bing_id:
   bing_secret:
+  authorization_header: 'X-Mlg-Token'
 
 test:
   <<: *default

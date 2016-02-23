@@ -26,7 +26,7 @@ module GlossaryDoc
       notes 'Use this method in order to add a new term to the glossary'
       param :query, :data, :string, :required, 'JSON string that represents the term'
       param :query, :should_replace, :integer, :optional, '0 or 1 telling whether an existing term should be replaced'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Term was added successfully', { query: { data: TERM }, headers: authed }
       response 400, 'Missing parameters', { query: { }, headers: authed }
       response 401, 'Access denied', { query: { data: TERM } }
@@ -36,7 +36,7 @@ module GlossaryDoc
       summary 'Get terms from a post'
       notes 'Use this method in order to get terms from glossary'
       param :query, :data, :string, :required, 'JSON string that represents the input text'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Terms from the glossary for the given input', { query: { data: TERM_QUERY }, headers: authed }
       response 400, 'Missing parameters', { query: { }, headers: authed }
       response 401, 'Access denied', { query: { data: TERM_QUERY } }
@@ -46,7 +46,7 @@ module GlossaryDoc
       summary 'Delete term from the glossary'
       notes 'Use this method in order to delete a term from the glossary'
       param :query, :id, :string, :required, 'The term ID as assigned by ElasticSearch'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Terms from the glossary for the given input', { query: { id: TERM_ID }, headers: authed }
       response 400, 'Missing parameters', { query: { }, headers: authed }
       response 401, 'Access denied', { query: { id: TERM_ID } }

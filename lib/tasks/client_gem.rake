@@ -60,6 +60,8 @@ namespace :lapis do
     docs.each do |doc|
      doc[:apis].each do |api|
 
+       api[:path].gsub!(/^\//, '')
+
        path = api[:path].gsub(/^api\//, '').gsub('/', '_')
 
        api[:operations].each do |op|
@@ -197,7 +199,7 @@ module #{gem_camel_name}
       end
 
       unless token.blank?
-        request['Authorization'] = 'Token token="' + token.to_s + '"'
+        request['#{CONFIG['authorization_header'] || 'X-Token'}'] = token.to_s
       end
 
       http = Net::HTTP.new(uri.hostname, uri.port)

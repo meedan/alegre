@@ -43,7 +43,10 @@ class ActiveSupport::TestCase
   end
 
   def authenticate_with_token(api_key = nil)
-    api_key ||= create_api_key
-    request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(api_key.access_token)
+    unless @request.nil?
+      header = CONFIG['authorization_header'] || 'X-Token'
+      api_key ||= create_api_key
+      @request.headers.merge!({ header => api_key.access_token })
+    end
   end
 end
