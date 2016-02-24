@@ -13,7 +13,7 @@ module DictionaryDoc
       param :query, :language, :string, :required, 'Source language of the text'
       param :query, :source_id, :string, :optional, 'An identifier of the input text (e.g., a post ID on Bridge)'
       param :query, :target_languages, :string, :optional, 'List of comma-separated target languages in 2-letters code (defaults to all languages in config.yml)'
-      authed = { 'Authorization' => 'Token token="test"' }
+      authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Terms from the dictionary', { query: { text: 'The book is on the table', language: 'en', source_id: 'x' }, headers: authed }
       response 400, 'Missing parameters', { query: nil, headers: authed }
       response 400, 'Invalid language format', { query: { text: 'Test', language: 'en_US', source_id: 'x' }, headers: authed }

@@ -1029,11 +1029,8 @@ table {
   float: left;
   margin: 0 10px 0 0;
 }
-#header form#api_selector .input input#input_apiKey {
-  width: 200px;
-}
 #header form#api_selector .input input#input_baseUrl {
-  width: 400px;
+  width: 200px;
 }
 #header form#api_selector .input a#explore {
   display: block;
@@ -1067,4 +1064,7 @@ table {
   min-height: 30px;
   text-align: center;
   padding-top: 10px;
+}
+#header form#api_selector .input input {
+  width: 130px;
 }

@@ -14,9 +14,10 @@ module Api
       private
 
       def authenticate_from_token!
-        authenticate_or_request_with_http_token do |token, options|
-          ApiKey.where(access_token: token).where('expire_at > ?', Time.now).exists?
-        end
+        header = CONFIG['authorization_header'] || 'X-Token'
+        token = request.headers[header]
+        key = ApiKey.where(access_token: token).where('expire_at > ?', Time.now).exists?
+        (render_unauthorized and return false) unless key
       end
 
       def verify_payload!

@@ -34,4 +34,8 @@ class ApiKeyTest < ActiveSupport::TestCase
       create_api_key application: 'invalid'
     end
   end
+
+  test "should not have applications" do
+    assert_equal [nil], ApiKey.applications
+  end
 end

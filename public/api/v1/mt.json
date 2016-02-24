@@ -1,0 +1,125 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "mt",
+  "apis": [
+    {
+      "path": "api/mt",
+      "operations": [
+        {
+          "summary": "Machine-translate some text",
+          "notes": "Use this method in order to get a machine translation for a text, given source and target languages",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Original text",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "from",
+              "type": "string",
+              "description": "Source language (two-letters code)",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "to",
+              "type": "string",
+              "description": "Target languages (two-letters code)",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": {
+                "query": {
+                  "text": "This is a test",
+                  "from": "en",
+                  "to": "pt"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Machine translation"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": {
+                  "text": "This is a test",
+                  "to": "pt"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Some parameter is missing"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": {
+                  "text": "This is a test",
+                  "from": "xy",
+                  "to": "pt"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Language not supported"
+            },
+            {
+              "code": 401,
+              "responseModel": {
+                "query": {
+                  "text": "This is a test",
+                  "from": "en",
+                  "to": "pt"
+                }
+              },
+              "message": "Access denied"
+            }
+          ],
+          "nickname": "Api::V1::Mt#index",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "path": "api/mt/languages",
+      "operations": [
+        {
+          "summary": "Get supported languages",
+          "notes": "Use this method in order to get a list of all languages supported for machine translation, in two-letters code",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": {
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Supported languages"
+            },
+            {
+              "code": 401,
+              "responseModel": {
+              },
+              "message": "Access denied"
+            }
+          ],
+          "nickname": "Api::V1::Mt#languages",
+          "method": "get"
+        }
+      ]
+    }
+  ],
+  "authorizations": null
+}

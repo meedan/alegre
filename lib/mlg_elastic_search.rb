@@ -11,7 +11,7 @@ LANG_WITH_ANALYZER = CONFIG['lang_with_analyzer']  #languages with stem and stop
 module Mlg
    class ElasticSearch
 
-  def self.delete_glossary (_id) #POST
+  def self.delete_glossary(_id)
     client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
     if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
@@ -41,14 +41,16 @@ module Mlg
     return glossary
   end
 
-  def self.add_glossary(jsonStr)
+  def self.add_glossary(jsonStr, should_replace = 0)
     client = Elasticsearch::Client.new log: true, url: ES_SERVER
     begin
       data_hash = JSON.parse(jsonStr)
       if self.validationInsert(data_hash)
         data_hash = self.updateTermName (data_hash)
         _id = self.generate_id_for_glossary_term(data_hash)
-        if !client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
+        exists = client.exists?(index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id)
+        replace = should_replace.to_i === 1
+        if !exists || replace
           str = data_hash.to_s.gsub("=>", ':')
 
           client.index index: GLOSSARY_INDEX,
@@ -57,11 +59,8 @@ module Mlg
                  body: str
         
           client.indices.refresh index: GLOSSARY_INDEX
-
-          return true
-        else
-          return false
         end
+        return true
       else
         return false
       end
@@ -134,8 +133,9 @@ module Mlg
     return dc
   end
 
-  def self.generate_id_for_glossary_term(data_hash)
-    return Digest::MD5.hexdigest(data_hash.inspect)
+  def self.generate_id_for_glossary_term(t)
+    id = [t['term'], t['lang'], t['translations'].collect{ |x| x['lang'] }, t['context']].inspect
+    return Digest::MD5.hexdigest(id)
   end
 
   def self.updateTermName (jsonDoc)

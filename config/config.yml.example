@@ -11,6 +11,9 @@ development: &default
   lang_with_analyzer: ['ar', 'hy', 'eu', 'pt', 'bg', 'ca', 'zh', 'cs', 'da', 'nl', 'en', 'fi', 'fr', 'gl', 'de', 'el', 'hi', 'hu', 'id', 'ga', 'it', 'lv', 'no', 'fa', 'pt', 'ro', 'ru', 'ckb', 'sp', 'sv', 'tr', 'th'] 
   babelfy_key: babelfysecretkey
   langcodes: ['EN','PT','AR','ES','ID','HI','FA','TL','TR','ZH']
+  bing_id:
+  bing_secret:
+  authorization_header: 'X-Mlg-Token'
 
 test:
   <<: *default

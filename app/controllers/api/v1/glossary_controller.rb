@@ -15,7 +15,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
       render_parameters_missing
     else
       str = params[:data].to_s
-      retES = Mlg::ElasticSearch.add_glossary(params[:data].to_s)
+      retES = Mlg::ElasticSearch.add_glossary(params[:data].to_s, params[:should_replace].to_i)
       if retES
         render_success 'success', true
       else

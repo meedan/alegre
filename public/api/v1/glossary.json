@@ -53,8 +53,8 @@
               "message": "Access denied"
             }
           ],
-          "method": "get",
-          "nickname": "Api::V1::Glossary#terms"
+          "nickname": "Api::V1::Glossary#terms",
+          "method": "get"
         }
       ]
     },
@@ -71,6 +71,13 @@
               "type": "string",
               "description": "JSON string that represents the term",
               "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "should_replace",
+              "type": "integer",
+              "description": "0 or 1 telling whether an existing term should be replaced",
+              "required": false
             }
           ],
           "responseMessages": [
@@ -107,8 +114,8 @@
               "message": "Access denied"
             }
           ],
-          "method": "post",
-          "nickname": "Api::V1::Glossary#term"
+          "nickname": "Api::V1::Glossary#term",
+          "method": "post"
         }
       ]
     },
@@ -161,10 +168,11 @@
               "message": "Access denied"
             }
           ],
-          "method": "delete",
-          "nickname": "Api::V1::Glossary#delete"
+          "nickname": "Api::V1::Glossary#delete",
+          "method": "delete"
         }
       ]
     }
-  ]
+  ],
+  "authorizations": null
 }

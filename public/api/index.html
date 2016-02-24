@@ -39,12 +39,20 @@
 
     $('#input_apiKey').change(function() {
       var key = $('#input_apiKey')[0].value;
-      console.log("key: " + key);
       if (key && key.trim() != "") {
-        console.log("added key " + key);
-        window.authorizations.add("key", new ApiKeyAuthorization("Authorization", 'Token token="' + key + '"', "header"));
+        window.authorizations.add('token', new ApiKeyAuthorization('X-Mlg-Token', key, 'header'));
       }
-    })
+    });
+
+    $('#http_user, #http_pass').change(function() {
+      var user = $('#http_user')[0].value.trim(),
+          pass = $('#http_pass')[0].value.trim();
+      if (user != '' && pass != '') {
+        var auth = 'Basic ' + btoa(user + ':' + pass);
+        window.authorizations.add('key', new ApiKeyAuthorization('Authorization', auth, 'header'));
+      }
+    });
+
     window.swaggerUi.load();
   });
 
@@ -59,6 +67,8 @@
     <form id='api_selector'>
       <div class='input'><input placeholder="/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
       <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+      <div class='input'><input placeholder="http auth user" id="http_user" name="http_user" type="text"/></div>
+      <div class='input'><input placeholder="http auth password" id="http_pass" name="http_pass" type="text"/></div>
       <div class='input'><a id="explore" href="#">Explore</a></div>
     </form>
   </div>
