@@ -80,6 +80,6 @@ USER root
 
 WORKDIR ${DEPLOYDIR}/current
 # make sure the /opt/dysl install is on the same branch as we are
-RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && cd /opt/dysl && git checkout $BRANCH && git pull origin $BRANCH
+RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && cd /opt/dysl && git checkout $BRANCH 
 
 CMD ["nginx"]
