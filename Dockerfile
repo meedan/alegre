@@ -52,12 +52,17 @@ RUN chmod g+s /var/www
 
 WORKDIR ${DEPLOYDIR}
 RUN mkdir ./latest
-COPY . ./latest
+COPY ./Gemfile ./latest/Gemfile
+COPY ./Gemfile.lock ./latest/Gemfile.lock
 
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
 
 RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc && cd ./latest && bundle install --deployment --without test development
+USER root
+COPY . ./latest
+RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
+USER ${DEPLOYUSER}
 
 # config
 RUN cd ./latest/config && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml && \
@@ -72,5 +77,9 @@ RUN mv ./latest ./api-mlg-$(date -I) && ln -s ./api-mlg-$(date -I) ./current
 # expose, cmd
 
 USER root
+
 WORKDIR ${DEPLOYDIR}/current
+# make sure the /opt/dysl install is on the same branch as we are
+RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && cd /opt/dysl && git checkout $BRANCH && git pull origin $BRANCH
+
 CMD ["nginx"]

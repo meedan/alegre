@@ -17,3 +17,4 @@ dysl
 vendor/bundle
 doc/*
 !doc/Makefile
+/.project
