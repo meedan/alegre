@@ -1,4 +1,4 @@
-# api-mlg
+# alegre
 # VERSION  0.0.1
 
 FROM dreg.meedan.net/meedan/ruby
@@ -8,9 +8,9 @@ MAINTAINER sysops@meedan.com
 # SYSTEM CONFIG
 #
 ENV DEPLOYUSER mlgdeploy
-ENV DEPLOYDIR /var/www/api-mlg
+ENV DEPLOYDIR /var/www/alegre
 ENV RAILS_ENV production
-ENV GITREPO git@github.com:meedan/api-mlg.git
+ENV GITREPO git@github.com:meedan/alegre.git
 
 RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs libmysqlclient-dev -y
 RUN easy_install pip
@@ -29,9 +29,9 @@ RUN dysl-install
 # APP CONFIG
 #
 
-# nginx for api-mlg
-COPY docker/nginx.conf /etc/nginx/sites-available/api-mlg
-RUN ln -s /etc/nginx/sites-available/api-mlg /etc/nginx/sites-enabled/api-mlg
+# nginx for alegre
+COPY docker/nginx.conf /etc/nginx/sites-available/alegre
+RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre
 RUN rm /etc/nginx/sites-enabled/default
 
 #
@@ -70,7 +70,7 @@ RUN cd ./latest/config && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/conf
     cd ./initializers && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb && \
     rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb
 
-RUN mv ./latest ./api-mlg-$(date -I) && ln -s ./api-mlg-$(date -I) ./current
+RUN mv ./latest ./alegre-$(date -I) && ln -s ./alegre-$(date -I) ./current
 
 #
 # RUNTIME ELEMENTS
