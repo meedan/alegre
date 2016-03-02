@@ -12,7 +12,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
     else
       str = params[:text].to_s
       Retriable.retriable do
-        @language = Mlg::Dysl.new.try_to_classify(str)
+        @language = Alegre::Dysl.new.try_to_classify(str)
       end
       render_success 'language', @language
     end
@@ -25,7 +25,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
       str = params[:text].to_s
       lang = params[:language].to_s
       Retriable.retriable do
-        @ret = Mlg::Dysl.new.add_sample(str, lang)
+        @ret = Alegre::Dysl.new.add_sample(str, lang)
       end
       render_success 'success', @ret
     end
@@ -33,7 +33,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
 
   def language
     Retriable.retriable do
-      @list = Mlg::Dysl.new.list_languages
+      @list = Alegre::Dysl.new.list_languages
     end
     render_success 'language', @list
   end

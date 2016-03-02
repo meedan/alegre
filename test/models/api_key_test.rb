@@ -36,6 +36,7 @@ class ApiKeyTest < ActiveSupport::TestCase
   end
 
   test "should not have applications" do
+    ApiKey.unstub(:applications)
     assert_equal [nil], ApiKey.applications
   end
 end

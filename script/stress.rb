@@ -5,7 +5,7 @@ require 'literate_randomizer'
 
 while true do
   str = LiterateRandomizer.sentence
-  language = Mlg::Dysl.new.try_to_classify(str)
+  language = Alegre::Dysl.new.try_to_classify(str)
   puts str
   puts language.inspect
   puts '-------------------------------------------------------------------'

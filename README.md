@@ -1,4 +1,4 @@
-## MLG API
+## Alegre
 
 A REST API to Meedan's linguistic functionality.
 

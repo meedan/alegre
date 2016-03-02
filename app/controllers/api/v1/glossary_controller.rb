@@ -1,5 +1,5 @@
 #encoding: utf-8 
-require 'mlg_elastic_search'
+require 'alegre_elastic_search'
 
 class Api::V1::GlossaryController < Api::V1::BaseApiController
 
@@ -15,7 +15,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
       render_parameters_missing
     else
       str = params[:data].to_s
-      retES = Mlg::ElasticSearch.add_glossary(params[:data].to_s, params[:should_replace].to_i)
+      retES = Alegre::ElasticSearch.add_glossary(params[:data].to_s, params[:should_replace].to_i)
       if retES
         render_success 'success', true
       else
@@ -30,7 +30,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
     else
       client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
-      @glossary = Mlg::ElasticSearch.get_glossary(params[:data].to_s)
+      @glossary = Alegre::ElasticSearch.get_glossary(params[:data].to_s)
       
       render_success 'term', @glossary
     end
@@ -41,7 +41,7 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
       render_parameters_missing
     else
       ret = false
-      ret = Mlg::ElasticSearch.delete_glossary(params[:id].to_s)
+      ret = Alegre::ElasticSearch.delete_glossary(params[:id].to_s)
       if ret
         render_success 'delete', true
       else

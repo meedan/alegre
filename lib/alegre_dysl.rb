@@ -1,4 +1,4 @@
-module Mlg
+module Alegre
   class Dysl
     @@dysl = nil
 
@@ -16,7 +16,7 @@ module Mlg
       begin
         self.classify(text)
       rescue Exception => e
-        Rails.logger.info "MlgDyslLib: An error of type #{e.class} happened, message is: #{e.message}"
+        Rails.logger.info "AlegreDyslLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
         self.classify(text)
       end

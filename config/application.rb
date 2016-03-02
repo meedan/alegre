@@ -6,9 +6,9 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-require File.expand_path('../../lib/mlg_dysl', __FILE__)
+require File.expand_path('../../lib/alegre_dysl', __FILE__)
 
-module ApiMlg
+module Alegre
   class Application < Rails::Application
     config.generators do |g|
                g.javascripts false

@@ -1,7 +1,7 @@
 #encoding: utf-8 
 require "net/http"
 require 'json'
-require 'mlg_elastic_search'
+require 'alegre_elastic_search'
 require 'retriable'
 
 KEY = CONFIG['babelfy_key'] 
@@ -22,13 +22,13 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
       context[:target_languages] = params[:target_languages] unless params[:target_languages].blank?
       data = { lang: params[:language], term: params[:text], context: context }
 
-      @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+      @dictionary = Alegre::ElasticSearch.get_glossary(data.to_json)
       @babelfy_requested = false
       
       if @dictionary.empty?
         request_terms
         @babelfy_requested = true
-        @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+        @dictionary = Alegre::ElasticSearch.get_glossary(data.to_json)
       end
 
       render_success 'term', @dictionary
@@ -99,7 +99,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
           if sourcedefinition.length > 0
             payload = ""
             payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations)
-            retES = Mlg::ElasticSearch.add_glossary(payload)
+            retES = Alegre::ElasticSearch.add_glossary(payload)
           end
         end
       end

@@ -57,11 +57,11 @@ class LanguagesControllerTest < ActionController::TestCase
     assert_equal "en", assigns(:language)[0][1]   
   end
 
-  test "identification - should return english hashtah" do
+  test "identification - should not return english hashtag" do
     authenticate_with_token
     get :identification, text: '#English'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal [], assigns(:language)
   end
 
 

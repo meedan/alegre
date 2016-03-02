@@ -8,7 +8,7 @@ ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_po
 LANG_WITH_ANALYZER = CONFIG['lang_with_analyzer']  #languages with stem and stop analyzers in elasticsearch index
 
 
-module Mlg
+module Alegre
    class ElasticSearch
 
   def self.delete_glossary(_id)
@@ -81,7 +81,7 @@ module Mlg
     end
 
     if !jsonCtx.has_key?('lang')
-      lang = Mlg::Dysl.new.try_to_classify(jsonCtx["term"])
+      lang = Alegre::Dysl.new.try_to_classify(jsonCtx["term"])
       if lang.length > 0
         jsonCtx['lang'] =  lang[0][1]
       end
@@ -173,7 +173,7 @@ module Mlg
       client.indices.delete index: index
     end  
 
-    client.indices.create index: index, body: Mlg::ElasticSearch.schema
+    client.indices.create index: index, body: Alegre::ElasticSearch.schema
   end
 
   def self.schema
