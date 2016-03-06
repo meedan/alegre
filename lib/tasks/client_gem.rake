@@ -1,5 +1,10 @@
 namespace :lapis do
   task build_client_gem: :environment do
+    # Work with test environment
+    ActiveRecord::Base.establish_connection('test')
+    api_key = ApiKey.create!
+    api_key.access_token = 'test'
+    api_key.save!
 
     # Generate name
     camel_name = Rails.application.class.to_s.gsub(/::Application$/, '')
@@ -231,5 +236,8 @@ end}
     puts "After that, add the repository address in line 14 ('homepage') of file #{gem_snake_name}/#{gem_snake_name}.gemspec."
     puts "Or publish to RubyGems.org and add that URL."
     puts '----------------------------------------------------------------------------------------------------------------'
+
+    api_key.destroy!
+    ActiveRecord::Base.establish_connection(ENV['RAILS_ENV'])
   end
 end
