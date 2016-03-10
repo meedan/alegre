@@ -38,7 +38,7 @@ class detGensim:
 	
 		#print "return ",lang
 		if (n == (len(text.lower().split()) * -1)):
-			return "unk"
+			return ""
 		else:
 			return lang			
 
