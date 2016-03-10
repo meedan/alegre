@@ -41,16 +41,16 @@ group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  # Generate random sentences for testing
+  gem 'literate_randomizer'
 end
 
 
 gem 'webmock'
 gem 'mocha'
-gem 'simplecov'
+gem 'simplecov', '~> 0.10.0'
 gem 'railroady'
-gem 'airbrake'
+gem 'airbrake', '4.3.3'
 gem 'codeclimate-test-reporter'
 gem 'awesome_print'
 gem 'gem-licenses'
@@ -65,7 +65,11 @@ gem 'unicorn'
 gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
 
 gem 'json'
+gem 'retriable', '~> 2.1'
 
 group :production do
   gem 'mysql2', '~> 0.3.13'
 end
+
+gem 'httpclient'
+gem 'bing_translator', '~> 4.5.0'

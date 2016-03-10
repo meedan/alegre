@@ -1,5 +1,10 @@
 namespace :lapis do
   task build_client_gem: :environment do
+    # Work with test environment
+    ActiveRecord::Base.establish_connection('test')
+    api_key = ApiKey.create!
+    api_key.access_token = 'test'
+    api_key.save!
 
     # Generate name
     camel_name = Rails.application.class.to_s.gsub(/::Application$/, '')
@@ -59,6 +64,8 @@ namespace :lapis do
 
     docs.each do |doc|
      doc[:apis].each do |api|
+
+       api[:path].gsub!(/^\//, '')
 
        path = api[:path].gsub(/^api\//, '').gsub('/', '_')
 
@@ -197,7 +204,7 @@ module #{gem_camel_name}
       end
 
       unless token.blank?
-        request['Authorization'] = 'Token token="' + token.to_s + '"'
+        request['#{CONFIG['authorization_header'] || 'X-Token'}'] = token.to_s
       end
 
       http = Net::HTTP.new(uri.hostname, uri.port)
@@ -229,5 +236,8 @@ end}
     puts "After that, add the repository address in line 14 ('homepage') of file #{gem_snake_name}/#{gem_snake_name}.gemspec."
     puts "Or publish to RubyGems.org and add that URL."
     puts '----------------------------------------------------------------------------------------------------------------'
+
+    api_key.destroy!
+    ActiveRecord::Base.establish_connection(ENV['RAILS_ENV'])
   end
 end

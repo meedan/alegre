@@ -57,11 +57,11 @@ class LanguagesControllerTest < ActionController::TestCase
     assert_equal "en", assigns(:language)[0][1]   
   end
 
-  test "identification - should return english hashtah" do
+  test "identification - should not return english hashtag" do
     authenticate_with_token
     get :identification, text: '#English'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal [], assigns(:language)
   end
 
 
@@ -80,37 +80,37 @@ class LanguagesControllerTest < ActionController::TestCase
 
   test "sample - should return error if no parameter was not provided" do
     authenticate_with_token
-    get :sample
+    post :sample
     assert_response 400
   end
 
   test "sample - should return error if language was not provided" do
     authenticate_with_token
-    get :sample, text: '#English'
+    post :sample, text: '#English'
     assert_response 400
   end
 
   test "sample - should return error if text was not provided" do
     authenticate_with_token
-    get :sample, language: 'en'
+    post :sample, language: 'en'
     assert_response 400
   end
 
   test "sample - should return sucess" do
     authenticate_with_token
-    get :identification, text: 'sample text in english language'
+    post :sample, language: 'en', text: 'sample text in english language'
     assert_response :success
   end
 
   test "sample - should return error if text blank" do
     authenticate_with_token
-    get :sample, language: 'en', text: ''
+    post :sample, language: 'en', text: ''
     assert_response 400
   end
 
   test "sample - should return error if language blank" do
     authenticate_with_token
-    get :sample, language: '', text: 'one example'
+    post :sample, language: '', text: 'one example'
     assert_response 400
   end
 
@@ -128,6 +128,7 @@ class LanguagesControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal arrayVar.class, assigns(:list).class
   end
+
 
 end
 

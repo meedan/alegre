@@ -8,6 +8,17 @@
       "path": "api/languages/identification",
       "operations": [
         {
+          "summary": "Identify the language of a given text",
+          "notes": "Use this method in order to identify the language of a given text",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be classified",
+              "required": true
+            }
+          ],
           "responseMessages": [
             {
               "code": 200,
@@ -41,91 +52,8 @@
               "message": "Access denied"
             }
           ],
-          "parameters": [
-            {
-              "paramType": "query",
-              "name": "text",
-              "type": "string",
-              "description": "Text to be classified",
-              "required": true
-            }
-          ],
-          "summary": "Identify the language of a given text",
-          "notes": "Use this method in order to identify the language of a given text",
           "method": "get",
           "nickname": "Api::V1::Languages#identification"
-        }
-      ]
-    },
-    {
-      "path": "api/languages/sample",
-      "operations": [
-        {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Returns ok"
-            },
-            {
-              "code": 400,
-              "responseModel": null,
-              "message": "Parameters missing (text was not provided)"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "Access denied"
-            }
-          ],
-          "parameters": [
-            {
-              "paramType": "query",
-              "name": "language",
-              "type": "string",
-              "description": "Language",
-              "required": true
-            },
-            {
-              "paramType": "query",
-              "name": "text",
-              "type": "string",
-              "description": "Text to be inserted",
-              "required": true
-            }
-          ],
-          "summary": "Add training sample to the model",
-          "notes": "Use this method in order to add training sample to the model",
-          "method": "post",
-          "nickname": "Api::V1::Languages#sample"
-        }
-      ]
-    },
-    {
-      "path": "api/languages/language",
-      "operations": [
-        {
-          "responseMessages": [
-            {
-              "code": 200,
-              "responseModel": null,
-              "message": "Returns list"
-            },
-            {
-              "code": 400,
-              "responseModel": null,
-              "message": "Parameters missing (text was not provided)"
-            },
-            {
-              "code": 401,
-              "responseModel": null,
-              "message": "Access denied"
-            }
-          ],
-          "summary": "List supported languages",
-          "notes": "Use this method in order to list supported languages",
-          "method": "get",
-          "nickname": "Api::V1::Languages#language"
         }
       ]
     }

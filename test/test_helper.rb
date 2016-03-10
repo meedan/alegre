@@ -6,6 +6,7 @@ require 'rails/test_help'
 require 'webmock'
 require 'mocha/test_unit'
 require 'sample_data'
+require 'alegre_elastic_search'
 
 class Api::V1::TestController < Api::V1::BaseApiController
   before_filter :verify_payload!, only: [:notify]
@@ -31,6 +32,7 @@ class ActiveSupport::TestCase
   def setup
     Rails.cache.clear if File.exists?(File.join(Rails.root, 'tmp', 'cache'))
     Rails.application.reload_routes!
+    Alegre::ElasticSearch.create_index
   end
 
   # This will run after any test
@@ -41,7 +43,10 @@ class ActiveSupport::TestCase
   end
 
   def authenticate_with_token(api_key = nil)
-    api_key ||= create_api_key
-    request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials(api_key.access_token)
+    unless @request.nil?
+      header = CONFIG['authorization_header'] || 'X-Token'
+      api_key ||= create_api_key
+      @request.headers.merge!({ header => api_key.access_token })
+    end
   end
 end

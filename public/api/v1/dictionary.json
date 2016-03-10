@@ -1,0 +1,100 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "/",
+  "resourcePath": "dictionary",
+  "apis": [
+    {
+      "path": "api/dictionary/terms",
+      "operations": [
+        {
+          "summary": "Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language",
+          "notes": "Get dictionary terms (from Babelfy for the first time, then from ElasticSearch) for a text in a certain language",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be searched",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "language",
+              "type": "string",
+              "description": "Source language of the text",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "source_id",
+              "type": "string",
+              "description": "An identifier of the input text (e.g., a post ID on Bridge)",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "target_languages",
+              "type": "string",
+              "description": "List of comma-separated target languages in 2-letters code (defaults to all languages in config.yml)",
+              "required": false
+             }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": {
+                "query": {
+                  "text": "The book is on the table",
+                  "lang": "en",
+                  "sourceId": "x"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Terms from dictionary"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": null,
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Missing parameters"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": {
+                  "text": "Test",
+                  "lang": "en_US",
+                  "sourceId": "x"
+                },
+                "headers": {
+                  "authorization": "Token token=\"test\""
+                }
+              },
+              "message": "Invalid language format"
+            },
+            {
+              "code": 401,
+              "responseModel": {
+                "query": {
+                  "text": "Test",
+                  "lang": "en",
+                  "sourceId": "x"
+                }
+              },
+              "message": "Access denied"
+            }
+          ],
+          "method": "get",
+          "nickname": "Api::V1::Dictionary#terms"
+        }
+      ]
+    }
+  ]
+}
