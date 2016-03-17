@@ -1,5 +1,5 @@
 require 'elasticsearch'
-require 'alegre_elastic_search'
+require 'alegre_elasticsearch'
 
 class CreateIndex < ActiveRecord::Migration
   def change
