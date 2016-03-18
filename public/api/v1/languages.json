@@ -27,7 +27,7 @@
                   "text": "The book is on the table"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Text language"
@@ -37,7 +37,7 @@
               "responseModel": {
                 "query": null,
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Parameter \"text\" is missing"

@@ -27,7 +27,7 @@
                   "data": "{\"lang\":\"en\",\"term\":\"This is just a test\",\"context\":{\"page_id\":\"foo\"}}"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Terms from the glossary for the given input"
@@ -38,7 +38,7 @@
                 "query": {
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Missing parameters"
@@ -53,8 +53,8 @@
               "message": "Access denied"
             }
           ],
-          "nickname": "Api::V1::Glossary#terms",
-          "method": "get"
+          "method": "get",
+          "nickname": "Api::V1::Glossary#terms"
         }
       ]
     },
@@ -88,7 +88,7 @@
                   "data": "{\"term\":\"Test\",\"lang\":\"en\",\"definition\":\"An experiment\",\"translations\":[{\"lang\":\"pt\",\"definition\":\"Um experimento\",\"term\":\"Teste\"},{\"lang\":\"es\",\"definition\":\"Un experimento\",\"term\":\"Teste\"}],\"context\":{\"page_id\":\"foo\",\"data_source\":\"glossary\"}}"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Term was added successfully"
@@ -99,7 +99,7 @@
                 "query": {
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Missing parameters"
@@ -114,8 +114,8 @@
               "message": "Access denied"
             }
           ],
-          "nickname": "Api::V1::Glossary#term",
-          "method": "post"
+          "method": "post",
+          "nickname": "Api::V1::Glossary#term"
         }
       ]
     },
@@ -142,7 +142,7 @@
                   "id": "2c94a1c8dc37c8c90338739f3c779c28"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Terms from the glossary for the given input"
@@ -153,7 +153,7 @@
                 "query": {
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Missing parameters"
@@ -168,11 +168,10 @@
               "message": "Access denied"
             }
           ],
-          "nickname": "Api::V1::Glossary#delete",
-          "method": "delete"
+          "method": "delete",
+          "nickname": "Api::V1::Glossary#delete"
         }
       ]
     }
-  ],
-  "authorizations": null
+  ]
 }

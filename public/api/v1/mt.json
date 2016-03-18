@@ -43,7 +43,7 @@
                   "to": "pt"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Machine translation"
@@ -56,7 +56,7 @@
                   "to": "pt"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Some parameter is missing"
@@ -70,7 +70,7 @@
                   "to": "pt"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Language not supported"
@@ -87,8 +87,8 @@
               "message": "Access denied"
             }
           ],
-          "nickname": "Api::V1::Mt#index",
-          "method": "get"
+          "method": "get",
+          "nickname": "Api::V1::Mt#index"
         }
       ]
     },
@@ -103,7 +103,7 @@
               "code": 200,
               "responseModel": {
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Supported languages"
@@ -115,11 +115,10 @@
               "message": "Access denied"
             }
           ],
-          "nickname": "Api::V1::Mt#languages",
-          "method": "get"
+          "method": "get",
+          "nickname": "Api::V1::Mt#languages"
         }
       ]
     }
-  ],
-  "authorizations": null
+  ]
 }

@@ -38,7 +38,7 @@
               "type": "string",
               "description": "List of comma-separated target languages in 2-letters code (defaults to all languages in config.yml)",
               "required": false
-             }
+            }
           ],
           "responseMessages": [
             {
@@ -46,21 +46,21 @@
               "responseModel": {
                 "query": {
                   "text": "The book is on the table",
-                  "lang": "en",
+                  "language": "en",
                   "sourceId": "x"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
-              "message": "Terms from dictionary"
+              "message": "Terms from the dictionary"
             },
             {
               "code": 400,
               "responseModel": {
                 "query": null,
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Missing parameters"
@@ -70,11 +70,11 @@
               "responseModel": {
                 "query": {
                   "text": "Test",
-                  "lang": "en_US",
+                  "language": "en_US",
                   "sourceId": "x"
                 },
                 "headers": {
-                  "authorization": "Token token=\"test\""
+                  "x-Alegre-Token": "test"
                 }
               },
               "message": "Invalid language format"
@@ -84,7 +84,7 @@
               "responseModel": {
                 "query": {
                   "text": "Test",
-                  "lang": "en",
+                  "language": "en",
                   "sourceId": "x"
                 }
               },

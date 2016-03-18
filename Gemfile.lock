@@ -199,7 +199,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.11)
-    swagger-docs (0.2.8)
+    swagger-docs (0.1.9)
       activesupport (>= 3, < 5)
       rails (>= 3, < 5)
     thin (1.6.4)
@@ -263,10 +263,13 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   simplecov (~> 0.10.0)
   sqlite3
-  swagger-docs
+  swagger-docs (= 0.1.9)
   thin
   turbolinks
   uglifier (>= 1.3.0)
   unicorn
   web-console (~> 2.0)
   webmock
+
+BUNDLED WITH
+   1.11.2
