@@ -1,6 +1,6 @@
 module Alegre
   class LangId
-    @@dysl = nil
+    @@langid = nil
 
     def start
       RubyPython.stop
@@ -9,14 +9,13 @@ module Alegre
       s.path.insert(0, CONFIG['langid']).rubify
       langid = RubyPython.import 'langid'
       @@langid = langid.LangId.new(MODEL_SENTENCES,LANGUAGES,STOPWORDS_PATH)
-      #@@dysl.trainPRELOAD(CONFIG['dysl'] + '/dysl/corpora/multiLanguage/trainedCorpus2.obj').rubify
     end
 
     def classify(text)
       begin
 	@@langid.classify(text).rubify
       rescue Exception => e
-        Rails.logger.info "AlegreDyslLib: An error of type #{e.class} happened, message is: #{e.message}"
+        Rails.logger.info "AlegreLangIdLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
         self.classify(text)
       end
@@ -27,7 +26,7 @@ module Alegre
     end
 
     def list_languages
-      @@langid.listLanguages.rubify
+      @@langid.list_languages.rubify
     end
 
 

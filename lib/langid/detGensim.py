@@ -2,7 +2,7 @@
 #coding:utf-8
 # Detecting language using a stopwords based approach with gensim
 
-from os import walk
+import os
 
 try:
 	from gensim import utils, matutils
@@ -34,8 +34,9 @@ class detGensim:
 	vecs = {}
 	model = {}
 	def __init__(self, mypath):
-		filenames = next(walk(mypath))[2]
-		for filename in filenames:
+		if mypath.endswith('/'):
+			mypath = mypath[:-1]
+		for filename in os.listdir(mypath):
 			self.vecs[filename] = vec(mypath+"/"+str(filename))
 			self.model[filename] = word2vec.Word2Vec(self.vecs[filename].ss, size=2, min_count=1)
 
@@ -66,8 +67,8 @@ class vec:
 	self.ss = []
 	self.ss2=[]
 	for line in open(fi):
-		self.ss.append([self.decode_input(line.replace("\n", "").lower())])
-		self.ss2.append(self.decode_input(line.replace("\n", "").lower()))
+		self.ss.append([line.replace("\n", "").lower()])
+		self.ss2.append(line.replace("\n", "").lower())
 
 
 def similar(model,v,txt):
@@ -83,7 +84,7 @@ def similar(model,v,txt):
 
 
 if __name__ == '__main__':
-	detGensim("/home/ccx/work/dysl/dysl/corpora/stopwords")
+	detGensim("/home/ccx/work/alegre/lib/langid/stopword/")
 	print "-->",detGensim.detect_language("aaa xcxcxc")
 	print "-->",detGensim.detect_language("sentence in english")
 	print "-->",detGensim.detect_language("uma em que frase do portuguÊs")

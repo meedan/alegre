@@ -11,34 +11,34 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'This is a sentence in English'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][1]   
   end
 
   test "identification - should get language es" do
     authenticate_with_token
     get :identification, text: 'Esta es una frase en español'
     assert_response :success
-    assert_equal "es", assigns(:language)[0][1]   
+    assert_equal "ES", assigns(:language)[0][1]   
   end
 
   test "identification - should get language pt" do
     authenticate_with_token
     get :identification, text: 'Esta é uma frase em português'
     assert_response :success
-    assert_equal "pt", assigns(:language)[0][1]   
+    assert_equal "PT", assigns(:language)[0][1]   
   end
 
   test "identification - should get language ar" do
     authenticate_with_token
     get :identification, text: 'هذه هي العبارة باللغة العربية'
     assert_response :success
-    assert_equal "ar", assigns(:language)[0][1]   
+    assert_equal "AR", assigns(:language)[0][1]   
   end
 
 
   test "identification - should return error empty if test is in a unknown language" do
     authenticate_with_token
-    get :identification, text: 'sdflk skljfkdsf skdfjd jjas'
+    get :identification, text: 'xxxxx xxxxxxx xxxxxxxx xxx'
     assert_response :success
     assert_equal [], assigns(:language)
   end
@@ -54,7 +54,7 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'I ♥ you English language'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][1]   
   end
 
   test "identification - should not return english hashtag" do
@@ -92,19 +92,19 @@ class LanguagesControllerTest < ActionController::TestCase
 
   test "sample - should return error if text was not provided" do
     authenticate_with_token
-    post :sample, language: 'en'
+    post :sample, language: 'EN'
     assert_response 400
   end
 
   test "sample - should return sucess" do
     authenticate_with_token
-    post :sample, language: 'en', text: 'sample text in english language'
+    post :sample, language: 'EN', text: 'sample text in english language'
     assert_response :success
   end
 
   test "sample - should return error if text blank" do
     authenticate_with_token
-    post :sample, language: 'en', text: ''
+    post :sample, language: 'EN', text: ''
     assert_response 400
   end
 
