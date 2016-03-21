@@ -6,7 +6,7 @@ require 'rails/test_help'
 require 'webmock'
 require 'mocha/test_unit'
 require 'sample_data'
-require 'mlg_elastic_search'
+require 'alegre_elasticsearch'
 
 class Api::V1::TestController < Api::V1::BaseApiController
   before_filter :verify_payload!, only: [:notify]
@@ -32,7 +32,7 @@ class ActiveSupport::TestCase
   def setup
     Rails.cache.clear if File.exists?(File.join(Rails.root, 'tmp', 'cache'))
     Rails.application.reload_routes!
-    Mlg::ElasticSearch.create_index
+    Alegre::ElasticSearch.create_index
   end
 
   # This will run after any test
@@ -40,6 +40,7 @@ class ActiveSupport::TestCase
   def teardown
     WebMock.reset!
     WebMock.allow_net_connect!
+    Time.unstub(:now)
   end
 
   def authenticate_with_token(api_key = nil)

@@ -1,11 +1,11 @@
-#encoding: utf-8 
+#encoding: utf-8
 require "net/http"
 require 'json'
-require 'mlg_elastic_search'
+require 'alegre_elasticsearch'
 require 'retriable'
 
-KEY = CONFIG['babelfy_key'] 
-LANGCODES = CONFIG['langcodes'] 
+KEY = CONFIG['babelfy_key']
+LANGCODES = CONFIG['langcodes']
 
 class Api::V1::DictionaryController < Api::V1::BaseApiController
 
@@ -22,17 +22,17 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
       context[:target_languages] = params[:target_languages] unless params[:target_languages].blank?
       data = { lang: params[:language], term: params[:text], context: context }
 
-      @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+      @dictionary = Alegre::ElasticSearch.get_glossary(data.to_json)
       @babelfy_requested = false
-      
+
       if @dictionary.empty?
         request_terms
         @babelfy_requested = true
-        @dictionary = Mlg::ElasticSearch.get_glossary(data.to_json)
+        @dictionary = Alegre::ElasticSearch.get_glossary(data.to_json)
       end
 
       render_success 'term', @dictionary
-    end    
+    end
   end
 
   private
@@ -57,7 +57,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
-    Retriable.retriable do  
+    Retriable.retriable do
       response = http.request(Net::HTTP::Get.new(uri.request_uri))
 
       if response.is_a?(Net::HTTPSuccess)
@@ -70,11 +70,11 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
           translations = []
           codetargets.each do |lang|
             by = GetSynset(annotation['babelSynsetID'], lang)
-            bs = GetMainSense(by,lang) 
+            bs = GetMainSense(by,lang)
             definition  = term = ""
             if bs.length > 0
               term = bs["simpleLemma"]
-              g = GetMainGloss(by,lang) 
+              g = GetMainGloss(by,lang)
               if g.length > 0
                 definition = g["gloss"]
               end
@@ -82,16 +82,16 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
 
             # Source
-            if (lang.upcase  == codesource.upcase ) 
-              sourcedefinition = definition;    
+            if (lang.upcase  == codesource.upcase )
+              sourcedefinition = definition;
             elsif term.length > 0
               translation = {}
-              translation["lang"] = lang.downcase 
+              translation["lang"] = lang.downcase
               translation["definition"] = definition
               translation["term"] = term
               if (term != "")
                 translations << translation
-              end  
+              end
             end
 
           end
@@ -99,7 +99,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
           if sourcedefinition.length > 0
             payload = ""
             payload = generatePayload(codesource.downcase, sourceterm, sourcedefinition, translations)
-            retES = Mlg::ElasticSearch.add_glossary(payload)
+            retES = Alegre::ElasticSearch.add_glossary(payload)
           end
         end
       end
@@ -121,7 +121,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
-    Retriable.retriable do  
+    Retriable.retriable do
       response = http.request(Net::HTTP::Get.new(uri.request_uri))
 
       if response.is_a?(Net::HTTPSuccess)
@@ -133,7 +133,7 @@ class Api::V1::DictionaryController < Api::V1::BaseApiController
 
 
   #return the first sense in the language as main
-  def GetMainSense(by,lang) 
+  def GetMainSense(by,lang)
     by['senses'] ||= []
     by['senses'].each do |entry|
       if entry['language'] == lang

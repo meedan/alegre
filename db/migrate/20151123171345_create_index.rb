@@ -1,9 +1,9 @@
 require 'elasticsearch'
-require 'mlg_elastic_search'
+require 'alegre_elasticsearch'
 
 class CreateIndex < ActiveRecord::Migration
   def change
-    Mlg::ElasticSearch.create_index
+    Alegre::ElasticSearch.create_index
   end
 end
 

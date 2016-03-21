@@ -1,4 +1,4 @@
-module Mlg
+module Alegre
   class Mt
     def initialize
       @mt = BingTranslator.new(CONFIG['bing_id'], CONFIG['bing_secret'])

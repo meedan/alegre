@@ -1,104 +1,110 @@
 namespace :lapis do
-  task build_client_gem: :environment do
+  namespace :client do
+    task ruby: :environment do
+      # Work with test environment
+      ActiveRecord::Base.establish_connection('test')
+      ApiKey.where(access_token: 'test').destroy_all
+      api_key = ApiKey.create!
+      api_key.access_token = 'test'
+      api_key.save!
 
-    # Generate name
-    camel_name = Rails.application.class.to_s.gsub(/::Application$/, '')
-    gem_camel_name = "#{camel_name}Client"
-    snake_name = camel_name.underscore
-    gem_snake_name = "#{snake_name}_client"
-    
-    # Get current version number
-    basedir = File.join(gem_snake_name, 'lib', gem_snake_name)
-    version_file = File.join(basedir, 'version.rb')
-    current_version = '0.1.0'
-    new_version = '0.0.1'
-    if File.exists?(version_file)
-      number = File.readlines(version_file)[1].gsub(/[^0-9\.]/, '').gsub('0.0.', '').to_i
-      new_version = '0.0.' + (number + 1).to_s
-    end
-      
-    # Remove current gem if it exists
-    FileUtils.rm_rf(gem_snake_name)
+      # Generate name
+      camel_name = Rails.application.class.to_s.gsub(/::Application$/, '')
+      gem_camel_name = "#{camel_name}Client"
+      snake_name = camel_name.underscore
+      gem_snake_name = "#{snake_name}_client"
 
-    # Create new gem
-    system "bundle gem #{gem_snake_name}"
+      # Get current version number
+      basedir = File.join(gem_snake_name, 'lib', gem_snake_name)
+      version_file = File.join(basedir, 'version.rb')
+      current_version = '0.1.0'
+      new_version = '0.0.1'
+      if File.exists?(version_file)
+        number = File.readlines(version_file)[1].gsub(/[^0-9\.]/, '').gsub('0.0.', '').to_i
+        new_version = '0.0.' + (number + 1).to_s
+      end
 
-    # Update version number
-    content = File.read(version_file).gsub(current_version, new_version)
-    f = File.open(version_file, 'w+')
-    f.puts(content)
-    f.close
+      # Remove current gem if it exists
+      FileUtils.rm_rf(gem_snake_name)
 
-    # Update spec (metadata and dependencies)
-    specfile = File.join(gem_snake_name, "#{gem_snake_name}.gemspec")
-    content = File.read(specfile)
-    content.gsub!(/spec\.authors.*\n/, "spec.authors = ['#{INFO[:author]}']\n")
-    content.gsub!(/spec\.email.*\n/, "spec.email = ['#{INFO[:author_email]}']\n")
-    content.gsub!(/spec\.summary.*\n/, "spec.summary = ['#{INFO[:description]} (Client)']\n")
-    content.gsub!(/spec\.description.*\n/, "spec.description = ['#{INFO[:description]} (Client)']\n")
-    content.gsub!(/^end$/, "  spec.add_development_dependency \"webmock\", \"~> 1.21.0\"\nend")
-    f = File.open(specfile, 'w+')
-    f.puts(content)
-    f.close
+      # Create new gem
+      system "bundle gem #{gem_snake_name} --mit"
 
-    # Update license
-    license = File.join(gem_snake_name, 'LICENSE.txt')
-    content = File.read(license)
-    content.gsub!(/(Copyright \(c\) #{Time.now.year} ).*\n/, "\\1#{INFO[:author]}\n")
-    f = File.open(license, 'w+')
-    f.puts(content)
-    f.close
+      # Update version number
+      content = File.read(version_file).gsub(current_version, new_version)
+      f = File.open(version_file, 'w+')
+      f.puts(content)
+      f.close
 
-    # Parse each possible return (from Swagger)
-    mock_methods = []
-    mock_methods_sigs = []
-    request_methods = []
-    request_methods_sigs = []
-    version = Swagger::Docs::Config.registered_apis.keys.last
-    docs = Swagger::Docs::Generator.generate_docs(Swagger::Docs::Config.registered_apis)[version][:processed]
+      # Update spec (metadata and dependencies)
+      specfile = File.join(gem_snake_name, "#{gem_snake_name}.gemspec")
+      content = File.read(specfile)
+      content.gsub!(/spec\.authors.*\n/, "spec.authors = ['#{INFO[:author]}']\n")
+      content.gsub!(/spec\.email.*\n/, "spec.email = ['#{INFO[:author_email]}']\n")
+      content.gsub!(/spec\.summary.*\n/, "spec.summary = ['#{INFO[:description]} (Client)']\n")
+      content.gsub!(/spec\.description.*\n/, "spec.description = ['#{INFO[:description]} (Client)']\n")
+      content.gsub!(/^end$/, "  spec.add_development_dependency \"webmock\", \"~> 1.21.0\"\nend")
+      f = File.open(specfile, 'w+')
+      f.puts(content)
+      f.close
 
-    docs.each do |doc|
-     doc[:apis].each do |api|
+      # Update license
+      license = File.join(gem_snake_name, 'LICENSE.txt')
+      content = File.read(license)
+      content.gsub!(/(Copyright \(c\) #{Time.now.year} ).*\n/, "\\1#{INFO[:author]}\n")
+      f = File.open(license, 'w+')
+      f.puts(content)
+      f.close
 
-       api[:path].gsub!(/^\//, '')
+      # Parse each possible return (from Swagger)
+      mock_methods = []
+      mock_methods_sigs = []
+      request_methods = []
+      request_methods_sigs = []
+      version = Swagger::Docs::Config.registered_apis.keys.last
+      docs = Swagger::Docs::Generator.generate_docs(Swagger::Docs::Config.registered_apis)[version][:processed]
 
-       path = api[:path].gsub(/^api\//, '').gsub('/', '_')
+      docs.each do |doc|
+       doc[:apis].each do |api|
 
-       api[:operations].each do |op|
+         api[:path].gsub!(/^\//, '')
 
-         next if op[:response_messages].first[:responseModel].nil?
+         path = api[:path].gsub(/^api\//, '').gsub('/', '_')
 
-         apicall = "#{op[:method].upcase} /#{api[:path]}"
-         method = "#{op[:method]}_#{path}"
-         request_methods_sigs << "#{method} (`#{apicall}`)"
+         api[:operations].each do |op|
 
-         request_methods << %{
+           next if op[:response_messages].first[:responseModel].nil?
+
+           apicall = "#{op[:method].upcase} /#{api[:path]}"
+           method = "#{op[:method]}_#{path}"
+           request_methods_sigs << "#{method} (`#{apicall}`)"
+
+           request_methods << %{
     # #{apicall}
     def self.#{method}(host = nil, params = {}, token = '', headers = {})
       request('#{op[:method]}', host, '/#{api[:path]}', params, token, headers)
     end
-         }
+           }
 
-         op[:response_messages].each do |r|
+           op[:response_messages].each do |r|
 
-           status = r[:code]
-           status == :ok if status == :success
-           status = Rack::Utils.status_code(status)
+             status = r[:code]
+             status == :ok if status == :success
+             status = Rack::Utils.status_code(status)
 
-           mock_method = "mock_#{path}_returns_#{r[:message].parameterize.gsub('-', '_')}"
-           mock_methods_sigs << mock_method
-           example = r[:responseModel]
+             mock_method = "mock_#{path}_returns_#{r[:message].parameterize.gsub('-', '_')}"
+             mock_methods_sigs << mock_method
+             example = r[:responseModel]
+             app = ActionDispatch::Integration::Session.new(Rails.application)
+             response = app.send(op[:method], '/' + api[:path], example[:query], example[:headers])
+             json = app.body.chomp
+             object = nil
+             begin
+               object = JSON.parse(json)
+             rescue
+             end
 
-           app = ActionDispatch::Integration::Session.new(Rails.application)
-           response = app.send(op[:method], '/' + api[:path], example[:query], example[:headers])
-           json = app.body.chomp
-           object = nil
-           begin
-             object = JSON.parse(json)
-           rescue
-           end
-
-           mock_methods << %{
+             mock_methods << %{
     def self.#{mock_method}(host = nil)
       WebMock.disable_net_connect!
       host ||= #{gem_camel_name}.host
@@ -109,15 +115,15 @@ namespace :lapis do
       yield
       WebMock.allow_net_connect!
     end
-           }
+             }
 
+           end
          end
        end
-     end
-    end
+      end
 
-    # Update README
-    readme = %{
+      # Update README
+      readme = %{
 # #{gem_camel_name}
 
 This gem is a client for #{snake_name}, which defines itself as '#{INFO[:description]}'. It also provides mock methods to test it.
@@ -156,14 +162,14 @@ If you are going to test something that uses the '#{gem_snake_name}' service, fi
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request     
-    }
-    f = File.open(File.join(gem_snake_name, 'README.md'), 'w+')
-    f.puts(readme)
-    f.close
+5. Create a new Pull Request
+      }
+      f = File.open(File.join(gem_snake_name, 'README.md'), 'w+')
+      f.puts(readme)
+      f.close
 
-    # Now the important stuff - generate the library
-    lib = %{require '#{gem_snake_name}/version'
+      # Now the important stuff - generate the library
+      lib = %{require '#{gem_snake_name}/version'
 require 'webmock'
 require 'net/http'
 module #{gem_camel_name}
@@ -204,7 +210,7 @@ module #{gem_camel_name}
 
       http = Net::HTTP.new(uri.hostname, uri.port)
       http.use_ssl = uri.scheme == 'https'
-      response = http.request(request) 
+      response = http.request(request)
       if response.code.to_i === 401
         raise 'Unauthorized'
       else
@@ -217,19 +223,23 @@ module #{gem_camel_name}
     #{mock_methods.join}
   end
 end}
-    f = File.open(File.join(gem_snake_name, 'lib', "#{gem_snake_name}.rb"), 'w+')
-    f.puts(lib)
-    f.close
+      f = File.open(File.join(gem_snake_name, 'lib', "#{gem_snake_name}.rb"), 'w+')
+      f.puts(lib)
+      f.close
 
-    # Compile gem
-    system "cd #{gem_snake_name} && gem build #{gem_snake_name}.gemspec && cd .."
+      # Compile gem
+      system "cd #{gem_snake_name} && gem build #{gem_snake_name}.gemspec && cd .."
 
-    # Finish
-    puts
-    puts '----------------------------------------------------------------------------------------------------------------'
-    puts "Done! Your gem is at '#{gem_snake_name}'. Now please submit it to a remote Github repository."
-    puts "After that, add the repository address in line 14 ('homepage') of file #{gem_snake_name}/#{gem_snake_name}.gemspec."
-    puts "Or publish to RubyGems.org and add that URL."
-    puts '----------------------------------------------------------------------------------------------------------------'
+      # Finish
+      puts
+      puts '----------------------------------------------------------------------------------------------------------------'
+      puts "Done! Your gem is at '#{gem_snake_name}'. Now please submit it to a remote Github repository."
+      puts "After that, add the repository address in line 14 ('homepage') of file #{gem_snake_name}/#{gem_snake_name}.gemspec."
+      puts "Or publish to RubyGems.org and add that URL."
+      puts '----------------------------------------------------------------------------------------------------------------'
+
+      api_key.destroy!
+      ActiveRecord::Base.establish_connection(ENV['RAILS_ENV'])
+    end
   end
 end

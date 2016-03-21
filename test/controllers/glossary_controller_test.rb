@@ -57,7 +57,7 @@ class GlossaryControllerTest < ActionController::TestCase
   test "should delete single word EN term from dictionary" do
     authenticate_with_token
     json = '{"lang": "en", "definition": "test definition","term": "test3","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"tags":["tag1","tag2"],"post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"} }'
-    Mlg::ElasticSearch.add_glossary json
+    Alegre::ElasticSearch.add_glossary json
     get :terms, data: '{"lang": "en", "term": "test3", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]
     delete :delete, id: data_hash["_id"]
@@ -66,7 +66,7 @@ class GlossaryControllerTest < ActionController::TestCase
 
   test "should delete single Arabic word term from dictionary" do
     authenticate_with_token
-    Mlg::ElasticSearch.add_glossary '{"lang": "ar", "definition": "test definition","term": "حكمة","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx", "page_id": "xxxx", "data_source": "dictionary","time-zone": "PDT / MST"} }'
+    Alegre::ElasticSearch.add_glossary '{"lang": "ar", "definition": "test definition","term": "حكمة","translations": [ {"lang": "en","definition": "definição de teste","term": "teste"}],"context": { "source": {"url": "testSite.url","name": "test site"},"post": "xxxx", "page_id": "xxxx", "data_source": "dictionary","time-zone": "PDT / MST"} }'
     get :terms, data: '{"lang": "ar", "term":  "حكمة", "context":{"source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]
     delete :delete, id: data_hash["_id"]
@@ -76,7 +76,7 @@ class GlossaryControllerTest < ActionController::TestCase
 
   test "should delete single Portuguese word term from dictionary" do
     authenticate_with_token
-    Mlg::ElasticSearch.add_glossary '{"term": "teste", "lang": "pt", "definition": "teste definition","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": {"tags":["T1","T2"], "source": {"url": "testSite.url","name": "test site"},"page_id":"test", "post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"}}'
+    Alegre::ElasticSearch.add_glossary '{"term": "teste", "lang": "pt", "definition": "teste definition","translations": [ {"lang": "pt","definition": "definição de teste","term": "teste"}],"context": {"tags":["T1","T2"], "source": {"url": "testSite.url","name": "test site"},"page_id":"test", "post": "xxxx","data_source": "dictionary","time-zone": "PDT / MST"}}'
     sleep 1
     get :terms, data: '{"lang": "pt", "term":  "teste", "context":{"tags":["T1","T2"], "source":{"url":"testSite.url", "name":"test site"}}}'
     data_hash = assigns(:glossary)[0]

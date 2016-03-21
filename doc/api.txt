@@ -1,0 +1,10 @@
+API Endpoints - Sat Mar 19 01:38:21 UTC 2016
+     1	DELETE /api/glossary/delete
+     2	GET    /api/dictionary/terms
+     3	GET    /api/glossary/terms
+     4	GET    /api/languages/identification
+     5	GET    /api/languages/language
+     6	GET    /api/mt
+     7	GET    /api/mt/languages
+     8	POST   /api/glossary/term
+     9	POST   /api/languages/sample

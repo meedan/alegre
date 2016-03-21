@@ -1,4 +1,4 @@
-require 'mlg_mt'
+require 'alegre_mt'
 
 class Api::V1::MtController < Api::V1::BaseApiController
   include MtDoc
@@ -29,6 +29,6 @@ class Api::V1::MtController < Api::V1::BaseApiController
   private
 
   def start_mt
-    @mt = Mlg::Mt.new
+    @mt = Alegre::Mt.new
   end
 end
