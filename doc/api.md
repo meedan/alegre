@@ -1,30 +1,4 @@
-# Alegre
-
-A linguistic service by [Meedan](https://meedan.com).
-
-## Installation
-
-* Copy `config/config.yml.example` to `config/config.yml` and adjust the options
-* Copy `config/database.yml.example` to `config/database.yml` and adjust the options
-* Copy `config/initializers/secret_token.rb.example` to `config/initializers/secret_token.rb` and adjust the options
-* Copy `config/initializers/errbit.rb.example` to `config/initializers/errbit.rb` and adjust the options
-* Run `bundle install` to install dependencies
-* Run `docker pull elasticsearch:latest && docker run -d -p 9200:9200 elasticsearch` to install and start Elasticsearch
-* Run `bundle exec rake db:migrate` to create database schema
-* Run `bundle exec rake lapis:api_keys:create` to create API key - you will need it on the API web interface later!
-* Run `bundle exec rake swagger:docs` to generate web-based documentation
-* Run `cd doc && make` to generate full documentation
-* Run `RAILS_ENV=test bundle exec rake db:migrate && bundle exec rake test` to run unit tests
-* Run `rails s` and access the API at [http://localhost:3000/api](http://localhost:3000/api)
-
-## Features
-
-* Language identification
-* Glossary
-* Dictionary
-* Machine Translation
-
-## API
+### API
 
 #### GET /api/languages/identification
 
@@ -542,42 +516,3 @@ Use this method in order to get a list of all languages supported for machine tr
 }
 ```
 
-
-## Rake tasks
-
-There are rake tasks for a few tasks (besides Rails' default ones). Run them this way: `bundle exec rake <task name>`
-
-* `test:coverage`: Run all tests and calculate test coverage
-* `application=<application name> lapis:api_keys:create`: Create a new API key for an application
-* `lapis:api_keys:delete_expired`: Delete all expired keys
-* `lapis:error_codes`: List all error codes that this application can return
-* `lapis:licenses`: List the licenses of all libraries used by this project
-* `lapis:client:ruby`: Generate a client Ruby gem, that allows other applications to communicate and test this service
-* `lapis:client:php`: Generate a client PHP library, that allows other applications to communicate and test this service
-* `lapis:docs`: Generate the documentation for this API, including models and controllers diagrams, Swagger, API endpoints, licenses, etc.
-* `lapis:docker:run`: Run the application in Docker
-* `lapis:docker:shell`: Enter the Docker container
-* `swagger:docs:markdown`: Generate the documentation in markdown format
-
-## Troubleshooting
-
-### Exception `RubyPython::InvalidInterpreter: An invalid interpreter was specified` when running `bundle exec rake db:migrate`
-This is because RubyPython [hardcodes the list of locations to search for `libpython`](https://github.com/halostatue/rubypython/blob/master/lib/rubypython/interpreter.rb#L81). To fix:
-
-* Identify your default Python version: `python --version`. You get something like:
-```
-Python 2.7.6
-```
-* Find your corresponding `libpython` library: `find /usr/lib -name 'libpython2.7*'`. You get something like:
-```
-/usr/lib/python2.7/config-x86_64-linux-gnu/libpython2.7.so
-/usr/lib/python2.7/config-x86_64-linux-gnu/libpython2.7.a
-/usr/lib/python2.7/config-x86_64-linux-gnu/libpython2.7-pic.a
-/usr/lib/x86_64-linux-gnu/libpython2.7.so
-/usr/lib/x86_64-linux-gnu/libpython2.7.so.1
-/usr/lib/x86_64-linux-gnu/libpython2.7.so.1.0
-/usr/lib/x86_64-linux-gnu/libpython2.7.a
-```
-* Symlink the `.so` library to one of the locations that RubyPython will check: `sudo ln -s /usr/lib/python2.7/config-x86_64-linux-gnu/libpython2.7.so /usr/lib/`
-
-* Try again, issue should be fixed!

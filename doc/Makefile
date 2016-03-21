@@ -6,7 +6,7 @@
 INKSCAPE = inkscape
 RAKE = bundle exec rake
 
-all: controllers_brief.png controllers_complete.png models_brief.png models_complete.png api.txt licenses.csv api-docs.json 
+all: controllers_brief.png controllers_complete.png models_brief.png models_complete.png api.txt licenses.csv api-docs.json api.md
 
 controllers_brief.png: controllers_brief.svg
 	$(INKSCAPE) --export-png='controllers_brief.png' controllers_brief.svg
@@ -41,6 +41,9 @@ licenses.csv:
 
 api-docs.json:
 	cd .. && $(RAKE) swagger:docs && cd - && ln -s ../public/api-docs.json
+
+api.md:
+	cd .. && $(RAKE) swagger:docs:markdown && cd -
 
 clean:
 	rm -f *.png *.svg *.txt *.csv *.json
