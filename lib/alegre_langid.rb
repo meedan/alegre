@@ -6,7 +6,7 @@ module Alegre
       RubyPython.stop
       RubyPython.start
       s = RubyPython.import 'sys'
-      s.path.insert(0, '/home/ccx/work/alegre/lib/langid').rubify
+      s.path.insert(0, Dir.pwd+'/lib/langid').rubify
       langid = RubyPython.import 'langid'
       @@langid = langid.LangId.new()
     end
