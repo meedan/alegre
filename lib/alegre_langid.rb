@@ -6,14 +6,14 @@ module Alegre
       RubyPython.stop
       RubyPython.start
       s = RubyPython.import 'sys'
-      s.path.insert(0, CONFIG['langid']).rubify
+      s.path.insert(0, '/home/ccx/work/alegre/lib/langid').rubify
       langid = RubyPython.import 'langid'
-      @@langid = langid.LangId.new(MODEL_SENTENCES,LANGUAGES,STOPWORDS_PATH)
+      @@langid = langid.LangId.new()
     end
 
     def classify(text)
       begin
-	@@langid.classify(text).rubify
+        @@langid.classify(text).rubify
       rescue Exception => e
         Rails.logger.info "AlegreLangIdLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
@@ -28,7 +28,5 @@ module Alegre
     def list_languages
       @@langid.list_languages.rubify
     end
-
-
   end
 end

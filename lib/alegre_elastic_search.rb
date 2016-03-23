@@ -81,7 +81,7 @@ module Alegre
     end
 
     if !jsonCtx.has_key?('lang')
-      lang = Alegre::Dysl.new.try_to_classify(jsonCtx["term"])
+      lang = Alegre::LangId.new.classify(jsonCtx["term"])
       if lang.length > 0
         jsonCtx['lang'] =  lang[0][1]
       end
