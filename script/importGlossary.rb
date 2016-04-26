@@ -4,23 +4,22 @@ require 'alegre_client'
 require 'optparse'
 
 def add_term(channel_id, term, lang1, definition, dst_term, dst_lang, dst_definition, host, alegre_token)
-  #lang = BRIDGE_CONFIG['supported_language_fallbacks'][dst_lang] || dst_lang
   term = { 
     term: term,
-    lang: lang1, 
+    lang: lang1.downcase,
     definition: definition,
     translations: [
-      { lang: dst_lang, definition: dst_definition, term: dst_term }
+      { lang: dst_lang.downcase, definition: dst_definition, term: dst_term }
     ],  
     context: { page_id: channel_id, 'data_source' => 'glossary' }
   }
+  puts "Adding #{term.inspect}"
+  puts '------------------------------------------------------------------'
   req = AlegreClient::Request.post_glossary_term(host, { data: term.to_json, should_replace: 0 }, alegre_token)
   req['type'] === 'success'
 end
 
-
 #ruby importGlossary.rb -f 'import.csv' -h 'http://localhost:3000' -t '658a12f0dafd1c6dd0905d4e9848fb30'
-
 
 options = {:host => nil, :csv => nil, :token => nil}
 
@@ -44,25 +43,24 @@ parser.parse!
 
 if options[:csv] == nil
   print "Enter CSV file: "
-    options[:csv] = gets.chomp
+  options[:csv] = gets.chomp
 end
-
 
 if options[:token] == nil
   print "Enter Alegre's token: "
-    options[:token] = gets.chomp
+  options[:token] = gets.chomp
 end
 
 if options[:host] == nil
   print "Enter Alegre's host: "
-    options[:host] = gets.chomp
+  options[:host] = gets.chomp
 end
 
 csvFile = CSV.read(options[:csv].to_s, headers:true)
 host = options[:host] 
 alegre_token = options[:token] 
-definition=''
+definition = ''
 
 csvFile.each do |row|
-  add_term(row['Page ID'] , row['Source Term'] , row['Source Language'][0..1].upcase  , definition, row['Target Term'], row['Target Language'][0..1].upcase , row['Target Definition'],  host, alegre_token)
+  add_term(row['Page ID'] , row['Source Term'] , row['Source Language'][0..1].upcase  , definition, row['Target Term'], row['Target Language'][0..1].upcase , row['Target Definition'], host, alegre_token)
 end

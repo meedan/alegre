@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/meedan/alegre-client.git
+  revision: 35ef45d86fd9f6aacea531996a45d3a420b21707
+  ref: 35ef45
+  specs:
+    alegre_client (0.0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -238,6 +245,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake (= 4.3.3)
+  alegre_client!
   auto_localize (= 0.1)
   awesome_print
   bing_translator (~> 4.5.0)
