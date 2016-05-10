@@ -158,9 +158,10 @@ class LangId:
       text = re.sub('hahaha', '', text)
       text = re.sub('haha', '', text)
       text = re.sub('(\sx\s|\sX\s)+', ' ', text)
-      text = re.sub('(\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
+      text = re.sub('(\👌|\€|\😪|\❤️|\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
       text = re.sub('(؟|\/|\t|\n+| - |\.)', ' ', text)
       text = re.sub(r'\\', ' ', text)
+      text = re.sub('\|', '', text)
       text = re.sub('\[', '', text)
       text = re.sub('\]', '', text)
       text = re.sub('\(', '', text)
@@ -181,7 +182,8 @@ class LangId:
         for line in fd.readlines():
           try:
             s = self.threeGrams(self.normalize(unicode(line)))
-            i = i+s
+            if re.match("", s):
+              i = i+s
           except ValueError:
             i = i
         fd.close()
@@ -208,7 +210,13 @@ class LangId:
      if len(ret) == 0:
        sims = self.sim_tfidf(self.threeGrams(text))
 
+       #print '......',text,sims
        if len(sims) > 0:
+        if len(sims) > 3:
+          if (sims[0][1] > 0.12) and ((sims[0][1] - sims[3][1]) < 0.036): #UNKNOWN
+            return []
+
+
         language = ''
         #sims = self.stopwordsIncreaseSims (text,sims)
 
@@ -220,10 +228,9 @@ class LangId:
         lang1= self.languages[sims[0][0]].lower()
         lang2= self.languages[sims[1][0]].lower()
 
-        print '......',text,sims,lang1,lang2,((sims[0][1] - sims[1][1]) > 0.003) , (sims[0][1] > 0.004)
+        print '......',text,sims,lang1,lang2,((sims[0][1] - sims[1][1]) > 0.003) , (sims[0][1] > 0.004),( ((sims[0][1] - sims[1][1]) > 0.003) and (sims[0][1] > 0.004) ) or (self.arabicAndfarsi(lang1, lang2, text))
         if ( ((sims[0][1] - sims[1][1]) > 0.003) and (sims[0][1] > 0.004) ) or (self.arabicAndfarsi(lang1, lang2, text)):
           language = self.languageRules(lang1, lang2, dLanguages, text)
-          ##print "---> ",language
           if len(language) > 0:
             ret.append([1, str(language.upper())])
             langPreDefined = language.upper()
@@ -231,7 +238,8 @@ class LangId:
           #print "ICI",self.languages
           lang = ""
           language = self.SWdetect_language(text)
-  
+          print '++++++language',language     
+
           if len(language) > 0:
             ret.append([1, str(language.upper())])
             langPreDefined = language.upper()
@@ -254,77 +262,84 @@ class LangId:
         return True
     return False
 
+
+  def find_words(self, text, search):
+    """Find exact words"""
+    dText   = text.split()
+    dSearch = search.split()
+    found_word = 0
+    for text_word in dText:
+        for search_word in dSearch:
+            if search_word == text_word:
+                found_word += 1
+
+    if found_word == len(dSearch):
+        return True
+    else:
+        return False
+
+
   def languageRules(self, lang1, lang2, dLanguages, text):
     language = ''
-
-
-
-
     if 'tl' in dLanguages.keys():
-      if text.find(' pa ') > -1:
+      if (text.find('ggong') > -1) or (text.find(' ang ') > -1) or (text.find('oong') > -1) or (text.find(' pa ') > -1):
         language = 'tl'  
       if ( text.find(' na ') > -1) and ((lang1 != 'pt')  and  (lang2 != 'pt') ):
         language = 'tl'
+      if ((lang2 != 'es')  and  (lang2 != 'fr')  and  (lang1 == 'tl') ) or ((lang1 != 'es')  and (lang1 != 'fr')  and  (lang2 == 'tl') ):     
+        if (text.find(' ni ') > -1) :
+           language = 'tl' 
 
     if ((lang1 == 'id')  and  (lang2 == 'tr') ):     
       if text.find('ş') > -1:
         language = 'tr'
+    elif ((lang2 == 'id')  and  (lang1 == 'tl') ) or ((lang1 == 'id')  and  (lang2 == 'tl') ):     
+      if (text.find(' ba ') > -1) or (text.find(' daw ') > -1) or (text.find('nasa') > -1) or (text.find(' at ') > -1)  or (text.find(' na ') > -1)  or (text.find('sila ') > -1) :
+         language = 'tl' 
     elif ((lang1 == 'tr')  and  (lang2 == 'az') ):     
       if text.find('ə') > -1:
          language = 'az'
-
     elif ((lang2 == 'ar')  and  (lang1 == 'fa') ) or ((lang1 == 'ar')  and  (lang2 == 'fa') ):     
       if self.findInText(['ﻩو','ة','دو'], text):
         language = 'ar'
       elif self.findInText(['دوازده','وﻩ',' و ','پ','چ','ژ','گ'], text):       
         language = 'fa'  
-
-
     elif ((lang2 == 'en')  and  (lang1 == 'az') ) or ((lang1 == 'en')  and  (lang2 == 'az') ):     
       if (text.find('ç') > -1) or  (text.find('ə') > -1) or (text.find('ş') > -1):
          language = 'az'
       elif (text.find(' to ') > -1) or (text.find(' day ') > -1) or (text.find(' one ') > -1):
          language = 'en'  
-
     elif ((lang2 == 'en')  and  (lang1 == 'id') ) or ((lang1 == 'en')  and  (lang2 == 'id') ):     
       if (text.find("i'm") > -1) or (text.find(' for') > -1) or  (text.find('thy') > -1) or (text.find('ts') > -1) or (text.find(' my ') > -1) or (text.find(' are ') > -1) or (text.find("aren't") > -1):
          language = 'en' 
-
     elif ((lang2 == 'en')  and  (lang1 == 'pt') ) or ((lang1 == 'en')  and  (lang2 == 'pt') ):     
       if (text.find('you') > -1):
          language = 'en' 
-
+    elif ((lang2 == 'pt')  and  (lang1 == 'es') ) or ((lang1 == 'pt')  and  (lang2 == 'es') ):     
+      if (self.find_words(text, 'lá')) or (self.find_words(text, 'você')) or (self.find_words(text, 'lua')) or (self.find_words(text, 'ali')):
+         language = 'pt' 
+      if (self.find_words(text, 'y')):
+         language = 'es' 
     elif ((lang2 == 'en')  and  (lang1 == 'es') ) or ((lang1 == 'en')  and  (lang2 == 'es') ):     
-      if (text.find('you') > -1):
+      if (text.find('lly') > -1) or (text.find('you') > -1) or (text.find(' st') > -1) or (self.find_words(text, 'him')):
          language = 'en' 
       elif (text.find('leer') > -1):
          language = 'es' 
-
-    elif ((lang2 != 'es')  and  (lang2 != 'fr')  and  (lang1 == 'tl') ) or ((lang1 != 'es')  and (lang1 != 'fr')  and  (lang2 == 'tl') ):     
-      if (text.find(' ni ') > -1) :
-         language = 'tl' 
-
-    elif ((lang2 == 'id')  and  (lang1 == 'tl') ) or ((lang1 == 'id')  and  (lang2 == 'tl') ):     
-      if (text.find('nasa') > -1) or (text.find(' at ') > -1)  or (text.find(' na ') > -1)  or (text.find('sila ') > -1) :
-         language = 'tl' 
-
     elif ((lang2 == 'en')  and  (lang1 == 'tl') ) or ((lang1 == 'en')  and  (lang2 == 'tl') ):     
-      if (text.find('easy') > -1):
+      if (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')):
          language = 'en' 
-
     elif ((lang2 == 'en')  and  (lang1 == 'fr') ) or ((lang1 == 'en')  and  (lang2 == 'fr') ):     
-      if (text.find(' this') > -1) or (text.find('will') > -1) or (text.find(' one') > -1) or (text.find('ee') > -1) :
+      if (text.find(' this') > -1) or (text.find(' for') > -1) or (text.find(' you ') > -1) or (text.find(' our ') > -1) or (text.find('will') > -1) or (text.find(' one') > -1) or (text.find('ee') > -1) :
          language = 'en' 
       elif (text.find('è') > -1):
          language = 'fr' 
     elif ((lang2 == 'en')  and  (lang1 == 'it') ) or ((lang1 == 'en')  and  (lang2 == 'it') ):     
-      if (text.find('thy') > -1) or (text.find('well') > -1) or (text.find('ts') > -1) or (text.find('ing ') > -1):
+      if (text.find('thy') > -1) or (self.find_words(text, 'never')) or (text.find('well') > -1) or (text.find('ts') > -1) or (text.find('ing ') > -1) or (text.find(' of ') > -1):
          language = 'en' 
       if (text.find('è') > -1):
          language = 'it' 
-
     elif ((lang1 == 'es')  and  (lang2 == 'en') ):     
-      if (text.find('my') > -1) or (text.find('ck') > -1):
+      if (text.find('my') > -1) or (text.find('ck') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'never')):
          language = 'en' 
     elif ((lang1 == 'it')  and  (lang2 == 'es') ):     
       if (text.find('nn') > -1) or (text.find('à') > -1)  or (text.find('ù') > -1):
@@ -339,6 +354,7 @@ class LangId:
       elif (text.find('ç') > -1) or (text.find(' e ') > -1)  or (text.find('à') > -1):
          language = 'pt'
 
+    print '======language',language     
     return language
 
   def add_sample(self, sentence, lang):
@@ -416,6 +432,11 @@ def classifyWindow3Words(line):
   if len(res) > 2: #[['0.196574', 'ES'], ['0.0847508', 'EN'],
     ##print '----++',line, res
     if  (not sameAlphabet(line)) or ( difFirstSecond(res) and canBeEnglish(res,3) )  :
+      #keep first 3 languages that are not English
+      first3 = []
+      for x in range(0, 4):
+          first3.append(res[x][1])
+
       dLangs = {}
       vLine = line.split(' ')
 
@@ -432,15 +453,14 @@ def classifyWindow3Words(line):
         w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
         if (sameAlphabet(w1)):
           lang = l.classify(w1)
-          lang[0][1] = areEnID(lang)
-          ##print '....',w1,lang
-          vLangs.append([w1,lang])
-
-          if len(lang) > 0:
-            if lang[0][1] in dLangs:
-              dLangs[lang[0][1]] += 1
-            else:
-              dLangs[lang[0][1]] = 1
+          if len(lang) > 0 :
+            lang[0][1] = areEnID(lang)
+            vLangs.append([w1,lang])
+            if (lang[0][1] in first3):
+              if lang[0][1] in dLangs:
+                dLangs[lang[0][1]] += 1
+              else:
+                dLangs[lang[0][1]] = 1
 
         vLine.pop(0)
 
@@ -453,30 +473,31 @@ def classifyWindow3Words(line):
           w1 = w1[1:] #remove first char
 
           lang = l.classify(w1)
-          lang[0][1] = areEnID(lang)
-          #print 'x....',w1,lang
-          vLangs.append([w1,lang])
-
-
-          if len(lang) > 0:
-            if lang[0][1] in dLangs:
-              dLangs[lang[0][1]] += 1
-            else:
-              dLangs[lang[0][1]] = 1
+          if len(lang) > 0 :
+            lang[0][1] = areEnID(lang)
+            vLangs.append([w1,lang])
+            if (lang[0][1] in first3):
+              if lang[0][1] in dLangs:
+                dLangs[lang[0][1]] += 1
+              else:
+                dLangs[lang[0][1]] = 1
 
 
         #dLangs in res
         res = []
-        for key, value in dLangs.iteritems():
-          res.append([value,key])
-      if ('EN' in dLangs) and (len(dLangs)>1):
+
+      for key, value in dLangs.iteritems():
+        res.append([value,key])
+
+
+      if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
         return  sorted(formatRet2(formatRet1(percentageResult(res))).items(), key=lambda item: -item[1])
       else:
         return sorted(formatRet1(percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
 
 
   ##print 'line,res -RET -',res[0][0],res
-  if float(res[0][0]) > 0:
+  if len(res) >  0 and float(res[0][0]) > 0:
     return sorted(formatRet1(percentageResult(res)).items(), key=lambda item: -item[1]) 
   else:
     return []
@@ -537,13 +558,13 @@ def testWindow3Words(fd,f):
 if __name__ == '__main__':
 
   l = LangId()
-  if True: #False: #
-    line = l.normalize("enjoy na enjoy ang crowd")
+  if False: # True: #
+    line = l.normalize(" lá vai lua maria observar luablanconolegendarios")
     # (" The system is highly useful for linguists and ethnographers to categorize the  هو واحد من أوائل المستوطنين الأمريكيين، وزعيم إقليمي في ما يُعرف الآن بمقاطعة بروارد في ولاية فلوريدا الأمريكية. قتلت السيمينول عائلته عام 1836، خلال حرب السيمينول الثانية، languages spoken on a regional basis, and to compute analysis in the field of lexicostatistics ") #("el caballo es de color marrón fuerte: the horse is very brown");#"يستقبل رئيس النائب في هذه الأثناء رئيسة بعثة في كريستينا لاسن : Receives the President of MP in the meantime, Head of Mission, Christina Lassen") #2,11    
     #print "line->",line
     #line = normalize("can you help me هل بإمكانك مساعدتي")
     result = classifyWindow3Words(line)
-    print str(line),result
+    print '***->',str(line),result
 
   else:
     #f = open('./rtestPosts.txt', 'w')
