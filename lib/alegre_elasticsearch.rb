@@ -78,20 +78,16 @@ module Alegre
         jsonCtx["post"] = nil
       end
 
-      if !jsonCtx.has_key?('lang')
-        lang = Alegre::Dysl.new.try_to_classify(jsonCtx["term"])
-        if lang.length > 0
-          jsonCtx['lang'] =  lang[0][1]
-        end
+    if !jsonCtx.has_key?('lang')
+      lang = Alegre::LangId.new.classify(jsonCtx["term"])
+      if lang.length > 0
+        jsonCtx['lang'] =  lang[0][1]
       end
-
       term = jsonCtx["lang"]
-
       if jsonCtx[term].nil?
         jsonCtx[term] = jsonCtx["term"]
         jsonCtx["term"] = nil
       end
-
       jsonCtx.each do |key, value|
       #2 levels {u'source': {u'url': u'testSite.url', u'name': u'test site'}, u'post': u'lala lala', u'data_source': u'dictionary'}
       if (!value.nil? && !key.nil?)

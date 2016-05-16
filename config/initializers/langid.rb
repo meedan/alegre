@@ -1,0 +1,1 @@
+Alegre::LangId.new.start
