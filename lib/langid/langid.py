@@ -34,6 +34,7 @@ class LangId:
     f = open(self.modelPath+'/languages', 'r')
     self.languages = f.read().split('\n')
     self.languages.pop()  
+    print 'self.modelPath+/corpus.mm',self.modelPath+'/corpus.mm'
     if os.path.exists(self.modelPath+'/corpus.mm'):
       self.dictionary = corpora.Dictionary.load(self.modelPath+'/dict.dict')
       self.corpus = corpora.MmCorpus(self.modelPath+'/corpus.mm')
@@ -47,15 +48,10 @@ class LangId:
       self.documents = []
       for lang in self.languages:
         self.documents.append(self.readFile(self.modelPath+'/'+lang.lower()))
-
       self.texts = []
       for document in self.documents:
           self.texts.append(document) #.lower().split())   
-
       self.newModelFiles()
-
-
-
 
   def newModelFiles(self):     
     self.dictionary = corpora.Dictionary(self.texts)
@@ -64,6 +60,7 @@ class LangId:
     self.tfidf = models.TfidfModel(self.corpus) # step 1 -- initialize a model
     self.tfidf.save(self.modelPath+'/model.tfidf') # same for tfidf, lda, ...
     pickle.dump(self.documents, open(self.modelPath+'/documents.obj', "wb" ) )
+    corpora.MmCorpus.serialize(self.modelPath+'/corpus.mm', self.corpus)
 
   def SWsimilar(self,model,v,txt):
     doc_tokens = txt.lower().split()
@@ -135,6 +132,8 @@ class LangId:
       text = re.sub('\(', '', text)
       text = re.sub('\)', '', text)
       text = re.sub('(  )+', ' ', text)
+      while text.startswith(' '):
+        text = text[1:]
       while text.endswith(' ') or text.endswith('\n'):
         text = text[:-1]
       return text
@@ -248,10 +247,13 @@ class LangId:
     language = self.compareLangs(['pt', 'es','it'], [lang1, lang2, lang3], [['você'], ['nuevo'],[]], text)
     if len(language)>0:
       return language
-    language = self.compareLangs(['en', 'pt', 'es'], [lang1, lang2, lang3], [['yes','day','you','this'], ['você'], []], text)
+    language = self.compareLangs(['en', 'pt', 'es'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], ['você'], []], text)
     if len(language)>0:
       return language
-    language = self.compareLangs(['en', 'it', 'fr'], [lang1, lang2, lang3], [['yes','day','you','this'], [], []], text)
+    language = self.compareLangs(['en', 'fr', 'es'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], [], []], text)
+    if len(language)>0:
+      return language
+    language = self.compareLangs(['en', 'it', 'fr'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], [], []], text)
     if len(language)>0:
       return language
     if ((lang1 == 'id')  and  (lang2 == 'tr') )  or  ((lang2 == 'id')  and  (lang1 == 'tr') ) :     
@@ -281,7 +283,7 @@ class LangId:
       if (self.find_words(text, 'day')) or (text.find("i'm") > -1) or (self.find_words(text, 'for')) or  (text.find('thy') > -1) or (text.find('ts') > -1) or (text.find(' my ') > -1) or (text.find(' are ') > -1) or (text.find("aren't") > -1):
          language = 'en' 
     elif ((lang2 == 'en')  and  (lang1 == 'pt') ) or ((lang1 == 'en')  and  (lang2 == 'pt') ):     
-      if (text.find('you') > -1):
+      if (text.find('you') > -1) or self.find_words(text, 'is') :
          language = 'en' 
     elif ((lang2 == 'fr')  and  (lang1 == 'es') ) or ((lang1 == 'fr')  and  (lang2 == 'es') ):     
       if (text.find('dades ') > -1) :
@@ -300,7 +302,7 @@ class LangId:
       elif (text.find('leer') > -1):
          language = 'es' 
     elif ((lang2 == 'en')  and  (lang1 == 'tl') ) or ((lang1 == 'en')  and  (lang2 == 'tl') ):     
-      if (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'for')):
+      if (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'for')) or (self.find_words(text, 'the')):
          language = 'en' 
       elif (self.find_words(text, 'ka')):
          language = 'tl' 
@@ -371,64 +373,67 @@ class LangId:
     return False
 
   def classify(self,line):  
-    res = self.classifyPerLanguage(line)
-    resOriginal = res 
-    print 'line,res -><',line,res
-    if len(res) > 2: 
-      if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) )  :
-        #keep first 3 languages that are not English
-        first3 = []
-        for x in range(0, 4):
-            first3.append(res[x][1])
-        dLangs = {}
-        vLine = line.split(' ')
-        while len(vLine[0]) < 1:
-          vLine.pop(0)
-        n = 0
-        vLangs = []
-        while len(vLine) > 3:
-          while len(vLine[0]) < 1:
-            vLine.pop(0)
-          w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
-          if (self.sameAlphabet(w1)):
-            lang = self.classifyPerLanguage(w1)
-            if len(lang) > 0 :
-              lang[0][1] = self.areEnID(lang)
-              vLangs.append([w1,lang])
-              if (lang[0][1] in first3):
-                if lang[0][1] in dLangs:
-                  dLangs[lang[0][1]] += 1
-                else:
-                  dLangs[lang[0][1]] = 1
-          vLine.pop(0)
-        if len(vLine) > 0:
-          w1 = ''
-          for w in vLine:
-            w1 = w1+' '+w
-          if len(w1) > 2 and (self.sameAlphabet(w1)):  
-            w1 = w1[1:] #remove first char
-            lang = self.classifyPerLanguage(w1)
-            if len(lang) > 0 :
-              lang[0][1] = self.areEnID(lang)
-              vLangs.append([w1,lang])
-              if (lang[0][1] in first3):
-                if lang[0][1] in dLangs:
-                  dLangs[lang[0][1]] += 1
-                else:
-                  dLangs[lang[0][1]] = 1
-          res = []
-        for key, value in dLangs.iteritems():
-          res.append([value,key])
-        print '-->dLangs',dLangs  
-        if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
-          return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))).items(), key=lambda item: -item[1])
-        else:
-          return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
-    if len(res) >  0 and float(res[0][0]) > 0:
-      return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
+    if len(line) > 1:
+	    res = self.classifyPerLanguage(line)
+	    resOriginal = res 
+	    print 'line,res -><',line,res
+	    if len(res) > 2: 
+	      if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) )  :
+		#keep first 3 languages that are not English
+		first3 = []
+		for x in range(0, 4):
+		    first3.append(res[x][1])
+		dLangs = {}
+		vLine = line.split(' ')
+		while len(vLine[0]) < 1:
+		  vLine.pop(0)
+		n = 0
+		vLangs = []
+		while len(vLine) > 3:
+		  while len(vLine[0]) < 1:
+		    vLine.pop(0)
+		  w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
+		  if (self.sameAlphabet(w1)):
+		    lang = self.classifyPerLanguage(w1)
+		    if len(lang) > 0 :
+		      lang[0][1] = self.areEnID(lang)
+		      vLangs.append([w1,lang])
+		      if (lang[0][1] in first3):
+		        if lang[0][1] in dLangs:
+		          dLangs[lang[0][1]] += 1
+		        else:
+		          dLangs[lang[0][1]] = 1
+		  vLine.pop(0)
+		if len(vLine) > 0:
+		  w1 = ''
+		  for w in vLine:
+		    w1 = w1+' '+w
+		  if len(w1) > 2 and (self.sameAlphabet(w1)):  
+		    w1 = w1[1:] #remove first char
+		    lang = self.classifyPerLanguage(w1)
+		    if len(lang) > 0 :
+		      lang[0][1] = self.areEnID(lang)
+		      vLangs.append([w1,lang])
+		      if (lang[0][1] in first3):
+		        if lang[0][1] in dLangs:
+		          dLangs[lang[0][1]] += 1
+		        else:
+		          dLangs[lang[0][1]] = 1
+		  res = []
+		for key, value in dLangs.iteritems():
+		  res.append([value,key])
+		print '-->dLangs',dLangs  
+		if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
+		  return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))).items(), key=lambda item: -item[1])
+		else:
+		  return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
+	    if len(res) >  0 and float(res[0][0]) > 0:
+	      return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
+	    else:
+	      return []
     else:
       return []
-
+	
   def areEnID(self,lang):
     #[are] in id and en
     if lang[0][1] == 'ID' and lang[1][1] == 'EN':
@@ -470,21 +475,7 @@ class vec:
 if __name__ == '__main__':
   l = LangId()
   if True: #False: #
-    line = l.normalize(" comisario ottoniel obed sandoval bonilla asume como nuevo jefe del  vía  ")
-    # (" The system is highly useful for linguists and ethnographers to categorize the  هو واحد من أوائل المستوطنين الأمريكيين، وزعيم إقليمي في ما يُعرف الآن بمقاطعة بروارد في ولاية فلوريدا الأمريكية. قتلت السيمينول عائلته عام 1836، خلال حرب السيمينول الثانية، languages spoken on a regional basis, and to compute analysis in the field of lexicostatistics ") #("el caballo es de color marrón fuerte: the horse is very brown");#"يستقبل رئيس النائب في هذه الأثناء رئيسة بعثة في كريستينا لاسن : Receives the President of MP in the meantime, Head of Mission, Christina Lassen") #2,11    
-    #print "line->",line
-    #line = normalize("can you help me هل بإمكانك مساعدتي")
+    line = l.normalize("x")
     result = l.classify(line)
     print '***->',str(line),result
-  else:
-    f = open('./reval.txt', 'w')
-    fd = open('./eval.txt', 'r')
-    res = []
-    for line in fd.readlines():
-        line = l.normalize(re.sub('\n', '', line))
-        result = l.classify(line)
-        #print str(line),result
-        f.write(str(line)+'\t'+str(result)+'\n')
-        f.flush()
-    fd.close()
-    f.close()
+  

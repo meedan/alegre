@@ -11,34 +11,41 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'This is a sentence in English'
     assert_response :success
-    assert_equal "EN", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][0]   
   end
 
   test "identification - should get language es" do
     authenticate_with_token
     get :identification, text: 'Esta es una frase en español'
     assert_response :success
-    assert_equal "ES", assigns(:language)[0][1]   
+    assert_equal "ES", assigns(:language)[0][0]   
   end
 
   test "identification - should get language pt" do
     authenticate_with_token
     get :identification, text: 'Esta é uma frase em português'
     assert_response :success
-    assert_equal "PT", assigns(:language)[0][1]   
+    assert_equal "PT", assigns(:language)[0][0]   
   end
 
   test "identification - should get language ar" do
     authenticate_with_token
     get :identification, text: 'هذه هي العبارة باللغة العربية'
     assert_response :success
-    assert_equal "AR", assigns(:language)[0][1]   
+    assert_equal "AR", assigns(:language)[0][0]   
   end
 
-
+  test "identification - should get language en+ar" do
+    authenticate_with_token
+    get :identification, text: 'in the morning evening at night غدا  البارحة غدا  البارحة'
+    assert_response :success
+    assert_equal "[EN,AR]", assigns(:language)[0][0]
+    print 'assigns(:language)[0][1]',assigns(:language)[0][1]   
+  end
+  
   test "identification - should return error empty if test is in a unknown language" do
     authenticate_with_token
-    get :identification, text: 'xxxxx xxxxxxx xxxxxxxx xxx'
+    get :identification, text: 'x'
     assert_response :success
     assert_equal [], assigns(:language)
   end
@@ -54,7 +61,7 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'I ♥ you English language'
     assert_response :success
-    assert_equal "EN", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][0]   
   end
 
   test "identification - should not return english hashtag" do
