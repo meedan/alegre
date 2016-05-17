@@ -2,93 +2,99 @@ require 'rubypython'
 require 'json'
 require 'elasticsearch'
 
-GLOSSARY_INDEX = CONFIG['glossary_index']
-GLOSSARY_TYPE  = CONFIG['glossary_type']
+GLOSSARY_INDEX = CONFIG['glossary_index'] 
+GLOSSARY_TYPE  = CONFIG['glossary_type'] 
 ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
+LANG_WITH_ANALYZER = CONFIG['lang_with_analyzer']  #languages with stem and stop analyzers in elasticsearch index
+
 
 module Alegre
-  class ElasticSearch
+   class ElasticSearch
 
-    def self.delete_glossary(_id)
-      client = Elasticsearch::Client.new log: true, url: ES_SERVER
+  def self.delete_glossary(_id)
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
 
-      if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
-        client.delete index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
-        client.indices.refresh index: GLOSSARY_INDEX
+    if client.exists? index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
+      client.delete index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id
+      client.indices.refresh index: GLOSSARY_INDEX
+      return true
+    else
+      return false
+    end
+  end
+
+  def self.get_glossary(str) 
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
+    glossary = []
+    data_hash = JSON.parse(str)
+    query = self.buildQuery(data_hash)
+
+    begin
+      ret = client.search index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, body: query
+      for doc in ret['hits']['hits']
+        glossary << doc
+      end
+    rescue Exception => e
+      puts 'Exception in get_glossary: ' + e.message
+    end
+
+    return glossary
+  end
+
+  def self.add_glossary(jsonStr, should_replace = 0)
+    client = Elasticsearch::Client.new log: true, url: ES_SERVER
+    begin
+      data_hash = JSON.parse(jsonStr)
+      if self.validationInsert(data_hash)
+        data_hash = self.updateTermName (data_hash)
+        _id = self.generate_id_for_glossary_term(data_hash)
+        exists = client.exists?(index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id)
+        replace = should_replace.to_i === 1
+        if !exists || replace
+          str = data_hash.to_s.gsub("=>", ':')
+
+          client.index index: GLOSSARY_INDEX,
+                 type: GLOSSARY_TYPE,
+                 id: _id,
+                 body: str
+        
+          client.indices.refresh index: GLOSSARY_INDEX
+        end
         return true
       else
         return false
       end
+    rescue Exception => e
+      return false
     end
+  end
 
-    def self.get_glossary(str)
-      client = Elasticsearch::Client.new log: true, url: ES_SERVER
-      glossary = []
-      data_hash = JSON.parse(str)
-      query = self.buildQuery(data_hash)
+  def self.buildQuery(jsonCtx)
+    dQuery = []  
+    dContext = []
+    jsonDc = {}
+    lang = ''
 
-      begin
-        ret = client.search index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, body: query
-        for doc in ret['hits']['hits']
-          glossary << doc
-        end
-      rescue Exception => e
-        puts 'Exception in get_glossary: ' + e.message
-      end
-
-      return glossary
+    if jsonCtx.has_key?('post') and !jsonCtx.has_key?('term')
+      jsonCtx["term"] = jsonCtx["post"]
+      jsonCtx["post"] = nil
     end
-
-    def self.add_glossary(jsonStr, should_replace = 0)
-      client = Elasticsearch::Client.new log: true, url: ES_SERVER
-      begin
-        data_hash = JSON.parse(jsonStr)
-        if self.validationInsert(data_hash)
-          data_hash = self.updateTermName (data_hash)
-          _id = self.generate_id_for_glossary_term(data_hash)
-          exists = client.exists?(index: GLOSSARY_INDEX, type: GLOSSARY_TYPE, id: _id)
-          replace = should_replace.to_i === 1
-          if !exists || replace
-            str = data_hash.to_s.gsub("=>", ':')
-
-            client.index index: GLOSSARY_INDEX,
-            type: GLOSSARY_TYPE,
-            id: _id,
-            body: str
-
-            client.indices.refresh index: GLOSSARY_INDEX
-          end
-          return true
-        else
-          return false
-        end
-      rescue Exception => e
-        return false
-      end
-    end
-
-    def self.buildQuery(jsonCtx)
-      dQuery = []
-      dContext = []
-      jsonDc = {}
-      lang = ''
-
-      if jsonCtx.has_key?('post') and !jsonCtx.has_key?('term')
-        jsonCtx["term"] = jsonCtx["post"]
-        jsonCtx["post"] = nil
-      end
 
     if !jsonCtx.has_key?('lang')
       lang = Alegre::LangId.new.classify(jsonCtx["term"])
       if lang.length > 0
         jsonCtx['lang'] =  lang[0][1]
       end
-      term = jsonCtx["lang"]
-      if jsonCtx[term].nil?
-        jsonCtx[term] = jsonCtx["term"]
-        jsonCtx["term"] = nil
-      end
-      jsonCtx.each do |key, value|
+    end
+
+    term = jsonCtx["lang"]
+
+    if jsonCtx[term].nil?
+      jsonCtx[term] = jsonCtx["term"]
+      jsonCtx["term"] = nil
+    end
+
+    jsonCtx.each do |key, value|
       #2 levels {u'source': {u'url': u'testSite.url', u'name': u'test site'}, u'post': u'lala lala', u'data_source': u'dictionary'}
       if (!value.nil? && !key.nil?)
         object = value
@@ -121,9 +127,9 @@ module Alegre
     sQuery = sQuery.gsub "\\",""
 
     if (dQuery.length  > 0)
-      dc = '{"query": {"bool": {"must": '+ sQuery +'}}}'
+      dc = '{"query": { "bool": { "must": '+ sQuery +'}}}'
     end
-
+    
     return dc
   end
 
@@ -147,22 +153,27 @@ module Alegre
 
       if !jsonDoc[term].nil? or !jsonDoc['term'].nil?
         return true
-      else
+      else    
         return false
       end
-    else
+    else    
       return false
     end
   end
 
   def self.create_index
-    client = Elasticsearch::Client.new log: true, url: ES_SERVER
+    index = CONFIG['glossary_index'] 
+    es_server = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
 
-    if client.indices.exists? index: GLOSSARY_INDEX
-      client.indices.delete index: GLOSSARY_INDEX
-    end
+    return if es_server === ':'
 
-    client.indices.create index: GLOSSARY_INDEX, body: Alegre::ElasticSearch.schema
+    client = Elasticsearch::Client.new log: true, url: es_server
+    
+    if client.indices.exists? index: index
+      client.indices.delete index: index
+    end  
+
+    client.indices.create index: index, body: Alegre::ElasticSearch.schema
   end
 
   def self.schema

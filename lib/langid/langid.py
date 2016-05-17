@@ -34,7 +34,6 @@ class LangId:
     f = open(self.modelPath+'/languages', 'r')
     self.languages = f.read().split('\n')
     self.languages.pop()  
-    print 'self.modelPath+/corpus.mm',self.modelPath+'/corpus.mm'
     if os.path.exists(self.modelPath+'/corpus.mm'):
       self.dictionary = corpora.Dictionary.load(self.modelPath+'/dict.dict')
       self.corpus = corpora.MmCorpus(self.modelPath+'/corpus.mm')
@@ -43,7 +42,6 @@ class LangId:
       self.texts = []
       for document in self.documents:
           self.texts.append(document) #.lower().split())   
-
     else:
       self.documents = []
       for lang in self.languages:
