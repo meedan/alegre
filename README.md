@@ -8,7 +8,8 @@ A linguistic service by [Meedan](https://meedan.com).
 * Copy `config/database.yml.example` to `config/database.yml` and adjust the options
 * Copy `config/initializers/secret_token.rb.example` to `config/initializers/secret_token.rb` and adjust the options
 * Copy `config/initializers/errbit.rb.example` to `config/initializers/errbit.rb` and adjust the options
-* Run `bundle install` to install dependencies
+* Run `bundle install` to install Ruby dependencies
+* Run `pip install -r requirements.txt` to install Python dependencies
 * Run `docker pull elasticsearch:latest && docker run -d -p 9200:9200 elasticsearch` to install and start Elasticsearch
 * Run `bundle exec rake db:migrate` to create database schema
 * Run `bundle exec rake lapis:api_keys:create` to create API key - you will need it on the API web interface later!

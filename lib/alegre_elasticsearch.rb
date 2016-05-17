@@ -100,7 +100,7 @@ module Alegre
         object = value
         if String === object
           if (key != "context") or !(value.class is Int)
-            dQuery << '{"match": {"'+key+'": "'+value+'"}}'
+            dQuery << '{"match": {"' + key.to_s + '": "' + value.to_s + '"}}'
           end
         elsif Hash === object
           value.each do |k, v|

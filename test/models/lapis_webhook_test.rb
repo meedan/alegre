@@ -3,7 +3,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), '..', '..', 'lib', '
 
 class LapisWebhookTest < ActiveSupport::TestCase
   def setup
-    @lw = Lapis::Webhook.new('http://meedan.com/test', { foo: 'bar' }.to_json)
+    @lw = Lapis::Webhook.new('http://ca.ios.ba/', { foo: 'bar' }.to_json)
     super
   end
 
@@ -16,6 +16,6 @@ class LapisWebhookTest < ActiveSupport::TestCase
   end
 
   test "should notify" do
-    assert_kind_of Net::HTTPFound, @lw.notify
+    assert_kind_of Net::HTTPOK, @lw.notify
   end
 end
