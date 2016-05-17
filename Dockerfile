@@ -15,16 +15,6 @@ ENV GITREPO git@github.com:meedan/alegre.git
 RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs libmysqlclient-dev -y
 RUN easy_install pip
 
-# Link libraries to the place that RubyPython looks for them
-COPY docker/link-python-libs /bin/link-python-libs
-RUN chmod +x /bin/link-python-libs
-RUN link-python-libs
-
-# Install DYSL
-COPY docker/dysl-install /bin/dysl-install
-RUN chmod +x /bin/dysl-install
-RUN dysl-install
-
 #
 # APP CONFIG
 #
@@ -54,6 +44,13 @@ WORKDIR ${DEPLOYDIR}
 RUN mkdir ./latest
 COPY ./Gemfile ./latest/Gemfile
 COPY ./Gemfile.lock ./latest/Gemfile.lock
+
+# Install and link libraries to the place that RubyPython looks for them
+COPY ./requirements.txt ./latest/requirements.txt
+RUN pip install -r ./latest/requirements.txt
+COPY docker/link-python-libs /bin/link-python-libs
+RUN chmod +x /bin/link-python-libs
+RUN link-python-libs
 
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}

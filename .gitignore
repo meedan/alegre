@@ -16,3 +16,4 @@ config/initializers/secret_token.rb
 dysl
 vendor/bundle
 /.project
+*.pyc

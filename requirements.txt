@@ -1,0 +1,4 @@
+alphabet-detector==0.0.5
+gensim==0.12.4
+hanzidentifier==1.0.2
+picklable-itertools==0.1.1
