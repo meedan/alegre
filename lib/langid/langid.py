@@ -242,7 +242,7 @@ class LangId:
       if ((lang2 != 'es')  and  (lang2 != 'fr')  and  (lang1 == 'tl') ) or ((lang1 != 'es')  and (lang1 != 'fr')  and  (lang2 == 'tl') ):     
         if (self.find_words(text, 'tayo')) or (text.find(' ni ') > -1) :
            language = 'tl' 
-    language = self.compareLangs(['pt', 'es','it'], [lang1, lang2, lang3], [['você'], ['nuevo'],[]], text)
+    language = self.compareLangs(['pt', 'es','it'], [lang1, lang2, lang3], [['você','com'], ['nuevo'],[]], text)
     if len(language)>0:
       return language
     language = self.compareLangs(['en', 'pt', 'es'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], ['você'], []], text)
@@ -420,9 +420,9 @@ class LangId:
 		  res = []
 		for key, value in dLangs.iteritems():
 		  res.append([value,key])
-		print '-->dLangs',dLangs  
+		#print '-->dLangs',dLangs  
 		if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
-		  return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))).items(), key=lambda item: -item[1])
+		  return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
 		else:
 		  return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
 	    if len(res) >  0 and float(res[0][0]) > 0:
@@ -446,11 +446,11 @@ class LangId:
     return retDict
 
   def formatRet2(self,retDict1):
-    retDict2 = {}
+    r = []
     for key, value in retDict1.iteritems():
       if key != 'EN':
-        retDict2['[EN,'+str(key)+']'] = value + retDict1['EN']
-    return retDict2
+        r.append([["EN",str(key)], value + retDict1['EN']])
+    return r 
 
   def percentageResult (self,res):
     totalSum = 0
@@ -473,7 +473,7 @@ class vec:
 if __name__ == '__main__':
   l = LangId()
   if True: #False: #
-    line = l.normalize("x")
+    line = l.normalize("in the morning evening at night غدا البارحة غدا البارحة غدا البارحة غدا البارحة ")
     result = l.classify(line)
     print '***->',str(line),result
   
