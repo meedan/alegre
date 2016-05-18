@@ -39,8 +39,7 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'in the morning evening at night غدا  البارحة غدا  البارحة'
     assert_response :success
-    assert_equal "[EN,AR]", assigns(:language)[0][0]
-    print 'assigns(:language)[0][1]',assigns(:language)[0][1]   
+    assert_equal ["EN", "AR"], assigns(:language)[0][0]
   end
   
   test "identification - should return error empty if test is in a unknown language" do
