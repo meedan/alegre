@@ -11,6 +11,7 @@ import pickle
 
 class LangId:     
   def __init__(self):
+    self.runMulti = 0
     modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
     if modelPath.endswith('/'):
       modelPath = modelPath[:-1]
@@ -50,6 +51,7 @@ class LangId:
       for document in self.documents:
           self.texts.append(document) #.lower().split())   
       self.newModelFiles()
+    self.index = similarities.MatrixSimilarity(self.tfidf[self.corpus])
 
   def newModelFiles(self):     
     self.dictionary = corpora.Dictionary(self.texts)
@@ -64,7 +66,6 @@ class LangId:
     doc_tokens = txt.lower().split()
     w = filter(lambda x: x in v.ss2, doc_tokens)
     dif = len(doc_tokens) - len(w)  
-    ##print "===",w,dif,len(doc_tokens) , len(w) ,v.ss2
     if len(w) > 0:
       try:
         return model.n_similarity(v.ss2, w) - dif
@@ -77,9 +78,7 @@ class LangId:
     sim = []
     n = 0
     for item in self.SWmodel:
-      ##print item
       sim = self.SWsimilar(self.SWmodel[item],self.SWvecs[item],text)
-      ##print sim
       if (n == 0) or (n < sim):
         lang = item
         n = sim
@@ -90,10 +89,9 @@ class LangId:
 
   def sim_tfidf(self, doc):     
       try:
-        vec_bow = self.dictionary.doc2bow(doc)#.lower().split())
+        vec_bow = self.dictionary.doc2bow(doc)
         vec_tfidf = self.tfidf[vec_bow] # convert the query to LSI space
-        index = similarities.MatrixSimilarity(self.tfidf[self.corpus])
-        sims = index[vec_tfidf]
+        sims = self.index[vec_tfidf]
         return sorted(enumerate(sims), key=lambda item: -item[1])
       except ValueError:
         return []
@@ -121,7 +119,7 @@ class LangId:
       text = re.sub('hahaha', '', text)
       text = re.sub('haha', '', text)
       text = re.sub('(\sx\s|\sX\s)+', ' ', text)
-      text = re.sub('(\👌|\€|\😪|\❤️|\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
+      text = re.sub('(\😭|\<|\>|\💔|\&|\💔|\📌|\►|\😊|\👌|\€|\😪|\❤️|\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
       text = re.sub('(؟|\/|\t|\n+| - |\.)', ' ', text)
       text = re.sub(r'\\', ' ', text)
       text = re.sub('\|', '', text)
@@ -181,7 +179,7 @@ class LangId:
         lang1= self.languages[sims[0][0]].lower()
         lang2= self.languages[sims[1][0]].lower()
         lang3= self.languages[sims[2][0]].lower()
-        print '......',text,sims,lang1,lang2,lang3,((sims[0][1] - sims[1][1]) > 0.003) , (sims[0][1] > 0.004),( ((sims[0][1] - sims[1][1]) > 0.003) and (sims[0][1] > 0.004) ) or (self.arabicAndfarsi(lang1, lang2, text))
+        #print '......',text,sims,lang1,lang2,lang3,((sims[0][1] - sims[1][1]) > 0.003) , (sims[0][1] > 0.004),( ((sims[0][1] - sims[1][1]) > 0.003) and (sims[0][1] > 0.004) ) or (self.arabicAndfarsi(lang1, lang2, text))
         language = self.languageRules(lang1, lang2, lang3, dLanguages, text)
         if len(language) > 0 and (language in [lang2,lang1,lang3]):
           ret.append([1, str(language.upper())])
@@ -202,6 +200,18 @@ class LangId:
       if text.find(ch) > -1:
         return True
     return False
+
+  def find_word_ending_with(self, text, search):
+    """Find exact words"""
+    dText   = text.split()
+    found_word = 0
+    for text_word in dText:
+      if text_word.endswith(search) and (len(text_word) > len(search)):
+          found_word += 1
+    if found_word >= 1:
+        return True
+    else:
+        return False
 
   def find_words(self, text, search):
     """Find exact words"""
@@ -242,23 +252,32 @@ class LangId:
       if ((lang2 != 'es')  and  (lang2 != 'fr')  and  (lang1 == 'tl') ) or ((lang1 != 'es')  and (lang1 != 'fr')  and  (lang2 == 'tl') ):     
         if (self.find_words(text, 'tayo')) or (text.find(' ni ') > -1) :
            language = 'tl' 
-    language = self.compareLangs(['pt', 'es','it'], [lang1, lang2, lang3], [['você','com'], ['nuevo'],[]], text)
+    language = self.compareLangs(['pt', 'es','it'], [lang1, lang2, lang3], [['aqui','você','com','daqui'], ['nuevo'],['ed']], text)
     if len(language)>0:
       return language
-    language = self.compareLangs(['en', 'pt', 'es'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], ['você'], []], text)
+    language = self.compareLangs(['pt', 'id','it'], [lang1, lang2, lang3], [['aqui','você','com','daqui'], ['ini'],['ed']], text)
     if len(language)>0:
       return language
-    language = self.compareLangs(['en', 'fr', 'es'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], [], []], text)
+    language = self.compareLangs(['pt', 'es','fr'], [lang1, lang2, lang3], [['aqui','você','com','daqui'], ['es','nuevo'],['est']], text)
     if len(language)>0:
       return language
-    language = self.compareLangs(['en', 'it', 'fr'], [lang1, lang2, lang3], [['yes','day','you','this','is','access'], [], []], text)
+    language = self.compareLangs(['en', 'pt', 'es'], [lang1, lang2, lang3], [['much','at','yes','day','you','this','is','access'], ['você'], []], text)
+    if len(language)>0:
+      return language
+    language = self.compareLangs(['en', 'id', 'it'], [lang1, lang2, lang3], [['much','about','yes','day','you','this','is','access'], ['ini'], ['ed']], text)
+    if len(language)>0:
+      return language
+    language = self.compareLangs(['en', 'fr', 'es'], [lang1, lang2, lang3], [['much','yes','day','you','this','is','access'], [], []], text)
+    if len(language)>0:
+      return language
+    language = self.compareLangs(['en', 'it', 'fr'], [lang1, lang2, lang3], [['much','yes','day','you','this','is','access'], ['ed'], []], text)
     if len(language)>0:
       return language
     if ((lang1 == 'id')  and  (lang2 == 'tr') )  or  ((lang2 == 'id')  and  (lang1 == 'tr') ) :     
       if text.find('ş') > -1:
         language = 'tr'
     elif ((lang2 == 'id')  and  (lang1 == 'tl') ) or ((lang1 == 'id')  and  (lang2 == 'tl') ):     
-      if  (self.find_words(text, 'ba')) or (self.find_words(text, 'sa')) or (self.find_words(text, 'daw')) or (text.find('nasa') > -1) or (text.find(' at ') > -1)  or (text.find(' na ') > -1)  or (text.find('sila ') > -1) or (self.find_words(text, 'ka')):
+      if (self.find_words(text, 'nalang')) or (self.find_words(text, 'ngayon')) or (self.find_words(text, 'akong')) or (self.find_words(text, 'ba')) or (self.find_words(text, 'sa')) or (self.find_words(text, 'daw')) or (text.find('nasa') > -1) or (text.find(' at ') > -1)  or (text.find(' na ') > -1)  or (text.find('sila ') > -1) or (self.find_words(text, 'ka')):
          language = 'tl' 
       else:
          language = self.SWdetect_language(text)         
@@ -278,11 +297,13 @@ class LangId:
       elif (text.find(' to ') > -1) or (text.find(' day ') > -1) or (text.find(' one ') > -1):
          language = 'en'  
     elif ((lang2 == 'en')  and  (lang1 == 'id') ) or ((lang1 == 'en')  and  (lang2 == 'id') ):     
-      if (self.find_words(text, 'day')) or (text.find("i'm") > -1) or (self.find_words(text, 'for')) or  (text.find('thy') > -1) or (text.find('ts') > -1) or (text.find(' my ') > -1) or (text.find(' are ') > -1) or (text.find("aren't") > -1):
+      if (self.find_words(text, 'day')) or (self.find_words(text, 'your')) or (self.find_words(text, 'you')) or (self.find_words(text, 'all')) or (text.find("i'm") > -1) or (self.find_words(text, 'for')) or  (text.find('thy') > -1) or (text.find('ts') > -1) or (text.find(' my ') > -1) or (text.find(' are ') > -1) or (text.find("aren't") > -1):
          language = 'en' 
     elif ((lang2 == 'en')  and  (lang1 == 'pt') ) or ((lang1 == 'en')  and  (lang2 == 'pt') ):     
       if (text.find('you') > -1) or self.find_words(text, 'is') :
          language = 'en' 
+      if (text.find('você') > -1):
+         language = 'pt' 
     elif ((lang2 == 'fr')  and  (lang1 == 'es') ) or ((lang1 == 'fr')  and  (lang2 == 'es') ):     
       if (text.find('dades ') > -1) :
          language = 'es' 
@@ -290,19 +311,19 @@ class LangId:
       if (text.find('dades ') > -1) :
          language = 'pt' 
     elif ((lang2 == 'pt')  and  (lang1 == 'es') ) or ((lang1 == 'pt')  and  (lang2 == 'es') ):     
-      if (self.find_words(text, 'lá')) or (self.find_words(text, '(sel')) or self.find_words(text, 'lua') or (self.find_words(text, 'ali')):
+      if (self.find_words(text, 'lá')) or (text.find('ç') > -1) or (self.find_words(text, '(sel')) or self.find_words(text, 'lua') or (self.find_words(text, 'ali')):
          language = 'pt' 
       if (self.find_words(text, 'y')) or (self.find_words(text, 'has')) or (self.find_words(text, 'del')):
          language = 'es' 
     elif ((lang2 == 'en')  and  (lang1 == 'es') ) or ((lang1 == 'en')  and  (lang2 == 'es') ):     
-      if (text.find('lly') > -1) or (text.find('you') > -1) or (text.find(' st') > -1) or (self.find_words(text, 'him'))  or (self.find_words(text, 'the')):
+      if (text.find('lly') > -1) or (text.find('you') > -1) or (text.find(' st') > -1) or (self.find_words(text, 'him'))  or (self.find_words(text, 'been'))  or (self.find_words(text, 'has'))  or (self.find_words(text, 'the')):
          language = 'en' 
       elif (text.find('leer') > -1):
          language = 'es' 
     elif ((lang2 == 'en')  and  (lang1 == 'tl') ) or ((lang1 == 'en')  and  (lang2 == 'tl') ):     
-      if (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'for')) or (self.find_words(text, 'the')):
+      if (self.find_words(text, 'much')) or (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'my')) or (self.find_words(text, 'you')) or (self.find_words(text, 'for')) or (self.find_words(text, 'the')):
          language = 'en' 
-      elif (self.find_words(text, 'ka')):
+      elif (self.find_words(text, 'ka')) or (self.find_words(text, 'ako')) or (self.find_words(text, 'isa')):
          language = 'tl' 
     elif ((lang2 == 'en')  and  (lang1 == 'fr') ) or ((lang1 == 'en')  and  (lang2 == 'fr') ):     
       if (self.find_words(text, 'my')) or (self.find_words(text, 'yes')) or (self.find_words(text, 'be')) or (self.find_words(text, 'this')) or (self.find_words(text, 'for')) or  (text.find(' you ') > -1) or (text.find(' our ') > -1) or (text.find('will') > -1) or (text.find(' one') > -1) or (text.find('ee') > -1) :
@@ -312,9 +333,9 @@ class LangId:
       else:
          language = self.SWdetect_language(text)
     elif ((lang2 == 'en')  and  (lang1 == 'it') ) or ((lang1 == 'en')  and  (lang2 == 'it') ):   
-      if (text.find('ey') > -1) or (text.find('thy') > -1) or (self.find_words(text, 'for'))  or (self.find_words(text, 'have')) or (self.find_words(text, 'to')) or (self.find_words(text, 'i')) or (self.find_words(text, 'never')) or (text.find('well') > -1) or (text.find('ts') > -1) or (text.find('ing ') > -1) or (text.find(' of ') > -1):
+      if (text.find('ey') > -1) or (self.find_words(text, 'call'))  or (text.find('thy') > -1) or self.find_word_ending_with(text, 'ed') or (self.find_words(text, 'is')) or (self.find_words(text, 'for'))  or (self.find_words(text, 'have')) or (self.find_words(text, 'to')) or (self.find_words(text, 'i')) or (self.find_words(text, 'all')) or (self.find_words(text, 'never')) or (text.find('well') > -1) or (text.find('ts') > -1) or (text.find('ing ') > -1) or (text.find(' of ') > -1):
          language = 'en' 
-      if (text.find('è') > -1):
+      if (text.find('è') > -1) or (self.find_words(text, 'ed'))  or (self.find_words(text, 'che')) :
          language = 'it' 
     elif ((lang1 == 'es')  and  (lang2 == 'en') ):     
       if (text.find('my') > -1) or (text.find('ck') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'never')):
@@ -372,66 +393,67 @@ class LangId:
 
   def classify(self,line):  
     if len(line) > 1:
-	    res = self.classifyPerLanguage(line)
-	    resOriginal = res 
-	    print 'line,res -><',line,res
-	    if len(res) > 2: 
-	      if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) )  :
-		#keep first 3 languages that are not English
-		first3 = []
-		for x in range(0, 4):
-		    first3.append(res[x][1])
-		dLangs = {}
-		vLine = line.split(' ')
-		while len(vLine[0]) < 1:
-		  vLine.pop(0)
-		n = 0
-		vLangs = []
-		while len(vLine) > 3:
-		  while len(vLine[0]) < 1:
-		    vLine.pop(0)
-		  w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
-		  if (self.sameAlphabet(w1)):
-		    lang = self.classifyPerLanguage(w1)
-		    if len(lang) > 0 :
-		      lang[0][1] = self.areEnID(lang)
-		      vLangs.append([w1,lang])
-		      if (lang[0][1] in first3):
-		        if lang[0][1] in dLangs:
-		          dLangs[lang[0][1]] += 1
-		        else:
-		          dLangs[lang[0][1]] = 1
-		  vLine.pop(0)
-		if len(vLine) > 0:
-		  w1 = ''
-		  for w in vLine:
-		    w1 = w1+' '+w
-		  if len(w1) > 2 and (self.sameAlphabet(w1)):  
-		    w1 = w1[1:] #remove first char
-		    lang = self.classifyPerLanguage(w1)
-		    if len(lang) > 0 :
-		      lang[0][1] = self.areEnID(lang)
-		      vLangs.append([w1,lang])
-		      if (lang[0][1] in first3):
-		        if lang[0][1] in dLangs:
-		          dLangs[lang[0][1]] += 1
-		        else:
-		          dLangs[lang[0][1]] = 1
-		  res = []
-		for key, value in dLangs.iteritems():
-		  res.append([value,key])
-		#print '-->dLangs',dLangs  
-		if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
-		  return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
-		else:
-		  return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
-	    if len(res) >  0 and float(res[0][0]) > 0:
-	      return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
-	    else:
-	      return []
-    else:
-      return []
-	
+      res = self.classifyPerLanguage(line)
+      resOriginal = res 
+      #print 'line,res -><',line,res
+      if len(res) > 2:
+        if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) )  :         
+          self.runMulti = self.runMulti + 1 #keep first 3 languages that are not English
+          first3 = []
+          for x in range(0, 4):
+              first3.append(res[x][1])
+          dLangs = {}
+          vLine = line.split(' ')
+          while len(vLine[0]) < 1:
+            vLine.pop(0)
+          n = 0
+          vLangs = []
+          while len(vLine) > 3:
+            while len(vLine[0]) < 1:
+              vLine.pop(0)
+            if len(vLine) > 3:
+              w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
+              if (self.sameAlphabet(w1)):
+                lang = self.classifyPerLanguage(w1)
+                if len(lang) > 0 :
+                  lang[0][1] = self.areEnID(lang)
+                  vLangs.append([w1,lang])
+                  if (lang[0][1] in first3):
+                    if lang[0][1] in dLangs:
+                      dLangs[lang[0][1]] += 1
+                    else:
+                      dLangs[lang[0][1]] = 1
+              vLine.pop(0)
+          if len(vLine) > 0:
+            w1 = ''
+            for w in vLine:
+              w1 = w1+' '+w
+            if len(w1) > 2 and (self.sameAlphabet(w1)):  
+              w1 = w1[1:] #remove first char
+              lang = self.classifyPerLanguage(w1)
+              if len(lang) > 0 :
+                lang[0][1] = self.areEnID(lang)
+                vLangs.append([w1,lang])
+                if (lang[0][1] in first3):
+                  if lang[0][1] in dLangs:
+                    dLangs[lang[0][1]] += 1
+                  else:
+                    dLangs[lang[0][1]] = 1
+            res = []
+          for key, value in dLangs.iteritems():
+            res.append([value,key])
+          #print '-->dLangs',dLangs  
+          if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
+            return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
+          else:
+            return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
+        else:
+          if len(res) >  0 and float(res[0][0]) > 0:
+            return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
+          else:
+            return []
+    return []
+  
   def areEnID(self,lang):
     #[are] in id and en
     if lang[0][1] == 'ID' and lang[1][1] == 'EN':
@@ -457,10 +479,13 @@ class LangId:
     n = 0
     for r in res:
       totalSum = totalSum + float(r[0]) 
-    for r in res:
-      res[n][0] = float(r[0]) / float(totalSum)
-      n = n + 1
+    if totalSum > 0:
+      for r in res:
+        res[n][0] = float(r[0]) / float(totalSum)
+        n = n + 1
     return (res)
+
+  
 
 class vec:
   def __init__(self, fi):
@@ -472,8 +497,7 @@ class vec:
 
 if __name__ == '__main__':
   l = LangId()
-  if True: #False: #
-    line = l.normalize("in the morning evening at night غدا البارحة غدا البارحة غدا البارحة غدا البارحة ")
-    result = l.classify(line)
-    print '***->',str(line),result
-  
+  import time
+  line = l.normalize("-sai daqui amigo e camarada")
+  result = l.classify(line)
+  print '***->',str(line),result
