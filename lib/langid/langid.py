@@ -498,6 +498,6 @@ class vec:
 if __name__ == '__main__':
   l = LangId()
   import time
-  line = l.normalize("-sai daqui amigo e camarada")
+  line = l.normalize(" Because of this (and it took me some time to find it out hehe) I can't run the code right now")
   result = l.classify(line)
   print '***->',str(line),result
