@@ -473,7 +473,7 @@ class LangId:
     r = []
     for key, value in retDict1.iteritems():
       if key != 'EN':
-        r.append([["EN",str(key)], value + retDict1['EN']])
+        r.append(["EN," + str(key), value + retDict1['EN']])
     return r 
 
   def percentageResult (self,res):
