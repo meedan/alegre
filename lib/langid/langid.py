@@ -103,8 +103,9 @@ class LangId:
       ret.append(b[i:i+n])
     return ret
 
-  def normalize(self,text): 
+  def normalize(self,s): 
       """normalization for twitter"""
+      text = unicode(s)
       text = text.lower()
       text = filter(lambda c: not c.isdigit(), text)
       text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text) #url
@@ -391,7 +392,8 @@ class LangId:
         return True
     return False
 
-  def classify(self,line):  
+  def classify(self, s):  
+    line = self.normalize(s)
     if len(line) > 1:
       res = self.classifyPerLanguage(line)
       resOriginal = res 
@@ -497,7 +499,6 @@ class vec:
 
 if __name__ == '__main__':
   l = LangId()
-  import time
-  line = l.normalize(" Because of this (and it took me some time to find it out hehe) I can't run the code right now")
+  line = " Because of this (and it took me some time to find it out hehe) I can't run the code right now"
   result = l.classify(line)
   print '***->',str(line),result
