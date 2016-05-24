@@ -14,7 +14,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
       Retriable.retriable do
         @language = Alegre::LangId.new.classify(str)
       end
-      render_success 'language', @language
+      render_success 'language', @language.flatten.join(',')
     end
   end
 
