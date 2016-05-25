@@ -159,11 +159,11 @@ class LangId:
        chineseChars = len(str(chineseArray)) - (2+len(chineseArray))
        if len(text) / 3 < chineseChars: #At least 1/3 of the sentence in Chinese characteres
          if hanzidentifier.identify(text) is hanzidentifier.SIMPLIFIED:
-           ret = [[1,'ZH-CHS']]
+           ret = [['ZH-CHS',1]]
          elif hanzidentifier.identify(text) is hanzidentifier.TRADITIONAL:
-           ret = [[1,'ZH-CHT']]
+           ret = [['ZH-CHT',1]]
          elif hanzidentifier.identify(text) is hanzidentifier.BOTH:
-           ret = [[1,'ZH-CHT'],[1,'ZH-CHS']]
+           ret = [['ZH-CHT',1],['ZH-CHS',1]]
      #not chinese    
      if len(ret) == 0:
        sims = self.sim_tfidf(self.threeGrams(text))
