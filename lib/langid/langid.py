@@ -454,6 +454,8 @@ class LangId:
             return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
           else:
             return []
+      elif len(res) == 1:
+        return(res)
     return []
   
   def areEnID(self,lang):
