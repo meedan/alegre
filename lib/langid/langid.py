@@ -448,7 +448,10 @@ class LangId:
           if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
             return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
           else:
-            return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
+            if len(res) >  0 and float(res[0][0]) > 0:
+              return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
+            else:
+              return []
         else:
           if len(res) >  0 and float(res[0][0]) > 0:
             return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
