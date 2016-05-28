@@ -13,7 +13,7 @@ module Alegre
 
     def classify(text)
       begin
-        @@langid.classify(text).rubify
+        @@langid.classify(self.normalize(text)).rubify
       rescue Exception => e
         Rails.logger.info "AlegreLangIdLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
@@ -27,6 +27,12 @@ module Alegre
 
     def list_languages
       @@langid.list_languages.rubify
+    end
+
+    # TODO
+    # @expose
+    def normalize(text)
+      text
     end
   end
 end
