@@ -105,35 +105,43 @@ class LangId:
 
   def normalize(self,s): 
       """normalization for twitter"""
-      text = unicode(s)
-      text = text.lower()
-      text = filter(lambda c: not c.isdigit(), text)
-      text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text) #url
-      text = re.sub(r"(?:\@|\#)\S+", "", text) #@user #hashtag
-      text = re.sub(r'(^| )[:;x]-?[\(\)dop]($| )', ' ', text)  # facemark
-      text = re.sub(r'(^| )(rt[ :]+)*', ' ', text)
-      text = re.sub(r'([hj])+([aieo])+(\1+\2+){1,}', r'\1\2\1\2', text, re.IGNORECASE)  # laugh
-      text = re.sub(r' +(via|live on) *$', '', text)
-      text = re.sub('«»“”"[.,!%@#$<>:;}?{()+-=-_&*@|\/"]+', ' ', text)
-      text = re.sub('(\!|#|\*|\?|,|;|:|%|\$|\"|\.\.\.)', ' ', text)
-      text = re.sub('  +', ' ', text)
-      text = re.sub('hahaha', '', text)
-      text = re.sub('haha', '', text)
-      text = re.sub('(\sx\s|\sX\s)+', ' ', text)
-      text = re.sub('(\😭|\<|\>|\💔|\&|\💔|\📌|\►|\😊|\👌|\€|\😪|\❤️|\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
-      text = re.sub('(؟|\/|\t|\n+| - |\.)', ' ', text)
-      text = re.sub(r'\\', ' ', text)
-      text = re.sub('\|', '', text)
-      text = re.sub('\[', '', text)
-      text = re.sub('\]', '', text)
-      text = re.sub('\(', '', text)
-      text = re.sub('\)', '', text)
-      text = re.sub('(  )+', ' ', text)
-      while text.startswith(' '):
-        text = text[1:]
-      while text.endswith(' ') or text.endswith('\n'):
-        text = text[:-1]
-      return text
+      if len(s) > 0:
+        text = unicode(s)
+        text = text.lower()
+        text = filter(lambda c: not c.isdigit(), text)
+        if len(s) > 0:
+          text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text) #url
+          text = re.sub(r"(?:\@|\#)\S+", "", text) #@user #hashtag
+          text = re.sub(r'(^| )[:;x]-?[\(\)dop]($| )', ' ', text)  # facemark
+          text = re.sub(r'(^| )(rt[ :]+)*', ' ', text)
+          text = re.sub(r'([hj])+([aieo])+(\1+\2+){1,}', r'\1\2\1\2', text, re.IGNORECASE)  # laugh
+          text = re.sub(r' +(via|live on) *$', '', text)
+          text = re.sub('«»“”"[.,!%@#$<>:;}?{()+-=-_&*@|\/"]+', ' ', text)
+          text = re.sub('(\!|#|\*|\?|,|;|:|%|\$|\"|\.\.\.)', ' ', text)
+          text = re.sub('  +', ' ', text)
+          text = re.sub('hahaha', '', text)
+          text = re.sub('haha', '', text)
+          text = re.sub('(\sx\s|\sX\s)+', ' ', text)
+          text = re.sub('(\😭|\<|\>|\💔|\&|\💔|\📌|\►|\😊|\👌|\€|\😪|\❤️|\😌|\✨|\➡|\⬅|\☕️|\😂|\😃|\😎|\😁|\😢|\😉|\😴|\😊|\♡|\😚|\😘|\😍|\💕|\💓|\💙|\💛|\💖|\💜|\💞|\🎉|\💗|\🔛)+', '', text)
+          text = re.sub('(؟|\/|\t|\n+| - |\.)', ' ', text)
+          text = re.sub(r'\\', ' ', text)
+          text = re.sub('\|', '', text)
+          text = re.sub('\[', '', text)
+          text = re.sub('\]', '', text)
+          text = re.sub('\(', '', text)
+          text = re.sub('\)', '', text)
+          text = re.sub('(  )+', ' ', text)
+          if len(text) > 0:
+            while text.startswith(' '):
+              text = text[1:]
+          if len(text) > 0:
+            while text.endswith(' ') or text.endswith('\n'):
+              text = text[:-1]
+          return text
+        else:
+          return ""
+      else:
+        return ""
 
   def readFile(self,filesPath):
     i = []# u''
@@ -141,17 +149,18 @@ class LangId:
       if file.endswith(".txt"):
         fd = open(filesPath+'/'+file, 'r')
         for line in fd.readlines():
-          try:
-            s = self.threeGrams(self.normalize(unicode(line)))
-            #if re.match("", s):
-            i = i+s
-          except ValueError:
-            i = i
+          if len(line) > 0:
+            try:
+              s = self.threeGrams(self.normalize(line))
+              #if re.match("", s):
+              i = i+s
+            except ValueError:
+              i = i
         fd.close()
     return i  
 
   def classifyPerLanguage(self,line):
-     text = self.normalize(unicode(line))
+     text = self.normalize(line)
      ret = []
      langPreDefined = ''
      if hanzidentifier.has_chinese(text): #chinese
@@ -361,7 +370,7 @@ class LangId:
   def add_sample(self, sentence, lang):
     try:
       idx = self.languages.index(lang)
-      self.documents[idx] = self.documents[idx]  + self.threeGrams(self.normalize(unicode(sentence)))
+      self.documents[idx] = self.documents[idx]  + self.threeGrams(self.normalize(sentence))
       self.newModelFiles()
       return True      
     except ValueError:
@@ -392,14 +401,23 @@ class LangId:
         return True
     return False
 
+  def repeated_letters(self, word):
+    if len(word) > 1:
+      l = word[0]
+      for char in word:
+          if char != l:
+              return False
+      return True
+    return False
+
   def classify(self, s):  
     line = self.normalize(s)
-    if len(line) > 1:
+    if len(line) > 1  and  not(self.repeated_letters(line)):
       res = self.classifyPerLanguage(line)
       resOriginal = res 
       #print 'line,res -><',line,res
       if len(res) > 2:
-        if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) )  :         
+        if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) ):         
           self.runMulti = self.runMulti + 1 #keep first 3 languages that are not English
           first3 = []
           for x in range(0, 4):
