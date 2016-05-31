@@ -11,7 +11,6 @@ import pickle
 
 class LangId:     
   def __init__(self):
-    self.runMulti = 0
     modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
     if modelPath.endswith('/'):
       modelPath = modelPath[:-1]
@@ -331,8 +330,8 @@ class LangId:
       elif (text.find('leer') > -1):
          language = 'es' 
     elif ((lang2 == 'en')  and  (lang1 == 'tl') ) or ((lang1 == 'en')  and  (lang2 == 'tl') ):     
-      if (self.find_words(text, 'much')) or (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'my')) or (self.find_words(text, 'you')) or (self.find_words(text, 'for')) or (self.find_words(text, 'the')):
-         language = 'en' 
+      if self.find_word_ending_with(text, 'ght') or (self.find_words(text, 'morning')) or (self.find_words(text, 'much')) or (text.find('easy') > -1) or (text.find('by ') > -1) or (self.find_words(text, 'i')) or (self.find_words(text, 'my')) or (self.find_words(text, 'you')) or (self.find_words(text, 'for')) or (self.find_words(text, 'the')):
+         language = 'en'  
       elif (self.find_words(text, 'ka')) or (self.find_words(text, 'ako')) or (self.find_words(text, 'isa')):
          language = 'tl' 
     elif ((lang2 == 'en')  and  (lang1 == 'fr') ) or ((lang1 == 'en')  and  (lang2 == 'fr') ):     
@@ -415,10 +414,8 @@ class LangId:
     if len(line) > 1  and  not(self.repeated_letters(line)):
       res = self.classifyPerLanguage(line)
       resOriginal = res 
-      #print 'line,res -><',line,res
       if len(res) > 2:
         if  (not self.sameAlphabet(line)) or ( self.difFirstSecond(res) and self.canBeEnglish(res,3) ):         
-          self.runMulti = self.runMulti + 1 #keep first 3 languages that are not English
           first3 = []
           for x in range(0, 4):
               first3.append(res[x][1])
@@ -435,7 +432,7 @@ class LangId:
               w1 = vLine[0]+' '+vLine[1]+ ' '+vLine[2]
               if (self.sameAlphabet(w1)):
                 lang = self.classifyPerLanguage(w1)
-                if len(lang) > 0 :
+                if len(lang) > 0 and float(lang[0][0]) > 0:
                   lang[0][1] = self.areEnID(lang)
                   vLangs.append([w1,lang])
                   if (lang[0][1] in first3):
@@ -451,7 +448,7 @@ class LangId:
             if len(w1) > 2 and (self.sameAlphabet(w1)):  
               w1 = w1[1:] #remove first char
               lang = self.classifyPerLanguage(w1)
-              if len(lang) > 0 :
+              if len(lang) > 0  and float(lang[0][0]) > 0:
                 lang[0][1] = self.areEnID(lang)
                 vLangs.append([w1,lang])
                 if (lang[0][1] in first3):
@@ -462,7 +459,6 @@ class LangId:
             res = []
           for key, value in dLangs.iteritems():
             res.append([value,key])
-          #print '-->dLangs',dLangs  
           if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
             return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
           else:
