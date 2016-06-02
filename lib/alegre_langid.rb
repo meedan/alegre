@@ -4,20 +4,23 @@ module Alegre
 
     def start
       RubyPython.stop
+      sleep 1
       RubyPython.start
       s = RubyPython.import 'sys'
-      s.path.insert(0, Dir.pwd+'/lib/langid').rubify
+      s.path.insert(0, File.join(Rails.root, 'lib/langid')).rubify
       langid = RubyPython.import 'langid'
-      @@langid = langid.LangId.new()
+      instance = langid.LangId.new
+      self.instantiate_langid(instance)
     end
 
     def classify(text)
+      text = self.normalize(text)
       begin
-        @@langid.classify(self.normalize(text)).rubify
+        self.classify!(text)
       rescue Exception => e
         Rails.logger.info "AlegreLangIdLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
-        self.classify(text)
+        self.classify!(text)
       end
     end
 
@@ -33,6 +36,16 @@ module Alegre
     # @expose
     def normalize(text)
       text
+    end
+
+    protected
+
+    def classify!(text)
+      @@langid.respond_to?(:classify) ? @@langid.classify(text).rubify : []
+    end
+
+    def instantiate_langid(value)
+      @@langid = value
     end
   end
 end

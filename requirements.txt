@@ -1,3 +1,4 @@
+NumPy==1.11.0
 alphabet-detector==0.0.5
 gensim==0.12.4
 hanzidentifier==1.0.2

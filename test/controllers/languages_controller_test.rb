@@ -151,4 +151,13 @@ class LanguagesControllerTest < ActionController::TestCase
       end
     end
   end
+
+  test "language - should not crash with function object error" do
+    authenticate_with_token
+    text = 'So devastated over this shooting at UCLA. Sending all my thoughts and prayers to the Bruins.'
+    assert_nothing_raised do
+      get :identification, text: text
+      assert_response :success
+    end
+  end
 end

@@ -409,7 +409,9 @@ class LangId:
       return True
     return False
 
-  def classify(self, s):  
+  def classify(self, s=u''):
+    if not(isinstance(s, basestring)) or (self is None):
+      return []
     line = self.normalize(s)
     if len(line) > 1  and  not(self.repeated_letters(line)):
       res = self.classifyPerLanguage(line)
