@@ -3,11 +3,13 @@ from collections import OrderedDict
 from alphabet_detector import AlphabetDetector
 from gensim import corpora, models, similarities, utils, matutils
 from gensim.models import word2vec
+import errbit_reporter as errbit
 import re
 import os
 import sys  
 import hanzidentifier
 import pickle
+import socket
 
 class LangId:     
   def __init__(self):
@@ -408,6 +410,34 @@ class LangId:
               return False
       return True
     return False
+
+  def try_to_classify(self, s=u'', errbit_url='', errbit_key=''):
+    result = []
+    if not(errbit_url) or not(errbit_key):
+      return self.classify(s)
+    config = errbit.Configuration(api_key=errbit_key, errbit_url=errbit_url, environment_name=socket.gethostname())
+    client = errbit.Client(config)
+    try:
+      context = {
+        'request_url': 'python://langid',
+        'component': 'LangID',
+        'action': 'classify',
+        'params': {
+          'input': s
+        },
+        'cgi_data': {
+          'REQUEST_METHOD': 'POST',
+          'HTTP_USER_AGENT': 'Python'
+        },
+        'session': {
+          'session_id': 'python'
+        }
+      }
+      with client.notify_on_exception(**context):
+        result = self.classify(s)
+    except:
+      result = []
+    return result
 
   def classify(self, s=u''):
     if not(isinstance(s, basestring)) or (self is None):

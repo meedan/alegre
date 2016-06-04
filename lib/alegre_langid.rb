@@ -41,7 +41,14 @@ module Alegre
     protected
 
     def classify!(text)
-      @@langid.respond_to?(:classify) ? @@langid.classify(text).rubify : []
+      errbit_url = ''
+      errbit_key = ''
+      begin
+        errbit_url = 'http://' + Airbrake.configuration.host + ':' + Airbrake.configuration.port.to_s
+        errbit_key = Airbrake.configuration.api_key
+      rescue
+      end
+      @@langid.respond_to?(:try_to_classify) ? @@langid.try_to_classify(text, errbit_url, errbit_key).rubify : []
     end
 
     def instantiate_langid(value)
