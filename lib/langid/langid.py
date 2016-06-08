@@ -167,11 +167,11 @@ class LangId:
        chineseChars = len(str(chineseArray)) - (2+len(chineseArray))
        if len(text) / 3 < chineseChars: #At least 1/3 of the sentence in Chinese characteres
          if hanzidentifier.identify(text) is hanzidentifier.SIMPLIFIED:
-           ret = [['1','ZH-CHS']]
+           ret = [[1,'ZH-CHS']]
          elif hanzidentifier.identify(text) is hanzidentifier.TRADITIONAL:
-           ret = [['1','ZH-CHT']]
+           ret = [[1,'ZH-CHT']]
          elif hanzidentifier.identify(text) is hanzidentifier.BOTH or  hanzidentifier.identify(text) is hanzidentifier.MIXED:
-           ret = [['1','ZH-CHT'],['1','ZH-CHS']]
+           ret = [[1,'ZH-CHT'],[1,'ZH-CHS']]
      return ret
 
   def classifyPerLanguage(self,line):
@@ -520,7 +520,7 @@ class LangId:
           else:
             return []
       elif len(res) == 1:
-        return(res)
+        return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
     return []
   
   def areEnID(self,lang):
