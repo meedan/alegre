@@ -160,24 +160,27 @@ class LangId:
         fd.close()
     return i  
 
-  def classifyPerLanguage(self,line):
-     text = self.normalize(line)
+  def is_chinese(self,text):
      ret = []
-     langPreDefined = ''
      if hanzidentifier.has_chinese(text): #chinese
        chineseArray = re.findall(ur'[\u4e00-\u9fff]+',text)
        chineseChars = len(str(chineseArray)) - (2+len(chineseArray))
        if len(text) / 3 < chineseChars: #At least 1/3 of the sentence in Chinese characteres
          if hanzidentifier.identify(text) is hanzidentifier.SIMPLIFIED:
-           ret = [['ZH-CHS',1]]
+           ret = [['1','ZH-CHS']]
          elif hanzidentifier.identify(text) is hanzidentifier.TRADITIONAL:
-           ret = [['ZH-CHT',1]]
-         elif hanzidentifier.identify(text) is hanzidentifier.BOTH:
-           ret = [['ZH-CHT',1],['ZH-CHS',1]]
+           ret = [['1','ZH-CHT']]
+         elif hanzidentifier.identify(text) is hanzidentifier.BOTH or  hanzidentifier.identify(text) is hanzidentifier.MIXED:
+           ret = [['1','ZH-CHT'],['1','ZH-CHS']]
+     return ret
+
+  def classifyPerLanguage(self,line):
+     text = self.normalize(line)
+     langPreDefined = ''
+     ret = self.is_chinese(text)
      #not chinese    
      if len(ret) == 0:
        sims = self.sim_tfidf(self.threeGrams(text))
-       #print '......',text,sims
        if len(sims) > 0:
         if len(sims) > 3:
           if (sims[0][1] > 0.12) and ((sims[0][1] - sims[3][1]) < 0.036): #UNKNOWN
@@ -190,7 +193,6 @@ class LangId:
         lang1= self.languages[sims[0][0]].lower()
         lang2= self.languages[sims[1][0]].lower()
         lang3= self.languages[sims[2][0]].lower()
-        #print '......',text,sims,lang1,lang2,lang3,((sims[0][1] - sims[1][1]) > 0.003) , (sims[0][1] > 0.004),( ((sims[0][1] - sims[1][1]) > 0.003) and (sims[0][1] > 0.004) ) or (self.arabicAndfarsi(lang1, lang2, text))
         language = self.languageRules(lang1, lang2, lang3, dLanguages, text)
         if len(language) > 0 and (language in [lang2,lang1,lang3]):
           ret.append([1, str(language.upper())])
@@ -284,6 +286,12 @@ class LangId:
     language = self.compareLangs(['en', 'it', 'fr'], [lang1, lang2, lang3], [['much','yes','day','you','this','is','access'], ['ed'], []], text)
     if len(language)>0:
       return language
+    if hanzidentifier.identify(text) > 0:
+         txt = self.only_chinese(text)
+         if len(txt) > 1:
+           ret = self.is_chinese(txt)
+           if len(ret) > 0:
+             language = ret[0][1]         
     if ((lang1 == 'id')  and  (lang2 == 'tr') )  or  ((lang2 == 'id')  and  (lang1 == 'tr') ) :     
       if text.find('ş') > -1:
         language = 'tr'
@@ -365,8 +373,16 @@ class LangId:
          language = 'pt'
       else:
          language = self.SWdetect_language(text)
-
     return language
+
+  def only_chinese(self,text):
+    r = []
+    s = u''
+    r = re.findall(ur'[\u4e00-\u9fff]+', text) 
+    if len(r) > 0:
+      for w in r:
+       s = s + w
+    return s
 
   def add_sample(self, sentence, lang):
     try:
@@ -467,7 +483,7 @@ class LangId:
                 if len(lang) > 0 and float(lang[0][0]) > 0:
                   lang[0][1] = self.areEnID(lang)
                   vLangs.append([w1,lang])
-                  if (lang[0][1] in first3):
+                  if (lang[0][1] in first3) or (lang[0][1].startswith('ZH-')):
                     if lang[0][1] in dLangs:
                       dLangs[lang[0][1]] += 1
                     else:
@@ -483,7 +499,7 @@ class LangId:
               if len(lang) > 0  and float(lang[0][0]) > 0:
                 lang[0][1] = self.areEnID(lang)
                 vLangs.append([w1,lang])
-                if (lang[0][1] in first3):
+                if (lang[0][1] in first3) or (lang[0][1].startswith('ZH-')):
                   if lang[0][1] in dLangs:
                     dLangs[lang[0][1]] += 1
                   else:
@@ -537,8 +553,6 @@ class LangId:
         res[n][0] = float(r[0]) / float(totalSum)
         n = n + 1
     return (res)
-
-  
 
 class vec:
   def __init__(self, fi):
