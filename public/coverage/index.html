@@ -14,7 +14,7 @@
       <img src="./assets/0.10.0/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2016-05-24T19:12:58-03:00">2016-05-24T19:12:58-03:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2016-06-08T18:37:27-03:00">2016-06-08T18:37:27-03:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -25,7 +25,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         24.92
+         25.58
        </span>
     </span> hits/line)
   </h2>
@@ -57,7 +57,7 @@
         <td>43</td>
         <td>43</td>
         <td>0</td>
-        <td>110.2</td>
+        <td>114.4</td>
       </tr>
       
       <tr>
@@ -87,7 +87,7 @@
         <td>23</td>
         <td>23</td>
         <td>0</td>
-        <td>3.3</td>
+        <td>4.0</td>
       </tr>
       
       <tr>
@@ -167,7 +167,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>21.9</td>
+        <td>18.6</td>
       </tr>
       
       <tr>
@@ -177,7 +177,7 @@
         <td>106</td>
         <td>106</td>
         <td>0</td>
-        <td>17.6</td>
+        <td>18.4</td>
       </tr>
       
       <tr>
@@ -197,7 +197,7 @@
         <td>8</td>
         <td>8</td>
         <td>0</td>
-        <td>33.0</td>
+        <td>36.1</td>
       </tr>
       
       <tr>
@@ -227,7 +227,7 @@
         <td>9</td>
         <td>9</td>
         <td>0</td>
-        <td>11.6</td>
+        <td>11.8</td>
       </tr>
       
     </tbody>
@@ -243,7 +243,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         33.81
+         34.75
        </span>
     </span> hits/line)
   </h2>
@@ -275,7 +275,7 @@
         <td>43</td>
         <td>43</td>
         <td>0</td>
-        <td>110.2</td>
+        <td>114.4</td>
       </tr>
       
       <tr>
@@ -305,7 +305,7 @@
         <td>23</td>
         <td>23</td>
         <td>0</td>
-        <td>3.3</td>
+        <td>4.0</td>
       </tr>
       
       <tr>
@@ -380,7 +380,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         21.9
+         18.6
        </span>
     </span> hits/line)
   </h2>
@@ -412,7 +412,7 @@
         <td>15</td>
         <td>15</td>
         <td>0</td>
-        <td>21.9</td>
+        <td>18.6</td>
       </tr>
       
     </tbody>
@@ -511,7 +511,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         14.01
+         14.69
        </span>
     </span> hits/line)
   </h2>
@@ -543,7 +543,7 @@
         <td>106</td>
         <td>106</td>
         <td>0</td>
-        <td>17.6</td>
+        <td>18.4</td>
       </tr>
       
       <tr>
@@ -563,7 +563,7 @@
         <td>8</td>
         <td>8</td>
         <td>0</td>
-        <td>33.0</td>
+        <td>36.1</td>
       </tr>
       
       <tr>
@@ -593,7 +593,7 @@
         <td>9</td>
         <td>9</td>
         <td>0</td>
-        <td>11.6</td>
+        <td>11.8</td>
       </tr>
       
     </tbody>
@@ -721,26 +721,26 @@
           <code class="ruby">      def authenticate_from_token!</code>
         </li>
       
-        <li class="covered" data-hits="76" data-linenumber="17">
-          <span class="hits">76</span>
+        <li class="covered" data-hits="79" data-linenumber="17">
+          <span class="hits">79</span>
           
           <code class="ruby">        header = CONFIG[&#39;authorization_header&#39;] || &#39;X-Token&#39;</code>
         </li>
       
-        <li class="covered" data-hits="76" data-linenumber="18">
-          <span class="hits">76</span>
+        <li class="covered" data-hits="79" data-linenumber="18">
+          <span class="hits">79</span>
           
           <code class="ruby">        token = request.headers[header]</code>
         </li>
       
-        <li class="covered" data-hits="76" data-linenumber="19">
-          <span class="hits">76</span>
+        <li class="covered" data-hits="79" data-linenumber="19">
+          <span class="hits">79</span>
           
           <code class="ruby">        key = ApiKey.where(access_token: token).where(&#39;expire_at &gt; ?&#39;, Time.now).exists?</code>
         </li>
       
-        <li class="covered" data-hits="76" data-linenumber="20">
-          <span class="hits">76</span>
+        <li class="covered" data-hits="79" data-linenumber="20">
+          <span class="hits">79</span>
           
           <code class="ruby">        (render_unauthorized and return false) unless key</code>
         </li>
@@ -895,14 +895,14 @@
           <code class="ruby">      def remove_empty_params_and_headers</code>
         </li>
       
-        <li class="covered" data-hits="331" data-linenumber="46">
-          <span class="hits">331</span>
+        <li class="covered" data-hits="343" data-linenumber="46">
+          <span class="hits">343</span>
           
           <code class="ruby">        params.reject!{ |k, v| v.blank? }</code>
         </li>
       
-        <li class="covered" data-hits="3713" data-linenumber="47">
-          <span class="hits">3713</span>
+        <li class="covered" data-hits="3854" data-linenumber="47">
+          <span class="hits">3854</span>
           
           <code class="ruby">        request.headers.each{ |k, v| request.headers[k] = nil if (k =~ /HTTP_/).present? &amp;&amp; v.blank? }</code>
         </li>
@@ -925,14 +925,14 @@
           <code class="ruby">      def set_custom_response_headers</code>
         </li>
       
-        <li class="covered" data-hits="79" data-linenumber="51">
-          <span class="hits">79</span>
+        <li class="covered" data-hits="82" data-linenumber="51">
+          <span class="hits">82</span>
           
           <code class="ruby">        response.headers[&#39;X-Build&#39;] = BUILD</code>
         </li>
       
-        <li class="covered" data-hits="79" data-linenumber="52">
-          <span class="hits">79</span>
+        <li class="covered" data-hits="82" data-linenumber="52">
+          <span class="hits">82</span>
           
           <code class="ruby">        response.headers[&#39;Accept&#39;] ||= ApiConstraints.accept(1)</code>
         </li>
@@ -967,20 +967,20 @@
           <code class="ruby">      def render_success(type = &#39;success&#39;, object = nil)</code>
         </li>
       
-        <li class="covered" data-hits="44" data-linenumber="58">
-          <span class="hits">44</span>
+        <li class="covered" data-hits="47" data-linenumber="58">
+          <span class="hits">47</span>
           
           <code class="ruby">        json = { type: type }</code>
         </li>
       
-        <li class="covered" data-hits="44" data-linenumber="59">
-          <span class="hits">44</span>
+        <li class="covered" data-hits="47" data-linenumber="59">
+          <span class="hits">47</span>
           
           <code class="ruby">        json[:data] = object unless object.nil?</code>
         </li>
       
-        <li class="covered" data-hits="44" data-linenumber="60">
-          <span class="hits">44</span>
+        <li class="covered" data-hits="47" data-linenumber="60">
+          <span class="hits">47</span>
           
           <code class="ruby">        render json: json, status: 200</code>
         </li>
@@ -2623,8 +2623,8 @@
           <code class="ruby">  def identification</code>
         </li>
       
-        <li class="covered" data-hits="11" data-linenumber="10">
-          <span class="hits">11</span>
+        <li class="covered" data-hits="14" data-linenumber="10">
+          <span class="hits">14</span>
           
           <code class="ruby">    if params[:text].blank?</code>
         </li>
@@ -2641,20 +2641,20 @@
           <code class="ruby">    else</code>
         </li>
       
-        <li class="covered" data-hits="9" data-linenumber="13">
-          <span class="hits">9</span>
+        <li class="covered" data-hits="12" data-linenumber="13">
+          <span class="hits">12</span>
           
           <code class="ruby">      str = params[:text].to_s</code>
         </li>
       
-        <li class="covered" data-hits="9" data-linenumber="14">
-          <span class="hits">9</span>
+        <li class="covered" data-hits="12" data-linenumber="14">
+          <span class="hits">12</span>
           
           <code class="ruby">      Retriable.retriable do</code>
         </li>
       
-        <li class="covered" data-hits="9" data-linenumber="15">
-          <span class="hits">9</span>
+        <li class="covered" data-hits="12" data-linenumber="15">
+          <span class="hits">12</span>
           
           <code class="ruby">        @language = Alegre::LangId.new.classify(str)</code>
         </li>
@@ -2665,8 +2665,8 @@
           <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="9" data-linenumber="17">
-          <span class="hits">9</span>
+        <li class="covered" data-hits="12" data-linenumber="17">
+          <span class="hits">12</span>
           
           <code class="ruby">      render_success &#39;language&#39;, @language</code>
         </li>
@@ -4165,8 +4165,8 @@
           <code class="ruby">  def self.applications</code>
         </li>
       
-        <li class="covered" data-hits="62" data-linenumber="12">
-          <span class="hits">62</span>
+        <li class="covered" data-hits="4" data-linenumber="12">
+          <span class="hits">4</span>
           
           <code class="ruby">    [nil]</code>
         </li>
@@ -4183,8 +4183,8 @@
           <code class="ruby">  </code>
         </li>
       
-        <li class="covered" data-hits="65" data-linenumber="15">
-          <span class="hits">65</span>
+        <li class="covered" data-hits="67" data-linenumber="15">
+          <span class="hits">67</span>
           
           <code class="ruby">  validates :application, inclusion: { in: proc { ApiKey.applications } }</code>
         </li>
@@ -4219,14 +4219,14 @@
           <code class="ruby">    begin</code>
         </li>
       
-        <li class="covered" data-hits="64" data-linenumber="21">
-          <span class="hits">64</span>
+        <li class="covered" data-hits="66" data-linenumber="21">
+          <span class="hits">66</span>
           
           <code class="ruby">      self.access_token = SecureRandom.hex</code>
         </li>
       
-        <li class="covered" data-hits="64" data-linenumber="22">
-          <span class="hits">64</span>
+        <li class="covered" data-hits="66" data-linenumber="22">
+          <span class="hits">66</span>
           
           <code class="ruby">    end while ApiKey.where(access_token: access_token).exists?</code>
         </li>
@@ -4249,8 +4249,8 @@
           <code class="ruby">  def calculate_expiration_date</code>
         </li>
       
-        <li class="covered" data-hits="64" data-linenumber="26">
-          <span class="hits">64</span>
+        <li class="covered" data-hits="66" data-linenumber="26">
+          <span class="hits">66</span>
           
           <code class="ruby">    self.expire_at = Time.now.since(30.days)</code>
         </li>
@@ -5269,14 +5269,14 @@
           <code class="ruby">  def self.create_index</code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="165">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="165">
+          <span class="hits">88</span>
           
           <code class="ruby">    index = CONFIG[&#39;glossary_index&#39;] </code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="166">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="166">
+          <span class="hits">88</span>
           
           <code class="ruby">    es_server = CONFIG[&#39;elasticsearch_server&#39;].to_s + &#39;:&#39; + CONFIG[&#39;elasticsearch_port&#39;].to_s</code>
         </li>
@@ -5287,8 +5287,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="168">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="168">
+          <span class="hits">88</span>
           
           <code class="ruby">    return if es_server === &#39;:&#39;</code>
         </li>
@@ -5299,8 +5299,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="170">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="170">
+          <span class="hits">88</span>
           
           <code class="ruby">    client = Elasticsearch::Client.new log: true, url: es_server</code>
         </li>
@@ -5311,14 +5311,14 @@
           <code class="ruby">    </code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="172">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="172">
+          <span class="hits">88</span>
           
           <code class="ruby">    if client.indices.exists? index: index</code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="173">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="173">
+          <span class="hits">88</span>
           
           <code class="ruby">      client.indices.delete index: index</code>
         </li>
@@ -5335,8 +5335,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="176">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="176">
+          <span class="hits">88</span>
           
           <code class="ruby">    client.indices.create index: index, body: Alegre::ElasticSearch.schema</code>
         </li>
@@ -6127,8 +6127,8 @@
           <code class="ruby">         }</code>
         </li>
       
-        <li class="covered" data-hits="77" data-linenumber="308">
-          <span class="hits">77</span>
+        <li class="covered" data-hits="88" data-linenumber="308">
+          <span class="hits">88</span>
           
           <code class="ruby">      }}&#39;</code>
         </li>
@@ -6325,14 +6325,14 @@
           <code class="ruby">  def initialize(options)</code>
         </li>
       
-        <li class="covered" data-hits="90" data-linenumber="3">
-          <span class="hits">90</span>
+        <li class="covered" data-hits="101" data-linenumber="3">
+          <span class="hits">101</span>
           
           <code class="ruby">    @version = options[:version]</code>
         </li>
       
-        <li class="covered" data-hits="90" data-linenumber="4">
-          <span class="hits">90</span>
+        <li class="covered" data-hits="101" data-linenumber="4">
+          <span class="hits">101</span>
           
           <code class="ruby">    @default = options[:default]</code>
         </li>
@@ -6379,8 +6379,8 @@
           <code class="ruby">  def self.accept(version = 1)</code>
         </li>
       
-        <li class="covered" data-hits="79" data-linenumber="12">
-          <span class="hits">79</span>
+        <li class="covered" data-hits="82" data-linenumber="12">
+          <span class="hits">82</span>
           
           <code class="ruby">    &quot;application/vnd.lapis.v#{version}&quot;</code>
         </li>
@@ -6781,8 +6781,8 @@
           <code class="ruby">  def create_api_key(options = {})</code>
         </li>
       
-        <li class="covered" data-hits="64" data-linenumber="18">
-          <span class="hits">64</span>
+        <li class="covered" data-hits="66" data-linenumber="18">
+          <span class="hits">66</span>
           
           <code class="ruby">    ApiKey.create! options</code>
         </li>
