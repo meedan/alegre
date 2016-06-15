@@ -122,6 +122,28 @@ namespace :lapis do
        end
       end
 
+      # Get exposed functions
+
+      require 'rdoc'
+      require 'htmlentities'
+      exposed_methods_signs = []
+      exposed_methods_bodies = []
+      rdoc = RDoc::RDoc.new
+      options = rdoc.load_options
+      rdoc.options = options
+      rdoc.store = RDoc::Store.new
+      classes = rdoc.parse_files(['app', 'lib'])[0].instance_variable_get('@store').all_classes
+      classes.each do |c|
+        c.method_list.each do |m|
+          dump = m.marshal_dump
+          tags = dump[5].parts.map(&:parts).flatten
+          if tags.include?('@expose')
+            exposed_methods_signs << dump[1]
+            exposed_methods_bodies << HTMLEntities.new.decode(m.markup_code.gsub(/<span class=\"ruby-comment\">.*<\/span>/, '').gsub(/<[^>]*>/, '').gsub("\n", "\n    ").gsub(/ def /, ' def self.'))
+          end
+        end
+      end
+
       # Update README
       readme = %{
 # #{gem_camel_name}
@@ -155,6 +177,10 @@ The available methods are:
 If you are going to test something that uses the '#{gem_snake_name}' service, first you need to mock each possible response it can return, which are:
 
 #{mock_methods_sigs.collect{ |r| "* #{gem_camel_name}::Mock.#{r}" }.join("\n")}
+
+You can also reuse utility functions that are exposed by '#{gem_snake_name}'. They are:
+
+#{exposed_methods_signs.collect{ |r| "* #{gem_camel_name}::Util.#{r}" }.join("\n")}
 
 ## Contributing
 
@@ -221,6 +247,10 @@ module #{gem_camel_name}
 
   module Mock
     #{mock_methods.join}
+  end
+
+  module Util
+    #{exposed_methods_bodies.join}
   end
 end}
       f = File.open(File.join(gem_snake_name, 'lib', "#{gem_snake_name}.rb"), 'w+')

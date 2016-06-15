@@ -73,3 +73,7 @@ end
 
 gem 'httpclient'
 gem 'bing_translator', '~> 4.5.0'
+
+gem 'alegre_client', git: 'https://github.com/meedan/alegre-client.git', ref: '7d78007'
+
+gem 'htmlentities', require: false, group: :development

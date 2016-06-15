@@ -8,7 +8,8 @@ A linguistic service by [Meedan](https://meedan.com).
 * Copy `config/database.yml.example` to `config/database.yml` and adjust the options
 * Copy `config/initializers/secret_token.rb.example` to `config/initializers/secret_token.rb` and adjust the options
 * Copy `config/initializers/errbit.rb.example` to `config/initializers/errbit.rb` and adjust the options
-* Run `bundle install` to install dependencies
+* Run `bundle install` to install Ruby dependencies
+* Run `pip install -r requirements.txt` to install Python dependencies
 * Run `docker pull elasticsearch:latest && docker run -d -p 9200:9200 elasticsearch` to install and start Elasticsearch
 * Run `bundle exec rake db:migrate` to create database schema
 * Run `bundle exec rake lapis:api_keys:create` to create API key - you will need it on the API web interface later!
@@ -42,8 +43,68 @@ Use this method in order to identify the language of a given text
   "type": "language",
   "data": [
     [
-      1.0,
-      "en"
+      "EN",
+      1
+    ],
+    [
+      "FR",
+      0
+    ],
+    [
+      "ES",
+      0
+    ],
+    [
+      "IT",
+      0
+    ],
+    [
+      "PT",
+      0
+    ],
+    [
+      "TR",
+      0
+    ],
+    [
+      "ID",
+      0
+    ],
+    [
+      "TL",
+      0
+    ],
+    [
+      "AZ",
+      0
+    ],
+    [
+      "RU",
+      0
+    ],
+    [
+      "KA",
+      0
+    ],
+    [
+      "HI",
+      0
+    ],
+    [
+      "AR",
+      0
+    ],
+    [
+      "FA",
+      0
+    ],
+    [
+      "ZH-CHS",
+      0
+    ],
+    [
+      "ZH-CHT",
+      0
     ]
   ]
 }

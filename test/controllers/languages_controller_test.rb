@@ -11,34 +11,40 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'This is a sentence in English'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][0]   
   end
 
   test "identification - should get language es" do
     authenticate_with_token
     get :identification, text: 'Esta es una frase en español'
     assert_response :success
-    assert_equal "es", assigns(:language)[0][1]   
+    assert_equal "ES", assigns(:language)[0][0]   
   end
 
   test "identification - should get language pt" do
     authenticate_with_token
     get :identification, text: 'Esta é uma frase em português'
     assert_response :success
-    assert_equal "pt", assigns(:language)[0][1]   
+    assert_equal "PT", assigns(:language)[0][0]   
   end
 
   test "identification - should get language ar" do
     authenticate_with_token
     get :identification, text: 'هذه هي العبارة باللغة العربية'
     assert_response :success
-    assert_equal "ar", assigns(:language)[0][1]   
+    assert_equal "AR", assigns(:language)[0][0]   
   end
 
-
+  test "identification - should get language en+ar" do
+    authenticate_with_token
+    get :identification, text: 'in the morning evening at night غدا  البارحة غدا  البارحة'
+    assert_response :success
+    assert_equal "EN,AR", assigns(:language)[0][0]
+  end
+  
   test "identification - should return error empty if test is in a unknown language" do
     authenticate_with_token
-    get :identification, text: 'sdflk skljfkdsf skdfjd jjas'
+    get :identification, text: 'x'
     assert_response :success
     assert_equal [], assigns(:language)
   end
@@ -54,7 +60,7 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :identification, text: 'I ♥ you English language'
     assert_response :success
-    assert_equal "en", assigns(:language)[0][1]   
+    assert_equal "EN", assigns(:language)[0][0]   
   end
 
   test "identification - should not return english hashtag" do
@@ -92,19 +98,19 @@ class LanguagesControllerTest < ActionController::TestCase
 
   test "sample - should return error if text was not provided" do
     authenticate_with_token
-    post :sample, language: 'en'
+    post :sample, language: 'EN'
     assert_response 400
   end
 
   test "sample - should return sucess" do
     authenticate_with_token
-    post :sample, language: 'en', text: 'sample text in english language'
+    post :sample, language: 'EN', text: 'sample text in english language'
     assert_response :success
   end
 
   test "sample - should return error if text blank" do
     authenticate_with_token
-    post :sample, language: 'en', text: ''
+    post :sample, language: 'EN', text: ''
     assert_response 400
   end
 
@@ -129,7 +135,29 @@ class LanguagesControllerTest < ActionController::TestCase
     assert_equal arrayVar.class, assigns(:list).class
   end
 
+  # http://mantis.meedan.net/view.php?id=4801
+  test "language - should not crash with Python unary operand error" do
+    authenticate_with_token
 
+    texts = [
+      '「ふるさと納税」商品券 大多喜町は廃止、勝浦市は継続: ふるさと納税」の特典競争が過熱する中、一万円寄付すると六千円分がもらえる商品券「ふるさと感謝券」を贈る特典を今月限りで廃止する大多喜町。換金性が ... https://t.co/ogqfRArQwY #Test',
+      'https://t.co/dZJ58CWhjx #Jordan #ﺍﻷﺭﺪﻧ'
+    ]
+
+    texts.each do |text|
+      assert_nothing_raised do
+        get :identification, text: text
+        assert_response :success
+      end
+    end
+  end
+
+  test "language - should not crash with function object error" do
+    authenticate_with_token
+    text = 'So devastated over this shooting at UCLA. Sending all my thoughts and prayers to the Bruins.'
+    assert_nothing_raised do
+      get :identification, text: text
+      assert_response :success
+    end
+  end
 end
-
-
