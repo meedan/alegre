@@ -5,6 +5,12 @@ GIT
   specs:
     alegre_client (0.0.8)
 
+GIT
+  remote: https://github.com/meedan/diacritics.git
+  revision: a1c74ebe3f721e0d95df6efeab0685cf46430394
+  specs:
+    diacritics (0.0.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -254,6 +260,7 @@ DEPENDENCIES
   bing_translator (~> 4.5.0)
   codeclimate-test-reporter
   coffee-rails (~> 4.1.0)
+  diacritics!
   elasticsearch
   gem-licenses
   htmlentities
