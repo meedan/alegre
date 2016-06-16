@@ -32,10 +32,10 @@ module Alegre
     end
 
     # @expose
-    def normalize(text,spaceParameter=' ')
+    def normalize(text,space_parameter=' ')
       require 'diacritics'
       String.send(:include, Diacritics::String)
-      return text.permanent(spaceParameter)
+      return text.permanent(space_parameter)
     end
 
     protected

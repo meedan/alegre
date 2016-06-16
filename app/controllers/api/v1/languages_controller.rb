@@ -44,10 +44,8 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
       render_parameters_missing
     else
       str = params[:text].to_s
-      Retriable.retriable do
-        @text = Alegre::LangId.new.normalize(str)
-      end
-      render_success 'language', @text
+      @text = Alegre::LangId.new.normalize(str)
+      render_success 'text', @text
     end
   end
 
