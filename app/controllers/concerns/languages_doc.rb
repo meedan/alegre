@@ -16,6 +16,16 @@ module LanguagesDoc
       response 401, 'Access denied', { query: { text: 'Test' } }
     end
 
+    swagger_api :normalize do
+      summary 'Remove diacritics from a given text'
+      notes 'Use this method in order to remove diacritics from a given text'
+      param :query, :text, :string, :required, 'Text to normalized'
+      authed = { CONFIG['authorization_header'] => 'test' }
+      response :ok, 'Normalized text', {text: '' , headers: authed }
+      response 400, 'Parameter "text" is missing', { query: nil, headers: authed }
+      response 401, 'Access denied', { query: { text: 'Test' } }
+    end
+
     #swagger_api :sample do
     #   summary 'Add training sample to the model'
     #   notes 'Use this method in order to add training sample to the model'

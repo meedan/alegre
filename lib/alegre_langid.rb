@@ -14,7 +14,6 @@ module Alegre
     end
 
     def classify(text)
-      text = self.normalize(text)
       begin
         self.classify!(text)
       rescue Exception => e
@@ -32,10 +31,11 @@ module Alegre
       @@langid.list_languages.rubify
     end
 
-    # TODO
     # @expose
-    def normalize(text)
-      text
+    def normalize(text,spaceParameter=' ')
+      require 'diacritics'
+      String.send(:include, Diacritics::String)
+      return text.permanent(spaceParameter)
     end
 
     protected
