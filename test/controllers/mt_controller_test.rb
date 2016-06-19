@@ -38,6 +38,11 @@ class MtControllerTest < ActionController::TestCase
     assert_response 400
   end
 
+  test "should get machine translations for Chinese" do
+    get :index, text: '这是一个测试', from: 'zh-chs', to: 'en'
+    assert_response :success
+  end
+
   test "should get supported languages" do
     get :languages
     languages = parse_response

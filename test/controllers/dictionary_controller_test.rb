@@ -53,4 +53,10 @@ class DictionaryControllerTest < ActionController::TestCase
     assert_equal ['book', 'table'], JSON.parse(@response.body)['data'].collect{ |t| t['_source']['term'].strip }.sort
     assert !assigns(:babelfy_requested)
   end
+
+  test "dict - should get terms in Chinese" do
+    authenticate_with_token
+    get :terms, language: 'zh', text: '这是一个测试', source_id: '123456'
+    assert_response :success
+  end
 end
