@@ -78,4 +78,4 @@ gem 'alegre_client', git: 'https://github.com/meedan/alegre-client.git', ref: '7
 
 gem 'htmlentities', require: false, group: :development
 
-gem 'diacritics', git: 'https://github.com/meedan/diacritics.git'
+gem 'diacritics', git: 'https://github.com/meedan/diacritics.git', ref: '903c4f0'

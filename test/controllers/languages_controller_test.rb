@@ -165,6 +165,12 @@ class LanguagesControllerTest < ActionController::TestCase
     authenticate_with_token
     get :normalize, text: 'ç ã Ñ'
     assert_response :success
-    assert_equal "c a n", assigns(:text)
+    assert_equal 'c a n', assigns(:text)
+  end
+
+  test "language - diacritic normalization when text is not present" do
+    authenticate_with_token
+    get :normalize
+    assert_response 400
   end
 end

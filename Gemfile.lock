@@ -7,7 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/meedan/diacritics.git
-  revision: a1c74ebe3f721e0d95df6efeab0685cf46430394
+  revision: 903c4f0169025af4427773bff60b3f55d275f4d9
+  ref: 903c4f0
   specs:
     diacritics (0.0.8)
 
