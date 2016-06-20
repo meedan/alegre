@@ -11,7 +11,7 @@ module LanguagesDoc
       notes 'Use this method in order to identify the language of a given text'
       param :query, :text, :string, :required, 'Text to be classified'
       authed = { CONFIG['authorization_header'] => 'test' }
-      response :ok, 'Text language', { query: { text: 'input text' }, headers: authed }
+      response :ok, 'Text language', { query: { text: 'I like apples' }, headers: authed }
       response 400, 'Parameter "text" is missing', { query: nil, headers: authed }
       response 401, 'Access denied', { query: { text: 'Test' } }
     end
@@ -21,7 +21,7 @@ module LanguagesDoc
       notes 'Use this method in order to remove diacritics from a given text'
       param :query, :text, :string, :required, 'Text to be normalized'
       authed = { CONFIG['authorization_header'] => 'test' }
-      response :ok, 'Normalized text', {text: 'input text' , headers: authed }
+      response :ok, 'Normalized text', { query: { text: 'Eu gosto de maçã'}, headers: authed }
       response 400, 'Parameter "text" is missing', { query: nil, headers: authed }
       response 401, 'Access denied', { query: { text: 'Test' } }
     end
