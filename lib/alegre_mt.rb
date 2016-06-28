@@ -6,7 +6,7 @@ module Alegre
 
     def languages
       Rails.cache.fetch('supported_languages_for_mt', expires_in: 24.hours) do
-        @mt.supported_language_codes
+        @mt.supported_language_codes.map(&:downcase)
       end
     end
 

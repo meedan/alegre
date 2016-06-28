@@ -24,7 +24,7 @@
               "code": 200,
               "responseModel": {
                 "query": {
-                  "text": "The book is on the table"
+                  "text": "input text"
                 },
                 "headers": {
                   "x-Alegre-Token": "test"
@@ -54,6 +54,57 @@
           ],
           "method": "get",
           "nickname": "Api::V1::Languages#identification"
+        }
+      ]
+    },
+    {
+      "path": "api/languages/normalize",
+      "operations": [
+        {
+          "summary": "Remove diacritics from a given text",
+          "notes": "Use this method in order to remove diacritics from a given text",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be normalized",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": {
+                "text": "input text",
+                "headers": {
+                  "x-Alegre-Token": "test"
+                }
+              },
+              "message": "Normalized text"
+            },
+            {
+              "code": 400,
+              "responseModel": {
+                "query": null,
+                "headers": {
+                  "x-Alegre-Token": "test"
+                }
+              },
+              "message": "Parameter \"text\" is missing"
+            },
+            {
+              "code": 401,
+              "responseModel": {
+                "query": {
+                  "text": "Test"
+                }
+              },
+              "message": "Access denied"
+            }
+          ],
+          "method": "get",
+          "nickname": "Api::V1::Languages#normalize"
         }
       ]
     }

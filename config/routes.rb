@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get 'languages/identification', to: 'languages#identification'
       post 'languages/sample', to: 'languages#sample'
       get 'languages/language', to: 'languages#language'
+      get 'languages/normalize', to: 'languages#normalize'
       get 'glossary/terms', to: 'glossary#terms'
       post 'glossary/term', to: 'glossary#term'
       delete 'glossary/delete', to: 'glossary#delete'

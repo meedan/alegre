@@ -11,7 +11,17 @@ module LanguagesDoc
       notes 'Use this method in order to identify the language of a given text'
       param :query, :text, :string, :required, 'Text to be classified'
       authed = { CONFIG['authorization_header'] => 'test' }
-      response :ok, 'Text language', { query: { text: 'The book is on the table' }, headers: authed }
+      response :ok, 'Text language', { query: { text: 'I like apples' }, headers: authed }
+      response 400, 'Parameter "text" is missing', { query: nil, headers: authed }
+      response 401, 'Access denied', { query: { text: 'Test' } }
+    end
+
+    swagger_api :normalize do
+      summary 'Remove diacritics from a given text'
+      notes 'Use this method in order to remove diacritics from a given text'
+      param :query, :text, :string, :required, 'Text to be normalized'
+      authed = { CONFIG['authorization_header'] => 'test' }
+      response :ok, 'Normalized text', { query: { text: 'Eu gosto de maçã'}, headers: authed }
       response 400, 'Parameter "text" is missing', { query: nil, headers: authed }
       response 401, 'Access denied', { query: { text: 'Test' } }
     end
