@@ -138,18 +138,23 @@ class LanguagesControllerTest < ActionController::TestCase
   # http://mantis.meedan.net/view.php?id=4801
   test "language - should not crash with Python unary operand error" do
     authenticate_with_token
-
     texts = [
       '「ふるさと納税」商品券 大多喜町は廃止、勝浦市は継続: ふるさと納税」の特典競争が過熱する中、一万円寄付すると六千円分がもらえる商品券「ふるさと感謝券」を贈る特典を今月限りで廃止する大多喜町。換金性が ... https://t.co/ogqfRArQwY #Test',
       'https://t.co/dZJ58CWhjx #Jordan #ﺍﻷﺭﺪﻧ'
     ]
-
     texts.each do |text|
       assert_nothing_raised do
         get :identification, text: text
         assert_response :success
       end
     end
+  end
+
+  # https://mantis.meedan.com/view.php?id=4896
+  test "0004896: Python exception on Bridge Live" do
+    get :identification, text: 'CR7 মাঠ ছে‌ড়ে যাওয়ার পর খেলা বন্ধ কর‌ে ঘুমাই‌তে গে‌ছিলাম। সকা‌লে উ‌ঠে দে‌খি পর্তুগাল জি‌তে গে‌ছে!'
+    assert_response :success
+    assert_equal [], assigns(:language)
   end
 
   test "language - should not crash with function object error" do
