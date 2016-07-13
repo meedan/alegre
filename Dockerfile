@@ -1,7 +1,6 @@
 # alegre
-# VERSION  0.0.1
 
-FROM dreg.meedan.net/meedan/ruby
+FROM meedan/ruby
 MAINTAINER sysops@meedan.com
 
 #
