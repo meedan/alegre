@@ -152,6 +152,7 @@ class LanguagesControllerTest < ActionController::TestCase
 
   # https://mantis.meedan.com/view.php?id=4896
   test "0004896: Python exception on Bridge Live" do
+    authenticate_with_token
     get :identification, text: 'CR7 মাঠ ছে‌ড়ে যাওয়ার পর খেলা বন্ধ কর‌ে ঘুমাই‌তে গে‌ছিলাম। সকা‌লে উ‌ঠে দে‌খি পর্তুগাল জি‌তে গে‌ছে!'
     assert_response :success
     assert_equal [], assigns(:language)
