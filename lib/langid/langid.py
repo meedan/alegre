@@ -510,7 +510,7 @@ class LangId:
           if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
             return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
           else:
-            if len(res) >  0 and float(res[0][0]) > 0:
+            if len(res) >  0 and float(res[0][0]) > 0 and (self.resSum(resOriginal) > 0):
               return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
             else:
               return []
@@ -519,10 +519,16 @@ class LangId:
             return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
           else:
             return []
-      elif len(res) == 1:
+      elif len(res) == 1 :
         return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
     return []
   
+  def resSum(self,a):
+    s = 0.0
+    for r in a:   
+      s = s + float(r[0])
+    return s
+   
   def areEnID(self,lang):
     #[are] in id and en
     if lang[0][1] == 'ID' and lang[1][1] == 'EN':
