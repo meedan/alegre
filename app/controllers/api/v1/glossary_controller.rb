@@ -5,8 +5,8 @@ class Api::V1::GlossaryController < Api::V1::BaseApiController
 
   include GlossaryDoc
 
-  GLOSSARY_INDEX = CONFIG['glossary_index']
-  GLOSSARY_TYPE  = CONFIG['glossary_type']
+  GLOSSARY_INDEX = CONFIG['elasticsearch_index']
+  GLOSSARY_TYPE  = "glossary"
   ES_SERVER = CONFIG['elasticsearch_server'].to_s + ':' + CONFIG['elasticsearch_port'].to_s
 
   def term # POST
