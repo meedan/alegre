@@ -56,12 +56,10 @@ gem 'awesome_print'
 gem 'gem-licenses'
 gem 'logstasher'
 gem 'auto_localize', '0.1'
-gem 'thin'
 gem 'protected_attributes'
 gem 'swagger-docs', '0.1.9'
 gem 'responders'
 gem 'rubypython'
-gem 'unicorn'
 gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
 
 gem 'json'
@@ -79,3 +77,5 @@ gem 'alegre_client', git: 'https://github.com/meedan/alegre-client.git', ref: '7
 gem 'htmlentities', require: false, group: :development
 
 gem 'diacritics', git: 'https://github.com/meedan/diacritics.git', ref: '903c4f0'
+
+gem 'puma'
