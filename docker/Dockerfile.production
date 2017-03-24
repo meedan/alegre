@@ -19,7 +19,7 @@ RUN easy_install pip
 #
 
 # nginx for alegre
-COPY docker/nginx.conf /etc/nginx/sites-available/alegre
+COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
 RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
     && rm /etc/nginx/sites-enabled/default
 
@@ -46,7 +46,7 @@ COPY ./Gemfile.lock ./latest/Gemfile.lock
 
 # Install and link libraries to the place that RubyPython looks for them
 COPY ./requirements.txt ./latest/requirements.txt
-COPY docker/link-python-libs /usr/local/bin/link-python-libs
+COPY docker/bin/link-python-libs /usr/local/bin/link-python-libs
 RUN pip install -r ./latest/requirements.txt 
 RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \    
     && /usr/local/bin/link-python-libs
