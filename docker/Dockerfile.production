@@ -11,7 +11,15 @@ ENV DEPLOYUSER=mlgdeploy \
     RAILS_ENV=production \
     GITREPO=git@github.com:meedan/alegre.git
 
-RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs libmysqlclient-dev -y
+RUN apt-get install -y \
+    gcc \
+    python \
+    python-setuptools \
+    libpython-dev \
+    python2.7-dev \
+    gfortran \
+    libatlas-base-dev
+
 RUN easy_install pip
 
 #
