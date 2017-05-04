@@ -66,6 +66,7 @@ gem 'json'
 gem 'retriable', '~> 2.1'
 
 group :production do
+  gem 'mysql2', '~> 0.3.13'
   gem 'pg', '~> 0.15'
 end
 

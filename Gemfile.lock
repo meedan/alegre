@@ -139,6 +139,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    mysql2 (0.3.21)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     nori (2.6.0)
@@ -268,6 +269,7 @@ DEPENDENCIES
   literate_randomizer
   logstasher
   mocha
+  mysql2 (~> 0.3.13)
   pg (~> 0.15)
   protected_attributes
   puma
