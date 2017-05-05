@@ -5,7 +5,7 @@ MAINTAINER Meedan <sysops@meedan.com>
 ENV RAILS_ENV development
 
 # install dependencies
-RUN apt-get update -qq && apt-get install libpq-dev gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq && apt-get install libpq-dev gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev libmysqlclient-dev nodejs -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN easy_install pip
 
 # install our app
@@ -20,8 +20,8 @@ COPY . /app
 # install and link libraries to the place that RubyPython looks for them
 COPY requirements.txt /app/requirements.txt
 COPY bin/link-python-libs /usr/local/bin/link-python-libs
-RUN pip install -r /app/requirements.txt 
-RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \    
+RUN pip install -r /app/requirements.txt
+RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \
     && /usr/local/bin/link-python-libs
 
 # startup
