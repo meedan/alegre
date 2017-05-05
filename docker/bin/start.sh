@@ -21,11 +21,11 @@ for ENV in $( env | cut -d= -f1); do
 done
 
 # set permission on runtime volumes linked from ${DEPLOYDIR}/current/
-cd ${DEPLOYDIR}/shared
-for D in cache screenshots projects; do
-    chown -R ${DEPLOYUSER}:www-data $D
-    chmod -R 775 $D
-done
+# cd ${DEPLOYDIR}/shared
+# for D in cache screenshots projects; do
+#     chown -R ${DEPLOYUSER}:www-data $D
+#     chmod -R 775 $D
+# done
 
 cd -
 
