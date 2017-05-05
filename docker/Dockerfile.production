@@ -7,9 +7,14 @@ MAINTAINER sysops@meedan.com
 # SYSTEM CONFIG
 #
 ENV DEPLOYUSER=mlgdeploy \
-    DEPLOYDIR=/var/www/alegre \
+    DEPLOYDIR=/app \
     RAILS_ENV=production \
-    GITREPO=git@github.com:meedan/alegre.git
+    GITREPO=git@github.com:meedan/alegre.git \
+    PRODUCT=bridge \
+    APP=alegre \
+    TERM=xterm \
+    MIN_INSTANCES=4 \
+    MAX_POOL_SIZE=12
 
 RUN apt-get install -y \
     gcc \
@@ -19,6 +24,9 @@ RUN apt-get install -y \
     python2.7-dev \
     gfortran \
     libatlas-base-dev
+
+COPY ./docker/bin/* /opt/bin/
+RUN chmod 755 /opt/bin/*.sh
 
 RUN easy_install pip
 
@@ -41,30 +49,24 @@ RUN useradd ${DEPLOYUSER} -s /bin/bash -m \
 #
 # code deployment
 #
-
-RUN mkdir -p $DEPLOYDIR \
-    && chown www-data:www-data /var/www \
-    && chmod 775 /var/www \
-    && chmod g+s /var/www
+RUN mkdir -p $DEPLOYDIR/latest \
+    && chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 
 WORKDIR ${DEPLOYDIR}
-RUN mkdir ./latest
 COPY ./Gemfile ./latest/Gemfile
 COPY ./Gemfile.lock ./latest/Gemfile.lock
 
 # Install and link libraries to the place that RubyPython looks for them
 COPY ./requirements.txt ./latest/requirements.txt
-COPY docker/bin/link-python-libs /usr/local/bin/link-python-libs
 RUN pip install -r ./latest/requirements.txt 
-RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \    
-    && /usr/local/bin/link-python-libs
+RUN /opt/bin/link-python-libs
 
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
 
 RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc \
     && cd ./latest \
-    && bundle install --deployment --without test development
+    && bundle install --jobs 20 --retry 5 --deployment --without test development
 
 USER root
 COPY . ./latest
@@ -72,12 +74,7 @@ RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
 
 # config
-RUN cd ./latest/config \
-    && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml \
-    && rm -f ./config.yml && ln -s ${DEPLOYDIR}/shared/config/config.yml ./config.yml \
-    && cd ./initializers \
-    && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb \
-    && rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb
+RUN /opt/bin/find_and_link_config_files.sh ${DEPLOYDIR}/latest
 
 RUN mv ./latest ./alegre-$(date -I) && ln -s ./alegre-$(date -I) ./current
 
@@ -88,4 +85,4 @@ RUN mv ./latest ./alegre-$(date -I) && ln -s ./alegre-$(date -I) ./current
 USER root
 WORKDIR ${DEPLOYDIR}/current
 EXPOSE 80
-CMD ["nginx"]
+CMD ["/opt/bin/start.sh"]
