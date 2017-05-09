@@ -10,6 +10,7 @@ import sys
 import hanzidentifier
 import pickle
 import socket
+from sets import Set
 
 class LangId:     
   def __init__(self):
@@ -41,11 +42,16 @@ class LangId:
       self.corpus = corpora.MmCorpus(self.modelPath+'/corpus.mm')
       self.tfidf = models.TfidfModel.load(self.modelPath+'/model.tfidf')
       self.documents = pickle.load(open(self.modelPath+'/documents.obj', "rb" ) )
+      if os.path.exists(self.modelPath+'/samples.obj'):
+        self.samples = pickle.load(open(self.modelPath+'/samples.obj', "rb" ) )
+      else:
+        self.samples = {}
       self.texts = []
       for document in self.documents:
           self.texts.append(document) #.lower().split())   
     else:
       self.documents = []
+      self.samples = {}
       for lang in self.languages:
         self.documents.append(self.readFile(self.modelPath+'/'+lang.lower()))
       self.texts = []
@@ -62,6 +68,7 @@ class LangId:
     self.tfidf.save(self.modelPath+'/model.tfidf') # same for tfidf, lda, ...
     pickle.dump(self.documents, open(self.modelPath+'/documents.obj', "wb" ) )
     corpora.MmCorpus.serialize(self.modelPath+'/corpus.mm', self.corpus)
+    pickle.dump(self.samples, open(self.modelPath+'/samples.obj', "wb" ) )
 
   def SWsimilar(self,model,v,txt):
     doc_tokens = txt.lower().split()
@@ -178,6 +185,11 @@ class LangId:
      text = self.normalize(line)
      langPreDefined = ''
      ret = self.is_chinese(text)
+
+     for key, value in self.samples.iteritems():
+        if line in value:
+          ret = [[1,key]]
+
      #not chinese    
      if len(ret) == 0:
        sims = self.sim_tfidf(self.threeGrams(text))
@@ -386,10 +398,28 @@ class LangId:
 
   def add_sample(self, sentence, lang):
     try:
-      idx = self.languages.index(lang)
-      self.documents[idx] = self.documents[idx]  + self.threeGrams(self.normalize(sentence))
-      self.newModelFiles()
-      return True      
+      sentence = self.normalize(sentence)
+      if (len(sentence) > 0) and (self.languages.index(lang) >= 0):
+        if lang in self.samples.keys():
+          self.samples[lang].add(sentence)
+        else:
+          self.samples[lang] =  Set([sentence])
+        pickle.dump(self.samples, open(self.modelPath+'/samples.obj', "wb" ) )
+        return True
+      else:
+        return False      
+    except ValueError:
+      return False
+
+  def delete_sample(self, sentence, lang):
+    try:
+      sentence = self.normalize(sentence)
+      if (len(sentence) > 0) and (self.languages.index(lang) >= 0) and (sentence in self.samples[lang]):
+        self.samples[lang].remove(sentence)
+        pickle.dump(self.samples, open(self.modelPath+'/samples.obj', "wb" ) )
+        return True      
+      else:
+        return False      
     except ValueError:
       return False
 
@@ -567,3 +597,4 @@ class vec:
     for line in open(fi):
       self.ss.append([line.replace("\n", "").lower()])
       self.ss2.append(line.replace("\n", "").lower())
+
