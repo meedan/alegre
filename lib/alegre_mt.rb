@@ -1,7 +1,7 @@
 module Alegre
   class Mt
     def initialize
-      @mt = BingTranslator.new(CONFIG['bing_id'], CONFIG['bing_secret'])
+      @mt = BingTranslator.new(CONFIG['bing_cognitive_subscription_key'])
     end
 
     def languages

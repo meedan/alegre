@@ -13,7 +13,7 @@ config/initializers/errbit.rb
 config/initializers/secret_token.rb
 *.sw*
 *~
-dysl
 vendor/bundle
 /.project
 *.pyc
+tmp

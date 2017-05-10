@@ -1,83 +1,32 @@
-# alegre
-
 FROM meedan/ruby
-MAINTAINER sysops@meedan.com
+MAINTAINER Meedan <sysops@meedan.com>
 
-#
-# SYSTEM CONFIG
-#
-ENV DEPLOYUSER=mlgdeploy \
-    DEPLOYDIR=/var/www/alegre \
-    RAILS_ENV=production \
-    GITREPO=git@github.com:meedan/alegre.git
+# the Rails stage can be overridden from the caller
+ENV RAILS_ENV development
 
-RUN apt-get install gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev nodejs libmysqlclient-dev -y
+# install dependencies
+RUN apt-get update -qq && apt-get install libpq-dev gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN easy_install pip
 
-#
-# APP CONFIG
-#
+# install our app
+WORKDIR /app
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc \
+    gem install bundler \
+    && bundle install --jobs 20 --retry 5
+COPY . /app
 
-# nginx for alegre
-COPY docker/nginx.conf /etc/nginx/sites-available/alegre
-RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
-    && rm /etc/nginx/sites-enabled/default
-
-#
-# USER CONFIG
-#
-
-RUN useradd ${DEPLOYUSER} -s /bin/bash -m \
-    && chown -R ${DEPLOYUSER}:${DEPLOYUSER} /home/${DEPLOYUSER}
-
-#
-# code deployment
-#
-
-RUN mkdir -p $DEPLOYDIR \
-    && chown www-data:www-data /var/www \
-    && chmod 775 /var/www \
-    && chmod g+s /var/www
-
-WORKDIR ${DEPLOYDIR}
-RUN mkdir ./latest
-COPY ./Gemfile ./latest/Gemfile
-COPY ./Gemfile.lock ./latest/Gemfile.lock
-
-# Install and link libraries to the place that RubyPython looks for them
-COPY ./requirements.txt ./latest/requirements.txt
-COPY docker/link-python-libs /usr/local/bin/link-python-libs
-RUN pip install -r ./latest/requirements.txt 
-RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \    
+# install and link libraries to the place that RubyPython looks for them
+COPY requirements.txt /app/requirements.txt
+COPY bin/link-python-libs /usr/local/bin/link-python-libs
+RUN pip install -r /app/requirements.txt
+RUN chmod +x /usr/local/bin/link-python-libs && sleep 1 \
     && /usr/local/bin/link-python-libs
 
-RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
-USER ${DEPLOYUSER}
-
-RUN echo "gem: --no-rdoc --no-ri" > ~/.gemrc \
-    && cd ./latest \
-    && bundle install --deployment --without test development
-
-USER root
-COPY . ./latest
-RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
-USER ${DEPLOYUSER}
-
-# config
-RUN cd ./latest/config \
-    && rm -f ./database.yml && ln -s ${DEPLOYDIR}/shared/config/database.yml ./database.yml \
-    && rm -f ./config.yml && ln -s ${DEPLOYDIR}/shared/config/config.yml ./config.yml \
-    && cd ./initializers \
-    && rm -f ./errbit.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/errbit.rb ./errbit.rb \
-    && rm -f ./secret_token.rb && ln -s ${DEPLOYDIR}/shared/config/initializers/secret_token.rb ./secret_token.rb
-
-RUN mv ./latest ./alegre-$(date -I) && ln -s ./alegre-$(date -I) ./current
-
-#
-# RUNTIME ELEMENTS
-# expose, cmd
-
-USER root
-WORKDIR ${DEPLOYDIR}/current
-EXPOSE 80
-CMD ["nginx"]
+# startup
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+EXPOSE 3004
+ENTRYPOINT ["tini", "--"]
+CMD ["/docker-entrypoint.sh"]
