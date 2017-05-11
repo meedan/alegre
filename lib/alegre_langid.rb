@@ -9,7 +9,7 @@ module Alegre
       s = RubyPython.import 'sys'
       s.path.insert(0, File.join(Rails.root, 'lib/langid')).rubify
       langid = RubyPython.import 'langid'
-      instance = langid.LangId.new
+      instance = langid.LangId.new(CONFIG['langid'])
       self.instantiate_langid(instance)
     end
 

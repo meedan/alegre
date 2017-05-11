@@ -12,8 +12,9 @@ import pickle
 import socket
 
 class LangId:     
-  def __init__(self):
-    modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
+  def __init__(self,modelPath=""):
+    if len(modelPath) == 0:
+      modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
     if modelPath.endswith('/'):
       modelPath = modelPath[:-1]
     self.modelPath = modelPath
@@ -567,3 +568,18 @@ class vec:
     for line in open(fi):
       self.ss.append([line.replace("\n", "").lower()])
       self.ss2.append(line.replace("\n", "").lower())
+
+if __name__ == '__main__':
+    #str = params[:text].to_s
+    #lang = params[:language].to_s
+    #Retriable.retriable do
+    #  @ret = Alegre::LangId.new.add_sample(str, lang)
+
+    p = LangId()
+    s = "one large example"
+    ret = p.add_sample(s,"EN")
+    print ret
+    print ("***************")
+    print p.classify(s)
+
+
