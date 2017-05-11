@@ -569,17 +569,3 @@ class vec:
       self.ss.append([line.replace("\n", "").lower()])
       self.ss2.append(line.replace("\n", "").lower())
 
-if __name__ == '__main__':
-    #str = params[:text].to_s
-    #lang = params[:language].to_s
-    #Retriable.retriable do
-    #  @ret = Alegre::LangId.new.add_sample(str, lang)
-
-    p = LangId()
-    s = "one large example"
-    ret = p.add_sample(s,"EN")
-    print ret
-    print ("***************")
-    print p.classify(s)
-
-
