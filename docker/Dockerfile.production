@@ -6,7 +6,7 @@ MAINTAINER sysops@meedan.com
 #
 # SYSTEM CONFIG
 #
-ENV DEPLOYUSER=mlgdeploy \
+ENV DEPLOYUSER=alegre \
     DEPLOYDIR=/app \
     RAILS_ENV=production \
     GITREPO=git@github.com:meedan/alegre.git \

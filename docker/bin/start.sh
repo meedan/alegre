@@ -20,12 +20,17 @@ for ENV in $( env | cut -d= -f1); do
     config_replace "$ENV" "${!ENV}" /etc/nginx/sites-enabled/${APP}
 done
 
+# populate the model if empty
+if [ ! -e "${DEPLOYDIR}/shared/model/en" ]; then
+    cp -avp ${DEPLOYDIR}/current/lib/langid/model_orig/* ${DEPLOYDIR}/shared/model/
+fi
+
 # set permission on runtime volumes linked from ${DEPLOYDIR}/current/
-# cd ${DEPLOYDIR}/shared
-# for D in cache screenshots projects; do
-#     chown -R ${DEPLOYUSER}:www-data $D
-#     chmod -R 775 $D
-# done
+cd ${DEPLOYDIR}/shared
+for D in model; do
+    chown -R ${DEPLOYUSER}:www-data $D
+    chmod -R 775 $D
+done
 
 cd -
 
