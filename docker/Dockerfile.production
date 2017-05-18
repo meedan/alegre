@@ -6,7 +6,7 @@ MAINTAINER sysops@meedan.com
 #
 # SYSTEM CONFIG
 #
-ENV DEPLOYUSER=mlgdeploy \
+ENV DEPLOYUSER=alegre \
     DEPLOYDIR=/app \
     RAILS_ENV=production \
     GITREPO=git@github.com:meedan/alegre.git \
@@ -73,8 +73,11 @@ COPY . ./latest
 RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
 USER ${DEPLOYUSER}
 
-# config
-RUN /opt/bin/find_and_link_config_files.sh ${DEPLOYDIR}/latest
+# setup links for configs and the 'model' directory
+RUN /opt/bin/find_and_link_config_files.sh ${DEPLOYDIR}/latest \
+    && cd ./latest/lib/langid \
+    && mv model model_orig \
+    && ln -s ${DEPLOYDIR}/shared/model ./model
 
 RUN mv ./latest ./alegre-$(date -I) && ln -s ./alegre-$(date -I) ./current
 
