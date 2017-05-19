@@ -81,7 +81,8 @@ module Alegre
     end
 
     if !jsonCtx.has_key?('lang')
-      lang = Alegre::LangId.new.classify(jsonCtx["term"])
+      instance = langid.LangId.new(CONFIG['langid'])
+      lang = instance.classify(jsonCtx["term"])
       if lang.length > 0
         jsonCtx['lang'] =  lang[0][1]
       end

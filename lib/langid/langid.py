@@ -12,8 +12,9 @@ import pickle
 import socket
 
 class LangId:     
-  def __init__(self):
-    modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
+  def __init__(self,modelPath=""):
+    if len(modelPath) == 0:
+      modelPath = os.path.dirname(os.path.abspath(__file__))+'/model'
     if modelPath.endswith('/'):
       modelPath = modelPath[:-1]
     self.modelPath = modelPath
@@ -567,3 +568,4 @@ class vec:
     for line in open(fi):
       self.ss.append([line.replace("\n", "").lower()])
       self.ss2.append(line.replace("\n", "").lower())
+
