@@ -1,5 +1,6 @@
 development: &default
   secret_token: somethingsecret
+  langid: /app/lib/langid/model
   elasticsearch_index: alegre
   elasticsearch_server: elasticsearch
   elasticsearch_port: 9200
