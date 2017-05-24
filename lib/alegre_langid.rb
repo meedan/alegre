@@ -27,6 +27,10 @@ module Alegre
       @@langid.add_sample(str, lang).rubify
     end
 
+    def delete_sample(str, lang)
+      @@langid.delete_sample(str, lang).rubify
+    end
+
     def list_languages
       @@langid.list_languages.rubify
     end

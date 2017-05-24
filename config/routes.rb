@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       get 'languages/identification', to: 'languages#identification'
       post 'languages/sample', to: 'languages#sample'
+      post 'languages/delete_sample', to: 'languages#delete_sample'
       get 'languages/language', to: 'languages#language'
       get 'languages/normalize', to: 'languages#normalize'
       get 'glossary/terms', to: 'glossary#terms'
