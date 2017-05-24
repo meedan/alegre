@@ -5,7 +5,7 @@ MAINTAINER Meedan <sysops@meedan.com>
 ENV RAILS_ENV development
 
 # install dependencies
-RUN apt-get update -qq && apt-get install libpq-dev gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev libmysqlclient-dev nodejs -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq && apt-get install libpq-dev gcc python python-setuptools libpython-dev python2.7-dev vim gfortran libatlas-base-dev -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN easy_install pip
 
 # install our app
