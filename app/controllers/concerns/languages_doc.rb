@@ -10,6 +10,7 @@ module LanguagesDoc
       summary 'Identify the language of a given text'
       notes 'Use this method in order to identify the language of a given text'
       param :query, :text, :string, :required, 'Text to be classified'
+      param :query, :languages, :string, :optional, 'Languages'
       authed = { CONFIG['authorization_header'] => 'test' }
       response :ok, 'Text language', { query: { text: 'I like apples' }, headers: authed }
       response 400, 'Parameter "text" is missing', { query: nil, headers: authed }

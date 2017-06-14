@@ -11,8 +11,13 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
       render_parameters_missing
     else
       str = params[:text].to_s
+      if params[:languages].blank?
+        langs = "[]"
+      else
+        langs = params[:languages].to_s
+      end
       Retriable.retriable do
-        @language = Alegre::LangId.new.classify(str)
+        @language = Alegre::LangId.new.classify(str,langs)
       end
       render_success 'language', @language
     end

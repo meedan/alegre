@@ -233,4 +233,34 @@ class LanguagesControllerTest < ActionController::TestCase
     assert_not_equal "PT", assigns(:language)[0][0]   
   end
 
+
+  test "identification - should get language pt and es  sending ES language" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'ES'
+    assert_response :success
+    assert_equal "ES", assigns(:language)[0][0]   
+  end
+
+  test "identification - should get language pt  sending AR language" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'AR'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+  end
+
+  test "identification - should get language PT sending PT and ES languages" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'AR'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+  end
 end
