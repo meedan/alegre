@@ -458,10 +458,10 @@ class LangId:
       return True
     return False
 
-  def try_to_classify(self, s=u'', errbit_url='', errbit_key=''):
+  def try_to_classify(self, s=u'', langs=U'', errbit_url='', errbit_key=''):
     result = []
     if not(errbit_url) or not(errbit_key):
-      return self.classify(s)
+      return self.classify(s, langs.upper().split(","))
     config = errbit.Configuration(api_key=errbit_key, errbit_url=errbit_url, environment_name=socket.gethostname())
     client = errbit.Client(config)
     try:
@@ -481,15 +481,16 @@ class LangId:
         }
       }
       with client.notify_on_exception(**context):
-        result = self.classify(s)
+        result = self.classify(s,langs.upper().split(","))
     except:
       result = []
     return result
 
-  def classify(self, s=u''):
+  def classify(self, s=u'', langs=[]):
     if not(isinstance(s, basestring)) or (self is None):
       return []
     line = self.normalize(s)
+    final_result = []
     if len(line) > 1  and  not(self.repeated_letters(line)):
       res = self.classifyPerLanguage(line)
       resOriginal = res 
@@ -539,20 +540,28 @@ class LangId:
           for key, value in dLangs.iteritems():
             res.append([value,key])
           if ('EN' in dLangs) and (len(dLangs)>1) and not(len(dLangs) == 2 and 'FR' in dLangs.keys() and dLangs['FR'] == 1) :
-            return  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
+            final_result =  sorted(self.formatRet2(self.formatRet1(self.percentageResult(res))), key=lambda item: -item[1])
           else:
             if len(res) >  0 and float(res[0][0]) > 0 and (self.resSum(resOriginal) > 0):
-              return sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
+              final_result = sorted(self.formatRet1(self.percentageResult(resOriginal)).items(), key=lambda item: -item[1]) 
             else:
-              return []
+              final_result = []
         else:
           if len(res) >  0 and float(res[0][0]) > 0:
-            return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
+            final_result = sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
           else:
-            return []
+            final_result = []
       elif len(res) == 1 :
-        return sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
-    return []
+        final_result = sorted(self.formatRet1(self.percentageResult(res)).items(), key=lambda item: -item[1]) 
+
+    if (len(final_result) > 0):
+      for count in range(0,len(final_result)):
+        k = final_result[count]
+        if (final_result[count][0].upper() in  langs):
+          final_result[count] = [final_result[count][0],final_result[count][1] + 0.2]
+      final_result = sorted(self.percentageResultTuples (final_result), key=lambda final_result: -final_result[1]) 
+
+    return final_result
   
   def resSum(self,a):
     s = 0.0
@@ -591,6 +600,17 @@ class LangId:
         n = n + 1
     return (res)
 
+  def percentageResultTuples (self,res):
+    totalSum = 0
+    n = 0
+    for r in res:
+      totalSum = totalSum + float(r[1]) 
+    if totalSum > 0:
+      for r in res:
+        res[n] = (r[0],float(r[1]) / float(totalSum))
+        n = n + 1
+    return (res)
+
 class vec:
   def __init__(self, fi):
     self.ss = []
@@ -598,4 +618,3 @@ class vec:
     for line in open(fi):
       self.ss.append([line.replace("\n", "").lower()])
       self.ss2.append(line.replace("\n", "").lower())
-

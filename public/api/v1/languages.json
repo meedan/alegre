@@ -17,6 +17,13 @@
               "type": "string",
               "description": "Text to be classified",
               "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "languages",
+              "type": "string",
+              "description": "Languages",
+              "required": false
             }
           ],
           "responseMessages": [
@@ -24,7 +31,7 @@
               "code": 200,
               "responseModel": {
                 "query": {
-                  "text": "input text"
+                  "text": "I like apples"
                 },
                 "headers": {
                   "x-Alegre-Token": "test"
@@ -58,6 +65,94 @@
       ]
     },
     {
+      "path": "api/languages/sample",
+      "operations": [
+        {
+          "summary": "Add training sample to the model",
+          "notes": "Use this method in order to add training sample to the model",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "language",
+              "type": "string",
+              "description": "Language",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be inserted",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Returns ok"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Parameters missing"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "method": "post",
+          "nickname": "Api::V1::Languages#sample"
+        }
+      ]
+    },
+    {
+      "path": "api/languages/delete_sample",
+      "operations": [
+        {
+          "summary": "Delete training sample to the model",
+          "notes": "Use this method in order to delete training sample to the model",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "language",
+              "type": "string",
+              "description": "Language",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "text",
+              "type": "string",
+              "description": "Text to be deleted",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": null,
+              "message": "Returns ok"
+            },
+            {
+              "code": 400,
+              "responseModel": null,
+              "message": "Parameters missing"
+            },
+            {
+              "code": 401,
+              "responseModel": null,
+              "message": "Access denied"
+            }
+          ],
+          "method": "post",
+          "nickname": "Api::V1::Languages#delete_sample"
+        }
+      ]
+    },
+    {
       "path": "api/languages/normalize",
       "operations": [
         {
@@ -76,7 +171,9 @@
             {
               "code": 200,
               "responseModel": {
-                "text": "input text",
+                "query": {
+                  "text": ""
+                },
                 "headers": {
                   "x-Alegre-Token": "test"
                 }

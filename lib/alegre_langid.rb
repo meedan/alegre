@@ -13,9 +13,9 @@ module Alegre
       self.instantiate_langid(instance)
     end
 
-    def classify(text)
+    def classify(text, langs)
       begin
-        self.classify!(text)
+        self.classify!(text, langs)
       rescue Exception => e
         Rails.logger.info "AlegreLangIdLib: An error of type #{e.class} happened, message is: #{e.message}"
         self.start
@@ -44,7 +44,7 @@ module Alegre
 
     protected
 
-    def classify!(text)
+    def classify!(text, langs)
       errbit_url = ''
       errbit_key = ''
       begin
@@ -52,7 +52,7 @@ module Alegre
         errbit_key = Airbrake.configuration.api_key
       rescue
       end
-      @@langid.respond_to?(:try_to_classify) ? @@langid.try_to_classify(text, errbit_url, errbit_key).rubify : []
+      @@langid.respond_to?(:try_to_classify) ? @@langid.try_to_classify(text, langs, errbit_url, errbit_key).rubify : []
     end
 
     def instantiate_langid(value)

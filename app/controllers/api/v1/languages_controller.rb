@@ -12,7 +12,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
     else
       str = params[:text].to_s
       Retriable.retriable do
-        @language = Alegre::LangId.new.classify(str)
+        @language = Alegre::LangId.new.classify(str,params[:languages].to_s)
       end
       render_success 'language', @language
     end
