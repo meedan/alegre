@@ -12,7 +12,7 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
     else
       str = params[:text].to_s
       Retriable.retriable do
-        @language = Alegre::LangId.new.classify(str)
+        @language = Alegre::LangId.new.classify(str,params[:languages].to_s)
       end
       render_success 'language', @language
     end
@@ -27,7 +27,28 @@ class Api::V1::LanguagesController < Api::V1::BaseApiController
       Retriable.retriable do
         @ret = Alegre::LangId.new.add_sample(str, lang)
       end
-      render_success 'success', @ret
+      if @ret
+        render_success 'success', @ret
+      else
+        render_error('Could not add', 'INVALID_VALUE', status = 400)
+      end
+    end
+  end
+
+  def delete_sample
+    if params[:text].blank? or params[:language].blank?
+      render_parameters_missing
+    else
+      str = params[:text].to_s
+      lang = params[:language].to_s
+      Retriable.retriable do
+        @ret = Alegre::LangId.new.delete_sample(str, lang)
+      end
+      if @ret
+        render_success 'success', @ret
+      else
+        render_error('Could not delete', 'INVALID_VALUE', status = 400)
+      end
     end
   end
 

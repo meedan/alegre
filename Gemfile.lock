@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/meedan/alegre-client.git
-  revision: 7d780077e65595c99b80698580ba2d8455f4c64d
-  ref: 7d78007
+  revision: d97ec6a675bf9edde72e36207a370148eecd5575
+  ref: d97ec6a675bf9edde72e36207a370148eecd5575
   specs:
-    alegre_client (0.0.8)
+    alegre_client (0.0.10)
 
 GIT
   remote: https://github.com/meedan/diacritics.git
@@ -285,4 +285,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.6
+   1.16.1

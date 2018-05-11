@@ -179,4 +179,88 @@ class LanguagesControllerTest < ActionController::TestCase
     get :normalize
     assert_response 400
   end
+
+  test "sample - should return error if language does not exist" do
+    authenticate_with_token
+    post :sample, language: 'XX', text: 'xx'
+    assert_response 400
+  end
+
+  test "delete sample - should return error if language does not exist" do
+    authenticate_with_token
+    post :delete_sample, language: ' SS', text: 'xx'
+    assert_response 400
+  end
+
+  test "sample - should return error if text is blank" do
+    authenticate_with_token
+    post :sample, language: 'EN', text: ''
+    assert_response 400
+  end
+
+  test "delete sample - should return error if text is blank" do
+    authenticate_with_token
+    post :delete_sample, language: 'EN', text: ''
+    assert_response 400
+  end
+
+  test "sample - should return error if language is blank" do
+    authenticate_with_token
+    post :sample, language: '', text: 'SSS'
+    assert_response 400
+  end
+
+  test "delete sample - should return error if language is blank" do
+    authenticate_with_token
+    post :delete_sample, language: '', text: 'SSS'
+    assert_response 400
+  end
+
+  test "sample - should add and delete sample" do
+    authenticate_with_token
+    get :identification, text: 'sdfc sdfg aqswdefr'
+    assert_response :success
+    assert_not_equal "PT", assigns(:language)[0][0]   
+    post :sample, language: 'PT', text: 'sdfc sdfg aqswdefr'
+    assert_response :success
+    get :identification, text: 'sdfc sdfg aqswdefr'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    post :delete_sample, language: 'PT', text: 'sdfc sdfg aqswdefr'
+    assert_response :success
+    get :identification, text: 'sdfc sdfg aqswdefr'
+    assert_response :success
+    assert_not_equal "PT", assigns(:language)[0][0]   
+  end
+
+
+  test "identification - should get language pt and es  sending ES language" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'ES'
+    assert_response :success
+    assert_equal "ES", assigns(:language)[0][0]   
+  end
+
+  test "identification - should get language pt  sending AR language" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'AR'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+  end
+
+  test "identification - should get language PT sending PT and ES languages" do
+    authenticate_with_token
+    get :identification, text: 'eu quero comer'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+    get :identification, text: 'eu quero comer', languages: 'AR'
+    assert_response :success
+    assert_equal "PT", assigns(:language)[0][0]   
+  end
 end
