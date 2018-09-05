@@ -182,126 +182,126 @@ module Alegre
          "glossary": {
             "properties": {
                "ar": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "arabic"
                },
                "bg": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "bulgarian"
                },
                "ca": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "catalan"
                },
                "cs": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "czech"
                },
                "da": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "danish"
                },
                "de": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "german"
                },
                "el": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "greek"
                },
                "en": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "english"
                },
                "es": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "spanish"
                },
                "eu": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "basque"
                },
                "fa": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "persian"
                },
                "fi": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "finnish"
                },
                "fr": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "french"
                },
                "ga": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "irish"
                },
                "gl": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "galician"
                },
                "hi": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "hindi"
                },
                "hu": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "hungarian"
                },
                "hy": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "armenian"
                },
                "id": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "indonesian"
                },
                "it": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "italian"
                },
                "lv": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "latvian"
                },
                "nl": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "dutch"
                },
                "no": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "norwegian"
                },
                "pt": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "brazilian"
                },
                "ro": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "romanian"
                },
                "ru": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "russian"
                },
                "sv": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "swedish"
                },
                "term": {
-                  "type": "string"
+                  "type": "text"
                },
                "th": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "thai"
                },
                "tr": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "turkish"
                },
                "zh": {
-                  "type": "string",
+                  "type": "text",
                   "analyzer": "chinese"
                }
             }

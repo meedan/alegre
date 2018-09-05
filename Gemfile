@@ -60,7 +60,7 @@ gem 'protected_attributes'
 gem 'swagger-docs', '0.1.9'
 gem 'responders'
 gem 'rubypython'
-gem 'elasticsearch' #, git: 'git://github.com/elasticsearch/elasticsearch-ruby.git'
+gem 'elasticsearch', '~> 6.x'
 
 gem 'json'
 gem 'retriable', '~> 2.1'
