@@ -1,0 +1,58 @@
+{
+  "entities": [
+    {
+      "end": 12,
+      "type": "NORP",
+      "start": 0,
+      "text": "Pastafarians"
+    },
+    {
+      "end": 51,
+      "type": "ORG",
+      "start": 42,
+      "text": "Coca Cola"
+    }
+  ],
+  "words": [
+    {
+      "text": "Pastafarians",
+      "tag": "NNS"
+    },
+    {
+      "text": "are",
+      "tag": "VBP"
+    },
+    {
+      "text": "smarter",
+      "tag": "JJR"
+    },
+    {
+      "text": "than",
+      "tag": "IN"
+    },
+    {
+      "text": "people",
+      "tag": "NNS"
+    },
+    {
+      "text": "with",
+      "tag": "IN"
+    },
+    {
+      "text": "Coca",
+      "tag": "NNP"
+    },
+    {
+      "text": "Cola",
+      "tag": "NNP"
+    },
+    {
+      "text": "bottles",
+      "tag": "NNS"
+    },
+    {
+      "text": ".",
+      "tag": "."
+    }
+  ]
+}
