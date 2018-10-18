@@ -7,9 +7,7 @@ A linguistic service to support multilingual apps.
 ```
 $ python -m venv .alegre
 $ source .alegre/bin/activate
-$ pip install -r requirements.txt
-$ python manage.py test
-$ python manage.py run
+$ make all
 ```
 
 Then visit http://localhost:5000/
