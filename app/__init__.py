@@ -4,6 +4,7 @@ from flask_restplus import Api
 from flask import Blueprint
 
 from .main.controller.langid_controller import api as langid_ns
+from .main.controller.spacy_controller import api as spacy_ns
 
 blueprint = Blueprint('api', __name__)
 
@@ -14,3 +15,4 @@ api = Api(blueprint,
           )
 
 api.add_namespace(langid_ns, path='/langid')
+api.add_namespace(spacy_ns, path='/spacy')

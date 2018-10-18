@@ -9,7 +9,7 @@ langid_request = api.model('langid_request', {
 
 @api.route('/')
 class LangidResource(Resource):
-    @api.response(201, 'langid successfully queried.')
+    @api.response(200, 'langid successfully queried.')
     @api.doc('Make a langid query')
     @api.expect(langid_request, validate=True)
     def post(self):
