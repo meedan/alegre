@@ -20,19 +20,14 @@ clean:
 	find . -type f -name '*.log' -delete
 
 python-packages:
-
 	pip install --upgrade pip
 	pip install -r requirements.txt
 
 spacy-packages:
 	python -m spacy download en
-	python -m spacy download de
 	python -m spacy download es
-	python -m spacy download pt
 	python -m spacy download fr
-	python -m spacy download it
-	python -m spacy download nl
-	python -m spacy download xx
+	python -m spacy download pt
 
 install: python-packages spacy-packages
 
