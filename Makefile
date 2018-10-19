@@ -20,6 +20,7 @@ all: clean install test run
 clean:
 	find . -type f -name '*.pyc' -delete
 	find . -type f -name '*.log' -delete
+	find . -type f -name '*.db' -delete
 
 python-packages:
 	pip install --upgrade pip
