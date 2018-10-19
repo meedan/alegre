@@ -1,4 +1,6 @@
-.PHONY: help clean python-packages install tests run all
+SHELL := /bin/bash
+
+.PHONY: help clean python-packages install tests run all elasticsearch spacy-packages
 
 .DEFAULT: help
 help:
@@ -31,8 +33,12 @@ spacy-packages:
 
 install: python-packages spacy-packages
 
+elasticsearch:
+	docker-compose up -d --no-recreate
+	until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
+
 test:
-	python manage.py test
+	BOILERPLATE_ENV=test python manage.py test
 
 run:
 	python manage.py run

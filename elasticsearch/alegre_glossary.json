@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "en": {
+      "type": "text",
+      "analyzer": "english"
+    },
+    "pt": {
+      "type": "text",
+      "analyzer": "portuguese"
+    },
+    "ar": {
+      "type": "text",
+      "analyzer": "arabic"
+    },
+    "context": {
+      "type": "nested"
+    }
+  }
+}
