@@ -9,7 +9,7 @@ services:
       - "transport.host=127.0.0.1"
       - "xpack.security.enabled=false"
     volumes:
-      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - "esdata:/usr/share/elasticsearch/data"
   kibana:
     image: docker.elastic.co/kibana/kibana:6.4.2
     ports:
@@ -18,3 +18,5 @@ services:
       - elasticsearch
     environment:
       - "ELASTICSEARCH_URL: http://elasticsearch:9200"
+volumes:
+  esdata:

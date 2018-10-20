@@ -38,8 +38,8 @@ elasticsearch:
 	docker-compose up -d --no-recreate
 	until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
 
-test:
+test: elasticsearch
 	BOILERPLATE_ENV=test python manage.py test
 
-run:
+run: elasticsearch
 	python manage.py run
