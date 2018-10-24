@@ -2,3 +2,5 @@ __pycache__
 .alegre
 elasticsearch/data/nodes
 *.db
+configurator
+google_credentials.json

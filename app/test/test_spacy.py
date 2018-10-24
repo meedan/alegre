@@ -17,10 +17,10 @@ class TestSpacyBlueprint(BaseTestCase):
                 )),
                 content_type='application/json'
             )
-            self.assertTrue(response.content_type == 'application/json')
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual('application/json', response.content_type)
+            self.assertEqual(200, response.status_code)
             data = json.loads(response.data.decode())
-            self.assertDictEqual(data, json.load(open('./app/test/data/spacy.json')))
+            self.assertDictEqual(json.load(open('./app/test/data/spacy.json')), data)
 
 
 if __name__ == '__main__':

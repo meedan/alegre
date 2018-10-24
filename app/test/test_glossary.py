@@ -26,8 +26,8 @@ class TestGlossaryBlueprint(BaseTestCase):
         index=app.config['ELASTICSEARCH_GLOSSARY']
       )
       self.assertDictEqual(
-        mapping[app.config['ELASTICSEARCH_GLOSSARY']]['mappings']['_doc'],
-        json.load(open('./elasticsearch/alegre_glossary.json'))
+        json.load(open('./elasticsearch/alegre_glossary.json')),
+        mapping[app.config['ELASTICSEARCH_GLOSSARY']]['mappings']['_doc']
       )
 
     def test_glossary_queries(self):
@@ -88,7 +88,7 @@ class TestGlossaryBlueprint(BaseTestCase):
       )
       self.assertEqual("Por que minha mãe conversa com a TV?", result['hits']['hits'][0]['_source']['pt'])
 
-    def test_glossary(self):
+    def test_glossary_api(self):
         with self.client:
             for term in json.load(open('./app/test/data/glossary.json')):
                 del term['_type']
