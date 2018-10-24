@@ -9,7 +9,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious_secret_key')
     DEBUG = False
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
-    ELASTICSEARCH_URL = 'http://localhost:9200'
+    ELASTICSEARCH_URL = 'http://elasticsearch:9200'
 
 
 class DevelopmentConfig(Config):

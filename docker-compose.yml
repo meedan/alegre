@@ -1,4 +1,6 @@
 version: '2'
+volumes:
+  esdata:
 services:
   elasticsearch:
     build: ./elasticsearch
@@ -18,5 +20,13 @@ services:
       - elasticsearch
     environment:
       - "ELASTICSEARCH_URL: http://elasticsearch:9200"
-volumes:
-  esdata:
+  alegre:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kibana
+    volumes:
+      - ".:/app"
+    environment:
+      - "BOILERPLATE_ENV: dev"

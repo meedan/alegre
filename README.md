@@ -5,12 +5,13 @@ A linguistic service to support multilingual apps.
 
 # Usage
 ```
-$ python -m venv .alegre
-$ source .alegre/bin/activate
-$ make all
+docker-compose up
 ```
 
-Then visit http://localhost:5000/
+Then visit:
+- http://localhost:5000 for the Alegre API
+- http://localhost:5601 for the Kibana UI
+- http://localhost:9200 for the Elasticsearch API
 
 # Use cases
 - Query multiple langid engines, such as langid.py, Google cld3, Meedan langid, etc.
