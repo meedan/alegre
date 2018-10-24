@@ -1,7 +1,3 @@
-sudo: required
-language: python
-python:
-- '3.6'
 before_install:
 - git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
 - d=configurator/bridge/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
