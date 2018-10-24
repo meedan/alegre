@@ -1,0 +1,17 @@
+[
+  {
+    "_type": "_doc",
+    "en": "An example",
+    "pt": "Um exemplo"
+  },
+  {
+    "_type": "_doc",
+    "en": "Why does my mother talk to the TV?",
+    "pt": "Por que minha mãe conversa com a TV?",
+    "context": {
+      "provider": "translation",
+      "project": "bridge",
+      "user": "ccx"
+    }
+  }
+]
