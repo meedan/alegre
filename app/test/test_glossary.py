@@ -88,6 +88,29 @@ class TestGlossaryBlueprint(BaseTestCase):
       )
       self.assertEqual("Por que minha mãe conversa com a TV?", result['hits']['hits'][0]['_source']['pt'])
 
+    def test_glossary(self):
+        with self.client:
+            for term in json.load(open('./app/test/data/glossary.json')):
+                del term['_type']
+                response = self.client.post('/glossary/', data=json.dumps(term), content_type='application/json')
+                result = json.loads(response.data.decode())
+                self.assertEqual('created', result['result']['result'])
+
+            response = self.client.post(
+                '/glossary/query',
+                data=json.dumps({
+                  "query": {
+                    "simple_query_string": {
+                      "fields": [ "en" ],
+                      "query": "talking"
+                    }
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual("Por que minha mãe conversa com a TV?", result['result']['hits']['hits'][0]['_source']['pt'])
+
 
 if __name__ == '__main__':
     unittest.main()
