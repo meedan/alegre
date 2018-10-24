@@ -2,11 +2,15 @@ sudo: required
 language: python
 python:
 - '3.6'
+cache:
+  directories:
+    - $HOME/.pip-cache/
 before_install:
 - docker-compose up -d
 - wget -q --waitretry=1 --retry-connrefused -t 0 -T 10 -O - http://127.0.0.1:9200
 install:
-- make install
+- pip install --upgrade pip
+- pip install -r requirements.txt --cache-dir $HOME/.pip-cache
 script:
 - make test
 notifications:
