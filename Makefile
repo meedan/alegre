@@ -3,7 +3,6 @@ run: wait
 	python manage.py run
 test: wait
 	BOILERPLATE_ENV=test coverage run manage.py test
-	coverage report
 wait:
 	until curl --silent -XGET --fail http://elasticsearch:9200; do printf '.'; sleep 1; done
 requirements:
