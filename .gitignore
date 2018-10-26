@@ -3,3 +3,4 @@ elasticsearch/data/nodes
 *.db
 configurator
 google_credentials.json
+.coverage

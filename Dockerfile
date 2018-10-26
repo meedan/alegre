@@ -12,4 +12,4 @@ RUN python -m spacy download en && \
 
 COPY . .
 
-CMD [ "/app/docker-entrypoint.sh" ]
+CMD [ "make", "run" ]

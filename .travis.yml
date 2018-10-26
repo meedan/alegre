@@ -4,7 +4,7 @@ before_install:
 - docker-compose up -d
 - wget -q --waitretry=1 --retry-connrefused -t 0 -T 10 -O - http://127.0.0.1:9200
 script:
-- docker-compose exec alegre bash -c "BOILERPLATE_ENV=test python manage.py test"
+- docker-compose exec alegre bash -c "make test"
 notifications:
   slack:
     secure: 0SU04JhlCVFUKKzMP37Xu5V8cn43YGnxt+km7osn/60+0I7pXsO4eBwc3xRWiP4fvCfOAH5dhn934wR1KNTVbm8eoOtyqocFzFAvsHBAFCYZCH6vo1L7ZQSGJw2VkhsdL0yO0r+HV1bTWFi54lBjyfbyw44IEzwavO1GcDh3/l6M8t53YY8MjlV8EQ3rnw5jyrTAZnrz03U2rK1DWtW2t4Ud3pT51DXhwNYfPZgWCF6vudSa13NoOsAnBXFhTLXuv1DGcdwFC+cgVzCCvR+CDErnoGir9hffKMI4Kw1e71SCPNngPdYayQlcfX/2p7fL5lDQCoVM4jb95kJLYqvWSBz4YaujMNjIFG9BobGcrzMqGmotBQbBL+ynK74wpL7ess4lkuzAo+eW/IBBoR/SR9+wLh/PfaBEHKrkhb7mDR99YCEmR3TMI7Pj5CJueS1LnBDuFM1YvdhMo+0mXD6DYOL2CyQN6AIRSDQnK6LmHBfl2VsD2OXdX++rWUultF4Ua3CDBRrbXUHT3X2r6dnMlJ2t9Ha/2NsMGu+Yt9h0BS0OmDJ86/itga/ms8OUnczwLG9mFKwQ5BziVH0suRyoeFvi1+nwwttAl2B9exlROw8MbiYsI2A0lsRG3ILR162XFSxK6KKXbFNZpWGFw4QnsXorlmEmttboPMD7oNiY/Ck=

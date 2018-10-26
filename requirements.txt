@@ -6,6 +6,7 @@ certifi==2018.10.15
 cffi==1.11.5
 chardet==3.0.4
 Click==7.0
+coverage==4.5.1
 cymem==2.0.2
 cytoolz==0.9.0.1
 dill==0.2.8.2
