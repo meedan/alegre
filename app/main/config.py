@@ -10,6 +10,7 @@ class Config:
     DEBUG = False
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
     ELASTICSEARCH_URL = 'http://elasticsearch:9200'
+    ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
 
 
 class DevelopmentConfig(Config):
