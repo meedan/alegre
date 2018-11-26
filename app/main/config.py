@@ -28,6 +28,7 @@ class TestingConfig(Config):
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary_test'
+    ELASTICSEARCH_SIMILARITY = 'alegre_similarity_test'
 
 
 class ProductionConfig(Config):
