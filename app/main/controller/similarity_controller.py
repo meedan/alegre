@@ -5,7 +5,8 @@ from ..fields import JsonObject
 
 api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
-    'text': fields.String(required=False, description='text to be stored or to find a similar one')
+    'text': fields.String(required=False, description='text to be stored or to find a similar one'),
+    'context': JsonObject(required=False, description='context')
 })
 
 @api.route('/')
@@ -36,8 +37,44 @@ class SimilarityQueryResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        conditions = [
+            {
+                'more_like_this': {
+                    'fields': ['text'],
+                    'like': request.json['text'],
+                    'min_doc_freq': 1,
+                    'min_term_freq': 1,
+                    'max_query_terms': 12
+                }
+            },
+        ]
+        if 'context' in request.json:
+            match = {}
+            for key in request.json['context']:
+                match['context.' + key] = request.json['context'][key]
+            context = {
+                'nested': {
+                    'path': 'context',
+                    'query': {
+                        'bool': {
+                            'must': [
+                                {
+                                    'match': match
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+            conditions.append(context)
         result = es.search(
-            body={ 'query': { 'more_like_this': { 'fields': ['text'], 'like': request.json['text'], 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
+            body={
+                'query': {
+                    'bool': {
+                        'must': conditions
+                    }
+                }
+            },
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )

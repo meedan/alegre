@@ -9,7 +9,12 @@
   },
   {
     "_type": "_doc",
-    "text": "That is a test"
+    "text": "That is a test",
+    "context": {
+      "app": "check",
+      "dbid": 12,
+      "team_id": 1
+    }
   },
   {
     "_type": "_doc",

@@ -73,5 +73,18 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
+            response = self.client.post(
+                '/similarity/query',
+                data=json.dumps({
+                  "text": "this is a test",
+                  "context": {
+                    "dbid": 12
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
 if __name__ == '__main__':
     unittest.main()
