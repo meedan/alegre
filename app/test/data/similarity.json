@@ -1,0 +1,23 @@
+[
+  {
+    "_type": "_doc",
+    "text": "This is a test"
+  },
+  {
+    "_type": "_doc",
+    "text": "This was a test"
+  },
+  {
+    "_type": "_doc",
+    "text": "That is a test",
+    "context": {
+      "app": "check",
+      "dbid": 12,
+      "team_id": 1
+    }
+  },
+  {
+    "_type": "_doc",
+    "text": "Something different here"
+  }
+]
