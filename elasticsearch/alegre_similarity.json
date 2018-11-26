@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "text": {
+      "type": "text",
+      "term_vector": "yes"
+    }
+  }
+} 

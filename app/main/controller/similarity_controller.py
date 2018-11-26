@@ -37,7 +37,7 @@ class SimilarityQueryResource(Resource):
     def post(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         result = es.search(
-            body={ 'query': { 'more_like_this': { 'fields': ['text'], 'like': 'this is a test', 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
+            body={ 'query': { 'more_like_this': { 'fields': ['text'], 'like': request.json['text'], 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
