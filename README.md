@@ -22,3 +22,4 @@ Then visit:
 - Provide translation memory / multilingual glossary service
 - Provide locale-specific functions from ICU / CLDR
 - Query existing API capabilities including target language for each available function (langid, ner, etc.)
+- Find similar texts
