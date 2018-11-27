@@ -1,4 +1,5 @@
 import unittest
+import json
 from google.cloud import translate
 
 from app.main import db
@@ -16,6 +17,42 @@ class TestTranslationBlueprint(BaseTestCase):
         result = client.translate('camisa', source_language='es')
         self.assertEqual('shirt', result['translatedText'])
 
+    def test_mt_api(self):
+        with self.client:
+            response = self.client.post(
+                '/mt/',
+                data=json.dumps({
+                  'text': 'borracha na oficina',
+                  'from': 'es',
+                  'to': 'en'
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('drunk in office', result['text'])
+
+            response = self.client.post(
+                '/mt/',
+                data=json.dumps({
+                  'text': 'borracha na oficina',
+                  'from': 'pt',
+                  'to': 'en'
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('rubber in the workshop', result['text'])
+
+            response = self.client.post(
+                '/mt/',
+                data=json.dumps({
+                  'text': 'I am testing this',
+                  'to': 'pt'
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('Estou testando isso', result['text'])
 
 if __name__ == '__main__':
     unittest.main()
