@@ -4,3 +4,4 @@ elasticsearch/data/nodes
 configurator
 google_credentials.json
 .coverage
+log
