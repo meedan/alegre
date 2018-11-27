@@ -18,7 +18,8 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def run():
-  app.run(host= '0.0.0.0')
+  port = os.getenv('ALEGRE_PORT') or 5000
+  app.run(host='0.0.0.0', port=port)
 
 @manager.command
 def test():
