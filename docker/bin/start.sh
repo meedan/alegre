@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /app
 make run &
-nginx
+nginx -g 'daemon off'
