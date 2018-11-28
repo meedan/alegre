@@ -22,7 +22,7 @@ RUN chmod 755 /opt/bin/*.sh
 #
 
 # nginx for alegre
-
+RUN apt-get update && apt-get install nginx -y
 COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
 RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
     && rm /etc/nginx/sites-enabled/default
