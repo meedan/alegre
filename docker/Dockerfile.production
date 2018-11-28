@@ -12,7 +12,7 @@ ENV DEPLOYUSER=alegre \
     GITREPO=git@github.com:meedan/alegre.git \
     PRODUCT=bridge \
     APP=alegre \
-    TERM=xterm \
+    TERM=xterm
 
 COPY ./docker/bin/* /opt/bin/
 RUN chmod 755 /opt/bin/*.sh
