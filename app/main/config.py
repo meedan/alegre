@@ -9,7 +9,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious_secret_key')
     DEBUG = False
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
-    ELASTICSEARCH_URL = 'http://elasticsearch:9200'
+    ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL') or 'http://elasticsearch:9200'
     ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
 
 
