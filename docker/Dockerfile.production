@@ -1,0 +1,63 @@
+# alegre
+
+FROM python:3
+MAINTAINER sysops@meedan.com
+
+#
+# SYSTEM CONFIG
+#
+
+ENV DEPLOYUSER=alegre \
+    DEPLOYDIR=/app \
+    GITREPO=git@github.com:meedan/alegre.git \
+    PRODUCT=bridge \
+    APP=alegre \
+    TERM=xterm \
+
+COPY ./docker/bin/* /opt/bin/
+RUN chmod 755 /opt/bin/*.sh
+
+#
+# APP CONFIG
+#
+
+# nginx for alegre
+
+COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
+RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
+    && rm /etc/nginx/sites-enabled/default
+
+#
+# USER CONFIG
+#
+
+RUN useradd ${DEPLOYUSER} -s /bin/bash -m \
+    && chown -R ${DEPLOYUSER}:${DEPLOYUSER} /home/${DEPLOYUSER}
+
+#
+# code deployment
+#
+
+RUN mkdir -p $DEPLOYDIR \
+    && chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
+
+WORKDIR ${DEPLOYDIR}
+
+COPY requirements.txt ./
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m spacy download en && \
+    python -m spacy download es && \
+    python -m spacy download fr && \
+    python -m spacy download pt
+
+RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
+
+USER root
+
+COPY . .
+
+USER ${DEPLOYUSER}
+
+EXPOSE 80
+CMD ["/opt/bin/start.sh"]
