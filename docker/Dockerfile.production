@@ -27,21 +27,7 @@ COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
 RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
     && rm /etc/nginx/sites-enabled/default
 
-#
-# USER CONFIG
-#
-
-RUN useradd ${DEPLOYUSER} -s /bin/bash -m \
-    && chown -R ${DEPLOYUSER}:${DEPLOYUSER} /home/${DEPLOYUSER}
-
-#
-# code deployment
-#
-
-RUN mkdir -p $DEPLOYDIR \
-    && chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
-
-WORKDIR ${DEPLOYDIR}
+WORKDIR /app
 
 COPY requirements.txt ./
 RUN pip install --upgrade pip
@@ -51,13 +37,7 @@ RUN python -m spacy download en && \
     python -m spacy download fr && \
     python -m spacy download pt
 
-RUN chown -R ${DEPLOYUSER}:www-data ${DEPLOYDIR}
-
-USER root
-
 COPY . .
-
-USER ${DEPLOYUSER}
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]
