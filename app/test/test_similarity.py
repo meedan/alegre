@@ -36,21 +36,6 @@ class TestSimilaryBlueprint(BaseTestCase):
         mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']['_doc']
       )
 
-    def test_similarity_queries(self):
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-      success, _ = helpers.bulk(es,
-        json.load(open('./app/test/data/similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
-      )
-      self.assertTrue(success)
-      es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-      result = es.search(
-        doc_type='_doc',
-        index=app.config['ELASTICSEARCH_SIMILARITY'],
-        body={ 'query': { 'more_like_this': { 'fields': ['content'], 'like': 'this is a test', 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
-      )
-      self.assertEqual(3, len(result['hits']['hits']))
-
     def test_similarity_api(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
@@ -93,6 +78,16 @@ class TestSimilaryBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
+
+            response = self.client.post(
+                '/similarity/query',
+                data=json.dumps({
+                  "text": "Magnitude 4.5 quake strikes near Fort St. John"
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(2, len(result['result']))
 
 if __name__ == '__main__':
     unittest.main()

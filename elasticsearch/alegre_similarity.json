@@ -1,9 +1,7 @@
 {
   "properties": {
     "content": {
-      "type": "text",
-      "term_vector": "yes",
-      "similarity": "scripted_tfidf"
+      "type": "text"
     },
     "context": {
       "type": "nested"

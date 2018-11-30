@@ -42,12 +42,11 @@ class SimilarityQueryResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         conditions = [
             {
-                'more_like_this': {
-                    'fields': ['content'],
-                    'like': request.json['text'],
-                    'min_doc_freq': 1,
-                    'min_term_freq': 1,
-                    'max_query_terms': 12
+                'match': {
+                  'content': {
+                      'query': request.json['text'],
+                      'minimum_should_match': '70%'
+                  }
                 }
             },
         ]
