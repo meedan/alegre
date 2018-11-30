@@ -3,6 +3,7 @@
     "text": {
       "type": "text",
       "term_vector": "yes"
+      "similarity": "scripted_tfidf"
     },
     "context": {
       "type": "nested"
