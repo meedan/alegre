@@ -5,3 +5,4 @@ configurator
 google_credentials.json
 .coverage
 log
+*.sw*

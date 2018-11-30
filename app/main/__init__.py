@@ -46,5 +46,11 @@ def create_app(config_name):
     body=json.load(open('./elasticsearch/alegre_similarity.json')),
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
+  es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
+  es.indices.put_settings(
+    body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
+    index=app.config['ELASTICSEARCH_SIMILARITY']
+  )
+  es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
 
   return app
