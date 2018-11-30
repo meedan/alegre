@@ -16,8 +16,11 @@ class SimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        body = { 'content': request.json['text'] }
+        if 'context' in request.json:
+            body['context'] = request.json['context']
         result = es.index(
-            body=request.json,
+            body=body,
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
@@ -40,7 +43,7 @@ class SimilarityQueryResource(Resource):
         conditions = [
             {
                 'more_like_this': {
-                    'fields': ['text'],
+                    'fields': ['content'],
                     'like': request.json['text'],
                     'min_doc_freq': 1,
                     'min_term_freq': 1,

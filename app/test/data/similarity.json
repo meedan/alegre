@@ -1,15 +1,15 @@
 [
   {
     "_type": "_doc",
-    "text": "This is a test"
+    "content": "This is a test"
   },
   {
     "_type": "_doc",
-    "text": "This was a test"
+    "content": "This was a test"
   },
   {
     "_type": "_doc",
-    "text": "That is a test",
+    "content": "That is a test",
     "context": {
       "app": "check",
       "dbid": 12,
@@ -18,6 +18,6 @@
   },
   {
     "_type": "_doc",
-    "text": "Something different here"
+    "content": "Something different here"
   }
 ]

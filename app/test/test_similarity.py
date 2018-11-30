@@ -13,17 +13,17 @@ class TestSimilaryBlueprint(BaseTestCase):
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
-      es.indices.put_mapping(
-        doc_type='_doc',
-        body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
-      )
       es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_settings(
         body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
       es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es.indices.put_mapping(
+        doc_type='_doc',
+        body=json.load(open('./elasticsearch/alegre_similarity.json')),
+        index=app.config['ELASTICSEARCH_SIMILARITY']
+      )
 
     def test_similarity_mapping(self):
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
@@ -47,7 +47,7 @@ class TestSimilaryBlueprint(BaseTestCase):
       result = es.search(
         doc_type='_doc',
         index=app.config['ELASTICSEARCH_SIMILARITY'],
-        body={ 'query': { 'more_like_this': { 'fields': ['text'], 'like': 'this is a test', 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
+        body={ 'query': { 'more_like_this': { 'fields': ['content'], 'like': 'this is a test', 'min_doc_freq': 1, 'min_term_freq': 1, 'max_query_terms': 12 } } },
       )
       self.assertEqual(3, len(result['hits']['hits']))
 
@@ -55,6 +55,8 @@ class TestSimilaryBlueprint(BaseTestCase):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 del term['_type']
+                term['text'] = term['content']
+                del term['content']
                 response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
