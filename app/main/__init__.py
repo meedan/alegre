@@ -4,12 +4,21 @@ from flask_bcrypt import Bcrypt
 from flask_restplus import Api
 from elasticsearch import Elasticsearch, TransportError
 from werkzeug.contrib.fixers import ProxyFix
+from gensim.models.keyedvectors import KeyedVectors
+from .lib.docsim import DocSim
 import json
-
 from .config import config_by_name
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
+
+# Load corpus
+model_path = './data/glove-6B-50d-gensim.txt'
+stopwords_path = './data/stopwords-en.txt'
+model = KeyedVectors.load_word2vec_format(model_path)
+with open(stopwords_path, 'r') as fh:
+  stopwords = fh.read().split(',')
+ds = DocSim(model, stopwords=stopwords)
 
 def create_app(config_name):
   app = Flask(__name__)
