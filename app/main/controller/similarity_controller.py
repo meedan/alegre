@@ -7,7 +7,7 @@ from ..fields import JsonObject
 api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or to find a similar one'),
-    'type': fields.String(required=False, description='which similatiry to use: "es" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
+    'type': fields.String(required=False, description='which similarity to use: "es" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
     'context': JsonObject(required=False, description='context')
 })
 
