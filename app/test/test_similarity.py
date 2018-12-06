@@ -2,8 +2,9 @@ import unittest
 import json
 from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
+import numpy as np
 
-from app.main import db
+from app.main import db, ds
 from app.test.base import BaseTestCase
 
 class TestSimilaryBlueprint(BaseTestCase):
@@ -88,6 +89,29 @@ class TestSimilaryBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
+
+    def test_wordvec_similarity_api(self):
+        with self.client:
+            term = { 'text': 'how to delete an invoice', 'type': 'wordvec', 'context': { 'dbid': 54 } }
+            response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
+            result = json.loads(response.data.decode())
+            self.assertEqual(True, result['success'])
+
+        response = self.client.post(
+            '/similarity/query',
+            data=json.dumps({
+              "text": "how to delete an invoice",
+              "context": {
+                "dbid": 54
+              }
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        vector1 = np.asarray(result['result'][0]['_source']['vector'])
+        vector2 = ds.vectorize('purge an invoice')
+        similarity = ds.cosine_sim(vector1, vector2)
+        self.assertGreater(similarity, 0.7)
 
 if __name__ == '__main__':
     unittest.main()

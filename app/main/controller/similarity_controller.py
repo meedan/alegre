@@ -1,11 +1,13 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
+from app.main import ds
 from ..fields import JsonObject
 
 api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or to find a similar one'),
+    'type': fields.String(required=False, description='which similatiry to use: "es" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
     'context': JsonObject(required=False, description='context')
 })
 
@@ -15,8 +17,13 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
+        similarity_type = 'es'
+        if 'type' in request.json:
+            similarity_type = request.json['type']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
+        if similarity_type == 'wordvec':
+            body['vector'] = ds.vectorize(request.json['text']).tolist()
         if 'context' in request.json:
             body['context'] = request.json['context']
         result = es.index(
