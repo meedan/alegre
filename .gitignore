@@ -6,3 +6,4 @@ google_credentials.json
 .coverage
 log
 *.sw*
+elasticsearch/es-script-cosine-scoring/target

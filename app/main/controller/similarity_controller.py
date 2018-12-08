@@ -46,17 +46,48 @@ class SimilarityQueryResource(Resource):
     @api.doc('Make a similarity query')
     @api.expect(similarity_request, validate=True)
     def post(self):
+        similarity_type = 'es'
+        if 'type' in request.json:
+            similarity_type = request.json['type']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        conditions = [
-            {
-                'match': {
-                  'content': {
-                      'query': request.json['text'],
-                      'minimum_should_match': '70%'
-                  }
+        conditions = []
+        if similarity_type == 'es':
+            conditions = [
+                {
+                    'match': {
+                      'content': {
+                          'query': request.json['text'],
+                          'minimum_should_match': '70%'
+                      }
+                    }
+                },
+            ]
+        elif similarity_type == 'wordvec':
+            vector = ds.vectorize(request.json['text']).tolist()
+            conditions = [
+                {
+                    'function_score': {
+                        'query': {
+                            'match_all': {}
+                        },
+                        'boost': -1,
+                        'boost_mode': 'sum',
+                        'functions': [
+                            {
+                                'script_score': {
+                                    'script': {
+                                        'source': 'cosine',
+                                        'lang': 'meedan_scripts',
+                                        'params': {
+                                            'vector': vector
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
                 }
-            },
-        ]
+            ]
         if 'context' in request.json:
             match = {}
             for key in request.json['context']:
@@ -76,14 +107,15 @@ class SimilarityQueryResource(Resource):
                 }
             }
             conditions.append(context)
-        result = es.search(
-            body={
-                'query': {
-                    'bool': {
-                        'must': conditions
-                    }
+        body = {
+            'query': {
+                'bool': {
+                    'must': conditions
                 }
-            },
+            }
+        }
+        result = es.search(
+            body=body,   
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )

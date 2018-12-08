@@ -113,5 +113,21 @@ class TestSimilaryBlueprint(BaseTestCase):
         similarity = ds.cosine_sim(vector1, vector2)
         self.assertGreater(similarity, 0.7)
 
+        response = self.client.post(
+            '/similarity/query',
+            data=json.dumps({
+              "text": "purge an invoice",
+              "type": "wordvec",
+              "context": {
+                "dbid": 54
+              }
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual(1, len(result['result']))
+        similarity = result['result'][0]['_score']
+        self.assertGreater(similarity, 0.7)
+
 if __name__ == '__main__':
     unittest.main()
