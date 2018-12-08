@@ -49,7 +49,7 @@ class SimilarityQueryResource(Resource):
         similarity_type = 'es'
         if 'type' in request.json:
             similarity_type = request.json['type']
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
         if similarity_type == 'es':
             conditions = [
