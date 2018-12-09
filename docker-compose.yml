@@ -18,7 +18,7 @@ services:
     volumes:
       - "esdata:/usr/share/elasticsearch/data"
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.1
+    image: docker.elastic.co/kibana/kibana:6.3.0
     ports:
       - "5601:5601"
     networks:

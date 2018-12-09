@@ -16,7 +16,7 @@
     </repository>
   </repositories>
   <properties>
-    <elasticsearch.version>6.5.1</elasticsearch.version>
+    <elasticsearch.version>6.3.0</elasticsearch.version>
   </properties>
   <dependencies>
     <dependency>
