@@ -13,7 +13,7 @@ db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
 
 # Load corpus
-model_path = './data/glove-6B-50d-gensim.txt'
+model_path = './data/model.txt'
 stopwords_path = './data/stopwords-en.txt'
 model = KeyedVectors.load_word2vec_format(model_path)
 with open(stopwords_path, 'r') as fh:

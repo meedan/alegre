@@ -4,6 +4,9 @@ alegre
 A linguistic service to support multilingual apps.
 
 # Usage
+
+Place your model file at `data/model.txt`, in Gensim format. Then:
+
 ```
 docker-compose up
 ```
