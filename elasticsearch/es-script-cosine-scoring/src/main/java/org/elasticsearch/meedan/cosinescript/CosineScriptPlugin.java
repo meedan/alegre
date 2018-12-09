@@ -118,12 +118,17 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           double value = 0.0d;
                           try {
                             String alegreUrl = System.getenv().get("ALEGRE_URL");
-                            logger.info("Calling Alegre at: " + alegreUrl);
                             URL url = new URL(alegreUrl + "/wordvec/similarity");
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setDoOutput(true);
                             conn.setRequestMethod("POST");
                             conn.setRequestProperty("Content-Type", "application/json");
+                            String alegreAuth = System.getenv().get("ALEGRE_AUTH");
+                            if (alegreAuth != null) {
+                              String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(alegreAuth.getBytes());
+                              conn.setRequestProperty("Authorization", basicAuth);
+                            }
+                            logger.info("Calling Alegre at " + alegreUrl + " with authentication " + alegreAuth);
 
                             String input = "{\"vector1\":\"" + vector1 + "\",\"vector2\":\"" + vector2 + "\"}";
 

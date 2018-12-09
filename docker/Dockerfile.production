@@ -22,7 +22,7 @@ RUN chmod 755 /opt/bin/*.sh
 #
 
 # nginx for alegre
-RUN apt-get update && apt-get install nginx -y
+RUN apt-get update && apt-get install nginx wget unzip -y
 COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
 RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
     && rm /etc/nginx/sites-enabled/default
@@ -38,6 +38,14 @@ RUN python -m spacy download en && \
     python -m spacy download pt
 
 COPY . .
+
+# model
+RUN echo 'Downloading and converting model...' && \
+    cd /app/data && \
+    wget https://nlp.stanford.edu/data/glove.6B.zip --no-check-certificate && \
+    unzip glove.6B.zip && \
+    python convert-glove-to-gensim.py /app/data/glove.6B.300d.txt /app/data/model.txt && \
+    cd -
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]
