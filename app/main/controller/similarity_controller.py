@@ -8,6 +8,7 @@ api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or to find a similar one'),
     'type': fields.String(required=False, description='which similarity to use: "es" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
+    'threshold': fields.Float(required=False, description='minimum score to consider, between 0 and 1 (defaults to 0.7)'),
     'context': JsonObject(required=False, description='context')
 })
 
@@ -51,13 +52,18 @@ class SimilarityQueryResource(Resource):
             similarity_type = request.json['type']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
+
+        threshold = 0.7
+        if 'threshold' in request.json:
+            threshold = request.json['threshold']
+
         if similarity_type == 'es':
             conditions = [
                 {
                     'match': {
                       'content': {
                           'query': request.json['text'],
-                          'minimum_should_match': '70%'
+                          'minimum_should_match': str(int(round(threshold * 100))) + '%'
                       }
                     }
                 },
@@ -67,11 +73,10 @@ class SimilarityQueryResource(Resource):
             conditions = [
                 {
                     'function_score': {
+                        'min_score': threshold,
                         'query': {
                             'match_all': {}
                         },
-                        'boost': -1,
-                        'boost_mode': 'sum',
                         'functions': [
                             {
                                 'script_score': {
@@ -94,6 +99,7 @@ class SimilarityQueryResource(Resource):
                 match['context.' + key] = request.json['context'][key]
             context = {
                 'nested': {
+                    'score_mode': 'none',
                     'path': 'context',
                     'query': {
                         'bool': {
