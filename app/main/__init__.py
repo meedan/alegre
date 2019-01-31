@@ -7,18 +7,21 @@ from werkzeug.contrib.fixers import ProxyFix
 from gensim.models.keyedvectors import KeyedVectors
 from .lib.docsim import DocSim
 import json
+import os.path
 from .config import config_by_name
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
 
 # Load corpus
+ds = None
 model_path = './data/model.txt'
-stopwords_path = './data/stopwords-en.txt'
-model = KeyedVectors.load_word2vec_format(model_path)
-with open(stopwords_path, 'r') as fh:
-  stopwords = fh.read().split(',')
-ds = DocSim(model, stopwords=stopwords)
+if os.path.isfile(model_path):
+  stopwords_path = './data/stopwords-en.txt'
+  model = KeyedVectors.load_word2vec_format(model_path)
+  with open(stopwords_path, 'r') as fh:
+    stopwords = fh.read().split(',')
+  ds = DocSim(model, stopwords=stopwords)
 
 def create_app(config_name):
   app = Flask(__name__)
