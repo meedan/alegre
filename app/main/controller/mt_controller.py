@@ -13,7 +13,7 @@ mt_request = api.model('mt_request', {
 @api.route('/')
 class TranslationResource(Resource):
     @api.response(200, 'text successfully translated.')
-    @api.doc('Machine-translate a text')
+    @api.doc('Machine-translate a text document')
     @api.expect(mt_request, validate=True)
     def post(self):
         client = translate.Client.from_service_account_json('./google_credentials.json')
