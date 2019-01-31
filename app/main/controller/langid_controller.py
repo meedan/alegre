@@ -15,7 +15,6 @@ class LangidResource(Resource):
     def post(self):
         client = translate.Client.from_service_account_json('./google_credentials.json')
         result = client.detect_language([request.json['text']])[0]
-        print(result)
         return {
             'language': result['language'],
             'confidence': result['confidence']
