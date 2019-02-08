@@ -6,8 +6,8 @@ from ..fields import JsonObject
 
 api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
-    'text': fields.String(required=True, description='text to be stored or to find a similar one'),
-    'type': fields.String(required=False, description='which similarity to use: "es" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
+    'text': fields.String(required=True, description='text to be stored or to query for similarity'),
+    'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0 and 1 (defaults to 0.7)'),
     'context': JsonObject(required=False, description='context')
 })
@@ -18,9 +18,9 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        similarity_type = 'es'
-        if 'type' in request.json:
-            similarity_type = request.json['type']
+        similarity_type = 'elasticsearch'
+        if 'method' in request.json:
+            similarity_type = request.json['method']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if similarity_type == 'wordvec':
@@ -47,9 +47,9 @@ class SimilarityQueryResource(Resource):
     @api.doc('Make a similarity query')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        similarity_type = 'es'
-        if 'type' in request.json:
-            similarity_type = request.json['type']
+        similarity_type = 'elasticsearch'
+        if 'method' in request.json:
+            similarity_type = request.json['method']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
 
@@ -57,7 +57,7 @@ class SimilarityQueryResource(Resource):
         if 'threshold' in request.json:
             threshold = request.json['threshold']
 
-        if similarity_type == 'es':
+        if similarity_type == 'elasticsearch':
             conditions = [
                 {
                     'match': {
@@ -121,7 +121,7 @@ class SimilarityQueryResource(Resource):
             }
         }
         result = es.search(
-            body=body,   
+            body=body,
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )

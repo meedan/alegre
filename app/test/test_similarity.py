@@ -93,7 +93,7 @@ class TestSimilaryBlueprint(BaseTestCase):
     @unittest.skipIf(ds == None, "model.txt file is missing")
     def test_wordvec_similarity_api(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'type': 'wordvec', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to delete an invoice', 'method': 'wordvec', 'context': { 'dbid': 54 } }
             response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
