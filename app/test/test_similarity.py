@@ -118,7 +118,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/similarity/query',
             data=json.dumps({
               "text": "purge an invoice",
-              "type": "wordvec",
+              "method": "wordvec",
               "context": {
                 "dbid": 54
               }
@@ -134,7 +134,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/similarity/query',
             data=json.dumps({
               "text": "purge an invoice",
-              "type": "wordvec",
+              "method": "wordvec",
               "threshold": 0.7
             }),
             content_type='application/json'
