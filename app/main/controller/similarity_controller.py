@@ -1,13 +1,15 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from elasticsearch import helpers, Elasticsearch, TransportError
+from elasticsearch import Elasticsearch
 from app.main import ds
-from ..fields import JsonObject
+from ..lib.fields import JsonObject
+from ..lib.es_helpers import language_to_analyzer
 
 api = Namespace('similarity', description='similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or to query for similarity'),
     'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
+    'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0 and 1 (defaults to 0.7)'),
     'context': JsonObject(required=False, description='context')
 })
@@ -68,6 +70,10 @@ class SimilarityQueryResource(Resource):
                     }
                 },
             ]
+            if 'language' in request.json:
+                conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
+                del conditions[0]['match']['content']['minimum_should_match']
+
         elif similarity_type == 'wordvec':
             vector = ds.vectorize(request.json['text']).tolist()
             conditions = [
@@ -94,20 +100,18 @@ class SimilarityQueryResource(Resource):
                 }
             ]
         if 'context' in request.json:
-            match = {}
+            matches = []
             for key in request.json['context']:
-                match['context.' + key] = request.json['context'][key]
+                matches.append({
+                    'match': { 'context.' + key: request.json['context'][key] }
+                })
             context = {
                 'nested': {
                     'score_mode': 'none',
                     'path': 'context',
                     'query': {
                         'bool': {
-                            'must': [
-                                {
-                                    'match': match
-                                }
-                            ]
+                            'must': matches
                         }
                     }
                 }

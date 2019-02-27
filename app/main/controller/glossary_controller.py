@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
-from ..fields import JsonObject
+from ..lib.fields import JsonObject
 
 api = Namespace('glossary', description='glossary operations')
 glossary_request = api.model('glossary_request', {

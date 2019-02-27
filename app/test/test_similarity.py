@@ -50,7 +50,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             response = self.client.post(
                 '/similarity/query',
                 data=json.dumps({
-                  "text": "this is a test"
+                  'text': 'this is a test'
                 }),
                 content_type='application/json'
             )
@@ -60,7 +60,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             response = self.client.post(
                 '/similarity/query',
                 data=json.dumps({
-                  "text": "something different"
+                  'text': 'something different'
                 }),
                 content_type='application/json'
             )
@@ -70,9 +70,10 @@ class TestSimilaryBlueprint(BaseTestCase):
             response = self.client.post(
                 '/similarity/query',
                 data=json.dumps({
-                  "text": "this is a test",
-                  "context": {
-                    "dbid": 12
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': 12,
+                    'app': 'check'
                   }
                 }),
                 content_type='application/json'
@@ -83,14 +84,46 @@ class TestSimilaryBlueprint(BaseTestCase):
             response = self.client.post(
                 '/similarity/query',
                 data=json.dumps({
-                  "text": "Magnitude 4.5 quake strikes near Fort St. John"
+                  'text': 'Magnitude 4.5 quake strikes near Fort St. John'
                 }),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-    @unittest.skipIf(ds == None, "model.txt file is missing")
+    def test_language_similarity_api(self):
+        with self.client:
+            for term in [
+              { 'text': 'नमस्ते मेरा नाम करीम है' },
+              { 'text': 'हॅलो माझे नाव करीम आहे' }
+            ]:
+              response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
+              result = json.loads(response.data.decode())
+              self.assertEqual(True, result['success'])
+
+            response = self.client.post(
+                '/similarity/query',
+                data=json.dumps({
+                  'text': 'नमस्ते मेरा नाम करीम है',
+                  'language': 'en'
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(2, len(result['result']))
+
+            response = self.client.post(
+                '/similarity/query',
+                data=json.dumps({
+                  'text': 'नमस्ते मेरा नाम करीम है',
+                  'language': 'hi'
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+    @unittest.skipIf(ds == None, 'model.txt file is missing')
     def test_wordvec_similarity_api(self):
         with self.client:
             term = { 'text': 'how to delete an invoice', 'method': 'wordvec', 'context': { 'dbid': 54 } }
@@ -101,9 +134,9 @@ class TestSimilaryBlueprint(BaseTestCase):
         response = self.client.post(
             '/similarity/query',
             data=json.dumps({
-              "text": "how to delete an invoice",
-              "context": {
-                "dbid": 54
+              'text': 'how to delete an invoice',
+              'context': {
+                'dbid': 54
               }
             }),
             content_type='application/json'
@@ -117,10 +150,10 @@ class TestSimilaryBlueprint(BaseTestCase):
         response = self.client.post(
             '/similarity/query',
             data=json.dumps({
-              "text": "purge an invoice",
-              "method": "wordvec",
-              "context": {
-                "dbid": 54
+              'text': 'purge an invoice',
+              'method': 'wordvec',
+              'context': {
+                'dbid': 54
               }
             }),
             content_type='application/json'
@@ -133,9 +166,9 @@ class TestSimilaryBlueprint(BaseTestCase):
         response = self.client.post(
             '/similarity/query',
             data=json.dumps({
-              "text": "purge an invoice",
-              "method": "wordvec",
-              "threshold": 0.7
+              'text': 'purge an invoice',
+              'method': 'wordvec',
+              'threshold': 0.7
             }),
             content_type='application/json'
         )
