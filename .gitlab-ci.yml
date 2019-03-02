@@ -1,0 +1,23 @@
+stages:
+  - build_qa
+  - deploy_qa
+
+build_qa:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_qa
+  variables:
+    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+  script:
+    - apk add --no-cache curl jq python py-pip
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region eu-west-1)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build  -f docker/Dockerfile.production -t "$QA_ECR_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$QA_ECR_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - gitlab/test
