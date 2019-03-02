@@ -34,7 +34,7 @@ deploy_qa:
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
     - pip install ecs-deploy
-    - ecs deploy -c ecs-qa -n qa-algere -i qa-alegre-c $QA_ECR_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT --timeout 3600
+    - ecs deploy ecs-qa  qa-algere --image qa-alegre-c $QA_ECR_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT --timeout 3600
     - echo "new Image was deployed $QA_ECR_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
