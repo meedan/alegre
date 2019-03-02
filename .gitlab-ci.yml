@@ -18,8 +18,10 @@ build_qa:
     - $(aws ecr get-login --no-include-email --region eu-west-1)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - d=configurator/bridge/qa/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+    - d=configurator/check/qa/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - docker build  -f docker/Dockerfile.production -t "$QA_ECR_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
+
+
