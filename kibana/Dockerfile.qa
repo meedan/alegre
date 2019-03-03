@@ -1,2 +1,3 @@
-FROM meedan/kibana
+FROM sebp/elk:630
+COPY kibana/kibana.yml.qa /etc/kibana/kibana.yml
 

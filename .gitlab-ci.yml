@@ -1,7 +1,7 @@
 stages:
-  - build_api_qa
   - build_es_qa
   - build_kibana_qa
+  - build_api_qa
   - deploy_qa
 
 
@@ -22,6 +22,26 @@ build_es_qa:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build  -f elasticsearch/Dockerfile.qa -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - gitlab/test
+
+build_kibana_qa:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_kibana_qa
+  variables:
+    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+  script:
+    - apk add --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build  -f kibana/Dockerfile.qa -t "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
 
