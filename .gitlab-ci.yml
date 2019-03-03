@@ -82,7 +82,7 @@ deploy_qa:
     - pip install ecs-deploy
     - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA --timeout 3600
+    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout 3600
     - echo "new Image was deployed $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT --timeout 3600
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
