@@ -20,7 +20,7 @@ build_es_qa:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build  -f elasticsearch/Dockerfile.qa -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker build  -f elasticsearch/Dockerfile.production -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
@@ -41,7 +41,7 @@ build_kibana_qa:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build  -f kibana/Dockerfile.qa -t "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker build  -f kibana/Dockerfile.production -t "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
