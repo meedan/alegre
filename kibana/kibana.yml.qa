@@ -1,3 +1,1 @@
 server.host: 0.0.0.0
-xpack.security.enabled: false
-elasticsearch.hosts $ELASTICSEARCH_URL
