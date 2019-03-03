@@ -1,0 +1,8 @@
+FROM meedan/elasticsearch:6.3
+RUN yum -y install maven
+COPY ./es-script-cosine-scoring /tmp/es-script-cosine-scoring
+RUN cd /tmp/es-script-cosine-scoring && mvn clean install
+RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --verbose --batch file:///tmp/es-script-cosine-scoring/target/releases/meedan-cosine-0.0.1.zip
+COPY ./elasticsearch.yml.qa /usr/share/elasticsearch/config/elasticsearch.yml
+COPY ./jvm.options.qa /usr/share/elasticsearch/config/jvm.options
+RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --verbose --batch discovery-ec2
