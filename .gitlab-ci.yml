@@ -1,7 +1,29 @@
 stages:
   - build_api_qa
   - build_es_qa
+  - build_kibana_qa
   - deploy_qa
+
+
+build_es_qa:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_es_qa
+  variables:
+    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+  script:
+    - apk add --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build  -f elasticsearch/Dockerfile.qa -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - gitlab/test
 
 build_api_qa:
   image: docker:latest
@@ -25,25 +47,7 @@ build_api_qa:
   only:
     - gitlab/test
 
-build_es_qa:
-  image: docker:latest
-  services:
-    - docker:dind
-  tags:
-    - docker
-  stage: build_es_qa
-  variables:
-    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
-  script:
-    - apk add --no-cache curl jq python py-pip git
-    - pip install awscli
-    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build  -f elasticsearch/Dockerfile.qa -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
-    - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-  only:
-    - gitlab/test
+
 
 
 deploy_qa:
@@ -57,7 +61,7 @@ deploy_qa:
     - pip install ecs-deploy
     - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-algere --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT --timeout 3600
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT --timeout 3600
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
