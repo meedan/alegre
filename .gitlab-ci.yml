@@ -79,7 +79,7 @@ deploy_qa:
   script:
     - pip install awscli
     - apt-get update
-    - apt-get install jq
+    - apt-get install -y jq
     - curl 'https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy' | tee /usr/bin/ecs-deploy
     - chmod +x /usr/bin/ecs-deploy
     - ecs-deploy -c ecs-qa  -n qa-alegre-es -i $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA -t 3600 --skip-deployments-check
