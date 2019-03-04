@@ -77,7 +77,7 @@ deploy_qa:
     AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
-    - pip install ecs-deploy==1.7.1
+    - pip install ecs-deploy==1.7.0
 #    - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
 #    - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout -1
