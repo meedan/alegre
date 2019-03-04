@@ -1,5 +1,5 @@
 stages:
-  - build
+  - build_qa
   - deploy_qa
 
 
@@ -9,7 +9,7 @@ build_es_qa:
     - docker:dind
   tags:
     - docker
-  stage: build
+  stage: build_qa
   variables:
     AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
@@ -29,7 +29,7 @@ build_kibana_qa:
     - docker:dind
   tags:
     - docker
-  stage: build
+  stage: build_qa
   variables:
     AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
@@ -50,7 +50,7 @@ build_api_qa:
     - docker:dind
   tags:
     - docker
-  stage: build
+  stage: build_qa
   variables:
     AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
