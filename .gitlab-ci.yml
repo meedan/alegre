@@ -18,7 +18,7 @@ test:
     - cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
     - docker-compose pull
     - docker-compose up -d
-    - wget -q --waitretry=1 --retry-connrefused -t 0 -T 10 -O - http://127.0.0.1:9200
+    # - wget -q --waitretry=1 --retry-connrefused -t 0 -T 10 -O - http://127.0.0.1:9200
     - docker-compose exec alegre bash -c "make test"
   after_script:
     - docker-compose exec alegre bash -c "coverage report"
