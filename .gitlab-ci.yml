@@ -19,9 +19,9 @@ test:
     - docker-compose pull
     - docker-compose up -d
     # - wget -q --waitretry=1 --retry-connrefused -t 0 -T 10 -O - http://127.0.0.1:9200
-    - docker-compose exec -ti alegre bash -c "make test"
+    - docker-compose exec -T alegre bash -c "make test"
   after_script:
-    - docker-compose exec -ti alegre bash -c "coverage report"
+    - docker-compose exec -T alegre bash -c "coverage report"
   only:
     - gitlab/test
 build_es_qa:
