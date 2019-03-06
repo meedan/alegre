@@ -12,8 +12,7 @@ test:
   stage: test
   script:
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - d=configurator/bridge/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}";
-    done
+    - d=configurator/bridge/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
     - docker-compose pull
     - docker-compose up -d
