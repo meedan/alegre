@@ -37,32 +37,32 @@ def create_app(config_name):
   db.init_app(app)
   flask_bcrypt.init_app(app)
 
-  # Create ES index.
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-  for key in ['ELASTICSEARCH_GLOSSARY', 'ELASTICSEARCH_SIMILARITY']:
-    try:
-      es.indices.create(index=app.config[key])
-    except TransportError as e:
-      # ignore already existing index
-      if e.error == 'resource_already_exists_exception':
-        pass
-      else:
-        raise
-  es.indices.put_mapping(
-    doc_type='_doc',
-    body=json.load(open('./elasticsearch/alegre_glossary.json')),
-    index=app.config['ELASTICSEARCH_GLOSSARY']
-  )
-  es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
-  es.indices.put_settings(
-    body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
-    index=app.config['ELASTICSEARCH_SIMILARITY']
-  )
-  es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
-  es.indices.put_mapping(
-    doc_type='_doc',
-    body=json.load(open('./elasticsearch/alegre_similarity.json')),
-    index=app.config['ELASTICSEARCH_SIMILARITY']
-  )
+  # # Create ES index.
+  # es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+  # for key in ['ELASTICSEARCH_GLOSSARY', 'ELASTICSEARCH_SIMILARITY']:
+  #   try:
+  #     es.indices.create(index=app.config[key])
+  #   except TransportError as e:
+  #     # ignore already existing index
+  #     if e.error == 'resource_already_exists_exception':
+  #       pass
+  #     else:
+  #       raise
+  # es.indices.put_mapping(
+  #   doc_type='_doc',
+  #   body=json.load(open('./elasticsearch/alegre_glossary.json')),
+  #   index=app.config['ELASTICSEARCH_GLOSSARY']
+  # )
+  # es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
+  # es.indices.put_settings(
+  #   body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
+  #   index=app.config['ELASTICSEARCH_SIMILARITY']
+  # )
+  # es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
+  # es.indices.put_mapping(
+  #   doc_type='_doc',
+  #   body=json.load(open('./elasticsearch/alegre_similarity.json')),
+  #   index=app.config['ELASTICSEARCH_SIMILARITY']
+  # )
 
   return app
