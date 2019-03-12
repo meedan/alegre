@@ -22,8 +22,9 @@ test:
     - docker-compose exec -T alegre bash -c "make test"
   after_script:
     - docker-compose exec -T alegre bash -c "coverage report"
-  only:
-    - gitlab/test
+  except:
+    - develop
+    - master
 build_es_qa:
   image: docker:latest
   services:
@@ -42,7 +43,7 @@ build_es_qa:
     - docker build --build-arg STAGE=qa  -f elasticsearch/Dockerfile.production -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - develop
 
 build_kibana_qa:
   image: docker:latest
@@ -63,7 +64,7 @@ build_kibana_qa:
     - docker build  -f kibana/Dockerfile.production -t "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - develop
 
 build_api_qa:
   image: docker:latest
@@ -85,7 +86,7 @@ build_api_qa:
     - docker build  -f docker/Dockerfile.production -t "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - develop
 
 
 
@@ -106,4 +107,4 @@ deploy_qa:
     - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - develop
