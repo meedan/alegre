@@ -2,6 +2,8 @@ stages:
   - test
   - build_qa
   - deploy_qa
+  - build_live
+  - deploy_live
 
 test:
   image: docker:latest
@@ -25,6 +27,7 @@ test:
   except:
     - develop
     - master
+
 build_es_qa:
   image: docker:latest
   services:
@@ -33,8 +36,8 @@ build_es_qa:
     - docker
   stage: build_qa
   variables:
-    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   script:
     - apk add --no-cache curl jq python py-pip git
     - pip install awscli
@@ -53,8 +56,8 @@ build_kibana_qa:
     - docker
   stage: build_qa
   variables:
-    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     ELASTICSEARCH_URL : $ELASTICSEARCH_URL
   script:
     - apk add --no-cache curl jq python py-pip git
@@ -74,8 +77,8 @@ build_api_qa:
     - docker
   stage: build_qa
   variables:
-    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   script:
     - apk add --no-cache curl jq python py-pip git
     - pip install awscli
@@ -89,22 +92,102 @@ build_api_qa:
     - develop
 
 
-
-
 deploy_qa:
   image: python:3
   stage: deploy_qa
   variables:
-    AWS_ACCESS_KEY_ID: $QA_AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: $QA_AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
     - pip install ecs-deploy==1.7.0
     - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout -1
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout -1
+    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL  --timeout -1
     - echo "new Image was deployed $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
+
+build_es_live:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_live
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  script:
+    - apk add --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build --build-arg STAGE=live  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - master
+
+build_kibana_live:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_live
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    ELASTICSEARCH_URL : $LIVE_ELASTICSEARCH_URL
+  script:
+    - apk add --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build  -f kibana/Dockerfile.production -t "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - master
+
+build_api_live:
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
+  stage: build_live
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  script:
+    - apk add --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/live/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+    - docker build  -f docker/Dockerfile.production -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"  .
+    - docker push "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - master
+
+
+deploy_live:
+  image: python:3
+  stage: deploy_live
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+  script:
+    - pip install ecs-deploy==1.7.0
+    - ecs deploy ecs-live  live-alegre-es --image live-alegre-es-c $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
+    - echo "new Image was deployed $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
+    - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL  --timeout 3600
+    - echo "new Image was deployed $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
+    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout 3600
+    - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
+  only:
+    - master
