@@ -27,7 +27,6 @@ test:
   except:
     - develop
     - master
-    - gitlab/test
 
 build_es_qa:
   image: docker:latest
@@ -129,7 +128,7 @@ build_es_live:
     - docker build --build-arg STAGE=live  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - master
 
 build_kibana_live:
   image: docker:latest
@@ -150,7 +149,7 @@ build_kibana_live:
     - docker build  -f kibana/Dockerfile.production -t "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - master
 
 build_api_live:
   image: docker:latest
@@ -172,7 +171,7 @@ build_api_live:
     - docker build  -f docker/Dockerfile.production -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - master
 
 
 deploy_live:
@@ -191,4 +190,4 @@ deploy_live:
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
-    - gitlab/test
+    - master
