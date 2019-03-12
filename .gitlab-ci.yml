@@ -188,7 +188,7 @@ deploy_live:
     - echo "new Image was deployed $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL  --timeout -1
     - echo "new Image was deployed $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-#    - ecs deploy ecs-live  live-alegre --image qa-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
-#    - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
+    - ecs deploy ecs-live  live-alegre --image qa-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
+    - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - gitlab/test
