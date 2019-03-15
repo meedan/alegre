@@ -9,6 +9,8 @@ test:
   image: docker:latest
   services:
     - docker:dind
+  cache:
+    key: "test"
   tags:
     - docker
   stage: test
