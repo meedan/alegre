@@ -9,13 +9,8 @@ test:
   image: docker:latest
   services:
     - docker:dind
-  cache:
-    key: "test-cache"
-    paths:
-      - dependencies/
-
   tags:
-    - docker
+    - meedan
   stage: test
   script:
     - apk add --no-cache curl wget git py-pip
