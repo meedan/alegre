@@ -10,7 +10,10 @@ test:
   services:
     - docker:dind
   cache:
-    key: "test"
+    key: "test-cache"
+    paths:
+      - dependencies/
+
   tags:
     - docker
   stage: test
