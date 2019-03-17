@@ -10,7 +10,7 @@ test:
   services:
     - docker:dind
   tags:
-    - docker
+    - meedan
   stage: test
   script:
     - apk add --no-cache curl wget git py-pip
