@@ -7,3 +7,4 @@ google_credentials.json
 log
 *.sw*
 elasticsearch/es-script-cosine-scoring/target
+*.rdb

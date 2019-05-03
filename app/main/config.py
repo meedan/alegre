@@ -11,6 +11,9 @@ class Config:
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
     ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL') or 'http://elasticsearch:9200'
     ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
+    REDIS_HOST = os.getenv('REDIS_HOST') or 'localhost'
+    REDIS_PORT = os.getenv('REDIS_PORT') or 6379
+    REDIS_DATABASE = 0
 
 
 class DevelopmentConfig(Config):
@@ -29,6 +32,7 @@ class TestingConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary_test'
     ELASTICSEARCH_SIMILARITY = 'alegre_similarity_test'
+    REDIS_DATABASE = 1
 
 
 class ProductionConfig(Config):
