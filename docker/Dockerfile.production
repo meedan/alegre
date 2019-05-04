@@ -47,12 +47,12 @@ RUN cd /app/elasticsearch/es-script-cosine-scoring && \
     cd -
 
 # model
-RUN echo 'Downloading and converting model...' && \
-    cd /app/data && \
-    wget https://nlp.stanford.edu/data/glove.6B.zip --no-check-certificate && \
-    unzip glove.6B.zip && \
-    python convert-glove-to-gensim.py /app/data/glove.6B.300d.txt /app/data/model.txt && \
-    cd -
+# RUN echo 'Downloading and converting model...' && \
+#    cd /app/data && \
+#    wget https://nlp.stanford.edu/data/glove.6B.zip --no-check-certificate && \
+#    unzip glove.6B.zip && \
+#    python convert-glove-to-gensim.py /app/data/glove.6B.300d.txt /app/data/model.txt && \
+#    cd -
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]
