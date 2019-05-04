@@ -13,7 +13,7 @@ class Config:
     ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
     REDIS_HOST = os.getenv('REDIS_HOST') or 'localhost'
     REDIS_PORT = os.getenv('REDIS_PORT') or 6379
-    REDIS_DATABASE = 0
+    REDIS_DATABASE = os.getenv('REDIS_DATABASE') or 0
 
 
 class DevelopmentConfig(Config):
