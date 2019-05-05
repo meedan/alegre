@@ -15,5 +15,6 @@ RUN python -m spacy download en && \
     python -m spacy download pt
 
 COPY . .
-
-CMD [ "make", "run" ]
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod a+x /docker-entrypoint.sh
+CMD ["sh", "-c", "/docker-entrypoint.sh"]
