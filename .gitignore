@@ -8,3 +8,4 @@ log
 *.sw*
 elasticsearch/es-script-cosine-scoring/target
 *.rdb
+.idea
