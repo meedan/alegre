@@ -22,7 +22,7 @@ RUN chmod 755 /opt/bin/*.sh
 #
 
 # nginx for alegre
-RUN apt-get update && apt-get install nginx wget unzip maven openjdk-8-jdk -y
+RUN apt-get update && apt-get install nginx wget unzip maven openjdk-8-jdk redis-server -y
 COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
 RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
     && rm /etc/nginx/sites-enabled/default
