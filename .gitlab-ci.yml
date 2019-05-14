@@ -133,7 +133,9 @@ build_es_live:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build --build-arg STAGE=live  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/live/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+    - docker build  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
@@ -154,6 +156,8 @@ build_kibana_live:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/live/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - docker build  -f kibana/Dockerfile.production -t "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
