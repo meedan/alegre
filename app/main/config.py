@@ -14,6 +14,9 @@ class Config:
     REDIS_HOST = os.getenv('REDIS_HOST') or 'localhost'
     REDIS_PORT = os.getenv('REDIS_PORT') or 6379
     REDIS_DATABASE = os.getenv('REDIS_DATABASE') or 0
+    PROVIDER_LANGID = os.getenv('PROVIDER_LANGID') or 'google'
+    MS_TEXT_ANALYTICS_KEY = os.getenv('MS_TEXT_ANALYTICS_KEY')
+    MS_TEXT_ANALYTICS_URL = os.getenv('MS_TEXT_ANALYTICS_URL') or 'https://westcentralus.api.cognitive.microsoft.com/text/analytics/v2.1/'
 
 
 class DevelopmentConfig(Config):

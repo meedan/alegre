@@ -3,6 +3,7 @@ elasticsearch/data/nodes
 *.db
 configurator
 google_credentials.json
+.env
 .coverage
 log
 *.sw*
