@@ -24,7 +24,7 @@ services:
     networks:
       - dev
     environment:
-      - "ELASTICSEARCH_URL: http://elasticsearch:9200"
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
   alegre:
     build: .
     ports:
@@ -33,5 +33,7 @@ services:
       - ".:/app"
     networks:
       - dev
+    env_file:
+      - .env
     environment:
-      - "BOILERPLATE_ENV: dev"
+      - "BOILERPLATE_ENV=dev"
