@@ -113,7 +113,7 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL  --timeout -1
     - echo "new Image was deployed $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $QA_REDIS_HOST -e qa-alegre-c REDIS_PORT $QA_REDIS_PORT -e qa-alegre-c REDIS_DATABASE $QA_REDIS_DATABASE --timeout -1
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL -e qa-alegre-c PROVIDER_LANGID $LIVE_PROVIDER_LANGID -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $QA_REDIS_HOST -e qa-alegre-c REDIS_PORT $QA_REDIS_PORT -e qa-alegre-c REDIS_DATABASE $QA_REDIS_DATABASE -e qa-alegre-c MS_TEXT_ANALYTICS_KEY $QA_MS_TEXT_ANALYTICS_KEY -e qa-alegre-c MS_TEXT_ANALYTICS_URL $QA_MS_TEXT_ANALYTICS_URL --timeout -1
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
@@ -205,7 +205,7 @@ deploy_live:
     - echo "new Image was deployed $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL  --timeout 3600
     - echo "new Image was deployed $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV  -e live-alegre-c REDIS_HOST $LIVE_REDIS_HOST -e live-alegre-c REDIS_PORT $LIVE_REDIS_PORT -e live-alegre-c REDIS_DATABASE $LIVE_REDIS_DATABASE --timeout -1
+    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PROVIDER_LANGID $LIVE_PROVIDER_LANGID -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV  -e live-alegre-c REDIS_HOST $LIVE_REDIS_HOST -e live-alegre-c REDIS_PORT $LIVE_REDIS_PORT -e live-alegre-c REDIS_DATABASE $LIVE_REDIS_DATABASE -e live-alegre-c MS_TEXT_ANALYTICS_KEY $LIVE_MS_TEXT_ANALYTICS_KEY -e live-alegre-c MS_TEXT_ANALYTICS_URL $LIVE_MS_TEXT_ANALYTICS_URL --timeout -1
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
