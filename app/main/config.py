@@ -11,7 +11,7 @@ class Config:
     ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
     ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL') or 'http://elasticsearch:9200'
     ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
-    REDIS_HOST = os.getenv('REDIS_HOST') or 'localhost'
+    REDIS_HOST = os.getenv('REDIS_HOST') or 'redis'
     REDIS_PORT = os.getenv('REDIS_PORT') or 6379
     REDIS_DATABASE = os.getenv('REDIS_DATABASE') or 0
     PROVIDER_LANGID = os.getenv('PROVIDER_LANGID') or 'google'

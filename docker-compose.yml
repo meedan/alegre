@@ -1,6 +1,7 @@
 version: '2'
 volumes:
-  esdata:
+  elasticsearch:
+  redis:
 networks:
   dev:
 services:
@@ -16,7 +17,7 @@ services:
     networks:
       - dev
     volumes:
-      - "esdata:/usr/share/elasticsearch/data"
+      - "elasticsearch:/usr/share/elasticsearch/data"
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.0
     ports:
@@ -25,6 +26,14 @@ services:
       - dev
     environment:
       - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+  redis:
+    image: redis:5
+    ports:
+      - "6379:6379"
+    volumes:
+      - "redis:/data"
+    networks:
+      - dev
   alegre:
     build: .
     ports:
