@@ -40,6 +40,9 @@ services:
       - "5000:5000"
     volumes:
       - ".:/app"
+    depends_on:
+      - kibana
+      - redis
     networks:
       - dev
     env_file:
