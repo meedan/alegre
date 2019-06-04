@@ -46,6 +46,6 @@ services:
     networks:
       - dev
     env_file:
-      - .env
+      - .env_file
     environment:
       - "BOILERPLATE_ENV=dev"
