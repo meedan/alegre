@@ -1,6 +1,7 @@
 version: '2'
 volumes:
-  esdata:
+  elasticsearch:
+  redis:
 networks:
   dev:
 services:
@@ -16,7 +17,7 @@ services:
     networks:
       - dev
     volumes:
-      - "esdata:/usr/share/elasticsearch/data"
+      - "elasticsearch:/usr/share/elasticsearch/data"
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.0
     ports:
@@ -24,14 +25,27 @@ services:
     networks:
       - dev
     environment:
-      - "ELASTICSEARCH_URL: http://elasticsearch:9200"
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+  redis:
+    image: redis:5
+    ports:
+      - "6379:6379"
+    volumes:
+      - "redis:/data"
+    networks:
+      - dev
   alegre:
     build: .
     ports:
       - "5000:5000"
     volumes:
       - ".:/app"
+    depends_on:
+      - kibana
+      - redis
     networks:
       - dev
+    env_file:
+      - .env_file
     environment:
-      - "BOILERPLATE_ENV: dev"
+      - "BOILERPLATE_ENV=dev"

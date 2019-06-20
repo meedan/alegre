@@ -1,41 +1,67 @@
 import unittest
 import json
 import math
-from google.cloud import translate
+import redis
+import os
+from flask import current_app as app
+from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
+from app.main.lib.langid import GoogleLangidProvider, MicrosoftLangidProvider
 
 class TestLangidBlueprint(BaseTestCase):
-    def test_langid(self):
-        client = translate.Client.from_service_account_json('./google_credentials.json')
-        result = client.detect_language([
-            'नमस्ते मेरा नाम करीम है',
-            'namaste mera naam kareem hai',
-            'हॅलो माझे नाव करीम आहे',
-            'হ্যালো আমার নাম কারিম',
-            'hyalo amara nama karim',
-            'હેલો, મારું નામ કરીમ છે',
-            'helo, marum nama karim che',
-            'ഹലോ എന്റെ പേര് കരീം ആണ്',
-            'வணக்கம் என் பெயர் கரிம்',
-            'vanakkam en peyar karim',
-            'హలో నా పేరు కరీం'
-        ])
-        self.assertEqual('hi', result[0]['language'])
-        self.assertEqual('hi', result[1]['language'])
-        self.assertEqual('mr', result[2]['language'])
-        self.assertEqual('bn', result[3]['language'])
-        self.assertEqual('bn', result[4]['language'])
-        self.assertEqual('gu', result[5]['language'])
-        self.assertEqual('gu', result[6]['language'])
-        self.assertEqual('ml', result[7]['language'])
-        self.assertEqual('ta', result[8]['language'])
-        self.assertEqual('ta', result[9]['language'])
-        self.assertEqual('te', result[10]['language'])
+    TESTS = [
+        { 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
+        { 'microsoft': 'en', 'google': 'hi', 'text': 'namaste mera naam Karim hai' },
+        { 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
+        { 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
+        { 'microsoft': 'id', 'google': 'bn', 'text': 'hyalo amara nama Karim' },
+        { 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
+        { 'microsoft': 'en', 'google': 'gu', 'text': 'helo, marum nama Karim che' },
+        { 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
+        { 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
+        { 'microsoft': 'fr', 'google': 'ta', 'text': 'vanakkam en peyar Karim' },
+        { 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
+        { 'microsoft': 'tl', 'google': 'tl', 'text': 'kamusta ang aking pangalan ay Karim' }
+    ]
+
+    def setUp(self):
+        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r.flushall()
+
+    @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
+    def test_langid_google(self):
+        for test in TestLangidBlueprint.TESTS:
+            result = GoogleLangidProvider.langid(test['text'])
+            self.assertEqual(test['google'], result['language'], test['text'])
+
+    @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
+    def test_langid_microsoft(self):
+        for test in TestLangidBlueprint.TESTS:
+            result = MicrosoftLangidProvider.langid(test['text'])
+            self.assertEqual(test['microsoft'], result['language'], test['text'])
 
     def test_langid_api(self):
-        with self.client:
+        response = self.client.post(
+            '/langid/',
+            data=json.dumps(dict(
+                text='Hello this is a test'
+            )),
+            content_type='application/json'
+        )
+        data = json.loads(response.data.decode())
+        self.assertEqual('en', data['language'])
+        self.assertTrue(math.isclose(1, data['confidence']))
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(200, response.status_code)
+
+    def test_langid_cache(self):
+        with patch('app.main.controller.langid_controller.LangidResource.langid', ) as mock_langid:
+            mock_langid.return_value = {
+                'language': 'en',
+                'confidence': 1.0
+            }
             response = self.client.post(
                 '/langid/',
                 data=json.dumps(dict(
@@ -43,12 +69,14 @@ class TestLangidBlueprint(BaseTestCase):
                 )),
                 content_type='application/json'
             )
-            data = json.loads(response.data.decode())
-            self.assertEqual('en', data['language'])
-            self.assertTrue(math.isclose(1, data['confidence']))
-            self.assertEqual('application/json', response.content_type)
-            self.assertEqual(200, response.status_code)
-
+            response = self.client.post(
+                '/langid/',
+                data=json.dumps(dict(
+                    text='Hello this is a test'
+                )),
+                content_type='application/json'
+            )
+            self.assertEqual(mock_langid.call_count, 1)
 
 if __name__ == '__main__':
     unittest.main()

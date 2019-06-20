@@ -3,7 +3,10 @@ elasticsearch/data/nodes
 *.db
 configurator
 google_credentials.json
+.env_file
 .coverage
 log
 *.sw*
 elasticsearch/es-script-cosine-scoring/target
+*.rdb
+.idea

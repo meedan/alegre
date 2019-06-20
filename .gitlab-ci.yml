@@ -15,7 +15,7 @@ test:
   stage: test
   script:
     - apk add --no-cache curl wget git py-pip
-    - pip install docker-compose
+    - pip install docker-compose==1.23.2
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
     - d=configurator/check/test/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
@@ -25,9 +25,6 @@ test:
     - docker-compose exec -T alegre bash -c "make test"
   after_script:
     - docker-compose exec -T alegre bash -c "coverage report"
-  except:
-    - develop
-    - master
 
 build_es_qa:
   image: docker:latest
@@ -45,7 +42,9 @@ build_es_qa:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build --build-arg STAGE=qa  -f elasticsearch/Dockerfile.production -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/qa/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+    - docker build -f elasticsearch/Dockerfile.production -t "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
@@ -67,6 +66,8 @@ build_kibana_qa:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/qa/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - docker build  -f kibana/Dockerfile.production -t "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
@@ -97,7 +98,7 @@ build_api_qa:
 
 
 deploy_qa:
-  image: python:3
+  image: python:3-alpine
   stage: deploy_qa
   tags:
     - meedan
@@ -107,12 +108,15 @@ deploy_qa:
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
+    - apk add --no-cache curl jq python py-pip git
     - pip install ecs-deploy==1.7.0
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - source configurator/check/qa/alegre/.env
     - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout -1
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL  --timeout -1
+    - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout -1
     - echo "new Image was deployed $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $QA_ELASTICSEARCH_URL -e qa-alegre-c PRODUCT $PRODUCT -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout -1
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $REDIS_HOST -e qa-alegre-c REDIS_PORT $REDIS_PORT -e qa-alegre-c REDIS_DATABASE $REDIS_DATABASE -e qa-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e qa-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL --timeout -1
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
@@ -122,7 +126,8 @@ build_es_live:
   services:
     - docker:dind
   tags:
-    - docker
+    - meedan
+    - meedan-labs
   stage: build_live
   variables:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -132,7 +137,9 @@ build_es_live:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build --build-arg STAGE=live  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/live/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+    - docker build  -f elasticsearch/Dockerfile.production -t "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
@@ -142,7 +149,8 @@ build_kibana_live:
   services:
     - docker:dind
   tags:
-    - docker
+    - meedan
+    - meedan-labs
   stage: build_live
   variables:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -153,6 +161,8 @@ build_kibana_live:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - d=configurator/check/live/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
     - docker build  -f kibana/Dockerfile.production -t "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"  .
     - docker push "$LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
   only:
@@ -163,7 +173,8 @@ build_api_live:
   services:
     - docker:dind
   tags:
-    - docker
+    - meedan
+    - meedan-labs
   stage: build_live
   variables:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -182,19 +193,25 @@ build_api_live:
 
 
 deploy_live:
-  image: python:3
+  image: python:3-alpine
   stage: deploy_live
+  tags:
+    - meedan
+    - meedan-labs
   variables:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
+    - apk add --no-cache curl jq python py-pip git
     - pip install ecs-deploy==1.7.0
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - source configurator/check/live/alegre/.env
     - ecs deploy ecs-live  live-alegre-es --image live-alegre-es-c $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
     - echo "new Image was deployed $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL  --timeout 3600
+    - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout 3600
     - echo "new Image was deployed $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $LIVE_ELASTICSEARCH_URL -e live-alegre-c PRODUCT $PRODUCT -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV --timeout 3600
+    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e live-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV  -e live-alegre-c REDIS_HOST $REDIS_HOST -e live-alegre-c REDIS_PORT $REDIS_PORT -e live-alegre-c REDIS_DATABASE $REDIS_DATABASE -e live-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e live-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL --timeout -1
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
