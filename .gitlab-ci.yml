@@ -111,7 +111,7 @@ deploy_qa:
     - apk add --no-cache curl jq python py-pip git
     - pip install ecs-deploy==1.7.0
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - source configurator/check/qa/alegre/.env
+    - source configurator/check/qa/alegre/.env_file
     - ecs deploy ecs-qa  qa-alegre-es --image qa-alegre-es-c $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout -1
     - echo "new Image was deployed $QA_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-qa  qa-alegre-kibana --image qa-alegre-kibana-c $QA_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout -1
@@ -206,10 +206,10 @@ deploy_live:
     - apk add --no-cache curl jq python py-pip git
     - pip install ecs-deploy==1.7.0
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - source configurator/check/live/alegre/.env
-    - ecs deploy ecs-live  live-alegre-es --image live-alegre-es-c $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout 3600
+    - source configurator/check/live/alegre/.env_file
+    - ecs deploy ecs-live  live-alegre-es --image live-alegre-es-c $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA --timeout -1
     - echo "new Image was deployed $LIVE_ECR_ES_BASE_URL:$CI_COMMIT_SHA"
-    - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout 3600
+    - ecs deploy ecs-live  live-alegre-kibana --image live-alegre-kibana-c $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA -e live-alegre-kibana-c ELASTICSEARCH_URL $ELASTICSEARCH_URL  --timeout -1
     - echo "new Image was deployed $LIVE_ECR_KIBANA_BASE_URL:$CI_COMMIT_SHA"
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e live-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV  -e live-alegre-c REDIS_HOST $REDIS_HOST -e live-alegre-c REDIS_PORT $REDIS_PORT -e live-alegre-c REDIS_DATABASE $REDIS_DATABASE -e live-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e live-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL --timeout -1
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
