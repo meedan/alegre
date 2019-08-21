@@ -22,14 +22,14 @@ class TestTranslationBlueprint(BaseTestCase):
             response = self.client.post(
                 '/mt/',
                 data=json.dumps({
-                  'text': 'borracha na oficina',
+                  'text': 'borracha en la oficina',
                   'from': 'es',
                   'to': 'en'
                 }),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual('drunk in office', result['text'])
+            self.assertEqual('drunk in the office', result['text'])
 
             response = self.client.post(
                 '/mt/',
