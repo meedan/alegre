@@ -25,6 +25,7 @@ test:
     - docker-compose exec -T alegre bash -c "make test"
   after_script:
     - docker-compose exec -T alegre bash -c "coverage report"
+  allow_failure: true
 
 build_es_qa:
   image: docker:latest
