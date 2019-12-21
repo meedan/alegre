@@ -54,7 +54,7 @@ build_live:
   tags:
     - meedan
     - meedan-labs
-  stage: build_qa
+  stage: build_live
   variables:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
@@ -64,7 +64,7 @@ build_live:
     - pip install awscli==1.16.201
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f docker/Dockerfile.production --cache-from "$LIVE_ECR_API_BASE_URL:latest" -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
+    - docker build -f docker/Dockerfile.production -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
     - docker push "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
