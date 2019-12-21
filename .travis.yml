@@ -4,6 +4,7 @@ before_install:
 - cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
 - docker-compose pull
 - docker-compose up -d
+- docker-compose logs -t -f &
 - wget -q --waitretry=5 --retry-connrefused -t 20 -T 10 -O - http://127.0.0.1:9200
 script:
 - docker-compose exec alegre bash -c "make test"
