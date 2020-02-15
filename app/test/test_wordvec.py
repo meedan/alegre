@@ -11,7 +11,7 @@ class TestWordvecBlueprint(BaseTestCase):
     def test_wordvec_api(self):
         with self.client:
             response = self.client.post(
-                '/wordvec/vector',
+                '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "this is a test"
                 }),
@@ -21,7 +21,7 @@ class TestWordvecBlueprint(BaseTestCase):
             vector = result['vector']
 
             response = self.client.post(
-                '/wordvec/similarity',
+                '/text/wordvec/similarity',
                 data=json.dumps({
                   "vector1": vector,
                   "vector2": vector
@@ -33,7 +33,7 @@ class TestWordvecBlueprint(BaseTestCase):
             self.assertEqual(1.0, similarity)
 
             response = self.client.post(
-                '/wordvec/vector',
+                '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "how to delete an invoice"
                 }),
@@ -43,7 +43,7 @@ class TestWordvecBlueprint(BaseTestCase):
             vector1 = result['vector']
 
             response = self.client.post(
-                '/wordvec/vector',
+                '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "purge an invoice"
                 }),
@@ -53,7 +53,7 @@ class TestWordvecBlueprint(BaseTestCase):
             vector2 = result['vector']
 
             response = self.client.post(
-                '/wordvec/similarity',
+                '/text/wordvec/similarity',
                 data=json.dumps({
                   "vector1": vector1,
                   "vector2": vector2

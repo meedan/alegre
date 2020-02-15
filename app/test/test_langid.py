@@ -43,8 +43,8 @@ class TestLangidBlueprint(BaseTestCase):
             self.assertEqual(test['microsoft'], result['language'], test['text'])
 
     def test_langid_api(self):
-        response = self.client.post(
-            '/langid/',
+        response = self.client.get(
+            '/text/langid/',
             data=json.dumps(dict(
                 text='Hello this is a test'
             )),
@@ -62,15 +62,15 @@ class TestLangidBlueprint(BaseTestCase):
                 'language': 'en',
                 'confidence': 1.0
             }
-            response = self.client.post(
-                '/langid/',
+            response = self.client.get(
+                '/text/langid/',
                 data=json.dumps(dict(
                     text='Hello this is a test'
                 )),
                 content_type='application/json'
             )
-            response = self.client.post(
-                '/langid/',
+            response = self.client.get(
+                '/text/langid/',
                 data=json.dumps(dict(
                     text='Hello this is a test'
                 )),

@@ -29,12 +29,12 @@ class GlossaryTermResource(Resource):
         }
 
 
-@api.route('/query')
+@api.route('/')
 class GlossaryQueryResource(Resource):
     @api.response(200, 'glossary successfully queried.')
     @api.doc('Make a glossary query')
     @api.expect(glossary_request, validate=True)
-    def post(self):
+    def get(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         result = es.search(
             body=request.json,

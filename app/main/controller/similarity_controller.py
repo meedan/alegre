@@ -5,7 +5,7 @@ from app.main import ds
 from ..lib.fields import JsonObject
 from ..lib.es_helpers import language_to_analyzer
 
-api = Namespace('similarity', description='similarity operations')
+api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or to query for similarity'),
     'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
@@ -43,12 +43,12 @@ class SimilarityResource(Resource):
         }
 
 
-@api.route('/query')
+@api.route('/')
 class SimilarityQueryResource(Resource):
     @api.response(200, 'similarity successfully queried.')
     @api.doc('Make a similarity query')
     @api.expect(similarity_request, validate=True)
-    def post(self):
+    def get(self):
         similarity_type = 'elasticsearch'
         if 'method' in request.json:
             similarity_type = request.json['method']

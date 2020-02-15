@@ -15,7 +15,7 @@ class LangidResource(Resource):
     @api.response(200, 'langid successfully queried.')
     @api.doc('Identify the language of a text document')
     @api.expect(langid_request, validate=True)
-    def post(self):
+    def get(self):
         # Read from cache first.
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
         key = 'langid:' + hashlib.md5(request.json['text'].encode('utf-8')).hexdigest()

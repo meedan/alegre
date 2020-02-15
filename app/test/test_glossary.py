@@ -92,12 +92,12 @@ class TestGlossaryBlueprint(BaseTestCase):
         with self.client:
             for term in json.load(open('./app/test/data/glossary.json')):
                 del term['_type']
-                response = self.client.post('/glossary/', data=json.dumps(term), content_type='application/json')
+                response = self.client.post('/text/glossary/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual('created', result['result']['result'])
 
-            response = self.client.post(
-                '/glossary/query',
+            response = self.client.get(
+                '/text/glossary/',
                 data=json.dumps({
                   "query": {
                     "simple_query_string": {

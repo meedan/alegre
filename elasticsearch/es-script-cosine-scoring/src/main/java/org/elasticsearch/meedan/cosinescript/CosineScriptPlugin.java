@@ -118,7 +118,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           double value = 0.0d;
                           try {
                             String alegreUrl = System.getenv().get("ALEGRE_URL");
-                            URL url = new URL(alegreUrl + "/wordvec/similarity");
+                            URL url = new URL(alegreUrl + "/text/wordvec/similarity");
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setDoOutput(true);
                             conn.setRequestMethod("POST");
