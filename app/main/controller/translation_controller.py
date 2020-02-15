@@ -15,7 +15,7 @@ class TranslationResource(Resource):
     @api.response(200, 'text successfully translated.')
     @api.doc('Machine-translate a text document')
     @api.expect(translation_request, validate=True)
-    def post(self):
+    def get(self):
         client = translate.Client.from_service_account_json('./google_credentials.json')
         source_language = None
         if 'from' in request.json:

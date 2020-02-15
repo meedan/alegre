@@ -159,7 +159,6 @@ class TestSimilaryBlueprint(BaseTestCase):
             content_type='application/json'
         )
         result = json.loads(response.data.decode())
-        print(result)
         self.assertEqual(1, len(result['result']))
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)

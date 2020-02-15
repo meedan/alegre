@@ -19,7 +19,7 @@ class TestTranslationBlueprint(BaseTestCase):
 
     def test_translation_api(self):
         with self.client:
-            response = self.client.post(
+            response = self.client.get(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'borracha en la oficina',
@@ -31,7 +31,7 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('drunk in the office', result['text'])
 
-            response = self.client.post(
+            response = self.client.get(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'borracha na oficina',
@@ -43,7 +43,7 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('rubber in the workshop', result['text'])
 
-            response = self.client.post(
+            response = self.client.get(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'I am testing this',
