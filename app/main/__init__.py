@@ -6,6 +6,9 @@ from elasticsearch import Elasticsearch, TransportError
 from werkzeug.contrib.fixers import ProxyFix
 from gensim.models.keyedvectors import KeyedVectors
 from .lib.docsim import DocSim
+import sqlalchemy
+from sqlalchemy.schema import DDL
+from sqlalchemy_utils import database_exists, create_database
 import json
 import os.path
 from .config import config_by_name
@@ -64,5 +67,27 @@ def create_app(config_name):
     body=json.load(open('./elasticsearch/alegre_similarity.json')),
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
+
+  # Create
+  with app.app_context():
+    if not database_exists(db.engine.url):
+      create_database(db.engine.url)
+
+    if config_name == 'test':
+      db.drop_all()
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION bit_count(value bigint)
+        RETURNS integer
+        AS $$ SELECT length(replace(value::bit(64)::text,'0','')); $$
+        LANGUAGE SQL IMMUTABLE STRICT;
+      """)
+    )
+
+    db.create_all()
+
 
   return app

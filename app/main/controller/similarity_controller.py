@@ -3,7 +3,7 @@ from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 from app.main import ds
 from ..lib.fields import JsonObject
-from ..lib.es_helpers import language_to_analyzer
+from ..lib.elasticsearch import language_to_analyzer
 
 api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
@@ -45,8 +45,8 @@ class SimilarityResource(Resource):
 
 @api.route('/')
 class SimilarityQueryResource(Resource):
-    @api.response(200, 'similarity successfully queried.')
-    @api.doc('Make a similarity query')
+    @api.response(200, 'text similarity successfully queried.')
+    @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
     def get(self):
         similarity_type = 'elasticsearch'

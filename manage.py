@@ -4,8 +4,12 @@ import unittest
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
-from app.main import create_app, db
 from app import blueprint
+from app.main import create_app, db
+from app.main.model import image
+
+from app.main.lib.imagehash import compute_phash_int
+from PIL import Image
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
 app.register_blueprint(blueprint)
@@ -27,6 +31,12 @@ def test():
   tests = unittest.TestLoader().discover('app/test', pattern='test*.py')
   result = unittest.TextTestRunner(verbosity=2).run(tests)
   return 0 if result.wasSuccessful() else 1
+
+@manager.command
+def phash(path):
+  im = Image.open(path).convert('RGB')
+  phash = compute_phash_int(im)
+  print(phash)
 
 if __name__ == '__main__':
   manager.run()

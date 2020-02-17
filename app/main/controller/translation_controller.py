@@ -3,7 +3,7 @@ from flask_restplus import Resource, Namespace, fields
 from ..lib.fields import JsonObject
 from google.cloud import translate
 
-api = Namespace('translation', description='machine translations')
+api = Namespace('translation', description='machine translation operations')
 translation_request = api.model('translation_request', {
     'text': fields.String(required=True, description='text to be translated'),
     'from': fields.String(required=False, description='source language'),
