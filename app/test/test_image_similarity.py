@@ -3,10 +3,12 @@ import json
 from flask import current_app as app
 import numpy as np
 from PIL import Image
+from sqlalchemy import text
 
-from app.main import db, ds
+from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.imagehash import compute_phash_int
+from app.main.model.image import ImageModel
 
 class TestImageSimilaryBlueprint(BaseTestCase):
   def test_image_phash(self):
@@ -24,6 +26,9 @@ class TestImageSimilaryBlueprint(BaseTestCase):
     result = db.session.execute(text("SELECT BIT_COUNT(:p) AS test_count"), { 'p': p }).first()
     self.assertEqual(result['test_count'], 28)
 
+  def test_image_fetch(self):
+    image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png')
+    self.assertEqual(image.phash, 45655524591978137)
 
 if __name__ == '__main__':
   unittest.main()

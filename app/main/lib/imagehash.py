@@ -1,7 +1,10 @@
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 import imagehash
 import struct
+import json
+import hashlib
 import numpy as np
+from sqlalchemy import text
 
 def ensure_pil(im):
   """Ensure image is Pillow format"""
@@ -61,3 +64,37 @@ def compute_whash_b64(im):
     :returns: Imagehash.ImageHash
   """
   return lambda im: imagehash.whash(ensure_pil(im), mode='db4')
+
+def search_by_phash(session, phash, threshold=6, limit=1, offset=0, filter={}):
+  cmd = """
+    SELECT * FROM (
+      SELECT images.*, BIT_COUNT(phash # :phash)
+      AS hamming_distance FROM images
+    ) f
+    WHERE hamming_distance < :threshold
+    AND context @> (:filter)::jsonb
+    ORDER BY hamming_distance ASC
+    LIMIT :limit
+    OFFSET :offset
+  """
+  matches = session.execute(text(cmd), {
+    'phash': phash,
+    'threshold': threshold,
+    'limit': limit,
+    'offset': offset,
+    'filter': json.dumps(filter)
+  }).fetchall()
+  keys = ('id', 'sha256', 'phash', 'ext', 'url', 'context', 'score')
+  results = [ dict(zip(keys, values)) for values in matches ]
+  return results
+
+def sha256_stream(stream, block_size=65536):
+  """Generates SHA256 hash for a file stream (from Flask)
+  :param fp_in: (FileStream) stream object
+  :param block_size: (int) byte size of block
+  :returns: (str) hash
+  """
+  sha256 = hashlib.sha256()
+  for block in iter(lambda: stream.read(block_size), b''):
+    sha256.update(block)
+  return sha256.hexdigest()
