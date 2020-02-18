@@ -3,7 +3,6 @@ from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
-from ..lib.fields import JsonObject
 from app.main import ds
 
 api = Namespace('wordvec', description='word vector operations')

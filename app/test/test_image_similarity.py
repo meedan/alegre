@@ -30,5 +30,27 @@ class TestImageSimilaryBlueprint(BaseTestCase):
     image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png')
     self.assertEqual(image.phash, 45655524591978137)
 
+  def test_image_api(self):
+    url = 'file:///app/app/test/data/lenna-512.png'
+    with self.client:
+      response = self.client.post('/image/similarity/', data=json.dumps({
+        'url': url,
+        'threshold': 0,
+        'context': {}
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertEqual(True, result['success'])
+      self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
+
+      url = 'file:///app/app/test/data/lenna-512.jpg'
+      response = self.client.get('/image/similarity/', data=json.dumps({
+        'url': url,
+        'threshold': 0,
+        'context': {}
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertEqual(1, len(result['result']))
+
+
 if __name__ == '__main__':
   unittest.main()

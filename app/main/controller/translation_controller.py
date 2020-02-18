@@ -1,6 +1,5 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from ..lib.fields import JsonObject
 from google.cloud import translate
 
 api = Namespace('translation', description='machine translation operations')
