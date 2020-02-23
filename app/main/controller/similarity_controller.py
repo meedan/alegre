@@ -126,7 +126,6 @@ class SimilarityResource(Resource):
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
-        result = result['hits']['hits']
         return {
-            'result': result
+            'result': result['hits']['hits']
         }

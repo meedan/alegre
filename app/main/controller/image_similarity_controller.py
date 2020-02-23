@@ -9,7 +9,7 @@ from sqlalchemy import text
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
   'url': fields.String(required=True, description='image URL to be stored or queried for similarity'),
-  'threshold': fields.Float(required=False, default=1.0, description='minimum score to consider, between 0 and 64 (defaults to 1)'),
+  'threshold': fields.Integer(required=False, default=1, description='minimum score to consider, between 0 and 64 (defaults to 1)'),
   'context': JsonObject(required=False, description='context')
 })
 

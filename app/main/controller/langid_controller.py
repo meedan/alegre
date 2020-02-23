@@ -35,8 +35,7 @@ class LangidResource(Resource):
             r.set(key, json.dumps(result))
 
         return {
-            'language': result['language'],
-            'confidence': result['confidence']
+            'result': result
         }
 
     def langid(self, text):
