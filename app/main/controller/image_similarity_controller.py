@@ -34,12 +34,12 @@ class ImageSimilarityResource(Resource):
   @api.expect(image_similarity_request, validate=True)
   def get(self):
     image = ImageModel.from_url(request.json['url'], {})
-    result = self.search_by_phash(image.phash, request.json['threshold'], request.json['context'], 1, 0)
+    result = self.search_by_phash(image.phash, request.json['threshold'], request.json['context'])
     return {
       'result': result
     }
 
-  def search_by_phash(self, phash, threshold, filter, limit, offset):
+  def search_by_phash(self, phash, threshold, filter):
     cmd = """
       SELECT * FROM (
         SELECT images.*, BIT_COUNT(phash # :phash)
@@ -48,15 +48,11 @@ class ImageSimilarityResource(Resource):
       WHERE score <= :threshold
       AND context @> (:filter)::jsonb
       ORDER BY score ASC
-      LIMIT :limit
-      OFFSET :offset
     """
     matches = db.session.execute(text(cmd), {
       'phash': phash,
       'threshold': threshold,
-      'filter': json.dumps(filter),
-      'limit': limit,
-      'offset': offset
+      'filter': json.dumps(filter)
     }).fetchall()
     keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
     results = [ dict(zip(keys, values)) for values in matches ]
