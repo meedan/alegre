@@ -35,7 +35,7 @@ def test():
 def phash(path):
   im = Image.open(path).convert('RGB')
   phash = compute_phash_int(im)
-  print(phash)
+  print(phash, "{0:b}".format(phash), sep=" ")
 
 if __name__ == '__main__':
   manager.run()
