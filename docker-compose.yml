@@ -51,3 +51,5 @@ services:
       - .env_file
     environment:
       - "BOILERPLATE_ENV=dev"
+      - "FLASK_ENV=development"
+      - "FLASK_DEBUG=true"
