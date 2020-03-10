@@ -1,10 +1,9 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from ..lib.fields import JsonObject
 from google.cloud import translate
 
-api = Namespace('mt', description='machine translations')
-mt_request = api.model('mt_request', {
+api = Namespace('translation', description='machine translation operations')
+translation_request = api.model('translation_request', {
     'text': fields.String(required=True, description='text to be translated'),
     'from': fields.String(required=False, description='source language'),
     'to': fields.String(required=True, description='target language'),
@@ -14,8 +13,8 @@ mt_request = api.model('mt_request', {
 class TranslationResource(Resource):
     @api.response(200, 'text successfully translated.')
     @api.doc('Machine-translate a text document')
-    @api.expect(mt_request, validate=True)
-    def post(self):
+    @api.expect(translation_request, validate=True)
+    def get(self):
         client = translate.Client.from_service_account_json('./google_credentials.json')
         source_language = None
         if 'from' in request.json:

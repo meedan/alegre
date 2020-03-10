@@ -42,7 +42,7 @@ deploy_qa:
     - pip install ecs-deploy==1.7.0
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
     - source configurator/check/qa/alegre/.env_file
-    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $REDIS_HOST -e qa-alegre-c REDIS_PORT $REDIS_PORT -e qa-alegre-c REDIS_DATABASE $REDIS_DATABASE -e qa-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e qa-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL --timeout 3600
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $REDIS_HOST -e qa-alegre-c REDIS_PORT $REDIS_PORT -e qa-alegre-c REDIS_DATABASE $REDIS_DATABASE -e qa-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e qa-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL -e qa-alegre-c DATABASE_NAME $DATABASE_NAME -e qa-alegre-c DATABASE_HOST $DATABASE_HOST -e qa-alegre-c DATABASE_USER $DATABASE_USER -e qa-alegre-c DATABASE_PASS $DATABASE_PASS --timeout 3600
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop

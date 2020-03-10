@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
-from ..lib.fields import JsonObject
+from app.main.lib.fields import JsonObject
 
 api = Namespace('glossary', description='glossary operations')
 glossary_request = api.model('glossary_request', {
@@ -28,13 +28,10 @@ class GlossaryTermResource(Resource):
             'result': result
         }
 
-
-@api.route('/query')
-class GlossaryQueryResource(Resource):
     @api.response(200, 'glossary successfully queried.')
     @api.doc('Make a glossary query')
     @api.expect(glossary_request, validate=True)
-    def post(self):
+    def get(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         result = es.search(
             body=request.json,

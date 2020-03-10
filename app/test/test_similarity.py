@@ -43,12 +43,12 @@ class TestSimilaryBlueprint(BaseTestCase):
                 del term['_type']
                 term['text'] = term['content']
                 del term['content']
-                response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
+                response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'this is a test'
                 }),
@@ -57,8 +57,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(3, len(result['result']))
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'something different'
                 }),
@@ -67,8 +67,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -81,8 +81,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John'
                 }),
@@ -97,12 +97,12 @@ class TestSimilaryBlueprint(BaseTestCase):
               { 'text': 'नमस्ते मेरा नाम करीम है' },
               { 'text': 'हॅलो माझे नाव करीम आहे' }
             ]:
-              response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
+              response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
               result = json.loads(response.data.decode())
               self.assertEqual(True, result['success'])
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
                   'language': 'en'
@@ -112,8 +112,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-            response = self.client.post(
-                '/similarity/query',
+            response = self.client.get(
+                '/text/similarity/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
                   'language': 'hi'
@@ -127,12 +127,12 @@ class TestSimilaryBlueprint(BaseTestCase):
     def test_wordvec_similarity_api(self):
         with self.client:
             term = { 'text': 'how to delete an invoice', 'method': 'wordvec', 'context': { 'dbid': 54 } }
-            response = self.client.post('/similarity/', data=json.dumps(term), content_type='application/json')
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
-        response = self.client.post(
-            '/similarity/query',
+        response = self.client.get(
+            '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
               'context': {
@@ -147,8 +147,8 @@ class TestSimilaryBlueprint(BaseTestCase):
         similarity = ds.cosine_sim(vector1, vector2)
         self.assertGreater(similarity, 0.7)
 
-        response = self.client.post(
-            '/similarity/query',
+        response = self.client.get(
+            '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
               'method': 'wordvec',
@@ -163,8 +163,8 @@ class TestSimilaryBlueprint(BaseTestCase):
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
-        response = self.client.post(
-            '/similarity/query',
+        response = self.client.get(
+            '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
               'method': 'wordvec',

@@ -10,3 +10,4 @@ log
 elasticsearch/es-script-cosine-scoring/target
 *.rdb
 .idea
+data/model.txt

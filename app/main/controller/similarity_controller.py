@@ -2,12 +2,12 @@ from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 from app.main import ds
-from ..lib.fields import JsonObject
-from ..lib.es_helpers import language_to_analyzer
+from app.main.lib.fields import JsonObject
+from app.main.lib.elasticsearch import language_to_analyzer
 
-api = Namespace('similarity', description='similarity operations')
+api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
-    'text': fields.String(required=True, description='text to be stored or to query for similarity'),
+    'text': fields.String(required=True, description='text to be stored or queried for similarity'),
     'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0 and 1 (defaults to 0.7)'),
@@ -42,13 +42,10 @@ class SimilarityResource(Resource):
             'success': success
         }
 
-
-@api.route('/query')
-class SimilarityQueryResource(Resource):
-    @api.response(200, 'similarity successfully queried.')
-    @api.doc('Make a similarity query')
+    @api.response(200, 'text similarity successfully queried.')
+    @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
-    def post(self):
+    def get(self):
         similarity_type = 'elasticsearch'
         if 'method' in request.json:
             similarity_type = request.json['method']
@@ -129,7 +126,6 @@ class SimilarityQueryResource(Resource):
             doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
-        result = result['hits']['hits']
         return {
-            'result': result
+            'result': result['hits']['hits']
         }
