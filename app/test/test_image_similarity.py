@@ -60,7 +60,7 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       url = 'file:///app/app/test/data/lenna-512.jpg'
       response = self.client.get('/image/similarity/', data=json.dumps({
         'url': url,
-        'threshold': 0,
+        'threshold': 1.0,
         'context': {}
       }), content_type='application/json')
       result = json.loads(response.data.decode())
@@ -69,7 +69,7 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       # Test querying with context.
       response = self.client.get('/image/similarity/', data=json.dumps({
         'url': url,
-        'threshold': 0,
+        'threshold': 1.0,
         'context': {
           'team_id': 1
         }
@@ -81,16 +81,15 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       url = 'file:///app/app/test/data/lenna-256.png'
       response = self.client.get('/image/similarity/', data=json.dumps({
         'url': url,
-        'threshold': 0,
+        'threshold': 1.0,
         'context': {}
       }), content_type='application/json')
       result = json.loads(response.data.decode())
       self.assertEqual(0, len(result['result']))
       response = self.client.get('/image/similarity/', data=json.dumps({
         'url': url,
-        'threshold': 5,
         'context': {}
-      }), content_type='application/json')
+      }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
       result = json.loads(response.data.decode())
       self.assertEqual(2, len(result['result']))
 

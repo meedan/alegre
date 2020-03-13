@@ -9,7 +9,7 @@ from sqlalchemy import text
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
   'url': fields.String(required=True, description='image URL to be stored or queried for similarity'),
-  'threshold': fields.Integer(required=False, default=1, description='minimum score to consider, between 0 and 64 (defaults to 1)'),
+  'threshold': fields.Float(required=False, default=0.9, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
   'context': JsonObject(required=False, description='context')
 })
 
@@ -34,7 +34,10 @@ class ImageSimilarityResource(Resource):
   @api.expect(image_similarity_request, validate=True)
   def get(self):
     image = ImageModel.from_url(request.json['url'], {})
-    result = self.search_by_phash(image.phash, request.json['threshold'], request.json['context'])
+    threshold = 0.9
+    if 'threshold' in request.json:
+      threshold = request.json['threshold']
+    result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
     return {
       'result': result
     }

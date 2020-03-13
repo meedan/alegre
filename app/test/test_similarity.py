@@ -84,7 +84,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/similarity/',
                 data=json.dumps({
-                  'text': 'Magnitude 4.5 quake strikes near Fort St. John'
+                  'text': 'Magnitude 4.5 quake strikes near Fort St. John',
+                  'threshold': 0.7
                 }),
                 content_type='application/json'
             )
@@ -152,6 +153,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             data=json.dumps({
               'text': 'purge an invoice',
               'method': 'wordvec',
+              'threshold': 0.7,
               'context': {
                 'dbid': 54
               }
