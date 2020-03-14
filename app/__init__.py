@@ -3,6 +3,7 @@
 from flask_restplus import Api
 from flask import Blueprint
 
+from .main.controller.healthcheck_controller import api as healthcheck_ns
 from .main.controller.langid_controller import api as langid_ns
 from .main.controller.glossary_controller import api as glossary_ns
 from .main.controller.similarity_controller import api as similarity_ns
@@ -18,6 +19,7 @@ api = Api(blueprint,
           description='A linguistic service for multilingual apps'
           )
 
+api.add_namespace(healthcheck_ns, path='/healthcheck')
 api.add_namespace(langid_ns, path='/text/langid')
 api.add_namespace(glossary_ns, path='/text/glossary')
 api.add_namespace(similarity_ns, path='/text/similarity')
