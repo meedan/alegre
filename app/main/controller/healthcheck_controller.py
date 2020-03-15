@@ -62,4 +62,4 @@ class HealthcheckResource(Resource):
     except Exception as e:
       result['LANGID'] = '%s: %s' % (app.config['PROVIDER_LANGID'].title() + 'LangidProvider', str(e))
 
-    return result, 200 if all(x and type(x) == type(True) for x in result.values()) else 500
+    return { 'result': result }, 200 if all(x and type(x) == type(True) for x in result.values()) else 500
