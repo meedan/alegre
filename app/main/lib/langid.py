@@ -7,7 +7,11 @@ class GoogleLangidProvider:
     @staticmethod
     def langid(text):
         client = translate.Client.from_service_account_json('./google_credentials.json')
-        return client.detect_language([text])[0]
+        response = client.detect_language([text])
+        return {
+          'result': response[0],
+          'raw': response
+        }
 
 class MicrosoftLangidProvider:
     @staticmethod
@@ -22,8 +26,10 @@ class MicrosoftLangidProvider:
             "documents": [{ "id": "1", "text": text }]
           }
         ).json()
-        result = response['documents'][0]['detectedLanguages'][0]
         return {
-          'language': result['iso6391Name'],
-          'confidence': result['score']
+          'result': {
+            'language': response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
+            'confidence': response['documents'][0]['detectedLanguages'][0]['score']
+          },
+          'raw': response
         }

@@ -7,7 +7,7 @@ from sqlalchemy import text
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.imagehash import compute_phash_int
+from app.main.lib.image_hash import compute_phash_int
 from app.main.model.image import ImageModel
 
 class TestImageSimilaryBlueprint(BaseTestCase):
