@@ -8,12 +8,20 @@ class GoogleLangidProvider:
   @staticmethod
   def langid(text):
     client = translate.Client.from_service_account_json('./google_credentials.json')
-    return client.detect_language([text])[0]
+    response = client.detect_language([text])
+    return {
+      'result': response[0],
+      'raw': response
+    }
 
   @staticmethod
   def languages():
     client = translate.Client.from_service_account_json('./google_credentials.json')
-    return client.get_languages()
+    response = client.get_languages()
+    return {
+      'result': response,
+      'raw': response
+    }
 
   @staticmethod
   def test():
@@ -36,10 +44,12 @@ class MicrosoftLangidProvider:
     ).json()
     if 'error' in response:
       raise Exception(response['error'])
-    result = response['documents'][0]['detectedLanguages'][0]
     return {
-      'language': result['iso6391Name'],
-      'confidence': result['score']
+      'result': {
+        'language': response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
+        'confidence': response['documents'][0]['detectedLanguages'][0]['score']
+      },
+      'raw': response
     }
 
   @staticmethod

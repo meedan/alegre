@@ -35,13 +35,13 @@ class TestLangidBlueprint(BaseTestCase):
     def test_langid_google(self):
         for test in TestLangidBlueprint.TESTS:
             result = GoogleLangidProvider.langid(test['text'])
-            self.assertEqual(test['google'], result['language'], test['text'])
+            self.assertEqual(test['google'], result['result']['language'], test['text'])
 
     @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
     def test_langid_microsoft(self):
         for test in TestLangidBlueprint.TESTS:
             result = MicrosoftLangidProvider.langid(test['text'])
-            self.assertEqual(test['microsoft'], result['language'], test['text'])
+            self.assertEqual(test['microsoft'], result['result']['language'], test['text'])
 
     def test_langid_api(self):
         response = self.client.get(
@@ -51,17 +51,19 @@ class TestLangidBlueprint(BaseTestCase):
             )),
             content_type='application/json'
         )
-        data = json.loads(response.data.decode())
-        self.assertEqual('en', data['result']['language'])
-        self.assertTrue(math.isclose(1, data['result']['confidence']))
+        result = json.loads(response.data.decode())
+        self.assertEqual('en', result['result']['language'])
+        self.assertTrue(math.isclose(1, result['result']['confidence']))
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
 
     def test_langid_cache(self):
         with patch('app.main.controller.langid_controller.LangidResource.langid', ) as mock_langid:
             mock_langid.return_value = {
-                'language': 'en',
-                'confidence': 1.0
+                'result': {
+                    'language': 'en',
+                    'confidence': 1.0
+                }
             }
             response = self.client.get(
                 '/text/langid/',

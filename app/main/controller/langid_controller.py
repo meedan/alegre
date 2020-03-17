@@ -29,14 +29,12 @@ class LangidResource(Resource):
             result = self.langid(request.json['text'])
 
             # Special case: Convert Tagalog to Filipino.
-            if result['language'] == 'tl':
-                result['language'] = 'fil'
+            if result['result']['language'] == 'tl':
+                result['result']['language'] = 'fil'
 
             r.set(key, json.dumps(result))
 
-        return {
-            'result': result
-        }
+        return result
 
     def langid(self, text):
         # In module `app.main.lib.langid`,

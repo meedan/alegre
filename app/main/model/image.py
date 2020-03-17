@@ -4,7 +4,7 @@ from PIL import Image
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
-from app.main.lib.imagehash import compute_phash_int, sha256_stream
+from app.main.lib.image_hash import compute_phash_int, sha256_stream
 
 class ImageModel(db.Model):
   """ Model for storing image related details """
