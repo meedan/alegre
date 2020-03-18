@@ -27,6 +27,7 @@ class TestLangidBlueprint(BaseTestCase):
     ]
 
     def setUp(self):
+        super().setUp()
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
         r.flushall()
 
