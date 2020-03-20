@@ -25,7 +25,7 @@ class HealthcheckResource(Resource):
 
     # Elasticsearch
     try:
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'], sniff_on_start=True)
+      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     except Exception as e:
       result['ELASTICSEARCH'] = str(e)
     else:
