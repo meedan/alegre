@@ -7,4 +7,4 @@ set -o allexport
 [[ -f .env_file ]] && source .env_file
 set +o allexport
 
-gunicorn -w 1 -b 0.0.0.0:${ALEGRE_PORT} --access-logfile - wsgi:app
+gunicorn -w 1 -b 0.0.0.0:${ALEGRE_PORT} --access-logfile - --error-logfile - wsgi:app
