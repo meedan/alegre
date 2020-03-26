@@ -10,23 +10,12 @@ MAINTAINER sysops@meedan.com
 ENV DEPLOYUSER=alegre \
     DEPLOYDIR=/app \
     GITREPO=git@github.com:meedan/alegre.git \
-    PRODUCT=bridge \
+    PRODUCT=check \
     APP=alegre \
     TERM=xterm
 
 COPY ./docker/bin/* /opt/bin/
 RUN chmod 755 /opt/bin/*.sh
-
-#
-# APP CONFIG
-#
-
-# nginx for alegre
-RUN apt-get update && apt-get install nginx wget unzip maven default-jdk -y
-COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
-RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
-    && rm /etc/nginx/sites-enabled/default
-RUN mkdir /var/www/files
 
 WORKDIR /app
 
@@ -35,20 +24,6 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-# plugin
-RUN cd /app/elasticsearch/es-script-cosine-scoring && \
-    mvn clean install && \
-    cp target/releases/meedan-cosine-0.0.1.zip /var/www/files/meedan-cosine-0.0.1.zip && \
-    cd -
-
-# model
-# RUN echo 'Downloading and converting model...' && \
-#    cd /app/data && \
-#    wget https://nlp.stanford.edu/data/glove.6B.zip --no-check-certificate && \
-#    unzip glove.6B.zip && \
-#    python convert-glove-to-gensim.py /app/data/glove.6B.300d.txt /app/data/model.txt && \
-#    cd -
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]

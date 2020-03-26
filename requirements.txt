@@ -31,6 +31,7 @@ google-cloud-translate==2.0.1
 google-cloud-vision==1.0.0
 googleapis-common-protos==1.51.0
 grpcio==1.27.2
+gunicorn==20.0.4
 idna==2.7
 ImageHash==4.0
 itsdangerous==0.24
