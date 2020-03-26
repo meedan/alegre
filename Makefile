@@ -8,3 +8,5 @@ wait:
 	until curl --silent -XGET --fail $(ELASTICSEARCH_URL); do printf '.'; sleep 1; done
 requirements:
 	pip freeze | grep -v 'sm==2.0.0' > requirements.txt
+gunicorn: wait
+	gunicorn -w 1 -b 0.0.0.0:$(ALEGRE_PORT) wsgi:app

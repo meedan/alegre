@@ -7,5 +7,4 @@ set -o allexport
 [[ -f .env_file ]] && source .env_file
 set +o allexport
 
-make run &
-nginx -g 'daemon off;'
+gunicorn -w 1 -b 0.0.0.0:${ALEGRE_PORT} wsgi:app
