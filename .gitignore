@@ -11,3 +11,6 @@ elasticsearch/es-script-cosine-scoring/target
 *.rdb
 .idea
 data/model.txt
+elasticsearch/elasticsearch.yml
+elasticsearch/jvm.options
+kibana/kibana.yml
