@@ -14,7 +14,7 @@ ENV DEPLOYUSER=alegre \
     APP=alegre \
     TERM=xterm
 
-COPY ./docker/bin/* /opt/bin/
+COPY ./production/bin/* /opt/bin/
 RUN chmod 755 /opt/bin/*.sh
 
 WORKDIR /app
