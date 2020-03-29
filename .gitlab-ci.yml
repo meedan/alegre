@@ -21,7 +21,7 @@ build_api_qa:
     - pip install awscli==1.16.201
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f docker/Dockerfile.production --cache-from "$QA_ECR_API_BASE_URL:latest" -t "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
+    - docker build -f production/Dockerfile --cache-from "$QA_ECR_API_BASE_URL:latest" -t "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
     - docker push "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
@@ -64,7 +64,7 @@ build_live:
     - pip install awscli==1.16.201
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f docker/Dockerfile.production -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
+    - docker build -f production/Dockerfile -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
     - docker push "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
