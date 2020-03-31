@@ -1,4 +1,4 @@
-FROM maven:latest as maven
+FROM maven:3-jdk-11 as maven
 COPY ./es-script-cosine-scoring /tmp/es-script-cosine-scoring
 RUN cd /tmp/es-script-cosine-scoring && mvn clean install
 

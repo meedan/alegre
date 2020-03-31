@@ -10,7 +10,7 @@ similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or queried for similarity'),
     'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
-    'threshold': fields.Float(required=False, description='minimum score to consider, between 0 and 1 (defaults to 0.7)'),
+    'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=False, description='context')
 })
 
@@ -20,12 +20,12 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        similarity_type = 'elasticsearch'
+        method = 'elasticsearch'
         if 'method' in request.json:
-            similarity_type = request.json['method']
+            method = request.json['method']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
-        if similarity_type == 'wordvec':
+        if method == 'wordvec':
             body['vector'] = ds.vectorize(request.json['text']).tolist()
         if 'context' in request.json:
             body['context'] = request.json['context']
@@ -46,17 +46,17 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
     def get(self):
-        similarity_type = 'elasticsearch'
+        method = 'elasticsearch'
         if 'method' in request.json:
-            similarity_type = request.json['method']
+            method = request.json['method']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
 
-        threshold = 0.7
+        threshold = 0.9
         if 'threshold' in request.json:
             threshold = request.json['threshold']
 
-        if similarity_type == 'elasticsearch':
+        if method == 'elasticsearch':
             conditions = [
                 {
                     'match': {
@@ -71,7 +71,7 @@ class SimilarityResource(Resource):
                 conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
                 del conditions[0]['match']['content']['minimum_should_match']
 
-        elif similarity_type == 'wordvec':
+        elif method == 'wordvec':
             vector = ds.vectorize(request.json['text']).tolist()
             conditions = [
                 {

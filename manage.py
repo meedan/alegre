@@ -8,7 +8,7 @@ from app import blueprint
 from app.main import create_app, db
 from app.main.model import image
 
-from app.main.lib.imagehash import compute_phash_int
+from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')

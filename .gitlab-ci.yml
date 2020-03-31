@@ -21,7 +21,7 @@ build_api_qa:
     - pip install awscli==1.16.201
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f docker/Dockerfile.production --cache-from "$QA_ECR_API_BASE_URL:latest" -t "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
+    - docker build -f production/Dockerfile --cache-from "$QA_ECR_API_BASE_URL:latest" -t "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
     - docker push "$QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
@@ -64,7 +64,7 @@ build_live:
     - pip install awscli==1.16.201
     - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f docker/Dockerfile.production -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
+    - docker build -f production/Dockerfile -t "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA" -t "$QA_ECR_API_BASE_URL:latest" .
     - docker push "$LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
@@ -85,7 +85,7 @@ deploy_live:
     - pip install ecs-deploy==1.7.0
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
     - source configurator/check/live/alegre/.env_file
-    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA -e live-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e live-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e live-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV  -e live-alegre-c REDIS_HOST $REDIS_HOST -e live-alegre-c REDIS_PORT $REDIS_PORT -e live-alegre-c REDIS_DATABASE $REDIS_DATABASE -e live-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e live-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL --timeout 3600
+    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 3600
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master

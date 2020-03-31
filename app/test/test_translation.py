@@ -1,6 +1,6 @@
 import unittest
 import json
-from google.cloud import translate
+from google.cloud import translate_v2 as translate
 
 from app.main import db
 from app.test.base import BaseTestCase

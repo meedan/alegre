@@ -10,23 +10,12 @@ MAINTAINER sysops@meedan.com
 ENV DEPLOYUSER=alegre \
     DEPLOYDIR=/app \
     GITREPO=git@github.com:meedan/alegre.git \
-    PRODUCT=bridge \
+    PRODUCT=check \
     APP=alegre \
     TERM=xterm
 
-COPY ./docker/bin/* /opt/bin/
+COPY ./production/bin/* /opt/bin/
 RUN chmod 755 /opt/bin/*.sh
-
-#
-# APP CONFIG
-#
-
-# nginx for alegre
-RUN apt-get update && apt-get install nginx wget unzip maven default-jdk -y
-COPY docker/config/nginx.conf /etc/nginx/sites-available/alegre
-RUN ln -s /etc/nginx/sites-available/alegre /etc/nginx/sites-enabled/alegre \
-    && rm /etc/nginx/sites-enabled/default
-RUN mkdir /var/www/files
 
 WORKDIR /app
 

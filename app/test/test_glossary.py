@@ -10,6 +10,7 @@ class TestGlossaryBlueprint(BaseTestCase):
     maxDiff = None
 
     def setUp(self):
+      super().setUp()
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
       es.indices.delete(index=app.config['ELASTICSEARCH_GLOSSARY'])
       es.indices.create(index=app.config['ELASTICSEARCH_GLOSSARY'])
