@@ -22,13 +22,15 @@ class Config:
     'dbname': os.getenv('DATABASE_NAME', 'alegre'),
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+  SQLALCHEMY_ENGINE_OPTIONS = {
+    'pool_size': 20,
+    'pool_pre_ping': True
+  }
 
 class DevelopmentConfig(Config):
   DEBUG = True
   FLASK_ENV = 'development'
   FLASK_DEBUG = True
-
 
 class TestingConfig(Config):
   DEBUG = True
@@ -44,10 +46,8 @@ class TestingConfig(Config):
     'dbname': 'alegre_test',
   }
 
-
 class ProductionConfig(Config):
   DEBUG = False
-
 
 config_by_name = dict(
   dev=DevelopmentConfig,
