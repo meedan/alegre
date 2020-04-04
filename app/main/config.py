@@ -22,10 +22,10 @@ class Config:
     'dbname': os.getenv('DATABASE_NAME', 'alegre'),
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
-  SQLALCHEMY_ENGINE_OPTIONS = {
-    'pool_size': 20,
-    'pool_pre_ping': True
-  }
+  # SQLALCHEMY_ENGINE_OPTIONS = {
+  #   'pool_size': 20,
+  #   'pool_pre_ping': True
+  # }
 
 class DevelopmentConfig(Config):
   DEBUG = True
