@@ -7,4 +7,5 @@ set -o allexport
 [[ -f .env_file ]] && source .env_file
 set +o allexport
 
+python manage.py init
 gunicorn -w 1 -b 0.0.0.0:${ALEGRE_PORT} --access-logfile - --error-logfile - wsgi:app

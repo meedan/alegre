@@ -23,7 +23,6 @@ class ImageSimilarityResource(Resource):
     image = ImageModel.from_url(request.json['url'], request.json['context'])
     db.session.add(image)
     db.session.commit()
-    db.session.flush()
 
     return {
       'success': result
