@@ -38,6 +38,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual('application/json', response.content_type)
+        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
         self.assertEqual(200, response.status_code)
         self.assertDictEqual({
             'adult': vision.enums.Likelihood.VERY_UNLIKELY,
