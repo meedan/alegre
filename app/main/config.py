@@ -15,7 +15,8 @@ class Config:
     'project_id': 1,
     'project_key': os.getenv('AIRBRAKE_PROJECT_KEY'),
     'host': os.getenv('AIRBRAKE_URL'),
-    'environment': os.getenv('AIRBRAKE_ENVIRONMENT', os.getenv('BOILERPLATE_ENV'))
+    'environment': os.getenv('AIRBRAKE_ENVIRONMENT', os.getenv('BOILERPLATE_ENV')),
+    'apm_disabled': True
   }
   PROVIDER_LANGID = os.getenv('PROVIDER_LANGID', 'google')
   PROVIDER_IMAGE_CLASSIFICATION = os.getenv('PROVIDER_IMAGE_CLASSIFICATION', 'google')
