@@ -41,4 +41,4 @@ class LangidResource(Resource):
         # look for a class called `#{ProviderName}LangidProvider`, e.g. `GoogleLangidProvider`
         # then call static method `langid()` on that class.
         class_ = getattr(importlib.import_module('app.main.lib.langid'), app.config['PROVIDER_LANGID'].title() + 'LangidProvider')
-        return class_.langid(text)
+        return dict(class_.langid(text), **{ 'provider': app.config['PROVIDER_LANGID'] })

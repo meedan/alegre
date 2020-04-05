@@ -31,9 +31,9 @@ class ImageClassificationResource(Resource):
 
         return result
 
-    def classify(self, text):
+    def classify(self, uri):
         # In module `app.main.lib.image_classification`,
         # look for a class called `#{ProviderName}ImageClassificationProvider`, e.g. `GoogleImageClassificationProvider`
         # then call static method `classify()` on that class.
         class_ = getattr(importlib.import_module('app.main.lib.image_classification'), app.config['PROVIDER_IMAGE_CLASSIFICATION'].title() + 'ImageClassificationProvider')
-        return class_.classify(text)
+        return dict(class_.classify(uri), **{ 'provider': app.config['PROVIDER_IMAGE_CLASSIFICATION'] })

@@ -53,6 +53,7 @@ class TestLangidBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual('en', result['result']['language'])
+        self.assertEqual(app.config['PROVIDER_LANGID'], result['provider'])
         self.assertTrue(math.isclose(1, result['result']['confidence']))
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
