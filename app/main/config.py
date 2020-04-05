@@ -11,6 +11,12 @@ class Config:
   REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
   REDIS_PORT = os.getenv('REDIS_PORT', 6379)
   REDIS_DATABASE = os.getenv('REDIS_DATABASE', 0)
+  PYBRAKE={
+    'project_id': 1,
+    'project_key': os.getenv('AIRBRAKE_PROJECT_KEY'),
+    'host': os.getenv('AIRBRAKE_URL'),
+    'environment': os.getenv('AIRBRAKE_ENVIRONMENT', os.getenv('BOILERPLATE_ENV'))
+  }
   PROVIDER_LANGID = os.getenv('PROVIDER_LANGID', 'google')
   PROVIDER_IMAGE_CLASSIFICATION = os.getenv('PROVIDER_IMAGE_CLASSIFICATION', 'google')
   MS_TEXT_ANALYTICS_KEY = os.getenv('MS_TEXT_ANALYTICS_KEY')
@@ -22,10 +28,6 @@ class Config:
     'dbname': os.getenv('DATABASE_NAME', 'alegre'),
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
-  # SQLALCHEMY_ENGINE_OPTIONS = {
-  #   'pool_size': 20,
-  #   'pool_pre_ping': True
-  # }
 
 class DevelopmentConfig(Config):
   DEBUG = True
