@@ -21,8 +21,12 @@ class ImageSimilarityResource(Resource):
   def post(self):
     result = True
     image = ImageModel.from_url(request.json['url'], request.json['context'])
-    db.session.add(image)
-    db.session.commit()
+    try:
+      db.session.add(image)
+      db.session.commit()
+    except:
+      db.session.rollback()
+      raise
 
     return {
       'success': result
