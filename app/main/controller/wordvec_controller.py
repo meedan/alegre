@@ -22,7 +22,7 @@ class WordvecVectorResource(Resource):
     @api.doc('Convert a text to a vector')
     @api.expect(wordvec_vector_request, validate=True)
     def post(self):
-        vector = ds.vectorize(request.json['text'])
+        vector = ds.respond(request.json)
         return {
             'vector': json.dumps(vector.tolist())
         }

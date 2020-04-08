@@ -3,6 +3,9 @@ ELASTICSEARCH_URL ?= 'http://elasticsearch:9200'
 run: wait
 	python manage.py init
 	python manage.py run
+run_model_server: wait
+	python manage.py init
+	python manage.py run_model_server $(MODEL_NAME)
 test: wait
 	BOILERPLATE_ENV=test FLASK_ENV=test python manage.py init
 	BOILERPLATE_ENV=test FLASK_ENV=test coverage run manage.py test

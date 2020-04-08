@@ -31,6 +31,14 @@ def run():
   app.run(host='0.0.0.0', port=port, threaded=True)
 
 @manager.command
+def run_model_server():
+  model_name = os.environ.get("MODEL_NAME")
+  if model_name == "DocSim":
+    DocSim.start(None)
+  else:
+    raise
+
+@manager.command
 def init():
   # Create ES index.
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'])

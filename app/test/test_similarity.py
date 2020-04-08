@@ -145,7 +145,7 @@ class TestSimilaryBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         vector1 = np.asarray(result['result'][0]['_source']['vector'])
-        vector2 = ds.vectorize('purge an invoice')
+        vector2 = ds.get_shared_model_response('purge an invoice')
         similarity = ds.cosine_sim(vector1, vector2)
         self.assertGreater(similarity, 0.7)
 

@@ -6,25 +6,11 @@ from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
 from .config import config_by_name
-
-from gensim.models.keyedvectors import KeyedVectors
-from .lib.docsim import DocSim
-import os.path
+from app.main.lib.shared_models.doc_sim_client import DocSim
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
-
-# Load language model.
-# FIXME Load lazily when needed and move to appropriate controller.
-ds = None
-model_path = './data/model.txt'
-if os.path.isfile(model_path):
-  stopwords_path = './data/stopwords-en.txt'
-  model = KeyedVectors.load_word2vec_format(model_path)
-  with open(stopwords_path, 'r') as fh:
-    stopwords = fh.read().split(',')
-  ds = DocSim(model, stopwords=stopwords)
-
+ds = DocSim()
 def create_app(config_name):
   app = Flask(__name__)
   app.config.from_object(config_by_name[config_name])

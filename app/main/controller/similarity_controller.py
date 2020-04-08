@@ -26,7 +26,7 @@ class SimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if method == 'wordvec':
-            body['vector'] = ds.vectorize(request.json['text']).tolist()
+            body['vector'] = ds.get_shared_model_response(request.json['text']).tolist()
         if 'context' in request.json:
             body['context'] = request.json['context']
         result = es.index(
@@ -72,7 +72,7 @@ class SimilarityResource(Resource):
                 del conditions[0]['match']['content']['minimum_should_match']
 
         elif method == 'wordvec':
-            vector = ds.vectorize(request.json['text']).tolist()
+            vector = ds.get_shared_model_response(request.json['text']).tolist()
             conditions = [
                 {
                     'function_score': {

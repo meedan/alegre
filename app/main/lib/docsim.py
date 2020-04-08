@@ -1,10 +1,22 @@
+import os.path
 import numpy as np
 from gensim.models.keyedvectors import KeyedVectors
 
-class DocSim(object):
+from app.main.lib.shared_models.model_server import SharedModel
+
+class DocSim(SharedModel):
+    @classmethod
+    def start(cls, model_path='./data/model.txt', stopwords_path='./data/stopwords-en.txt'):
+        if os.path.isfile(model_path):
+          model = KeyedVectors.load_word2vec_format(model_path)
+          with open(stopwords_path, 'r') as fh:
+            stopwords = fh.read().split(',')
+          DocSim(model, stopwords=stopwords).bulk_run()
+
     def __init__(self, w2v_model , stopwords=[]):
         self.w2v_model = w2v_model
         self.stopwords = stopwords
+        super().__init__()
 
     def vectorize(self, doc):
         """Identify the vector values for each word in the given document"""
@@ -52,3 +64,11 @@ class DocSim(object):
             results.sort(key=lambda k : k['score'] , reverse=True)
 
         return results
+
+  def respond(self, text_package):
+      return self.vectorize(text_package["text"])
+
+  def task_package(self, text):
+      return {
+          "text": text
+      }
