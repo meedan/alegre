@@ -6,11 +6,11 @@ from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
 from .config import config_by_name
-from app.main.lib.shared_models.doc_sim_client import DocSim
+from app.main.lib.docsim import DocSim
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
-ds = DocSim()
+ds = DocSim.start()
 def create_app(config_name):
   app = Flask(__name__)
   app.config.from_object(config_by_name[config_name])

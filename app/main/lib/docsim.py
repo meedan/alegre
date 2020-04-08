@@ -6,17 +6,21 @@ from app.main.lib.shared_models.model_server import SharedModel
 
 class DocSim(SharedModel):
     @classmethod
-    def start(cls, model_path='./data/model.txt', stopwords_path='./data/stopwords-en.txt'):
+    def start(cls, model_path='./data/model.txt', stopwords_path='./data/stopwords-en.txt', redis_server=None, queue_name_override=None):
         if os.path.isfile(model_path):
           model = KeyedVectors.load_word2vec_format(model_path)
           with open(stopwords_path, 'r') as fh:
             stopwords = fh.read().split(',')
-          DocSim(model, stopwords=stopwords).bulk_run()
+          ds = DocSim(model, stopwords=stopwords, redis_server, queue_name_override)
+          if ds.datastore:
+            ds.bulk_run()
+          else:
+            return ds
 
-    def __init__(self, w2v_model , stopwords=[]):
+    def __init__(self, w2v_model, stopwords=[], redis_server=None, queue_name_override=None):
         self.w2v_model = w2v_model
         self.stopwords = stopwords
-        super().__init__()
+        super().__init__(redis_server, queue_name_override)
 
     def vectorize(self, doc):
         """Identify the vector values for each word in the given document"""
