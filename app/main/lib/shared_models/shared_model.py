@@ -108,10 +108,10 @@ class SharedModel(object):
         )
       )
     else:
-      return self.respond(analysis_value)
+      return self.respond(self.task_package(analysis_value))
 
-  def respond(self):
+  def respond(self, task_package):
     raise NotImplementedError("SharedModel subclasses must define a `respond` function for accessing answers!")
 
-  def task_package(self):
+  def task_package(self, analysis_value):
     raise NotImplementedError("SharedModel subclasses must define a `task_package` function for packaging answers!")

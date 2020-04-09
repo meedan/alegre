@@ -27,13 +27,13 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def run():
-  port = os.getenv('ALEGRE_PORT') or 5000
+  port = os.getenv('ALEGRE_PORT', 5000)
   app.run(host='0.0.0.0', port=port, threaded=True)
 
 @manager.command
 def run_model_server():
-  model_name = os.environ.get("MODEL_NAME")
-  if model_name == "DocSim":
+  model_name = os.getenv('MODEL_NAME')
+  if model_name == 'DocSim':
     DocSim.start(None)
   else:
     raise

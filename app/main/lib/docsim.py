@@ -2,20 +2,20 @@ import os.path
 import numpy as np
 from gensim.models.keyedvectors import KeyedVectors
 
-from app.main.lib.shared_models.model_server import SharedModel
+from app.main.lib.shared_models.shared_model import SharedModel
 
 class DocSim(SharedModel):
     @classmethod
     def start(cls, model_path='./data/model.txt', stopwords_path='./data/stopwords-en.txt', redis_server=None, queue_name_override=None):
         if os.path.isfile(model_path):
-          model = KeyedVectors.load_word2vec_format(model_path)
-          with open(stopwords_path, 'r') as fh:
-            stopwords = fh.read().split(',')
-          ds = DocSim(model, stopwords=stopwords, redis_server, queue_name_override)
-          if ds.datastore:
-            ds.bulk_run()
-          else:
-            return ds
+            model = KeyedVectors.load_word2vec_format(model_path)
+            with open(stopwords_path, 'r') as fh:
+                stopwords = fh.read().split(',')
+            ds = DocSim(model, stopwords=stopwords, redis_server=redis_server, queue_name_override=queue_name_override)
+            if ds.datastore:
+                ds.bulk_run()
+            else:
+                return ds
 
     def __init__(self, w2v_model, stopwords=[], redis_server=None, queue_name_override=None):
         self.w2v_model = w2v_model
@@ -39,7 +39,6 @@ class DocSim(SharedModel):
         # PS: There are other & better ways to do it.
         vector = np.mean(word_vecs, axis=0)
         return vector
-
 
     def cosine_sim(self, vecA, vecB):
         """Find the cosine similarity distance between two vectors."""
@@ -69,10 +68,10 @@ class DocSim(SharedModel):
 
         return results
 
-  def respond(self, text_package):
-      return self.vectorize(text_package["text"])
+    def respond(self, task_package):
+        return self.vectorize(task_package["text"])
 
-  def task_package(self, text):
-      return {
-          "text": text
-      }
+    def task_package(self, text):
+        return {
+            "text": text
+        }
