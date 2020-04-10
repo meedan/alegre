@@ -3,8 +3,8 @@ from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
-from app.main import ds
-
+from app.main import language_models, DEFAULT_LANGUAGE_MODEL
+from app.main.lib.math_helpers import similarity_for_model_name
 api = Namespace('wordvec', description='word vector operations')
 
 wordvec_vector_request = api.model('wordvec_vector_request', {
@@ -22,7 +22,7 @@ class WordvecVectorResource(Resource):
     @api.doc('Convert a text to a vector')
     @api.expect(wordvec_vector_request, validate=True)
     def post(self):
-        vector = ds.respond(request.json)
+        vector = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].respond(request.json)
         return {
             'vector': json.dumps(vector.tolist())
         }
@@ -35,7 +35,7 @@ class WordvecSimilarityResource(Resource):
     def post(self):
         vec1 = np.asarray(json.loads(request.json['vector1']))
         vec2 = np.asarray(json.loads(request.json['vector2']))
-        similarity = ds.cosine_sim(vec1, vec2)
+        model_name = request.json.get("model_name", DEFAULT_LANGUAGE_MODEL)
         return {
-            'similarity': similarity
+            'similarity': similarity_for_model_name(model_name, vec1, vec2)
         }

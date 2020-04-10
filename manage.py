@@ -8,13 +8,16 @@ from elasticsearch import Elasticsearch, TransportError
 import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
+from PIL import Image
+import redis
 
 from app import blueprint
 from app.main import create_app, db
 from app.main.model import image
 
 from app.main.lib.image_hash import compute_phash_int
-from PIL import Image
+from app.main.lib.docsim import DocSim
+from app.main.lib.universal_sentence_encoder import UniversalSentenceEncoder
 
 config_name = os.getenv('BOILERPLATE_ENV', 'dev')
 app = create_app(config_name)
@@ -33,10 +36,13 @@ def run():
 @manager.command
 def run_model_server():
   model_name = os.getenv('MODEL_NAME')
+  redis_server = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
   if model_name == 'DocSim':
-    DocSim.start(None)
+    DocSim.start(redis_server)
+  elif model_name == 'UniversalSentenceEncoder':
+    UniversalSentenceEncoder.start(redis_server)
   else:
-    raise
+    raise ValueError("Must specify a valid model to run!")
 
 @manager.command
 def init():

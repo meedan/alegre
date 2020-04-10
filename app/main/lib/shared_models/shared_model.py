@@ -1,6 +1,7 @@
+import time
 import json
-from datetime import datetime
 import uuid
+from datetime import datetime
 from collections import namedtuple
 
 from redis import Redis
@@ -9,12 +10,26 @@ Task = namedtuple('Task', 'task_id task_type task_package')
 
 class SharedModel(object):
   @classmethod
-  def start(cls, datastore=Redis()):
+  def start_client(cls, datastore=Redis(), queue_name_override=None):
+    return cls(datastore)
+
+  @classmethod
+  def start_local(cls, model_opts={}, datastore=Redis()):
     instance = cls(datastore)
+    instance.load_model(model_opts)
+    return instance
+
+  @classmethod
+  def start(cls, model_opts={}, datastore=Redis()):
+    instance = cls(datastore)
+    instance.load_model(model_opts)
     instance.bulk_run()
 
+  def model_name(self):
+    return self.__class__.__name__
+    
   def __init__(self, datastore, queue_name_override=None):
-    self.queue_name = self.__class__.__name__
+    self.queue_name = self.model_name()
     if queue_name_override:
       self.queue_name = queue_name_override
     self.datastore = datastore
@@ -67,11 +82,12 @@ class SharedModel(object):
     return Task(
       task_id=self.task_id(),
       task_type=self.queue_name,
-      task_package=self.task_package(analysis_value)
+      task_package=analysis_value
     )
 
   def submit_task(self, task):
-    return self.push_task(task)
+    self.push_task(task)
+    return task
 
   def encode_task(self, task):
     return json.dumps(dict(task._asdict()))
@@ -108,10 +124,7 @@ class SharedModel(object):
         )
       )
     else:
-      return self.respond(self.task_package(analysis_value))
+      return self.respond(analysis_value)
 
   def respond(self, task_package):
     raise NotImplementedError("SharedModel subclasses must define a `respond` function for accessing answers!")
-
-  def task_package(self, analysis_value):
-    raise NotImplementedError("SharedModel subclasses must define a `task_package` function for packaging answers!")

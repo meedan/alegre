@@ -4,8 +4,9 @@ from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
 
-from app.main import db, ds
+from app.main import db, language_models, DEFAULT_LANGUAGE_MODEL
 from app.test.base import BaseTestCase
+from app.main.lib.math_helpers import similarity_for_model
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
@@ -145,8 +146,9 @@ class TestSimilaryBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         vector1 = np.asarray(result['result'][0]['_source']['vector'])
-        vector2 = ds.vectorize('purge an invoice')
-        similarity = ds.cosine_sim(vector1, vector2)
+        language_models[DEFAULT_LANGUAGE_MODEL].load_model()
+        vector2 = language_models[DEFAULT_LANGUAGE_MODEL].respond('purge an invoice')
+        similarity = similarity_for_model(language_models[DEFAULT_LANGUAGE_MODEL], vector1, vector2)
         self.assertGreater(similarity, 0.7)
 
         response = self.client.get(

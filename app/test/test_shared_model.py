@@ -10,11 +10,6 @@ class SharedModelStub(SharedModel):
   def respond(self, analysis_value):
       return analysis_value
 
-  def task_package(self, analysis_value):
-      return {
-          "test_package": analysis_value
-      }
-
 class TestSharedModel(BaseTestCase):
   @classmethod
   def redis(cls):
@@ -34,6 +29,10 @@ class TestSharedModel(BaseTestCase):
     self.assertEqual(instance.queue_name, "SharedModelStub")
     blah_named_instance = SharedModelStub(None, "blah")
     self.assertEqual(blah_named_instance.queue_name, "blah")
+
+  def test_model_name(self):
+    instance = SharedModelStub(None)
+    self.assertEqual(self.model_name, "SharedModelStub")
 
   def test_get_task_timeout_redis(self):
     instance = SharedModelStub(TestSharedModel.redis(), str(uuid.uuid4()))

@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
-from app.main import ds
+from app.main import language_models, DEFAULT_LANGUAGE_MODEL
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 
@@ -26,7 +26,7 @@ class SimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if method == 'wordvec':
-            body['vector'] = ds.get_shared_model_response(request.json['text']).tolist()
+            body['vector'] = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].get_shared_model_response(request.json['text']).tolist()
         if 'context' in request.json:
             body['context'] = request.json['context']
         result = es.index(
@@ -72,7 +72,7 @@ class SimilarityResource(Resource):
                 del conditions[0]['match']['content']['minimum_should_match']
 
         elif method == 'wordvec':
-            vector = ds.get_shared_model_response(request.json['text']).tolist()
+            vector = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].get_shared_model_response(request.json['text']).tolist()
             conditions = [
                 {
                     'function_score': {
