@@ -6,13 +6,10 @@ from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
 from .config import config_by_name
-from app.main.lib.docsim import DocSim
-from app.main.lib.universal_sentence_encoder import UniversalSentenceEncoder
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
-language_models = {e.model_name(): e for e in [DocSim.start_client(), UniversalSentenceEncoder.start_client()]}
-DEFAULT_LANGUAGE_MODEL = "UniversalSentenceEncoder"
+
 def create_app(config_name):
   app = Flask(__name__)
   app.config.from_object(config_by_name[config_name])

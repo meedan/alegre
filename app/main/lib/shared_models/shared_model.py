@@ -3,56 +3,70 @@ import json
 import uuid
 from datetime import datetime
 from collections import namedtuple
+import redis
+import time
+import importlib
+import os
 
-from redis import Redis
+from flask import current_app as app
 
 Task = namedtuple('Task', 'task_id task_type task_package')
 
+MODEL_NAME_PREFIX = "SharedModelQueue"
+
 class SharedModel(object):
-  @classmethod
-  def start_client(cls, datastore=Redis(), queue_name_override=None):
-    return cls(datastore)
+  @staticmethod
+  def model_class_from_name(model_name):
+    return getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
 
-  @classmethod
-  def start_local(cls, model_opts={}, datastore=Redis()):
-    instance = cls(datastore)
-    instance.load_model(model_opts)
-    return instance
+  @staticmethod
+  def model_instance_from_model_name(model_name, model_opts={}, datastore=None, queue_name_override=None):
+    return SharedModel.model_class_from_name(model_name)(model_opts, datastore, queue_name_override)
 
-  @classmethod
-  def start(cls, model_opts={}, datastore=Redis()):
-    instance = cls(datastore)
-    instance.load_model(model_opts)
-    instance.bulk_run()
+  @staticmethod
+  def start_model(model_name, model_opts={}, datastore=None, queue_name_override=None):
+    return model_instance_from_model_name(model_name, model_opts, datastore, queue_name_override).load()
+
+  @staticmethod
+  def start_server(model_name=os.getenv('MODEL_NAME'), model_opts={}, datastore=None, queue_name_override=None):
+    return start_model(model_name, model_opts, datastore, queue_name_override).bulk_run()
+
+  @staticmethod
+  def get_client(model_name=os.getenv('MODEL_NAME'), model_opts={}, datastore=None, queue_name_override=None):
+    return model_instance_from_model_name(model_name, model_opts, datastore, queue_name_override)
+
+  def __init__(self, model_opts={}, datastore=None, queue_name_override=None):
+    self.queue_name = MODEL_NAME_PREFIX+self.model_name()
+    if queue_name_override:
+      self.queue_name = queue_name_override
+    self.datastore = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+    if datastore:
+      self.datastore = datastore
 
   def model_name(self):
     return self.__class__.__name__
     
-  def __init__(self, datastore, queue_name_override=None):
-    self.queue_name = self.model_name()
-    if queue_name_override:
-      self.queue_name = queue_name_override
-    self.datastore = datastore
+  def load(self, model_opts):
+    self.load_model(model_opts)
+    return self
 
   def get_task(self, timeout=0):
-    if self.datastore:
-      response = self.datastore.blpop(self.queue_name, timeout)
-      if response:
-        return json.loads(response[1].decode("utf-8"))
-    else:
-      return None
+    item = self.datastore.blpop(self.queue_name, timeout)
+    if item:
+      task = Task(**json.loads(item[1].decode("utf-8")))
+      app.logger.info('[SharedModel] Picking up task %s', task.task_id)
+      return task
 
   def send_response(self, task, response):
-    self.datastore.set(task["task_id"], json.dumps({"response": response}))
+    self.datastore.set(task.task_id, json.dumps({"response": response}))
 
   def run(self):
     while True:
-      #could transform directly to opts instead of passing package along as a dict
       task = self.get_task()
       if task:
         self.send_response(
           task,
-          self.respond(task["task_package"])
+          self.respond(task.task_package)
         )
 
   def get_tasks(self):
@@ -65,11 +79,10 @@ class SharedModel(object):
     return tasks
 
   def bulk_run(self):
-    print("Running Model...")
     while True:
       tasks = self.get_tasks()
-      responses = self.respond([t["task_package"] for t in tasks])
-      for i,response in enumerate(responses):
+      responses = ([self.respond(task.task_package) for task in tasks])
+      for i, response in enumerate(responses):
         self.send_response(
           tasks[i],
           response
@@ -90,9 +103,10 @@ class SharedModel(object):
     return task
 
   def encode_task(self, task):
-    return json.dumps(dict(task._asdict()))
+    return json.dumps(task._asdict())
 
   def push_task(self, task):
+    app.logger.info('[SharedModel] Pushing task %s', task.task_id)
     return self.datastore.rpush(
       task.task_type,
       self.encode_task(task)
@@ -117,14 +131,11 @@ class SharedModel(object):
     return response
 
   def get_shared_model_response(self, analysis_value):
-    if self.datastore:
-      return self.get_task_response(
-        self.submit_task(
-          self.task_message(analysis_value)
-        )
+    return self.get_task_response(
+      self.submit_task(
+        self.task_message(analysis_value)
       )
-    else:
-      return self.respond(analysis_value)
+    )
 
   def respond(self, task_package):
-    raise NotImplementedError("SharedModel subclasses must define a `respond` function for accessing answers!")
+    raise NotImplementedError("[SharedModel] Subclasses must define a `respond` function for accessing answers!")

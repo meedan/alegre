@@ -4,9 +4,9 @@ from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
 
-from app.main import db, language_models, DEFAULT_LANGUAGE_MODEL
+from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.math_helpers import similarity_for_model
+from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
@@ -39,7 +39,7 @@ class TestSimilaryBlueprint(BaseTestCase):
         mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']['_doc']
       )
 
-    def test_similarity_api(self):
+    def test_english_similarity_api(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 del term['_type']
@@ -126,8 +126,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-    @unittest.skipIf(ds == None, 'model.txt file is missing')
-    def test_wordvec_similarity_api(self):
+    def test_wordvec_similarity(self):
         with self.client:
             term = { 'text': 'how to delete an invoice', 'method': 'wordvec', 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
@@ -145,10 +144,8 @@ class TestSimilaryBlueprint(BaseTestCase):
             content_type='application/json'
         )
         result = json.loads(response.data.decode())
-        vector1 = np.asarray(result['result'][0]['_source']['vector'])
-        language_models[DEFAULT_LANGUAGE_MODEL].load_model()
-        vector2 = language_models[DEFAULT_LANGUAGE_MODEL].respond('purge an invoice')
-        similarity = similarity_for_model(language_models[DEFAULT_LANGUAGE_MODEL], vector1, vector2)
+        self.assertEqual(1, len(result['result']))
+        similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
         response = self.client.get(

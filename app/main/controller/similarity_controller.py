@@ -1,9 +1,10 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
-from app.main import language_models, DEFAULT_LANGUAGE_MODEL
+
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
+from app.main.lib.shared_models.shared_model import SharedModel
 
 api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
@@ -26,7 +27,9 @@ class SimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if method == 'wordvec':
-            body['vector'] = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].get_shared_model_response(request.json['text']).tolist()
+          SharedModel.get_client(request.json.get("model"))
+            model = SharedModel.get_client(request.json.get("model"))
+            body['vector'] = model.get_shared_model_response(request.json['text'])
         if 'context' in request.json:
             body['context'] = request.json['context']
         result = es.index(
@@ -72,7 +75,8 @@ class SimilarityResource(Resource):
                 del conditions[0]['match']['content']['minimum_should_match']
 
         elif method == 'wordvec':
-            vector = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].get_shared_model_response(request.json['text']).tolist()
+            model = SharedModel.get_client(request.json.get("model"))
+            vector = model.get_shared_model_response(request.json['text'])
             conditions = [
                 {
                     'function_score': {

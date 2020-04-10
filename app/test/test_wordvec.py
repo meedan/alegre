@@ -3,11 +3,10 @@ import json
 from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 
-from app.main import db, language_models
+from app.main import db
 from app.test.base import BaseTestCase
 
-@unittest.skipIf(language_models["DocSim"] == None, "model.txt file is missing")
-class TestWordvecBlueprint(BaseTestCase):
+class TestWordVecBlueprint(BaseTestCase):
     def test_wordvec_api(self):
         with self.client:
             response = self.client.post(

@@ -5,126 +5,101 @@ from flask import current_app as app
 import redis
 
 from app.test.base import BaseTestCase
-from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.shared_models.shared_model import SharedModel, Task
 class SharedModelStub(SharedModel):
   def respond(self, analysis_value):
       return analysis_value
 
 class TestSharedModel(BaseTestCase):
-  @classmethod
-  def redis(cls):
-    return redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-
   def setUp(self):
-    r = TestSharedModel.redis()
-    r.flushall()
-
-  def tearDown(self):
-    r = TestSharedModel.redis()
+    r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     r.flushall()
 
   def test_init(self):
-    instance = SharedModelStub(None)
-    self.assertIsNone(instance.datastore)
+    instance = SharedModelStub()
     self.assertEqual(instance.queue_name, "SharedModelStub")
-    blah_named_instance = SharedModelStub(None, "blah")
-    self.assertEqual(blah_named_instance.queue_name, "blah")
 
   def test_model_name(self):
     instance = SharedModelStub(None)
     self.assertEqual(self.model_name, "SharedModelStub")
 
-  def test_get_task_timeout_redis(self):
-    instance = SharedModelStub(TestSharedModel.redis(), str(uuid.uuid4()))
+  def test_get_task_timeout(self):
+    instance = SharedModelStub()
     self.assertIsNone(instance.get_task(1))
 
-  def test_get_task_non_timeout_redis(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
-    message = {"blah": 1}
-    redis_instance.rpush("SharedModelStub", json.dumps(message))
-    self.assertEqual(instance.get_task(1), message)
+  def test_get_task_non_timeout(self):
+    instance = SharedModelStub()
+    message = {"task_id": "blah", "task_type": "blah", "task_package": "blah"}
+    instance.datastore.rpush("SharedModelStub", json.dumps(message))
+    self.assertEqual(instance.get_task(1), Task(**message))
 
-  def test_get_task_timeout_no_redis(self):
-    instance = SharedModelStub(None, str(uuid.uuid4()))
-    self.assertIsNone(instance.get_task(1))
-
-  def test_get_task_non_timeout_no_redis(self):
-    instance = SharedModelStub(None)
-    self.assertIsNone(instance.get_task(1))
+  def test_task_message(self):
+    instance = SharedModelStub()
+    message = instance.task_message("blah")._asdict()
+    self.assertEqual(sorted(message.keys()), ['task_id', 'task_package', 'task_type'])
+    self.assertEqual(message["task_package"], {'test_package': 'blah'})
 
   def test_send_response(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
-    instance.send_response({"task_id": "blah"}, 1)
-    self.assertEqual(json.loads(redis_instance.get("blah").decode("utf-8")), {"response": 1})
+    instance = SharedModelStub()
+    task = Task(**{"task_id": "blah", "task_type": "blah", "task_package": "blah"})
+    instance.send_response(task, 1)
+    self.assertEqual(json.loads(instance.datastore.get("blah").decode("utf-8")), {"response": 1})
 
   def test_get_tasks(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
-    message = {"blah": 1}
-    redis_instance.rpush("SharedModelStub", json.dumps(message))
-    redis_instance.rpush("SharedModelStub", json.dumps(message))
-    self.assertEqual(instance.get_tasks(), [message, message])
+    instance = SharedModelStub()
+    message = {"task_id": "blah", "task_type": "blah", "task_package": "blah"}
+    instance.datastore.rpush("SharedModelStub", json.dumps(message))
+    instance.datastore.rpush("SharedModelStub", json.dumps(message))
+    self.assertEqual(instance.get_tasks(), [Task(**message), Task(**message)])
 
   def test_task_id(self):
-    instance = SharedModelStub(None)
+    instance = SharedModelStub()
     task_id = instance.task_id()
     self.assertEqual(len(task_id), 36)
     self.assertEqual(task_id.count("-"), 4)
 
-  def test_task_message(self):
-    instance = SharedModelStub(None)
-    message = dict(instance.task_message("blah")._asdict())
-    self.assertEqual(sorted(message.keys()), ['task_id', 'task_package', 'task_type'])
-    self.assertEqual(message["task_package"], {'test_package': 'blah'})
-
   def test_submit_task(self):
-    instance = SharedModelStub(TestSharedModel.redis(), str(uuid.uuid4()))
+    instance = SharedModelStub()
     instance.submit_task(instance.task_message("blah"))
     self.assertEqual(instance.datastore.llen(instance.queue_name), 1)
 
   def test_submit_task(self):
-    instance = SharedModelStub(None, str(uuid.uuid4()))
+    instance = SharedModelStub()
     self.assertIsInstance(instance.encode_task(instance.task_message("blah")), str)
 
   def test_push_task(self):
-    instance = SharedModelStub(TestSharedModel.redis(), str(uuid.uuid4()))
+    instance = SharedModelStub()
     instance.push_task(instance.task_message("blah"))
     self.assertEqual(instance.datastore.llen(instance.queue_name), 1)
 
   def test_get_task_result(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
+    instance = SharedModelStub()
     task = instance.task_message("blah")
-    instance.send_response({"task_id": task.task_id}, 1)
+    instance.send_response(task, 1)
     self.assertEqual(json.loads(instance.get_task_result(task).decode("utf-8")), {'response': 1})
 
   def test_delete_task_response(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
+    instance = SharedModelStub()
     task = instance.task_message("blah")
-    instance.send_response({"task_id": task.task_id}, 1)
+    instance.send_response(task, 1)
     self.assertEqual(json.loads(instance.get_task_result(task).decode("utf-8")), {'response': 1})
     instance.delete_task_response(task)
     self.assertIsNone(instance.get_task_result(task))
 
   def read_task_response(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
+    instance = SharedModelStub()
     task = instance.task_message("blah")
-    instance.send_response({"task_id": task.task_id}, 1)
+    instance.send_response(task, 1)
     self.assertEqual(instance.read_task_response(task), 1)
 
   def get_task_response(self):
-    redis_instance = TestSharedModel.redis()
-    instance = SharedModelStub(redis_instance)
+    instance = SharedModelStub()
     task = instance.task_message("blah")
-    instance.send_response({"task_id": task.task_id}, 1)
+    instance.send_response(task, 1)
     self.assertEqual(instance.get_task_response(task), 1)
 
   def get_shared_model_response(self):
-    instance = SharedModelStub(None)
+    instance = SharedModelStub()
     self.assertEqual(instance.get_shared_model_response(1), 1)
 
 if __name__ == '__main__':

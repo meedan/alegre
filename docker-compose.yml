@@ -37,6 +37,20 @@ services:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_DB=alegre"
+  model_server:
+    build: .
+    command: ["make", "run_model_server"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      - "BOILERPLATE_ENV=dev"
+      - "FLASK_ENV=development"
+      - "FLASK_DEBUG=true"
+      - "MODEL_NAME=WordVec"
   alegre:
     build: .
     ports:
@@ -47,9 +61,11 @@ services:
       - postgres
       - kibana
       - redis
+      - model_server
     env_file:
       - .env_file
     environment:
       - "BOILERPLATE_ENV=dev"
       - "FLASK_ENV=development"
       - "FLASK_DEBUG=true"
+      - "MODEL_NAME=WordVec"

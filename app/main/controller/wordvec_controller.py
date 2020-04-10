@@ -3,8 +3,7 @@ from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
-from app.main import language_models, DEFAULT_LANGUAGE_MODEL
-from app.main.lib.math_helpers import similarity_for_model_name
+from app.main.lib.shared_models.shared_model import SharedModel
 api = Namespace('wordvec', description='word vector operations')
 
 wordvec_vector_request = api.model('wordvec_vector_request', {
@@ -17,25 +16,28 @@ wordvec_similarity_request = api.model('wordvec_similarity_request', {
 })
 
 @api.route('/vector')
-class WordvecVectorResource(Resource):
+class WordVecVectorResource(Resource):
     @api.response(200, 'text successfully converted to vector.')
     @api.doc('Convert a text to a vector')
     @api.expect(wordvec_vector_request, validate=True)
     def post(self):
-        vector = language_models[request.json.get("model", DEFAULT_LANGUAGE_MODEL)].respond(request.json)
+        model = SharedModel.get_client(request.json.get("model"))
+        vector = model.get_shared_model_response(request.json['text'])
         return {
-            'vector': json.dumps(vector.tolist())
+            'vector': json.dumps(vector)
         }
 
 @api.route('/similarity')
-class WordvecSimilarityResource(Resource):
+class WordVecSimilarityResource(Resource):
     @api.response(200, 'two vectors compared successfully.')
     @api.doc('Given two vectors, compare the similarities between them')
     @api.expect(wordvec_similarity_request, validate=True)
     def post(self):
         vec1 = np.asarray(json.loads(request.json['vector1']))
         vec2 = np.asarray(json.loads(request.json['vector2']))
-        model_name = request.json.get("model_name", DEFAULT_LANGUAGE_MODEL)
+        model_name = request.json.get("model_name")
+        model = SharedModel.get_client(model_name)
+        similarity = model.similarity(vec1, vec2)
         return {
             'similarity': similarity_for_model_name(model_name, vec1, vec2)
         }
