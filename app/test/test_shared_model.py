@@ -34,7 +34,7 @@ class TestSharedModel(BaseTestCase):
 
   def test_model_name(self):
     instance = SharedModelStub(None)
-    self.assertEqual(self.model_name, "SharedModelStub")
+    self.assertEqual(instance.model_name(), "SharedModelStub")
 
   def test_get_task_timeout(self):
     instance = SharedModelStub()
@@ -43,7 +43,7 @@ class TestSharedModel(BaseTestCase):
   def test_get_task_non_timeout(self):
     instance = SharedModelStub()
     message = {"task_id": "blah", "task_type": "blah", "task_package": "blah"}
-    instance.datastore.rpush("SharedModelStub", json.dumps(message))
+    instance.datastore.rpush(instance.queue_name, json.dumps(message))
     self.assertEqual(instance.get_task(1), Task(**message))
 
   def test_task_message(self):
@@ -61,8 +61,8 @@ class TestSharedModel(BaseTestCase):
   def test_get_tasks(self):
     instance = SharedModelStub()
     message = {"task_id": "blah", "task_type": "blah", "task_package": "blah"}
-    instance.datastore.rpush("SharedModelStub", json.dumps(message))
-    instance.datastore.rpush("SharedModelStub", json.dumps(message))
+    instance.datastore.rpush(instance.queue_name, json.dumps(message))
+    instance.datastore.rpush(instance.queue_name, json.dumps(message))
     self.assertEqual(instance.get_tasks(), [Task(**message), Task(**message)])
 
   def test_task_id(self):
@@ -117,7 +117,7 @@ class TestSharedModel(BaseTestCase):
 
   def get_shared_model_response(self):
     instance = SharedModelStub()
-    self.assertEqual(instance.get_shared_model_response(1), 1)
+    self.ssertEqual(instance.get_shared_model_response(1), 1)
 
 if __name__ == '__main__':
     unittest.main()

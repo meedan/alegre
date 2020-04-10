@@ -50,7 +50,7 @@ services:
       - "BOILERPLATE_ENV=dev"
       - "FLASK_ENV=development"
       - "FLASK_DEBUG=true"
-      - "MODEL_NAME=WordVec"
+      - "MODEL_NAME=UniversalSentenceEncoder"
   alegre:
     build: .
     ports:
@@ -68,4 +68,4 @@ services:
       - "BOILERPLATE_ENV=dev"
       - "FLASK_ENV=development"
       - "FLASK_DEBUG=true"
-      - "MODEL_NAME=WordVec"
+      - "MODEL_NAME=UniversalSentenceEncoder"

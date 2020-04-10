@@ -5,6 +5,7 @@ from flask import current_app as app
 import redis
 
 from app.test.base import BaseTestCase
+from app.main.lib.shared_models.wordvec import WordVec
 from app.main.lib.math_helpers import (
   similarity_for_model_name,
   similarity_for_model,
