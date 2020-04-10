@@ -2,42 +2,49 @@ import json
 from datetime import datetime
 import uuid
 from collections import namedtuple
+import redis
+import time
+import importlib
+import os
 
-from redis import Redis
+from flask import current_app as app
 
 Task = namedtuple('Task', 'task_id task_type task_package')
 
 class SharedModel(object):
-  @classmethod
-  def start(cls, datastore=Redis()):
-    instance = cls(datastore)
+  @staticmethod
+  def start_server(model_name=os.getenv('MODEL_NAME')):
+    class_ = getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
+    instance = class_()
+    instance.load()
     instance.bulk_run()
 
-  def __init__(self, datastore, queue_name_override=None):
+  @staticmethod
+  def get_client(model_name=os.getenv('MODEL_NAME')):
+    class_ = getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
+    return class_()
+
+  def __init__(self):
     self.queue_name = self.__class__.__name__
-    if queue_name_override:
-      self.queue_name = queue_name_override
-    self.datastore = datastore
+    self.datastore = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
 
   def get_task(self, timeout=0):
-    if self.datastore:
-      response = self.datastore.blpop(self.queue_name, timeout)
-      if response:
-        return json.loads(response[1].decode("utf-8"))
-    else:
-      return None
+    item = self.datastore.blpop(self.queue_name, timeout)
+    if item:
+      task = Task(**json.loads(item[1].decode("utf-8")))
+      app.logger.info('[SharedModel] Picking up task %s', task.task_id)
+      return task
 
   def send_response(self, task, response):
-    self.datastore.set(task["task_id"], json.dumps({"response": response}))
+    self.datastore.set(task.task_id, json.dumps({"response": response}))
 
   def run(self):
     while True:
-      #could transform directly to opts instead of passing package along as a dict
       task = self.get_task()
       if task:
         self.send_response(
           task,
-          self.respond(task["task_package"])
+          self.respond(task.task_package)
         )
 
   def get_tasks(self):
@@ -50,11 +57,10 @@ class SharedModel(object):
     return tasks
 
   def bulk_run(self):
-    print("Running Model...")
     while True:
       tasks = self.get_tasks()
-      responses = self.respond([t["task_package"] for t in tasks])
-      for i,response in enumerate(responses):
+      responses = ([self.respond(task.task_package) for task in tasks])
+      for i, response in enumerate(responses):
         self.send_response(
           tasks[i],
           response
@@ -71,12 +77,14 @@ class SharedModel(object):
     )
 
   def submit_task(self, task):
-    return self.push_task(task)
+    self.push_task(task)
+    return task
 
   def encode_task(self, task):
-    return json.dumps(dict(task._asdict()))
+    return json.dumps(task._asdict())
 
   def push_task(self, task):
+    app.logger.info('[SharedModel] Pushing task %s', task.task_id)
     return self.datastore.rpush(
       task.task_type,
       self.encode_task(task)
@@ -101,17 +109,14 @@ class SharedModel(object):
     return response
 
   def get_shared_model_response(self, analysis_value):
-    if self.datastore:
-      return self.get_task_response(
-        self.submit_task(
-          self.task_message(analysis_value)
-        )
+    return self.get_task_response(
+      self.submit_task(
+        self.task_message(analysis_value)
       )
-    else:
-      return self.respond(self.task_package(analysis_value))
+    )
 
   def respond(self, task_package):
-    raise NotImplementedError("SharedModel subclasses must define a `respond` function for accessing answers!")
+    raise NotImplementedError("[SharedModel] Subclasses must define a `respond` function for accessing answers!")
 
   def task_package(self, analysis_value):
-    raise NotImplementedError("SharedModel subclasses must define a `task_package` function for packaging answers!")
+    raise NotImplementedError("[SharedModel] Subclasses must define a `task_package` function for packaging answers!")

@@ -3,7 +3,7 @@ from flask_restplus import Resource, Namespace, fields
 from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
-from app.main import ds
+from app.main.lib.shared_models.shared_model import SharedModel
 
 api = Namespace('wordvec', description='word vector operations')
 
@@ -17,25 +17,27 @@ wordvec_similarity_request = api.model('wordvec_similarity_request', {
 })
 
 @api.route('/vector')
-class WordvecVectorResource(Resource):
+class WordVecVectorResource(Resource):
     @api.response(200, 'text successfully converted to vector.')
     @api.doc('Convert a text to a vector')
     @api.expect(wordvec_vector_request, validate=True)
     def post(self):
-        vector = ds.respond(request.json)
+        model = SharedModel.get_client()
+        vector = model.get_shared_model_response(request.json['text'])
         return {
-            'vector': json.dumps(vector.tolist())
+            'vector': json.dumps(vector)
         }
 
 @api.route('/similarity')
-class WordvecSimilarityResource(Resource):
+class WordVecSimilarityResource(Resource):
     @api.response(200, 'two vectors compared successfully.')
     @api.doc('Given two vectors, compare the similarities between them')
     @api.expect(wordvec_similarity_request, validate=True)
     def post(self):
+        model = SharedModel.get_client()
         vec1 = np.asarray(json.loads(request.json['vector1']))
         vec2 = np.asarray(json.loads(request.json['vector2']))
-        similarity = ds.cosine_sim(vec1, vec2)
+        similarity = model.similarity(vec1, vec2)
         return {
             'similarity': similarity
         }

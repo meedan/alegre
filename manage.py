@@ -12,6 +12,7 @@ from sqlalchemy_utils import database_exists, create_database
 from app import blueprint
 from app.main import create_app, db
 from app.main.model import image
+from app.main.lib.shared_models.shared_model import SharedModel
 
 from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
@@ -27,19 +28,20 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def run():
+  """Runs the API server."""
   port = os.getenv('ALEGRE_PORT', 5000)
   app.run(host='0.0.0.0', port=port, threaded=True)
 
 @manager.command
 def run_model_server():
+  """Runs the model server."""
   model_name = os.getenv('MODEL_NAME')
-  if model_name == 'DocSim':
-    DocSim.start(None)
-  else:
-    raise
+  print("* Serving model %s..." % model_name, flush=True)
+  SharedModel.start_server(model_name)
 
 @manager.command
 def init():
+  """Initializes the service."""
   # Create ES index.
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
   for key in ['ELASTICSEARCH_GLOSSARY', 'ELASTICSEARCH_SIMILARITY']:
@@ -92,14 +94,15 @@ def init():
     db.create_all()
 
 @manager.command
-def test():
+def test(pattern='test*.py'):
   """Runs the unit tests."""
-  tests = unittest.TestLoader().discover('app/test', pattern='test*.py')
+  tests = unittest.TestLoader().discover('app/test', pattern=pattern)
   result = unittest.TextTestRunner(verbosity=2).run(tests)
   return 0 if result.wasSuccessful() else 1
 
 @manager.command
 def phash(path):
+  """Computes the phash of a given image."""
   im = Image.open(path).convert('RGB')
   phash = compute_phash_int(im)
   print(phash, "{0:b}".format(phash), sep=" ")
