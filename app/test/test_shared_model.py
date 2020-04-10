@@ -18,7 +18,7 @@ class TestSharedModel(BaseTestCase):
 
   def test_init(self):
     instance = SharedModelStub()
-    self.assertEqual(instance.queue_name, "SharedModelStub")
+    self.assertEqual(instance.queue_name, 'SharedModelQueueSharedModelStub')
 
   def test_model_class_from_name(self):
     self.assertEqual(SharedModel.model_class_from_name("WordVec"), WordVec)
