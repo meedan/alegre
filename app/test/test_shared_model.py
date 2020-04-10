@@ -6,6 +6,7 @@ import redis
 
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel, Task
+from app.main.lib.shared_models.wordvec import WordVec
 class SharedModelStub(SharedModel):
   def respond(self, analysis_value):
       return analysis_value
@@ -18,6 +19,18 @@ class TestSharedModel(BaseTestCase):
   def test_init(self):
     instance = SharedModelStub()
     self.assertEqual(instance.queue_name, "SharedModelStub")
+
+  def test_model_class_from_name(self):
+    self.assertEqual(SharedModel.model_class_from_name("WordVec"), WordVec)
+
+  def test_model_instance_from_name(self):
+    self.assertIsInstance(SharedModel.model_instance_from_model_name("WordVec"), WordVec)
+
+  def test_start_model(self):
+    self.assertIsInstance(SharedModel.start_model("WordVec"), WordVec)
+
+  def test_start_model(self):
+    self.assertIsInstance(SharedModel.get_client("WordVec"), WordVec)
 
   def test_model_name(self):
     instance = SharedModelStub(None)
@@ -58,12 +71,16 @@ class TestSharedModel(BaseTestCase):
     self.assertEqual(len(task_id), 36)
     self.assertEqual(task_id.count("-"), 4)
 
+  def test_task_message(self):
+    instance = SharedModelStub()
+    self.assertIsInstance(instance.task_message("blah"), Task)
+
   def test_submit_task(self):
     instance = SharedModelStub()
     instance.submit_task(instance.task_message("blah"))
     self.assertEqual(instance.datastore.llen(instance.queue_name), 1)
 
-  def test_submit_task(self):
+  def test_encode_task(self):
     instance = SharedModelStub()
     self.assertIsInstance(instance.encode_task(instance.task_message("blah")), str)
 

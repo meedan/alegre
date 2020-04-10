@@ -16,32 +16,37 @@ MODEL_NAME_PREFIX = "SharedModelQueue"
 
 class SharedModel(object):
   @staticmethod
+  def default_redis_host():
+    with app.app_context():
+      return redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+
+  @staticmethod
   def model_class_from_name(model_name):
     return getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
 
   @staticmethod
-  def model_instance_from_model_name(model_name, model_opts={}, datastore=None, queue_name_override=None):
-    return SharedModel.model_class_from_name(model_name)(model_opts, datastore, queue_name_override)
+  def model_instance_from_model_name(model_name, model_opts={}, shared_model_opts={}):
+    return SharedModel.model_class_from_name(model_name)(model_opts, shared_model_opts)
 
   @staticmethod
-  def start_model(model_name, model_opts={}, datastore=None, queue_name_override=None):
-    return model_instance_from_model_name(model_name, model_opts, datastore, queue_name_override).load()
+  def start_model(model_name, model_opts={}, shared_model_opts={}):
+    instance = SharedModel.model_instance_from_model_name(model_name, model_opts, shared_model_opts)
+    return instance.load(model_opts)
 
   @staticmethod
-  def start_server(model_name=os.getenv('MODEL_NAME'), model_opts={}, datastore=None, queue_name_override=None):
-    return start_model(model_name, model_opts, datastore, queue_name_override).bulk_run()
+  def start_server(model_name=os.getenv('MODEL_NAME'), model_opts={}, shared_model_opts={}):
+    instance = SharedModel.start_model(model_name, model_opts, shared_model_opts)
+    instance.bulk_run()
 
   @staticmethod
-  def get_client(model_name=os.getenv('MODEL_NAME'), model_opts={}, datastore=None, queue_name_override=None):
-    return model_instance_from_model_name(model_name, model_opts, datastore, queue_name_override)
+  def get_client(model_name=None, model_opts={}, shared_model_opts={}):
+    if not model_name:
+      model_name = os.getenv('MODEL_NAME')
+    return SharedModel.model_instance_from_model_name(model_name, model_opts, shared_model_opts)
 
-  def __init__(self, model_opts={}, datastore=None, queue_name_override=None):
-    self.queue_name = MODEL_NAME_PREFIX+self.model_name()
-    if queue_name_override:
-      self.queue_name = queue_name_override
-    self.datastore = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    if datastore:
-      self.datastore = datastore
+  def __init__(self, model_opts={}, shared_model_opts={}):
+    self.queue_name = shared_model_opts.get("queue_name_override", MODEL_NAME_PREFIX+self.model_name())
+    self.datastore = shared_model_opts.get("datastore", SharedModel.default_redis_host())
 
   def model_name(self):
     return self.__class__.__name__

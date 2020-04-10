@@ -4,6 +4,8 @@ from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.math_helpers import similarity_for_model_name
+
 api = Namespace('wordvec', description='word vector operations')
 
 wordvec_vector_request = api.model('wordvec_vector_request', {
@@ -37,7 +39,6 @@ class WordVecSimilarityResource(Resource):
         vec2 = np.asarray(json.loads(request.json['vector2']))
         model_name = request.json.get("model_name")
         model = SharedModel.get_client(model_name)
-        similarity = model.similarity(vec1, vec2)
         return {
             'similarity': similarity_for_model_name(model_name, vec1, vec2)
         }

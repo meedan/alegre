@@ -5,30 +5,30 @@ from gensim.models.keyedvectors import KeyedVectors
 from app.main.lib.shared_models.shared_model import SharedModel
 
 class WordVec(SharedModel):
-    # SharedModel interface
-    def load(self):
-        model_path = './data/model.txt'
-        self.w2v_model = KeyedVectors.load_word2vec_format(model_path)
+    def load_model(self, opts={}):
+        model_path = opts.get("model_path", './data/model.txt')
+        stopwords_path = opts.get("stopwords_path", './data/stopwords-en.txt')
+        if os.path.isfile(model_path):
+            w2v_model = KeyedVectors.load_word2vec_format(model_path)
+            with open(stopwords_path, 'r') as fh:
+                stopwords = fh.read().split(',')
+            self.w2v_model = w2v_model
+            self.stopwords = stopwords
 
-        stopwords_path = './data/stopwords-en.txt'
-        with open(stopwords_path, 'r') as fh:
-            stopwords = fh.read().split(',')
-        self.stopwords = stopwords
+    def respond(self, doc):
+        if isinstance(doc,list):
+            return [e.tolist() for e in self.vectorize(doc)]
+        else:
+            return self.vectorize(doc).tolist()
 
-    def respond(self, task_package):
-        # Convert to regular array because we'll JSON-encode it
-        # To convert the array back to ndarray: np.array(a)
-        # https://stackoverflow.com/a/32850511/209184
-        return self.vectorize(task_package["text"]).tolist()
-
-    def task_package(self, text):
-        return {
-            "text": text
-        }
-
-    # WordVec implementation
     def vectorize(self, doc):
         """Identify the vector values for each word in the given document"""
+        if isinstance(doc,list):
+            return [self.vectorize_single_doc(d) for d in doc]
+        else:
+            return self.vectorize_single_doc(doc)
+
+    def vectorize_single_doc(self, doc):
         doc = doc.lower()
         words = [w for w in doc.split(" ") if w not in self.stopwords]
         word_vecs = []
@@ -39,15 +39,7 @@ class WordVec(SharedModel):
             except KeyError:
                 # Ignore, if the word doesn't exist in the vocabulary
                 pass
-
         # Assuming that document vector is the mean of all the word vectors
         # PS: There are other & better ways to do it.
         vector = np.mean(word_vecs, axis=0)
         return vector
-
-    def similarity(self, vecA, vecB):
-        """Find the cosine similarity distance between two vectors."""
-        csim = np.dot(vecA, vecB) / (np.linalg.norm(vecA) * np.linalg.norm(vecB))
-        if np.isnan(np.sum(csim)):
-            return 0
-        return csim

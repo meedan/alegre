@@ -6,14 +6,14 @@ from flask import current_app as app
 from app.main import db
 from app.test.base import BaseTestCase
 
-class TestWordVecBlueprint(BaseTestCase):
-    def test_wordvec_api(self):
+class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
+    def test_universalsentenceencoder_api(self):
         with self.client:
             response = self.client.post(
                 '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "this is a test",
-                  "model": "WordVec",
+                  "model": "UniversalSentenceEncoder",
                 }),
                 content_type='application/json'
             )
@@ -25,8 +25,7 @@ class TestWordVecBlueprint(BaseTestCase):
                 data=json.dumps({
                   "vector1": vector,
                   "vector2": vector,
-                  "model": "WordVec",
-
+                  "model": "UniversalSentenceEncoder",
                 }),
                 content_type='application/json'
             )
@@ -38,7 +37,7 @@ class TestWordVecBlueprint(BaseTestCase):
                 '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "how to delete an invoice",
-                  "model": "WordVec",
+                  "model": "UniversalSentenceEncoder",
                 }),
                 content_type='application/json'
             )
@@ -49,7 +48,7 @@ class TestWordVecBlueprint(BaseTestCase):
                 '/text/wordvec/vector',
                 data=json.dumps({
                   "text": "purge an invoice",
-                  "model": "WordVec",
+                  "model": "UniversalSentenceEncoder",
                 }),
                 content_type='application/json'
             )
@@ -61,7 +60,7 @@ class TestWordVecBlueprint(BaseTestCase):
                 data=json.dumps({
                   "vector1": vector1,
                   "vector2": vector2,
-                  "model": "WordVec",
+                  "model": "UniversalSentenceEncoder",
                 }),
                 content_type='application/json'
             )

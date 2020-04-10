@@ -27,7 +27,6 @@ class SimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if method == 'wordvec':
-          SharedModel.get_client(request.json.get("model"))
             model = SharedModel.get_client(request.json.get("model"))
             body['vector'] = model.get_shared_model_response(request.json['text'])
         if 'context' in request.json:
