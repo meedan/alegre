@@ -9,7 +9,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or queried for similarity'),
-    'method': fields.String(required=False, description='similarity method to use: "elasticsearch" (pure ElasticSearch, default) or "wordvec" (Word2Vec plus ElasticSearch)'),
+    'model': fields.String(required=False, description='similarity model to use: "Elasticsearch" (pure Elasticsearch, default) or the name of an existing model - USE CORRECT CASE!'),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=False, description='context')
@@ -21,13 +21,13 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        method = 'elasticsearch'
-        if 'method' in request.json:
-            method = request.json['method']
+        model_name = 'elasticsearch'
+        if 'model' in request.json:
+            model_name = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
-        if method == 'wordvec':
-            model = SharedModel.get_client(request.json.get("model"))
+        if model_name.lower() != 'elasticsearch':
+            model = SharedModel.get_client(model_name)
             body['vector'] = model.get_shared_model_response(request.json['text'])
         if 'context' in request.json:
             body['context'] = request.json['context']
@@ -48,9 +48,9 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
     def get(self):
-        method = 'elasticsearch'
-        if 'method' in request.json:
-            method = request.json['method']
+        model_name = 'elasticsearch'
+        if 'model' in request.json:
+            model_name = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
 
@@ -58,7 +58,7 @@ class SimilarityResource(Resource):
         if 'threshold' in request.json:
             threshold = request.json['threshold']
 
-        if method == 'elasticsearch':
+        if model_name.lower() == 'elasticsearch':
             conditions = [
                 {
                     'match': {
@@ -69,12 +69,14 @@ class SimilarityResource(Resource):
                     }
                 },
             ]
+
+            # FIXME: `analyzer` and `minimum_should_match` don't play well together.
             if 'language' in request.json:
                 conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
                 del conditions[0]['match']['content']['minimum_should_match']
 
-        elif method == 'wordvec':
-            model = SharedModel.get_client(request.json.get("model"))
+        else:
+            model = SharedModel.get_client(model_name)
             vector = model.get_shared_model_response(request.json['text'])
             conditions = [
                 {
@@ -90,7 +92,8 @@ class SimilarityResource(Resource):
                                         'source': 'cosine',
                                         'lang': 'meedan_scripts',
                                         'params': {
-                                            'vector': vector
+                                            'vector': vector,
+                                            'model': model_name
                                         }
                                     }
                                 }
@@ -99,6 +102,7 @@ class SimilarityResource(Resource):
                     }
                 }
             ]
+
         if 'context' in request.json:
             matches = []
             for key in request.json['context']:
@@ -117,6 +121,7 @@ class SimilarityResource(Resource):
                 }
             }
             conditions.append(context)
+
         body = {
             'query': {
                 'bool': {

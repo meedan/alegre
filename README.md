@@ -18,5 +18,11 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 - To test a specific module:
 ```
 docker-compose exec alegre bash
-python manage.py test -p test_wordvec.py
+BOILERPLATE_ENV=test FLASK_ENV=test coverage run manage.py test -p test_langid.py
+```
+- To test a model modules or controllers:
+```
+docker-compose exec alegre bash
+MODEL_NAME=WordVec BOILERPLATE_ENV=test FLASK_ENV=test python manage.py run_model &
+BOILERPLATE_ENV=test FLASK_ENV=test coverage run manage.py test -p test_wordvec.py
 ```

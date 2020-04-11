@@ -29,11 +29,11 @@ class Config:
     'dbname': os.getenv('DATABASE_NAME', 'alegre'),
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
+  FLASK_DEBUG = False
 
 class DevelopmentConfig(Config):
   DEBUG = True
   FLASK_ENV = 'development'
-  FLASK_DEBUG = True
 
 class TestingConfig(Config):
   DEBUG = True

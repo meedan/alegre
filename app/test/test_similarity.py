@@ -39,7 +39,7 @@ class TestSimilaryBlueprint(BaseTestCase):
         mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']['_doc']
       )
 
-    def test_english_similarity_api(self):
+    def test_elasticsearch_similarity_english(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 del term['_type']
@@ -94,7 +94,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-    def test_language_similarity_api(self):
+    def test_elasticsearch_similarity_hindi(self):
         with self.client:
             for term in [
               { 'text': 'नमस्ते मेरा नाम करीम है' },
@@ -128,7 +128,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_wordvec_similarity(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'method': 'wordvec', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to delete an invoice', 'model': 'WordVec', 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -137,6 +137,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
+              'model': 'WordVec',
               'context': {
                 'dbid': 54
               }
@@ -152,7 +153,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'method': 'wordvec',
+              'model': 'WordVec',
               'threshold': 0.7,
               'context': {
                 'dbid': 54
@@ -169,7 +170,61 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'method': 'wordvec',
+              'model': 'WordVec',
+              'threshold': 0.7
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual(1, len(result['result']))
+        similarity = result['result'][0]['_score']
+        self.assertGreater(similarity, 0.7)
+
+    def test_universalsentenceencoder_similarity(self):
+        with self.client:
+            term = { 'text': 'how to delete an invoice', 'model': 'UniversalSentenceEncoder', 'context': { 'dbid': 54 } }
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            result = json.loads(response.data.decode())
+            self.assertEqual(True, result['success'])
+
+        response = self.client.get(
+            '/text/similarity/',
+            data=json.dumps({
+              'text': 'how to delete an invoice',
+              'model': 'UniversalSentenceEncoder',
+              'context': {
+                'dbid': 54
+              }
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual(1, len(result['result']))
+        similarity = result['result'][0]['_score']
+        self.assertGreater(similarity, 0.7)
+
+        response = self.client.get(
+            '/text/similarity/',
+            data=json.dumps({
+              'text': 'purge an invoice',
+              'model': 'UniversalSentenceEncoder',
+              'threshold': 0.7,
+              'context': {
+                'dbid': 54
+              }
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual(1, len(result['result']))
+        similarity = result['result'][0]['_score']
+        self.assertGreater(similarity, 0.7)
+
+        response = self.client.get(
+            '/text/similarity/',
+            data=json.dumps({
+              'text': 'purge an invoice',
+              'model': 'UniversalSentenceEncoder',
               'threshold': 0.7
             }),
             content_type='application/json'

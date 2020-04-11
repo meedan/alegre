@@ -3,38 +3,36 @@ import json
 import uuid
 from flask import current_app as app
 import redis
+from unittest.mock import patch
+from collections import namedtuple
 
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel, Task
-from app.main.lib.shared_models.wordvec import WordVec
+
 class SharedModelStub(SharedModel):
+  def load(self, opts={}):
+    pass
+
   def respond(self, analysis_value):
-      return analysis_value
+    return analysis_value
+
+  def similarity(self, valueA, valueB):
+    return 0.0
 
 class TestSharedModel(BaseTestCase):
   def setUp(self):
     r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     r.flushall()
 
+  def test_get_client(self):
+    with patch('importlib.import_module', ) as mock_import:
+      ModuleStub = namedtuple('ModuleStub', 'SharedModelStub')
+      mock_import.return_value = ModuleStub(SharedModelStub=SharedModelStub)
+      self.assertIsInstance(SharedModel.get_client('SharedModelStub'), SharedModelStub)
+
   def test_init(self):
     instance = SharedModelStub()
-    self.assertEqual(instance.queue_name, 'SharedModelQueueSharedModelStub')
-
-  def test_model_class_from_name(self):
-    self.assertEqual(SharedModel.model_class_from_name("WordVec"), WordVec)
-
-  def test_model_instance_from_name(self):
-    self.assertIsInstance(SharedModel.model_instance_from_model_name("WordVec"), WordVec)
-
-  def test_start_model(self):
-    self.assertIsInstance(SharedModel.start_model("WordVec"), WordVec)
-
-  def test_start_model(self):
-    self.assertIsInstance(SharedModel.get_client("WordVec"), WordVec)
-
-  def test_model_name(self):
-    instance = SharedModelStub(None)
-    self.assertEqual(instance.model_name(), "SharedModelStub")
+    self.assertEqual(instance.queue_name, 'SharedModelStub')
 
   def test_get_task_timeout(self):
     instance = SharedModelStub()

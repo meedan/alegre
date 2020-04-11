@@ -26,7 +26,6 @@ class TestWordVecBlueprint(BaseTestCase):
                   "vector1": vector,
                   "vector2": vector,
                   "model": "WordVec",
-
                 }),
                 content_type='application/json'
             )

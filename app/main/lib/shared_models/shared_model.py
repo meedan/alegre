@@ -12,48 +12,21 @@ from flask import current_app as app
 
 Task = namedtuple('Task', 'task_id task_type task_package')
 
-MODEL_NAME_PREFIX = "SharedModelQueue"
-
 class SharedModel(object):
   @staticmethod
-  def default_redis_host():
-    with app.app_context():
-      return redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+  def get_client(model_name):
+    class_ = getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
+    return class_()
 
   @staticmethod
-  def model_class_from_name(model_name):
-    return getattr(importlib.import_module("app.main.lib.shared_models.%s" % model_name.lower()), model_name)
-
-  @staticmethod
-  def model_instance_from_model_name(model_name, model_opts={}, shared_model_opts={}):
-    return SharedModel.model_class_from_name(model_name)(model_opts, shared_model_opts)
-
-  @staticmethod
-  def start_model(model_name, model_opts={}, shared_model_opts={}):
-    instance = SharedModel.model_instance_from_model_name(model_name, model_opts, shared_model_opts)
-    return instance.load(model_opts)
-
-  @staticmethod
-  def start_server(model_name=os.getenv('MODEL_NAME'), model_opts={}, shared_model_opts={}):
-    instance = SharedModel.start_model(model_name, model_opts, shared_model_opts)
+  def start_server(model_name=os.getenv('MODEL_NAME')):
+    instance = SharedModel.get_client(model_name)
+    instance.load()
     instance.bulk_run()
 
-  @staticmethod
-  def get_client(model_name=None, model_opts={}, shared_model_opts={}):
-    if not model_name:
-      model_name = os.getenv('MODEL_NAME')
-    return SharedModel.model_instance_from_model_name(model_name, model_opts, shared_model_opts)
-
   def __init__(self, model_opts={}, shared_model_opts={}):
-    self.queue_name = shared_model_opts.get("queue_name_override", MODEL_NAME_PREFIX+self.model_name())
-    self.datastore = shared_model_opts.get("datastore", SharedModel.default_redis_host())
-
-  def model_name(self):
-    return self.__class__.__name__
-    
-  def load(self, model_opts):
-    self.load_model(model_opts)
-    return self
+    self.queue_name = self.__class__.__name__
+    self.datastore = self.datastore = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
 
   def get_task(self, timeout=0):
     item = self.datastore.blpop(self.queue_name, timeout)
@@ -142,5 +115,11 @@ class SharedModel(object):
       )
     )
 
+  def load(self, opts={}):
+    raise NotImplementedError("[SharedModel] Subclasses must define a `load` function to load their own model!")
+
   def respond(self, task_package):
-    raise NotImplementedError("[SharedModel] Subclasses must define a `respond` function for accessing answers!")
+    raise NotImplementedError("[SharedModel] Subclasses must define a `respond` function to process requests!")
+
+  def similarity(self, vecA, vecB):
+    raise NotImplementedError("[SharedModel] Subclasses must define a `similarity` function to compare values!")

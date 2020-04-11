@@ -79,14 +79,19 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
             private final Map<String, Object> params;
             private final SearchLookup lookup;
             private final List inputVector;
+            private final String modelName;
 
             private CosineLeafFactory(Map<String, Object> params, SearchLookup lookup) {
                 if (params.containsKey("vector") == false) {
                     throw new IllegalArgumentException("Missing parameter [vector]");
                 }
+                if (params.containsKey("model") == false) {
+                    throw new IllegalArgumentException("Missing parameter [model]");
+                }
                 this.params = params;
                 this.lookup = lookup;
                 this.inputVector = (List)params.get("vector");
+                this.modelName = (String)params.get("model");
             }
 
             @Override
@@ -97,6 +102,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
             @Override
             public SearchScript newInstance(LeafReaderContext context) throws IOException {
                 List inputVector = this.inputVector;
+                String modelName = this.modelName;
 
                 return new SearchScript(params, lookup, context) {
                     public String convertToJson(List list) {
@@ -108,7 +114,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                       return "[" + String.join(",", strings) + "]";
                     }
 
-                    public double getSimilarityFromAlegre(String vector1, String vector2) {
+                    public double getSimilarityFromAlegre(String vector1, String vector2, String modelName) {
                       SecurityManager sm = System.getSecurityManager();
                       if (sm != null) {
                         sm.checkPermission(new SpecialPermission());
@@ -130,7 +136,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                             }
                             logger.info("Calling Alegre at " + alegreUrl + " with authentication " + alegreAuth);
 
-                            String input = "{\"vector1\":\"" + vector1 + "\",\"vector2\":\"" + vector2 + "\"}";
+                            String input = "{\"vector1\":\"" + vector1 + "\",\"vector2\":\"" + vector2 + "\",\"model\":\"" + modelName + "\"}";
 
                             OutputStream os = conn.getOutputStream();
                             os.write(input.getBytes());
@@ -166,7 +172,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           List sourceVector = (List)vector;
                           String sourceVectorJSON = this.convertToJson(sourceVector);
                           String inputVectorJSON = this.convertToJson(inputVector);
-                          score = this.getSimilarityFromAlegre(sourceVectorJSON, inputVectorJSON);
+                          score = this.getSimilarityFromAlegre(sourceVectorJSON, inputVectorJSON, modelName);
                         }
                         catch (Exception e) {
                           score = 0.0d;
