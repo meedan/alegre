@@ -1,0 +1,19 @@
+version: '2'
+services:
+  model_use:
+    environment:
+      - "BOILERPLATE_ENV=test"
+      - "FLASK_ENV=test"
+      - "FLASK_DEBUG=false"
+      - "MODEL_NAME=UniversalSentenceEncoder"
+  model_wv:
+    environment:
+      - "BOILERPLATE_ENV=test"
+      - "FLASK_ENV=test"
+      - "FLASK_DEBUG=false"
+      - "MODEL_NAME=WordVec"
+  alegre:
+    environment:
+      - "BOILERPLATE_ENV=test"
+      - "FLASK_ENV=test"
+      - "FLASK_DEBUG=false"

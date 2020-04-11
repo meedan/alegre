@@ -14,15 +14,11 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 - Open http://localhost:5601 for the Kibana UI
 - Open http://localhost:9200 for the Elasticsearch API
 - `docker-compose exec alegre flask shell` to get inside a Python shell with the loaded app
-- `docker-compose exec alegre make test` to run all tests
-- To test a specific module:
+- To run tests:
 ```
-docker-compose exec alegre bash
-BOILERPLATE_ENV=test FLASK_ENV=test coverage run manage.py test -p test_langid.py
-```
-- To test a model modules or controllers:
-```
-docker-compose exec alegre bash
-MODEL_NAME=WordVec BOILERPLATE_ENV=test FLASK_ENV=test python manage.py run_model &
-BOILERPLATE_ENV=test FLASK_ENV=test coverage run manage.py test -p test_wordvec.py
+docker-compose -f docker-compose.yml -f docker-test.yml up -d --abort-on-container-exit
+docker-compose logs -t -f &
+wget -q --waitretry=5 --retry-connrefused -t 20 -T 10 -O - http://127.0.0.1:9200
+docker-compose exec alegre make test
+docker-compose exec alegre coverage report
 ```

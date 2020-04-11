@@ -32,7 +32,7 @@ class SharedModel(object):
     item = self.datastore.blpop(self.queue_name, timeout)
     if item:
       task = Task(**json.loads(item[1].decode("utf-8")))
-      app.logger.info('[SharedModel] Picking up task %s', task.task_id)
+      app.logger.info('[%s] Picking up task %s', self.queue_name, task.task_id)
       return task
 
   def send_response(self, task, response):
@@ -84,7 +84,7 @@ class SharedModel(object):
     return json.dumps(task._asdict())
 
   def push_task(self, task):
-    app.logger.info('[SharedModel] Pushing task %s', task.task_id)
+    app.logger.info('[%s] Pushing task %s', self.queue_name, task.task_id)
     return self.datastore.rpush(
       task.task_type,
       self.encode_task(task)
