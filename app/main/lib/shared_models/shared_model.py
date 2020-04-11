@@ -22,6 +22,7 @@ class SharedModel(object):
   def start_server(model_name=os.getenv('MODEL_NAME')):
     instance = SharedModel.get_client(model_name)
     instance.load()
+    app.logger.info("[%s] Serving model...", model_name)
     instance.bulk_run()
 
   def __init__(self, model_opts={}, shared_model_opts={}):

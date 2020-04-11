@@ -36,7 +36,6 @@ def run():
 def run_model():
   """Runs the model server."""
   model_name = os.getenv('MODEL_NAME')
-  print("* Serving model %s..." % model_name, flush=True)
   SharedModel.start_server(model_name)
 
 @manager.command
