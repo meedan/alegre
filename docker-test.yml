@@ -1,5 +1,10 @@
 version: '2'
 services:
+  postgres:
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=alegre_test"
   model_use:
     environment:
       - "BOILERPLATE_ENV=test"
@@ -13,6 +18,12 @@ services:
       - "FLASK_DEBUG=false"
       - "MODEL_NAME=WordVec"
   alegre:
+    depends_on:
+      - postgres
+      - elasticsearch
+      - redis
+      - model_use
+      - model_wv
     environment:
       - "BOILERPLATE_ENV=test"
       - "FLASK_ENV=test"
