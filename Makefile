@@ -5,7 +5,7 @@ run: wait
 	python manage.py run
 run_model:
 	python manage.py run_model
-test:
+test: wait
 	python manage.py init
 	coverage run manage.py test
 wait:
