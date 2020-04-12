@@ -22,10 +22,12 @@ class SharedModelStub(SharedModel):
     return 0.0
 
 class TestSharedModel(BaseTestCase):
-  def tearDown(self):
-    SharedModel.datastore().delete(SharedModelStub.model_key)
-    SharedModel.datastore().delete('SharedModel:%s' % SharedModelStub.model_key)
-    SharedModel.datastore().srem('SharedModel', SharedModelStub.model_key)
+  def setUp(self):
+    super().setUp()
+    r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+    r.delete(SharedModelStub.model_key)
+    r.delete('SharedModel:%s' % SharedModelStub.model_key)
+    r.srem('SharedModel', SharedModelStub.model_key)
 
   def test_server_registration(self):
     with patch('importlib.import_module', ) as mock_import:

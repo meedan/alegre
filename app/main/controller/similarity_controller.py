@@ -29,6 +29,7 @@ class SimilarityResource(Resource):
         if model_key.lower() != 'elasticsearch':
             model = SharedModel.get_client(model_key)
             body['vector'] = model.get_shared_model_response(request.json['text'])
+            body['model'] = model_key
         if 'context' in request.json:
             body['context'] = request.json['context']
         result = es.index(
