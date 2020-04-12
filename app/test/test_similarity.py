@@ -10,11 +10,13 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
+    wordvec_model_key = "wordvec-glove-6B-50d"
+    use_model_key = "universal-sentence-encoder-large"
 
     def setUp(self):
       super().setUp()
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_settings(
@@ -128,7 +130,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_wordvec_similarity(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'model': 'WordVec', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to delete an invoice', 'model': TestSimilaryBlueprint.wordvec_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -137,7 +139,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
-              'model': 'WordVec',
+              'model': TestSimilaryBlueprint.wordvec_model_key,
               'context': {
                 'dbid': 54
               }
@@ -153,7 +155,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': 'WordVec',
+              'model': TestSimilaryBlueprint.wordvec_model_key,
               'threshold': 0.7,
               'context': {
                 'dbid': 54
@@ -170,7 +172,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': 'WordVec',
+              'model': TestSimilaryBlueprint.wordvec_model_key,
               'threshold': 0.7
             }),
             content_type='application/json'
@@ -182,7 +184,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_universalsentenceencoder_similarity(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'model': 'UniversalSentenceEncoder', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to delete an invoice', 'model': TestSimilaryBlueprint.use_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -191,7 +193,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
-              'model': 'UniversalSentenceEncoder',
+              'model': TestSimilaryBlueprint.use_model_key,
               'context': {
                 'dbid': 54
               }
@@ -207,7 +209,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': 'UniversalSentenceEncoder',
+              'model': TestSimilaryBlueprint.use_model_key,
               'threshold': 0.7,
               'context': {
                 'dbid': 54
@@ -224,7 +226,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': 'UniversalSentenceEncoder',
+              'model': TestSimilaryBlueprint.use_model_key,
               'threshold': 0.7
             }),
             content_type='application/json'

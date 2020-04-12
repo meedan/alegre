@@ -6,9 +6,9 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import cosine_similarity
 
 class WordVec(SharedModel):
-    def load(self, opts={}):
-        model_path = opts.get('model_path', './data/model.txt')
-        stopwords_path = opts.get('stopwords_path', './data/stopwords-en.txt')
+    def load(self):
+        model_path = self.options.get('model_path')
+        stopwords_path = self.options.get('stopwords_path')
         if os.path.isfile(model_path):
             w2v_model = KeyedVectors.load_word2vec_format(model_path)
             with open(stopwords_path, 'r') as fh:

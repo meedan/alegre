@@ -5,24 +5,33 @@ import json
 import numpy as np
 from app.main.lib.shared_models.shared_model import SharedModel
 
-api = Namespace('wordvec', description='word vector operations')
+api = Namespace('model', description='model operations')
 
-wordvec_vector_request = api.model('wordvec_vector_request', {
+model_vector_request = api.model('model_vector_request', {
     'text': fields.String(required=True, description='text to be converted to a vector'),
     'model': fields.String(required=True, description='model to be used')
 })
 
-wordvec_similarity_request = api.model('wordvec_similarity_request', {
+model_similarity_request = api.model('model_similarity_request', {
     'vector1': fields.String(required=True, description='the first vector, as a JSON list'),
     'vector2': fields.String(required=True, description='the second vector, as a JSON list'),
     'model': fields.String(required=True, description='model to be used')
 })
 
+@api.route('/')
+class ModelVectorResource(Resource):
+    @api.response(200, 'successfully retrieved list of running models.')
+    @api.doc('Retrieve list of running models')
+    def get(self):
+        return {
+            'models': SharedModel.get_servers()
+        }
+
 @api.route('/vector')
-class WordVecVectorResource(Resource):
+class ModelVectorResource(Resource):
     @api.response(200, 'text successfully converted to vector.')
     @api.doc('Convert a text to a vector')
-    @api.expect(wordvec_vector_request, validate=True)
+    @api.expect(model_vector_request, validate=True)
     def post(self):
         model = SharedModel.get_client(request.json['model'])
         vector = model.get_shared_model_response(request.json['text'])
@@ -31,10 +40,10 @@ class WordVecVectorResource(Resource):
         }
 
 @api.route('/similarity')
-class WordVecSimilarityResource(Resource):
+class ModelSimilarityResource(Resource):
     @api.response(200, 'two vectors compared successfully.')
     @api.doc('Given two vectors, compare the similarities between them')
-    @api.expect(wordvec_similarity_request, validate=True)
+    @api.expect(model_similarity_request, validate=True)
     def post(self):
         model = SharedModel.get_client(request.json['model'])
         vec1 = np.asarray(json.loads(request.json['vector1']))

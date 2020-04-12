@@ -6,14 +6,16 @@ from flask import current_app as app
 from app.main import db
 from app.test.base import BaseTestCase
 
-class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
+class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
+    use_model_key = "universal-sentence-encoder-large"
+
     def test_universalsentenceencoder_api(self):
         with self.client:
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "this is a test",
-                  "model": "UniversalSentenceEncoder",
+                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -21,11 +23,11 @@ class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
             vector = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/similarity',
+                '/model/similarity',
                 data=json.dumps({
                   "vector1": vector,
                   "vector2": vector,
-                  "model": "UniversalSentenceEncoder",
+                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -34,10 +36,10 @@ class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
             self.assertEqual(1.0, similarity)
 
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "how to delete an invoice",
-                  "model": "UniversalSentenceEncoder",
+                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -45,10 +47,10 @@ class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
             vector1 = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "purge an invoice",
-                  "model": "UniversalSentenceEncoder",
+                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -56,11 +58,11 @@ class TestUniversalSentenceEncoderBlueprint(BaseTestCase):
             vector2 = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/similarity',
+                '/model/similarity',
                 data=json.dumps({
                   "vector1": vector1,
                   "vector2": vector2,
-                  "model": "UniversalSentenceEncoder",
+                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )

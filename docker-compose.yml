@@ -9,10 +9,10 @@ services:
     ports:
       - "9200:9200"
     environment:
-      - "discovery.type=single-node"
-      - "transport.host=127.0.0.1"
-      - "xpack.security.enabled=false"
-      - "ALEGRE_URL=http://alegre:5000"
+      discovery.type: single-node
+      transport.host: 127.0.0.1
+      xpack.security.enabled: "false"
+      ALEGRE_URL: http://alegre:5000
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
   kibana:
@@ -34,9 +34,9 @@ services:
     volumes:
       - "postgres:/var/lib/postgresql/data"
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=postgres"
-      - "POSTGRES_DB=alegre"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alegre
   model_use:
     build: .
     command: ["make", "run_model"]
@@ -47,10 +47,12 @@ services:
     env_file:
       - .env_file
     environment:
-      - "BOILERPLATE_ENV=dev"
-      - "FLASK_ENV=development"
-      - "FLASK_DEBUG=true"
-      - "MODEL_NAME=UniversalSentenceEncoder"
+      BOILERPLATE_ENV: dev
+      FLASK_ENV: development
+      FLASK_DEBUG: "true"
+      MODEL_CLASS: UniversalSentenceEncoder
+      MODEL_KEY: universal-sentence-encoder-large
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-large/5"}'
   model_wv:
     build: .
     command: ["make", "run_model"]
@@ -61,10 +63,12 @@ services:
     env_file:
       - .env_file
     environment:
-      - "BOILERPLATE_ENV=dev"
-      - "FLASK_ENV=development"
-      - "FLASK_DEBUG=true"
-      - "MODEL_NAME=WordVec"
+      BOILERPLATE_ENV: dev
+      FLASK_ENV: development
+      FLASK_DEBUG: "true"
+      MODEL_CLASS: WordVec
+      MODEL_KEY: wordvec-glove-6B-50d
+      MODEL_OPTIONS: '{"model_path": "./data/model.txt", "stopwords_path": "./data/stopwords-en.txt"}'
   alegre:
     build: .
     ports:
@@ -80,6 +84,6 @@ services:
     env_file:
       - .env_file
     environment:
-      - "BOILERPLATE_ENV=dev"
-      - "FLASK_ENV=development"
-      - "FLASK_DEBUG=true"
+      BOILERPLATE_ENV: dev
+      FLASK_ENV: development
+      FLASK_DEBUG: "true"

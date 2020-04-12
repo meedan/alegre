@@ -1,7 +1,7 @@
 alegre
 ------
 
-A linguistic service to support multilingual apps.
+A linguistic service to support multilingual apps. Part of the [Check platform](https://meedan.com/check). Refer to the [main repository](https://github.com/meedan/check) for quick start instructions.
 
 # Development
 
@@ -16,6 +16,7 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 - `docker-compose exec alegre flask shell` to get inside a Python shell with the loaded app
 
 # Testing
+
 - `docker-compose -f docker-compose.yml -f docker-test.yml up --abort-on-container-exit`
 - Wait for the logs to settle, then in a different console:
 - `docker-compose exec alegre make test`
@@ -24,3 +25,5 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 To run individual modules:
 - `docker-compose exec alegre bash`
 - `python manage.py test -p test_similarity.py`
+
+NOTE! Testing mode disables reloading on code changes to avoid [a bug with the Flask framework](https://github.com/tensorflow/tensorflow/issues/34607).

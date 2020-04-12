@@ -2,23 +2,26 @@ version: '2'
 services:
   postgres:
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=postgres"
-      - "POSTGRES_DB=alegre_test"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alegre_test
   model_use:
     environment:
-      - "BOILERPLATE_ENV=test"
-      - "FLASK_ENV=test"
-      - "FLASK_DEBUG=false"
-      - "MODEL_NAME=UniversalSentenceEncoder"
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "false"
+      MODEL_CLASS: UniversalSentenceEncoder
+      MODEL_KEY: universal-sentence-encoder-large
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-large/5"}'
   model_wv:
     environment:
-      - "BOILERPLATE_ENV=test"
-      - "FLASK_ENV=test"
-      - "FLASK_DEBUG=false"
-      - "MODEL_NAME=WordVec"
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "false"
+      MODEL_CLASS: WordVec
+      MODEL_KEY: wordvec-glove-6B-50d
+      MODEL_OPTIONS: '{"model_path": "./data/model.txt", "stopwords_path": "./data/stopwords-en.txt"}'
   alegre:
-    command: ["python", "manage.py", "run"]
     depends_on:
       - postgres
       - elasticsearch
@@ -26,6 +29,6 @@ services:
       - model_use
       - model_wv
     environment:
-      - "BOILERPLATE_ENV=test"
-      - "FLASK_ENV=test"
-      - "FLASK_DEBUG=false"
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "false"

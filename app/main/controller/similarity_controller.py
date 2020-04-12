@@ -21,13 +21,13 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        model_name = 'elasticsearch'
+        model_key = 'elasticsearch'
         if 'model' in request.json:
-            model_name = request.json['model']
+            model_key = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
-        if model_name.lower() != 'elasticsearch':
-            model = SharedModel.get_client(model_name)
+        if model_key.lower() != 'elasticsearch':
+            model = SharedModel.get_client(model_key)
             body['vector'] = model.get_shared_model_response(request.json['text'])
         if 'context' in request.json:
             body['context'] = request.json['context']
@@ -48,9 +48,9 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
     def get(self):
-        model_name = 'elasticsearch'
+        model_key = 'elasticsearch'
         if 'model' in request.json:
-            model_name = request.json['model']
+            model_key = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
 
@@ -58,7 +58,7 @@ class SimilarityResource(Resource):
         if 'threshold' in request.json:
             threshold = request.json['threshold']
 
-        if model_name.lower() == 'elasticsearch':
+        if model_key.lower() == 'elasticsearch':
             conditions = [
                 {
                     'match': {
@@ -76,7 +76,7 @@ class SimilarityResource(Resource):
                 del conditions[0]['match']['content']['minimum_should_match']
 
         else:
-            model = SharedModel.get_client(model_name)
+            model = SharedModel.get_client(model_key)
             vector = model.get_shared_model_response(request.json['text'])
             conditions = [
                 {
@@ -93,7 +93,7 @@ class SimilarityResource(Resource):
                                         'lang': 'meedan_scripts',
                                         'params': {
                                             'vector': vector,
-                                            'model': model_name
+                                            'model': model_key
                                         }
                                     }
                                 }

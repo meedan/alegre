@@ -11,9 +11,9 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import angular_similarity
 
 class UniversalSentenceEncoder(SharedModel):
-    def load(self, opts={}):
-        model_path = opts.get('model_path', 'https://tfhub.dev/google/universal-sentence-encoder-large/5')
-        self.model=hub.load(model_path)
+    def load(self):
+        model_path = self.options.get('model_path')
+        self.model = hub.load(model_path)
 
     def respond(self, doc):
       return self.vectorize(doc).tolist()

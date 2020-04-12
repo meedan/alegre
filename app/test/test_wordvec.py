@@ -6,14 +6,16 @@ from flask import current_app as app
 from app.main import db
 from app.test.base import BaseTestCase
 
-class TestWordVecBlueprint(BaseTestCase):
+class TestWordVecModelBlueprint(BaseTestCase):
+    wordvec_model_key = "wordvec-glove-6B-50d"
+
     def test_wordvec_api(self):
         with self.client:
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "this is a test",
-                  "model": "WordVec",
+                  "model": TestWordVecModelBlueprint.wordvec_model_key,
                 }),
                 content_type='application/json'
             )
@@ -21,11 +23,11 @@ class TestWordVecBlueprint(BaseTestCase):
             vector = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/similarity',
+                '/model/similarity',
                 data=json.dumps({
                   "vector1": vector,
                   "vector2": vector,
-                  "model": "WordVec",
+                  "model": TestWordVecModelBlueprint.wordvec_model_key,
                 }),
                 content_type='application/json'
             )
@@ -34,10 +36,10 @@ class TestWordVecBlueprint(BaseTestCase):
             self.assertEqual(1.0, similarity)
 
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "how to delete an invoice",
-                  "model": "WordVec",
+                  "model": TestWordVecModelBlueprint.wordvec_model_key,
                 }),
                 content_type='application/json'
             )
@@ -45,10 +47,10 @@ class TestWordVecBlueprint(BaseTestCase):
             vector1 = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/vector',
+                '/model/vector',
                 data=json.dumps({
                   "text": "purge an invoice",
-                  "model": "WordVec",
+                  "model": TestWordVecModelBlueprint.wordvec_model_key,
                 }),
                 content_type='application/json'
             )
@@ -56,11 +58,11 @@ class TestWordVecBlueprint(BaseTestCase):
             vector2 = result['vector']
 
             response = self.client.post(
-                '/text/wordvec/similarity',
+                '/model/similarity',
                 data=json.dumps({
                   "vector1": vector1,
                   "vector2": vector2,
-                  "model": "WordVec",
+                  "model": TestWordVecModelBlueprint.wordvec_model_key,
                 }),
                 content_type='application/json'
             )

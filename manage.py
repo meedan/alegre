@@ -35,8 +35,11 @@ def run():
 @manager.command
 def run_model():
   """Runs the model server."""
-  model_name = os.getenv('MODEL_NAME')
-  SharedModel.start_server(model_name)
+  SharedModel.start_server(
+    app.config['MODEL_CLASS'],
+    app.config['MODEL_KEY'],
+    app.config['MODEL_OPTIONS']
+  )
 
 @manager.command
 def init():
