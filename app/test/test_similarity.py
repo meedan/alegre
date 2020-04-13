@@ -246,7 +246,7 @@ class TestSimilaryBlueprint(BaseTestCase):
         response = self.client.get(
             '/text/similarity/',
             data=json.dumps({
-              'text': 'how to delete an invoice',
+              'text': 'how to slice a banana',
               'model': TestSimilaryBlueprint.use_model_key,
               'context': {
                 'dbid': 54
