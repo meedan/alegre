@@ -9,7 +9,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=True, description='text to be stored or queried for similarity'),
-    'model': fields.String(required=False, description='similarity model to use: "Elasticsearch" (pure Elasticsearch, default) or the name of an existing model - USE CORRECT CASE!'),
+    'model': fields.String(required=False, description='similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=False, description='context')
