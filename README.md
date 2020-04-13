@@ -25,5 +25,3 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 To run individual modules:
 - `docker-compose exec alegre bash`
 - `python manage.py test -p test_similarity.py`
-
-NOTE! Testing mode disables reloading on code changes to avoid [a bug with the Flask framework](https://github.com/tensorflow/tensorflow/issues/34607).

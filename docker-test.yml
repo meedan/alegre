@@ -9,7 +9,7 @@ services:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
-      FLASK_DEBUG: "false"
+      FLASK_DEBUG: "true"
       MODEL_CLASS: UniversalSentenceEncoder
       MODEL_KEY: universal-sentence-encoder-large
       MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-large/5"}'
@@ -17,7 +17,7 @@ services:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
-      FLASK_DEBUG: "false"
+      FLASK_DEBUG: "true"
       MODEL_CLASS: WordVec
       MODEL_KEY: wordvec-glove-6B-50d
       MODEL_OPTIONS: '{"model_path": "./data/model.txt", "stopwords_path": "./data/stopwords-en.txt"}'
@@ -31,4 +31,4 @@ services:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
-      FLASK_DEBUG: "false"
+      FLASK_DEBUG: "true"
