@@ -17,6 +17,10 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
 
+# Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
+# (by upgrading to tensorflow 2.2 or higher)
+import tensorflow as tf
+
 config_name = os.getenv('BOILERPLATE_ENV', 'dev')
 app = create_app(config_name)
 app.register_blueprint(blueprint)
