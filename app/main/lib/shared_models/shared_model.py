@@ -115,12 +115,15 @@ class SharedModel(object):
     return self.datastore.delete(task.task_id)
 
   def read_task_response(self, task):
-    return json.loads(
-      self.get_task_result(task).decode('utf-8')
-    )['response']
+    result = self.get_task_result(task)
+    if result:
+      return json.loads(
+        result.decode('utf-8')
+      )['response']
 
-  def get_task_response(self, task):
-    while self.get_task_result(task) is None:
+  def get_task_response(self, task, max_timeout=60):
+    start = datetime.now()
+    while (datetime.now()-start).total_seconds() < max_timeout and self.get_task_result(task) is None:
       time.sleep(0.001)
     response = self.read_task_response(task)
     self.delete_task_response(task)

@@ -54,7 +54,6 @@ class SimilarityResource(Resource):
             model_key = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
-
         threshold = 0.9
         if 'threshold' in request.json:
             threshold = request.json['threshold']
