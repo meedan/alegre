@@ -3,7 +3,7 @@ before_install:
 before_script:
   - git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
   - d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
-  - cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
+  - (cd data && unzip glove-6B-50d-gensim.txt.zip)
   - docker-compose build --pull
   - docker-compose -f docker-compose.yml -f docker-test.yml up -d
   - docker-compose logs -t -f &
