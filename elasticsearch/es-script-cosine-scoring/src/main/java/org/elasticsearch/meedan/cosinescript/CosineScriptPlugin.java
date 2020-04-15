@@ -175,6 +175,9 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           Vector v1 = Vector.create(inputVector);
                           Vector v2 = Vector.create(sourceVector);
                           score = 1 - v1.angle(v2) / Math.PI;
+                          logger.info("**** Vector 1: " + v1);
+                          logger.info("**** Vector 2: " + v2);
+                          logger.info("**** Similarity: " + score);
                         }
                         catch (Exception e) {
                           score = 0.0d;
