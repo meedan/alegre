@@ -20,7 +20,7 @@ services:
       FLASK_DEBUG: "true"
       MODEL_CLASS: WordVec
       MODEL_KEY: wordvec-glove-6B-50d
-      MODEL_OPTIONS: '{"model_path": "./data/model.txt", "stopwords_path": "./data/stopwords-en.txt"}'
+      MODEL_OPTIONS: '{"model_path": "./data/glove-6B-50d-gensim.txt", "stopwords_path": "./data/stopwords-en.txt"}'
   alegre:
     depends_on:
       - postgres

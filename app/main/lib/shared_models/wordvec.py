@@ -3,24 +3,22 @@ import numpy as np
 from gensim.models.keyedvectors import KeyedVectors
 
 from app.main.lib.shared_models.shared_model import SharedModel
-from app.main.lib.similarity_measures import cosine_similarity
+from app.main.lib.similarity_measures import angular_similarity
 
 class WordVec(SharedModel):
     def load(self):
         model_path = self.options.get('model_path')
         stopwords_path = self.options.get('stopwords_path')
         if os.path.isfile(model_path):
-            w2v_model = KeyedVectors.load_word2vec_format(model_path)
-            with open(stopwords_path, 'r') as fh:
-                stopwords = fh.read().split(',')
-            self.w2v_model = w2v_model
-            self.stopwords = stopwords
+            self.w2v_model = KeyedVectors.load_word2vec_format(model_path)
+        with open(stopwords_path, 'r') as fh:
+            self.stopwords = fh.read().split(',')
 
     def respond(self, doc):
         return self.vectorize(doc).tolist()
 
     def similarity(self, vecA, vecB):
-        return cosine_similarity(vecA, vecB)
+        return angular_similarity(vecA, vecB)
 
     def vectorize(self, doc):
         """

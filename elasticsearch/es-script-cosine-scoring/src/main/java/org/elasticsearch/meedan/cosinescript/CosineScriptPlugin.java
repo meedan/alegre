@@ -38,6 +38,8 @@ import org.elasticsearch.search.lookup.LeafDocLookup;
 import org.elasticsearch.search.lookup.SourceLookup;
 import org.elasticsearch.SpecialPermission;
 
+import mikera.vectorz.Vector;
+
 public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
     private static final Logger logger = LogManager.getLogger(CosineScriptPlugin.class);
 
@@ -170,9 +172,9 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           Object key = "vector";
                           Object vector = source.get(key);
                           List sourceVector = (List)vector;
-                          String sourceVectorJSON = this.convertToJson(sourceVector);
-                          String inputVectorJSON = this.convertToJson(inputVector);
-                          score = this.getSimilarityFromAlegre(sourceVectorJSON, inputVectorJSON, modelName);
+                          Vector v1 = Vector.create(inputVector);
+                          Vector v2 = Vector.create(sourceVector);
+                          score = 1 - v1.angle(v2) / Math.PI;
                         }
                         catch (Exception e) {
                           score = 0.0d;

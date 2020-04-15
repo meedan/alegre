@@ -123,7 +123,7 @@ class TestSharedModel(BaseTestCase):
 
   def get_shared_model_response(self):
     instance = SharedModelStub(SharedModelStub.model_key)
-    self.ssertEqual(instance.get_shared_model_response(1), 1)
+    self.assertEqual(instance.get_shared_model_response(1), 1)
 
 if __name__ == '__main__':
     unittest.main()
