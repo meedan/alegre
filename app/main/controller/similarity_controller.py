@@ -1,7 +1,6 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
-import json
 
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
@@ -133,8 +132,6 @@ class SimilarityResource(Resource):
                 }
             }
             conditions.append(context)
-
-        app.logger.info("***** ES conditions: %s", json.dumps(conditions))
 
         body = {
             'query': {

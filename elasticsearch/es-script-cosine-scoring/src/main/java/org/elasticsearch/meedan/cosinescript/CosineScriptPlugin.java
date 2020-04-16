@@ -174,10 +174,11 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           List sourceVector = (List)vector;
                           Vector v1 = Vector.create(inputVector);
                           Vector v2 = Vector.create(sourceVector);
-                          score = 1 - v1.angle(v2) / Math.PI;
-                          logger.info("**** Vector 1: " + v1);
-                          logger.info("**** Vector 2: " + v2);
-                          logger.info("**** Similarity: " + score);
+
+                          // Hand-calculating the angle because `vectorz.Vector.angle()` can get out of bounds.
+                          // https://github.com/mikera/vectorz/issues/102
+                          double angle = Math.acos(Math.max(-1.0, Math.min(1.0, v1.dotProduct(v2)/(v1.magnitude()*v2.magnitude()))));
+                          score = 1 - angle / Math.PI;
                         }
                         catch (Exception e) {
                           score = 0.0d;
