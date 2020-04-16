@@ -104,16 +104,16 @@ class SimilarityResource(Resource):
                 }
             ]
 
-            # # Add model to be matched.
-            # conditions.append(
-            #     {
-            #         'match': {
-            #             'model': {
-            #               'query': model_key,
-            #             }
-            #         }
-            #     },
-            # )
+            # Add model to be matched.
+            conditions.append(
+                {
+                    'match': {
+                        'model': {
+                          'query': model_key,
+                        }
+                    }
+                },
+            )
 
         if 'context' in request.json:
             matches = []
