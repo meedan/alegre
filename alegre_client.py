@@ -1,6 +1,7 @@
 import json
 import requests
 import csv
+from collections import Counter
 class AlegreClient:
     
   @staticmethod
@@ -45,14 +46,16 @@ class AlegreClient:
         model_name,
         context
       )
-    report = {"count": 0, "success": 0, "successes": [], "fails": [], "server_errors": 0}
+    report = {"count": 0, "success": 0, "successes": [], "fails": [], "server_errors": 0, "resultset": []}
     for fact_pair in dataset:
       report["count"] += 1
       result = json.loads(self.get_similar_texts({
         "model": model_name,
         "text": fact_pair["fact_pair"][1],
-        "context": context
+        "context": context,
+        "threshold": 0.0,
       }).text)
+      report["resultset"].append({"fact_pair": fact_pair, "response": result})
       if result and result.get("result") and result["result"][0]["_source"]["content"] == fact_pair["fact_pair"][0]:
         report["success"] += 1
         report["successes"].append(fact_pair)
@@ -68,6 +71,49 @@ class AlegreClient:
   def get_similar_texts(self, request_params):
     return requests.get(self.hostname+self.text_similarity_path(), json=request_params)
 
-
-#ac = AlegreClient()
-#report = ac.evaluate_model("texts.csv", "wordvec-glove-6B-50d", False)
+def interpret_report(report):
+  positions = Counter()
+  results_dataset = []
+  results_dataset.append(["Database-Stored Sentence", "Lookup Sentence", "Top Yielded Sentence", "ES Similarity Score", "Result Status"])
+  for res in report["resultset"]:
+    if not res.get('response', {}).get("message"):
+      competing_sentences = [ee.get("_source", {}).get("content") for ee in res.get("response", {}).get("result")]
+      db_sentence = res.get("fact_pair").get("fact_pair")[0]
+      lookup_sentence = res.get("fact_pair").get("fact_pair")[1]
+      row = [db_sentence, lookup_sentence]
+      if competing_sentences and db_sentence == competing_sentences[0]:
+        positions.update([1])
+        row.append(competing_sentences[0])
+        row.append(res.get("response", {}).get("result")[0].get("_score"))
+        row.append("Success")
+      elif competing_sentences and db_sentence != competing_sentences[0] and db_sentence in competing_sentences:
+        positions.update([competing_sentences.index(db_sentence)+1])
+        row.append(competing_sentences[0])
+        row.append(res.get("response", {}).get("result")[0].get("_score"))
+        row.append("Partial Success")
+      elif not competing_sentences:
+        positions.update(["false negative"])
+        row.append("Nothing found!")
+        row.append("Nothing found!")
+        row.append("False Negative")
+      else:
+        positions.update(["false positive"])
+        row.append(competing_sentences[0])
+        row.append(res.get("response", {}).get("result")[0].get("_score"))
+        row.append("False Positive")
+      results_dataset.append(row)
+    else: 
+      positions.update(["server error"])
+  return results_dataset, positions
+    
+if __name__ == '__main__':
+  # from alegre_client import AlegreClient
+  ac = AlegreClient()
+  report = ac.evaluate_model("texts.csv", "elasticsearch", True)
+  results_dataset, positions = interpret_report(report)
+  print(positions)
+  with open('alegre_fact_recall_report.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(results_dataset)
+  with open("report.json", "w") as f:
+    f.write(json.dumps(report))
