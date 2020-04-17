@@ -12,7 +12,6 @@ services:
       discovery.type: single-node
       transport.host: 127.0.0.1
       xpack.security.enabled: "false"
-      ALEGRE_URL: http://alegre:5000
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
   kibana:
