@@ -120,11 +120,7 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
                           List sourceVector = (List)vector;
                           Vector v1 = Vector.create(inputVector);
                           Vector v2 = Vector.create(sourceVector);
-
-                          // Hand-calculating the angle because `vectorz.Vector.angle()` can get out of bounds.
-                          // https://github.com/mikera/vectorz/issues/102
-                          double angle = Math.acos(Math.max(-1.0, Math.min(1.0, v1.dotProduct(v2)/(v1.magnitude()*v2.magnitude()))));
-                          score = 1 - angle / Math.PI;
+                          score = 1.0 - v1.angle(v2) / Math.PI;
                         }
                         catch (Exception e) {
                           score = 0.0d;

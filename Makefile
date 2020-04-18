@@ -1,5 +1,4 @@
 .PHONY: run test wait
-ELASTICSEARCH_URL ?= 'http://elasticsearch:9200'
 run: wait
 	python manage.py init
 	python manage.py run
