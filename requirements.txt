@@ -66,6 +66,7 @@ PyWavelets==1.1.1
 redis==3.2.1
 regex==2018.1.10
 requests==2.20.0
+tenacity==6.1.0
 rsa==4.0
 s3transfer==0.1.13
 scipy==1.2.1

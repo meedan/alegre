@@ -2,6 +2,7 @@ from flask import Flask, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_restplus import Api
+from flask_migrate import Migrate
 from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
@@ -13,6 +14,7 @@ import os.path
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
+migrate = Migrate()
 
 # Load language model.
 # FIXME Load lazily when needed and move to appropriate controller.
@@ -38,6 +40,7 @@ def create_app(config_name):
 
   db.init_app(app)
   flask_bcrypt.init_app(app)
+  migrate.init_app(app, db)
 
   with app.app_context():
     if os.getenv('AIRBRAKE_URL'):

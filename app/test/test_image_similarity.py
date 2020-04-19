@@ -4,6 +4,7 @@ from flask import current_app as app
 import numpy as np
 from PIL import Image
 from sqlalchemy import text
+from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
@@ -29,7 +30,85 @@ class TestImageSimilaryBlueprint(BaseTestCase):
 
   def test_image_api(self):
     url = 'file:///app/app/test/data/lenna-512.png'
-    with self.client:
+
+    # Test adding an image.
+    response = self.client.post('/image/similarity/', data=json.dumps({
+      'url': url,
+      'context': {
+        'team_id': 1,
+        'project_media_id': 1
+      }
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(True, result['success'])
+    self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
+
+    # Test adding an identical image.
+    response = self.client.post('/image/similarity/', data=json.dumps({
+      'url': url,
+      'context': {
+        'team_id': 2,
+        'project_media_id': 2
+      }
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(True, result['success'])
+    image = ImageModel.from_url(url)
+    self.assertListEqual([
+      {
+        'team_id': 1,
+        'project_media_id': 1
+      },
+      {
+        'team_id': 2,
+        'project_media_id': 2
+      }
+    ], ImageModel.query.filter_by(sha256=image.sha256).one().context)
+
+    # Test querying for identical images.
+    url = 'file:///app/app/test/data/lenna-512.jpg'
+    response = self.client.get('/image/similarity/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {}
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(1, len(result['result']))
+
+    # Test querying with context.
+    response = self.client.get('/image/similarity/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {
+        'team_id': 1
+      }
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(1, len(result['result']))
+
+    # Test querying for similar but not identical images.
+    url = 'file:///app/app/test/data/lenna-256.png'
+    response = self.client.get('/image/similarity/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {}
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(0, len(result['result']))
+    response = self.client.get('/image/similarity/', data=json.dumps({
+      'url': url,
+      'context': {
+        'team_id': 2
+      }
+    }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
+    result = json.loads(response.data.decode())
+    self.assertEqual(1, len(result['result']))
+
+  def test_image_api_error(self):
+    url = 'file:///app/app/test/data/lenna-512.png'
+
+    with patch('sqlalchemy.orm.session.Session.commit') as mock_commit:
+      mock_commit.side_effect = Exception('Simulated db.session.commit error')
 
       # Test adding an image.
       response = self.client.post('/image/similarity/', data=json.dumps({
@@ -40,58 +119,7 @@ class TestImageSimilaryBlueprint(BaseTestCase):
         }
       }), content_type='application/json')
       result = json.loads(response.data.decode())
-      self.assertEqual(True, result['success'])
-      self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
-
-      # Test adding an identical image.
-      response = self.client.post('/image/similarity/', data=json.dumps({
-        'url': url,
-        'context': {
-          'team_id': 2,
-          'project_media_id': 2
-        }
-      }), content_type='application/json')
-      result = json.loads(response.data.decode())
-      self.assertEqual(True, result['success'])
-      image = ImageModel.from_url(url)
-      self.assertEqual(2, len(ImageModel.query.filter_by(sha256=image.sha256).all()))
-
-      # Test querying for identical images.
-      url = 'file:///app/app/test/data/lenna-512.jpg'
-      response = self.client.get('/image/similarity/', data=json.dumps({
-        'url': url,
-        'threshold': 1.0,
-        'context': {}
-      }), content_type='application/json')
-      result = json.loads(response.data.decode())
-      self.assertEqual(2, len(result['result']))
-
-      # Test querying with context.
-      response = self.client.get('/image/similarity/', data=json.dumps({
-        'url': url,
-        'threshold': 1.0,
-        'context': {
-          'team_id': 1
-        }
-      }), content_type='application/json')
-      result = json.loads(response.data.decode())
-      self.assertEqual(1, len(result['result']))
-
-      # Test querying for similar but not identical images.
-      url = 'file:///app/app/test/data/lenna-256.png'
-      response = self.client.get('/image/similarity/', data=json.dumps({
-        'url': url,
-        'threshold': 1.0,
-        'context': {}
-      }), content_type='application/json')
-      result = json.loads(response.data.decode())
-      self.assertEqual(0, len(result['result']))
-      response = self.client.get('/image/similarity/', data=json.dumps({
-        'url': url,
-        'context': {}
-      }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
-      result = json.loads(response.data.decode())
-      self.assertEqual(2, len(result['result']))
+      self.assertEqual(500, response.status_code)
 
 if __name__ == '__main__':
   unittest.main()

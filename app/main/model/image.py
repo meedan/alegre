@@ -14,7 +14,7 @@ class ImageModel(db.Model):
   sha256 = db.Column(db.String(64, convert_unicode=True), nullable=False, index=True)
   phash = db.Column(db.BigInteger, nullable=False, index=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
-  context = db.Column(JSONB(), default={}, nullable=False)
+  context = db.Column(JSONB(), default=[], nullable=False)
   __table_args__ = (
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )

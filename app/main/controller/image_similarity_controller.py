@@ -5,13 +5,19 @@ from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.fields import JsonObject
 from sqlalchemy import text
+from sqlalchemy.orm.attributes import flag_modified
+from sqlalchemy.orm.exc import NoResultFound
+import tenacity
 
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
   'url': fields.String(required=True, description='image URL to be stored or queried for similarity'),
   'threshold': fields.Float(required=False, default=0.9, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
-  'context': JsonObject(required=False, description='context')
+  'context': JsonObject(required=False, default=[], description='context')
 })
+
+def _after_log(retry_state):
+    app.logger.debug("Retrying image similarity...")
 
 @api.route('/')
 class ImageSimilarityResource(Resource):
@@ -19,24 +25,17 @@ class ImageSimilarityResource(Resource):
   @api.doc('Store an image signature in the similarity database')
   @api.expect(image_similarity_request, validate=True)
   def post(self):
-    result = True
     image = ImageModel.from_url(request.json['url'], request.json['context'])
-    try:
-      db.session.add(image)
-      db.session.commit()
-    except:
-      db.session.rollback()
-      raise
-
+    self.save(image)
     return {
-      'success': result
+      'success': True
     }
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make an image similarity query')
   @api.expect(image_similarity_request, validate=True)
   def get(self):
-    image = ImageModel.from_url(request.json['url'], {})
+    image = ImageModel.from_url(request.json['url'])
     threshold = 0.9
     if 'threshold' in request.json:
       threshold = request.json['threshold']
@@ -44,6 +43,24 @@ class ImageSimilarityResource(Resource):
     return {
       'result': result
     }
+
+  @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
+  def save(self, image):
+    try:
+      # First locate existing image and append new context
+      existing = db.session.query(ImageModel).filter(ImageModel.url==image.url).one()
+      existing.context.append(image.context)
+      flag_modified(existing, 'context')
+    except NoResultFound as e:
+      # Otherwise, add new image, but with context as an array
+      if image.context:
+        image.context = [image.context]
+      db.session.add(image)
+    try:
+      db.session.commit()
+    except Exception as e:
+      db.session.rollback()
+      raise e
 
   def search_by_phash(self, phash, threshold, filter):
     cmd = """
@@ -58,7 +75,7 @@ class ImageSimilarityResource(Resource):
     matches = db.session.execute(text(cmd), {
       'phash': phash,
       'threshold': threshold,
-      'filter': json.dumps(filter)
+      'filter': json.dumps([filter])
     }).fetchall()
     keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
     results = [ dict(zip(keys, values)) for values in matches ]
