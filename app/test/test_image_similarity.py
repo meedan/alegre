@@ -65,6 +65,15 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       }
     ], ImageModel.query.filter_by(sha256=image.sha256).one().context)
 
+    # Test searching by context.
+    response = self.client.get('/image/similarity/', data=json.dumps({
+      'context': {
+        'project_media_id': 2
+      }
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertEqual(1, len(result['result']))
+
     # Test querying for identical images.
     url = 'file:///app/app/test/data/lenna-512.jpg'
     response = self.client.get('/image/similarity/', data=json.dumps({
