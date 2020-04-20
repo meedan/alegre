@@ -33,13 +33,16 @@ class ImageSimilarityResource(Resource):
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make an image similarity query')
-  @api.expect(image_similarity_request, validate=True)
+  @api.expect(image_similarity_request, validate=False)
   def get(self):
-    image = ImageModel.from_url(request.json['url'])
-    threshold = 0.9
-    if 'threshold' in request.json:
-      threshold = request.json['threshold']
-    result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
+    if 'url' not in request.json:
+      result = self.search_by_context(request.json['context'])
+    else:
+      image = ImageModel.from_url(request.json['url'])
+      threshold = 0.9
+      if 'threshold' in request.json:
+        threshold = request.json['threshold']
+      result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
     return {
       'result': result
     }
@@ -62,20 +65,32 @@ class ImageSimilarityResource(Resource):
       db.session.rollback()
       raise e
 
-  def search_by_phash(self, phash, threshold, filter):
+  def search_by_context(self, context):
+    cmd = """
+      SELECT * FROM images
+      WHERE context @> (:context)::jsonb
+    """
+    matches = db.session.execute(text(cmd), {
+      'context': json.dumps([context])
+    }).fetchall()
+    keys = ('id', 'sha256', 'phash', 'url', 'context')
+    results = [ dict(zip(keys, values)) for values in matches ]
+    return results
+
+  def search_by_phash(self, phash, threshold, context):
     cmd = """
       SELECT * FROM (
         SELECT images.*, BIT_COUNT(phash # :phash)
         AS score FROM images
       ) f
       WHERE score <= :threshold
-      AND context @> (:filter)::jsonb
+      AND context @> (:context)::jsonb
       ORDER BY score ASC
     """
     matches = db.session.execute(text(cmd), {
       'phash': phash,
       'threshold': threshold,
-      'filter': json.dumps([filter])
+      'context': json.dumps([context])
     }).fetchall()
     keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
     results = [ dict(zip(keys, values)) for values in matches ]
