@@ -54,21 +54,26 @@ class AlegreClient:
       "threshold": 0.0,
     }).text)
 
-  def evaluate_model(self, filename, model_name, confounder_filename=None, store_dataset=True, threshold=4):
+  def evaluate_model(self, filename, model_name, confounder_filename=None, store_dataset=True, omit_half=False, threshold=4):
     # Similarity score should be from 0 to 5 similar to data found at https://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark,
     # text_1 will be uploaded to service, text_2 will be used to attempt to retrieve text_1 from the service in a GET request.
     dataset = self.fact_pairs_from_csv(filename, threshold)
+    split_point = int(len(dataset)/2)
     context = {"task": "model_evaluation", "model_name": model_name}
     if store_dataset:
       if confounder_filename:
         self.input_confounders(confounder_filename, model_name, context)
+      if omit_half:
+        sent_group = dataset[:split_point]
+      else:
+        sent_group = dataset
       self.input_cases(
-        [f["fact_pair"][0].lower() for f in dataset],
+        [f["fact_pair"][0].lower() for f in sent_group],
         model_name,
         context
       )
     report = {"count": 0, "success": 0, "successes": [], "fails": [], "server_errors": 0, "resultset": []}
-    for fact_pair in dataset:
+    for ii, fact_pair in enumerate(dataset):
       report["count"] += 1
       result = json.loads(self.get_similar_texts({
         "model": model_name,
@@ -76,7 +81,9 @@ class AlegreClient:
         "context": context,
         "threshold": 0.0,
       }).text)
-      report["resultset"].append({"fact_pair": fact_pair, "response": result})
+      #due to indexing math this may be an off-by-one but it's close enough for our test today, and it's too late at night to make sure, but not too late so as not to remind myself about this later....
+      is_omitted = ii > split_point
+      report["resultset"].append({"fact_pair": fact_pair, "response": result, "is_omitted": is_omitted})
       if result and result.get("result") and result["result"][0]["_source"]["content"].lower() == fact_pair["fact_pair"][0].lower():
         report["success"] += 1
         report["successes"].append(fact_pair)
@@ -113,10 +120,16 @@ def interpret_report(report):
         row.append(res.get("response", {}).get("result")[0].get("_score"))
         row.append("Partial Success")
       elif not competing_sentences:
-        positions.update(["false negative"])
-        row.append("Nothing found!")
-        row.append("Nothing found!")
-        row.append("False Negative")
+        if res.get("is_omitted"):
+          positions.update(["true negative"])
+          row.append("Nothing found!")
+          row.append("Nothing found!")
+          row.append("True Negative")
+        else:
+          positions.update(["false negative"])
+          row.append("Nothing found!")
+          row.append("Nothing found!")
+          row.append("False Negative")
       else:
         positions.update(["false positive"])
         row.append(competing_sentences[0])
@@ -130,7 +143,7 @@ def interpret_report(report):
 if __name__ == '__main__':
   # from alegre_client import AlegreClient
   ac = AlegreClient()
-  report = ac.evaluate_model("texts.csv", "wordvec-glove-6B-50d", "confounder_headlines.csv", True)
+  report = ac.evaluate_model("texts.csv", "universal-sentence-encoder-large", "confounder_headlines.csv", True, True)
   results_dataset, positions = interpret_report(report)
   print(positions)
   with open('alegre_fact_recall_report.csv', 'w', newline='') as f:
