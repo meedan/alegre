@@ -83,5 +83,20 @@ class TestLangidBlueprint(BaseTestCase):
             )
             self.assertEqual(mock_langid.call_count, 1)
 
+    def test_langid_error(self):
+        with patch.dict(app.config, { 'PROVIDER_LANGID': 'google' }):
+            with patch('app.main.lib.langid.GoogleLangidProvider.langid', ) as mock_langid:
+                mock_langid.side_effect = Exception("Simulated langid error")
+                response = self.client.get(
+                    '/text/langid/',
+                    data=json.dumps(dict(
+                        text='Hello this is a test'
+                    )),
+                    content_type='application/json'
+                )
+                result = json.loads(response.data.decode())
+                self.assertEqual('application/json', response.content_type)
+                self.assertEqual(500, response.status_code)
+
 if __name__ == '__main__':
     unittest.main()

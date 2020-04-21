@@ -1,4 +1,4 @@
-package org.elasticsearch.meedan.cosinescript;
+package com.meedan.alegre;
 
 import java.security.*;
 
@@ -40,16 +40,16 @@ import org.elasticsearch.SpecialPermission;
 
 import mikera.vectorz.Vector;
 
-public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
-    private static final Logger logger = LogManager.getLogger(CosineScriptPlugin.class);
+public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
+    private static final Logger logger = LogManager.getLogger(SimilarityScriptPlugin.class);
 
     @Override
     public ScriptEngine getScriptEngine(Settings settings, Collection<ScriptContext<?>> contexts) {
-        return new MeedanScriptEngine();
+        return new SimilarityScriptEngine();
     }
 
     // tag::meedan_engine
-    private static class MeedanScriptEngine implements ScriptEngine {
+    private static class SimilarityScriptEngine implements ScriptEngine {
         @Override
         public String getType() {
             return "meedan_scripts";
@@ -64,8 +64,8 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                         + context.name + "]");
             }
             // we use the script "source" as the script identifier
-            if ("cosine".equals(scriptSource)) {
-                SearchScript.Factory factory = CosineLeafFactory::new;
+            if ("similarity".equals(scriptSource)) {
+                SearchScript.Factory factory = SimilarityLeafFactory::new;
                 return context.factoryClazz.cast(factory);
             }
             throw new IllegalArgumentException("Unknown script name "
@@ -77,23 +77,18 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
             // optionally close resources
         }
 
-        private static class CosineLeafFactory implements LeafFactory {
+        private static class SimilarityLeafFactory implements LeafFactory {
             private final Map<String, Object> params;
             private final SearchLookup lookup;
             private final List inputVector;
-            private final String modelName;
 
-            private CosineLeafFactory(Map<String, Object> params, SearchLookup lookup) {
+            private SimilarityLeafFactory(Map<String, Object> params, SearchLookup lookup) {
                 if (params.containsKey("vector") == false) {
                     throw new IllegalArgumentException("Missing parameter [vector]");
-                }
-                if (params.containsKey("model") == false) {
-                    throw new IllegalArgumentException("Missing parameter [model]");
                 }
                 this.params = params;
                 this.lookup = lookup;
                 this.inputVector = (List)params.get("vector");
-                this.modelName = (String)params.get("model");
             }
 
             @Override
@@ -104,7 +99,6 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
             @Override
             public SearchScript newInstance(LeafReaderContext context) throws IOException {
                 List inputVector = this.inputVector;
-                String modelName = this.modelName;
 
                 return new SearchScript(params, lookup, context) {
                     public String convertToJson(List list) {
@@ -114,54 +108,6 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                         strings.add(String.valueOf(d));
                       }
                       return "[" + String.join(",", strings) + "]";
-                    }
-
-                    public double getSimilarityFromAlegre(String vector1, String vector2, String modelName) {
-                      SecurityManager sm = System.getSecurityManager();
-                      if (sm != null) {
-                        sm.checkPermission(new SpecialPermission());
-                      }
-                      double similarity = AccessController.doPrivileged((PrivilegedAction<Double>)
-                        () -> {
-                          double value = 0.0d;
-                          try {
-                            String alegreUrl = System.getenv().get("ALEGRE_URL");
-                            URL url = new URL(alegreUrl + "/model/similarity");
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.setDoOutput(true);
-                            conn.setRequestMethod("POST");
-                            conn.setRequestProperty("Content-Type", "application/json");
-                            String alegreAuth = System.getenv().get("ALEGRE_AUTH");
-                            if (alegreAuth != null) {
-                              String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(alegreAuth.getBytes());
-                              conn.setRequestProperty("Authorization", basicAuth);
-                            }
-                            logger.info("Calling Alegre at " + alegreUrl + " with authentication " + alegreAuth);
-
-                            String input = "{\"vector1\":\"" + vector1 + "\",\"vector2\":\"" + vector2 + "\",\"model\":\"" + modelName + "\"}";
-
-                            OutputStream os = conn.getOutputStream();
-                            os.write(input.getBytes());
-                            os.flush();
-
-                            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-                            String part;
-                            String output = "";
-                            while ((part = br.readLine()) != null) {
-                              output += part;
-                            }
-                            conn.disconnect();
-                            value = Double.parseDouble(output.replaceAll(".*:([0-9.]+).*", "$1"));
-                          } catch (MalformedURLException e) {
-                            logger.info("Exception when calling Alegre: " + e);
-                          } catch (IOException e) {
-                            logger.info("Exception when calling Alegre: " + e);
-                          }
-                          return value;
-                        }
-                      );
-                      return similarity;
                     }
 
                     @Override
@@ -174,11 +120,7 @@ public class CosineScriptPlugin extends Plugin implements ScriptPlugin {
                           List sourceVector = (List)vector;
                           Vector v1 = Vector.create(inputVector);
                           Vector v2 = Vector.create(sourceVector);
-
-                          // Hand-calculating the angle because `vectorz.Vector.angle()` can get out of bounds.
-                          // https://github.com/mikera/vectorz/issues/102
-                          double angle = Math.acos(Math.max(-1.0, Math.min(1.0, v1.dotProduct(v2)/(v1.magnitude()*v2.magnitude()))));
-                          score = 1 - angle / Math.PI;
+                          score = 1.0 - v1.angle(v2) / Math.PI;
                         }
                         catch (Exception e) {
                           score = 0.0d;

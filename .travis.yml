@@ -8,7 +8,7 @@ before_script:
   - docker-compose -f docker-compose.yml -f docker-test.yml up -d
   - docker-compose logs -t -f &
   - echo "Waiting for model servers..."
-  - while [[ ! '2' =~  $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+  - while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
   - docker-compose exec alegre make test
 after_script:

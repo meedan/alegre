@@ -4,11 +4,15 @@ import redis
 import hashlib
 import json
 import importlib
+import tenacity
 
 api = Namespace('langid', description='langid operations')
 langid_request = api.model('langid_request', {
     'text': fields.String(required=True, description='text to identify')
 })
+
+def _after_log(retry_state):
+    app.logger.debug("Retrying langid...")
 
 @api.route('/')
 class LangidResource(Resource):
@@ -36,6 +40,7 @@ class LangidResource(Resource):
 
         return result
 
+    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=4), stop=tenacity.stop_after_delay(10), after=_after_log)
     def langid(self, text):
         # In module `app.main.lib.langid`,
         # look for a class called `#{ProviderName}LangidProvider`, e.g. `GoogleLangidProvider`

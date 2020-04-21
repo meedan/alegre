@@ -13,6 +13,8 @@ class GoogleImageClassificationProvider:
             {'type': vision.enums.Feature.Type.LABEL_DETECTION}
           ]
         })
+        if response.error.message:
+          raise Exception(response.error.message)
         raw = protobuf_to_dict(response)
         return {
           'result': {

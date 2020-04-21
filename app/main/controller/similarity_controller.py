@@ -89,11 +89,10 @@ class SimilarityResource(Resource):
                             {
                                 'script_score': {
                                     'script': {
-                                        'source': 'cosine',
+                                        'source': 'similarity',
                                         'lang': 'meedan_scripts',
                                         'params': {
-                                            'vector': vector,
-                                            'model': model_key
+                                            'vector': vector
                                         }
                                     }
                                 }

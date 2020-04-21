@@ -8,6 +8,7 @@ import time
 import importlib
 import os
 import hashlib
+import re
 
 from flask import current_app as app
 
@@ -15,8 +16,13 @@ Task = namedtuple('Task', 'task_id task_type task_package')
 
 class SharedModel(object):
   @staticmethod
+  def import_model_class(model_class):
+    class_name = re.sub(r'(?<!^)(?=[A-Z])', '_', model_class).lower()
+    return getattr(importlib.import_module('app.main.lib.shared_models.%s' % class_name), model_class)
+
+  @staticmethod
   def start_server(model_class, model_key, options={}):
-    class_ = getattr(importlib.import_module('app.main.lib.shared_models.%s' % model_class.lower()), model_class)
+    class_ = SharedModel.import_model_class(model_class)
     instance = class_(model_key, options)
     instance.load()
     app.logger.info('[%s] Serving model...', model_key)
@@ -38,7 +44,7 @@ class SharedModel(object):
   def get_client(model_key, options={}):
     r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     model_class = json.loads(r.get('SharedModel:%s' % model_key).decode('utf-8'))['model_class']
-    class_ = getattr(importlib.import_module('app.main.lib.shared_models.%s' % model_class.lower()), model_class)
+    class_ = SharedModel.import_model_class(model_class)
     return class_(model_key, options)
 
   def __init__(self, model_key, options={}):

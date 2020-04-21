@@ -51,6 +51,18 @@ class TestImageClassificationBlueprint(BaseTestCase):
             'spam': vision.enums.Likelihood.UNKNOWN
         }, result['result']['flags'])
 
+    def test_image_classification_error(self):
+        response = self.client.get(
+            '/image/classification/',
+            data=json.dumps(dict(
+                uri='https://bad.url/blah'
+            )),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(500, response.status_code)
+
     def test_image_classification_cache(self):
         with patch('app.main.controller.image_classification_controller.ImageClassificationResource.classify', ) as mock_image_classification:
             mock_image_classification.return_value = {
@@ -71,7 +83,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             response = self.client.get(
-                '/text/langid/',
+                '/image/classification/',
                 data=json.dumps(dict(
                     uri='https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png'
                 )),

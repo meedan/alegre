@@ -22,6 +22,6 @@ The Alegre API Swagger UI unfortunately [does not support sending body payloads 
 - `docker-compose exec alegre make test`
 - `docker-compose exec alegre coverage report`
 
-To run individual modules:
+To test individual modules:
 - `docker-compose exec alegre bash`
 - `python manage.py test -p test_similarity.py`
