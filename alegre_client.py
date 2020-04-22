@@ -115,7 +115,9 @@ class AlegreClient:
     for row in dataset["data"]:
       for paragraph in row["paragraphs"]:
         for question in paragraph["qas"]:
-          paired_qas.append({"lookup_text": question.get("question"), "database_text": paragraph.get("context")})
+          #subsample to 10% to keep data scale proportional to other tests we've run
+          if random.random() < 0.1:
+            paired_qas.append({"lookup_text": question.get("question"), "database_text": paragraph.get("context")})
     return paired_qas
 
   def run_b_test(self, model_name):
@@ -174,11 +176,12 @@ class AlegreClient:
         positions.update(["server error"])
     return results_dataset, positions
 
+
 if __name__ == '__main__':
   #from alegre_client import AlegreClient
   ac = AlegreClient()
-  report = ac.run_qa_test("elasticsearch")
-  results_dataset, positions = interpret_report(report)
+  report = ac.run_qawm_test("elasticsearch")
+  results_dataset, positions = ac.interpret_report(report)
   print(positions)
   with open('alegre_fact_recall_report.csv', 'w', newline='') as f:
     writer = csv.writer(f)
