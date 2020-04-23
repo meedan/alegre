@@ -130,5 +130,19 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       result = json.loads(response.data.decode())
       self.assertEqual(500, response.status_code)
 
+    with patch('sqlalchemy.orm.session.Session.execute') as mock_execute:
+      mock_execute.side_effect = Exception('Simulated db.session.execute error')
+
+      # Test adding an image.
+      response = self.client.get('/image/similarity/', data=json.dumps({
+        'url': url,
+        'context': {
+          'team_id': 1,
+          'project_media_id': 1
+        }
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertEqual(500, response.status_code)
+
 if __name__ == '__main__':
   unittest.main()
