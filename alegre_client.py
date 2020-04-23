@@ -132,8 +132,11 @@ class AlegreClient:
   def run_qa_test(self, model_name):
     return self.evaluate_model(self.transform_stanford_qa_data(), model_name, [], True, False)
 
-  def run_qawm_test(self, model_name):
+  def run_qac_test(self, model_name):
     return self.evaluate_model(self.transform_stanford_qa_data(), model_name, self.load_confounder_paragraphs(), True, False)
+
+  def run_qawm_test(self, model_name):
+    return self.evaluate_model(self.transform_stanford_qa_data(), model_name, self.load_confounder_paragraphs(), True, True)
 
   def interpret_report(self, report):
     positions = Counter()
