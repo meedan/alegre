@@ -13,17 +13,6 @@ class AlegreClient:
   def text_similarity_path():
     return "/text/similarity/"
 
-  def fact_pairs_from_csv(self, filename="texts.csv", threshold=4):
-    # Expects filename to refer to local CSV path where columns are [similarity_score],[text_1],[text_2]
-    with open(filename) as f:
-      reader = csv.reader(f)
-      dataset = []
-      for row in reader:
-        score = float(row[0])
-        if score >= threshold:
-          dataset.append({"database_text": row[1], "lookup_text": row[2], "score": score})
-    return dataset
-
   def __init__(self, hostname=None):
     if not hostname:
       hostname = AlegreClient.default_hostname()
@@ -36,7 +25,35 @@ class AlegreClient:
         request_params["context"] = context
       self.store_text_similarity(request_params)
 
-  def load_confounder_paragraphs(self, confounder_filename="train-v2.0.json"):
+  def transform_stanford_qa_data(self, qa_filename="data/dev-v2.0.json"):
+    #file must be unzipped in data dir for this to work!
+    #we may want to limit the number of cases per paragraph we look at here - 
+    #the groups of paragraphs are all thematically grouped, so results often 
+    #yield "good" answers even though they refer to some other similar paragraph in the set.
+    dataset = json.loads(open(qa_filename).read())
+    paired_qas = []
+    for row in dataset["data"]:
+      for paragraph in row["paragraphs"]:
+        for question in paragraph["qas"]:
+          #subsample to 10% to keep data scale proportional to other tests we've run
+          if random.random() < 0.1:
+            paired_qas.append({"lookup_text": question.get("question"), "database_text": paragraph.get("context")})
+    return paired_qas
+
+  def fact_pairs_from_csv(self, filename="data/texts.csv", threshold=4):
+    #file must be unzipped in data dir for this to work!
+    # Expects filename to refer to local CSV path where columns are [similarity_score],[text_1],[text_2]
+    with open(filename) as f:
+      reader = csv.reader(f)
+      dataset = []
+      for row in reader:
+        score = float(row[0])
+        if score >= threshold:
+          dataset.append({"database_text": row[1], "lookup_text": row[2], "score": score})
+    return dataset
+
+  def load_confounder_paragraphs(self, confounder_filename="data/train-v2.0.json"):
+    #file must be unzipped in data dir for this to work!
     paragraphs = []
     for row in json.loads(open(confounder_filename).read())["data"]:
       for para in row["paragraphs"]:
@@ -44,7 +61,8 @@ class AlegreClient:
           paragraphs.append(para["context"])
     return paragraphs
 
-  def load_confounder_headlines(self, confounder_filename="confounder_headlines.csv"):
+  def load_confounder_headlines(self, confounder_filename="data/confounder_headlines.csv"):
+    #file must be unzipped in data dir for this to work!
     confounders = []
     with open(confounder_filename) as f:
       reader = csv.reader(f)
@@ -105,20 +123,6 @@ class AlegreClient:
 
   def get_similar_texts(self, request_params):
     return requests.get(self.hostname+self.text_similarity_path(), json=request_params)
-
-  def transform_stanford_qa_data(self, qa_filename="dev-v2.0.json"):
-    #we may want to limit the number of cases per paragraph we look at here - 
-    #the groups of paragraphs are all thematically grouped, so results often 
-    #yield "good" answers even though they refer to some other similar paragraph in the set.
-    dataset = json.loads(open(qa_filename).read())
-    paired_qas = []
-    for row in dataset["data"]:
-      for paragraph in row["paragraphs"]:
-        for question in paragraph["qas"]:
-          #subsample to 10% to keep data scale proportional to other tests we've run
-          if random.random() < 0.1:
-            paired_qas.append({"lookup_text": question.get("question"), "database_text": paragraph.get("context")})
-    return paired_qas
 
   def run_b_test(self, model_name):
     return self.evaluate_model(self.fact_pairs_from_csv(), model_name, [], True, False)
