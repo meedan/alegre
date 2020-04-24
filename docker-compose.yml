@@ -76,5 +76,3 @@ services:
       - model_wv
     env_file:
       - .env_file
-    environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
