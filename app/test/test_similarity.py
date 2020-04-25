@@ -10,8 +10,8 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
-    wordvec_model_key = "wordvec-glove-6B-50d"
-    use_model_key = "universal-sentence-encoder-multilingual"
+    use_model_key = 'universal-sentence-encoder-multilingual-large'
+    test_model_key = 'shared-model-test'
 
     def setUp(self):
       super().setUp()
@@ -128,61 +128,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-    def test_wordvec_similarity(self):
-        with self.client:
-            term = { 'text': 'how to delete an invoice', 'model': TestSimilaryBlueprint.wordvec_model_key, 'context': { 'dbid': 54 } }
-            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            result = json.loads(response.data.decode())
-            self.assertEqual(True, result['success'])
-
-        response = self.client.get(
-            '/text/similarity/',
-            data=json.dumps({
-              'text': 'how to delete an invoice',
-              'model': TestSimilaryBlueprint.wordvec_model_key,
-              'context': {
-                'dbid': 54
-              }
-            }),
-            content_type='application/json'
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
-        self.assertGreater(similarity, 0.7)
-
-        response = self.client.get(
-            '/text/similarity/',
-            data=json.dumps({
-              'text': 'purge an invoice',
-              'model': TestSimilaryBlueprint.wordvec_model_key,
-              'threshold': 0.7,
-              'context': {
-                'dbid': 54
-              }
-            }),
-            content_type='application/json'
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
-        self.assertGreater(similarity, 0.7)
-
-        response = self.client.get(
-            '/text/similarity/',
-            data=json.dumps({
-              'text': 'purge an invoice',
-              'model': TestSimilaryBlueprint.wordvec_model_key,
-              'threshold': 0.7
-            }),
-            content_type='application/json'
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
-        self.assertGreater(similarity, 0.7)
-
-    def test_universalsentenceencoder_similarity(self):
+    def test_model_similarity(self):
         with self.client:
             term = { 'text': 'how to delete an invoice', 'model': TestSimilaryBlueprint.use_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
@@ -238,7 +184,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_wrong_model_key(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': TestSimilaryBlueprint.wordvec_model_key, 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to slice a banana', 'model': TestSimilaryBlueprint.use_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -247,7 +193,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to slice a banana',
-              'model': TestSimilaryBlueprint.use_model_key,
+              'model': TestSimilaryBlueprint.test_model_key,
               'context': {
                 'dbid': 54
               }

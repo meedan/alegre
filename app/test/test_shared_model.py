@@ -16,7 +16,7 @@ class SharedModelStub(SharedModel):
     pass
 
   def respond(self, analysis_value):
-    return analysis_value
+    return [0.0]
 
   def similarity(self, valueA, valueB):
     return 0.0

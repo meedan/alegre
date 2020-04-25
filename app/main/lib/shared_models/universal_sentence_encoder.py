@@ -1,10 +1,5 @@
 import sys, getopt
-import math
-import json
-from collections import Counter
-from datetime import datetime
 import numpy as np
-from redis.client import Redis
 import tensorflow_hub as hub
 import tensorflow_text
 

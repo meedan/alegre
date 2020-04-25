@@ -1,5 +1,4 @@
 __pycache__
-data/glove-6B-50d-gensim.txt
 google_credentials.json
 .env_file
 .coverage

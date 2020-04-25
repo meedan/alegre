@@ -36,7 +36,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre
-  model_use:
+  model_use_multilingual_large:
     build: .
     command: ["make", "run_model"]
     volumes:
@@ -47,21 +47,8 @@ services:
       - .env_file
     environment:
       MODEL_CLASS: UniversalSentenceEncoder
-      MODEL_KEY: universal-sentence-encoder-multilingual
-      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3"}'
-  model_wv:
-    build: .
-    command: ["make", "run_model"]
-    volumes:
-      - ".:/app"
-    depends_on:
-      - redis
-    env_file:
-      - .env_file
-    environment:
-      MODEL_CLASS: WordVec
-      MODEL_KEY: wordvec-glove-6B-50d
-      MODEL_OPTIONS: '{"model_path": "./data/glove-6B-50d-gensim.txt", "stopwords_path": "./data/stopwords-en.txt"}'
+      MODEL_KEY: universal-sentence-encoder-multilingual-large
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
   alegre:
     build: .
     ports:
@@ -72,7 +59,6 @@ services:
       - postgres
       - kibana
       - redis
-      - model_use
-      - model_wv
+      - model_use_multilingual_large
     env_file:
       - .env_file

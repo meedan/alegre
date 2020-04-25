@@ -5,29 +5,36 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
-  model_use:
+  model_use_multilingual_large:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
       MODEL_CLASS: UniversalSentenceEncoder
-      MODEL_KEY: universal-sentence-encoder-multilingual
-      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3"}'
-  model_wv:
+      MODEL_KEY: universal-sentence-encoder-multilingual-large
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
+  model_test:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
-      MODEL_CLASS: WordVec
-      MODEL_KEY: wordvec-glove-6B-50d
-      MODEL_OPTIONS: '{"model_path": "./data/glove-6B-50d-gensim.txt", "stopwords_path": "./data/stopwords-en.txt"}'
+      MODEL_CLASS: SharedModelTest
+      MODEL_KEY: shared-model-test
   alegre:
     depends_on:
       - postgres
       - elasticsearch
       - redis
-      - model_use
-      - model_wv
+      - model_use_multilingual_large
+      - model_test
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test

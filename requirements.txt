@@ -28,7 +28,6 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-Testing==0.7.1
 gast==0.2.2
-gensim==3.6.0
 google-api-core==1.16.0
 google-auth==1.5.1
 google-auth-oauthlib==0.4.1
@@ -48,7 +47,6 @@ jmespath==0.9.3
 jsonschema==2.6.0
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.0
-langid==1.1.6
 Mako==1.0.7
 Markdown==3.2.1
 MarkupSafe==1.1.1

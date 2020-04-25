@@ -3,12 +3,11 @@ before_install:
 before_script:
   - git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
   - d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
-  - (cd data && unzip glove-6B-50d-gensim.txt.zip)
   - docker-compose build --pull
   - docker-compose -f docker-compose.yml -f docker-test.yml up -d
   - docker-compose logs -t -f &
   - echo "Waiting for model servers..."
-  - while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+  - while [[ ! '1' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
   - docker-compose exec alegre make test
 after_script:
