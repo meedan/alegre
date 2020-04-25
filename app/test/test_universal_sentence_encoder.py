@@ -7,7 +7,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 
 class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
-    use_model_key = "universal-sentence-encoder-large"
+    use_model_key = "universal-sentence-encoder-multilingual"
 
     def test_universalsentenceencoder_api(self):
         with self.client:

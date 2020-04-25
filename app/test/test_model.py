@@ -11,7 +11,5 @@ class TestModelBlueprint(BaseTestCase):
         with self.client:
             response = self.client.get('/model/')
             result = json.loads(response.data.decode())
-            self.assertListEqual(sorted([
-              'universal-sentence-encoder-large',
-              'wordvec-glove-6B-50d'
-            ]), sorted(result['models']))
+            self.assertTrue('universal-sentence-encoder-multilingual' in result['models'])
+            self.assertTrue('wordvec-glove-6B-50d' in result['models'])

@@ -11,7 +11,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
     wordvec_model_key = "wordvec-glove-6B-50d"
-    use_model_key = "universal-sentence-encoder-large"
+    use_model_key = "universal-sentence-encoder-multilingual"
 
     def setUp(self):
       super().setUp()

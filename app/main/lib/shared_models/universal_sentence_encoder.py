@@ -6,6 +6,7 @@ from datetime import datetime
 import numpy as np
 from redis.client import Redis
 import tensorflow_hub as hub
+import tensorflow_text
 
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import angular_similarity

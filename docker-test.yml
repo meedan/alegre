@@ -11,8 +11,8 @@ services:
       FLASK_ENV: test
       FLASK_DEBUG: "true"
       MODEL_CLASS: UniversalSentenceEncoder
-      MODEL_KEY: universal-sentence-encoder-large
-      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-large/5"}'
+      MODEL_KEY: universal-sentence-encoder-multilingual
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual/3"}'
   model_wv:
     environment:
       BOILERPLATE_ENV: test
