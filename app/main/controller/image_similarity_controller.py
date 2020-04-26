@@ -31,22 +31,6 @@ class ImageSimilarityResource(Resource):
       'success': True
     }
 
-  @api.response(200, 'image similarity successfully queried.')
-  @api.doc('Make an image similarity query')
-  @api.expect(image_similarity_request, validate=False)
-  def get(self):
-    if 'url' not in request.json:
-      result = self.search_by_context(request.json['context'])
-    else:
-      image = ImageModel.from_url(request.json['url'])
-      threshold = 0.9
-      if 'threshold' in request.json:
-        threshold = request.json['threshold']
-      result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
-    return {
-      'result': result
-    }
-
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def save(self, image):
     try:
@@ -59,8 +43,32 @@ class ImageSimilarityResource(Resource):
       if image.context:
         image.context = [image.context]
       db.session.add(image)
+    except Exception as e:
+      db.session.rollback()
+      raise e
+
     try:
       db.session.commit()
+    except Exception as e:
+      db.session.rollback()
+      raise e
+
+  @api.response(200, 'image similarity successfully queried.')
+  @api.doc('Make an image similarity query')
+  @api.expect(image_similarity_request, validate=False)
+  def get(self):
+    try:
+      if 'url' not in request.json:
+        result = self.search_by_context(request.json['context'])
+      else:
+        image = ImageModel.from_url(request.json['url'])
+        threshold = 0.9
+        if 'threshold' in request.json:
+          threshold = request.json['threshold']
+        result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
+      return {
+        'result': result
+      }
     except Exception as e:
       db.session.rollback()
       raise e
