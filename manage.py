@@ -48,7 +48,7 @@ def run_model():
 @manager.command
 def init():
   """Initializes the service."""
-  # Create ES index.
+  # Create ES indexes.
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
   for key in ['ELASTICSEARCH_GLOSSARY', 'ELASTICSEARCH_SIMILARITY']:
     try:
@@ -76,6 +76,7 @@ def init():
     body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
+  es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
 
   # Create database.
   with app.app_context():
