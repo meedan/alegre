@@ -2,6 +2,7 @@
 ELASTICSEARCH_URL ?= 'http://elasticsearch:9200'
 run: wait
 	python manage.py init
+	python manage.py db upgrade
 	python manage.py run
 test: wait
 	BOILERPLATE_ENV=test FLASK_ENV=test python manage.py init
