@@ -26,8 +26,8 @@ import org.elasticsearch.common.settings.Settings;
 
 import org.elasticsearch.plugins.Plugin;
 import org.elasticsearch.plugins.ScriptPlugin;
-import org.elasticsearch.script.SearchScript;
-import org.elasticsearch.script.SearchScript.LeafFactory;
+import org.elasticsearch.script.ScoreScript;
+import org.elasticsearch.script.ScoreScript.LeafFactory;
 import org.elasticsearch.script.ScriptContext;
 import org.elasticsearch.script.ScriptEngine;
 
@@ -58,14 +58,14 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
         @Override
         public <T> T compile(String scriptName, String scriptSource,
                 ScriptContext<T> context, Map<String, String> params) {
-            if (context.equals(SearchScript.CONTEXT) == false) {
+            if (context.equals(ScoreScript.CONTEXT) == false) {
                 throw new IllegalArgumentException(getType()
                         + " scripts cannot be used for context ["
                         + context.name + "]");
             }
             // we use the script "source" as the script identifier
             if ("similarity".equals(scriptSource)) {
-                SearchScript.Factory factory = SimilarityLeafFactory::new;
+                ScoreScript.Factory factory = SimilarityLeafFactory::new;
                 return context.factoryClazz.cast(factory);
             }
             throw new IllegalArgumentException("Unknown script name "
@@ -97,21 +97,12 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
             }
 
             @Override
-            public SearchScript newInstance(LeafReaderContext context) throws IOException {
+            public ScoreScript newInstance(LeafReaderContext context) throws IOException {
                 List inputVector = this.inputVector;
 
-                return new SearchScript(params, lookup, context) {
-                    public String convertToJson(List list) {
-                      List<String> strings = new ArrayList<String>();
-                      for (Object o : list) {
-                        double d = (double)o;
-                        strings.add(String.valueOf(d));
-                      }
-                      return "[" + String.join(",", strings) + "]";
-                    }
-
+                return new ScoreScript(params, lookup, context) {
                     @Override
-                    public double runAsDouble() {
+                    public double execute() {
                         double score = 0.0d;
                         try {
                           SourceLookup source = lookup.getLeafSearchLookup(context).source();
