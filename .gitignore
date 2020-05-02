@@ -1,16 +1,5 @@
 __pycache__
-elasticsearch/data/nodes
-*.db
-configurator
 google_credentials.json
 .env_file
 .coverage
-log
-*.sw*
-elasticsearch/es-script-cosine-scoring/target
-*.rdb
 .idea
-data/model.txt
-elasticsearch/elasticsearch.yml
-elasticsearch/jvm.options
-kibana/kibana.yml

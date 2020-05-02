@@ -8,6 +8,9 @@
     },
     "vector": {
       "type": "double"
+    },
+    "model": {
+      "type": "keyword"
     }
   }
-} 
+}

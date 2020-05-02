@@ -29,7 +29,8 @@ class TestLangidBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-        r.flushall()
+        for key in r.scan_iter("langid:*"):
+            r.delete(key)
 
     @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
     def test_langid_google(self):
