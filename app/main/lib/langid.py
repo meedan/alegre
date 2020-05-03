@@ -48,11 +48,9 @@ class MicrosoftLangidProvider:
     ).json()
     if 'error' in response:
       raise Exception(response['error'])
-    if response['documents'][0]['detectedLanguages'][0]['iso6391Name'] == '(Unknown)':
-      response['documents'][0]['detectedLanguages'][0]['iso6391Name'] = 'und'
     return {
       'result': {
-        'language': response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
+        'language': 'und' if response['documents'][0]['detectedLanguages'][0]['iso6391Name'] == '(Unknown)' else response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
         'confidence': response['documents'][0]['detectedLanguages'][0]['score']
       },
       'raw': response
