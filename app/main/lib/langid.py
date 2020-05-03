@@ -2,6 +2,7 @@
 from google.cloud import translate_v2 as translate
 from flask import current_app as app
 import requests
+import cld3
 
 class GoogleLangidProvider:
 # https://cloud.google.com/translate/docs/reference/libraries/v2/python
@@ -10,7 +11,10 @@ class GoogleLangidProvider:
     client = translate.Client.from_service_account_json('./google_credentials.json')
     response = client.detect_language([text])
     return {
-      'result': response[0],
+      'result': {
+        'language': response[0]['language'],
+        'confidence': response[0]['confidence']
+      },
       'raw': response
     }
 
@@ -44,6 +48,8 @@ class MicrosoftLangidProvider:
     ).json()
     if 'error' in response:
       raise Exception(response['error'])
+    if response['documents'][0]['detectedLanguages'][0]['iso6391Name'] == '(Unknown)':
+      response['documents'][0]['detectedLanguages'][0]['iso6391Name'] = 'und'
     return {
       'result': {
         'language': response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
@@ -61,4 +67,27 @@ class MicrosoftLangidProvider:
   def test():
     # FIXME Find a better way to test proper config
     MicrosoftLangidProvider.langid('hello, world')
+    return True
+
+
+class Cld3LangidProvider:
+# https://github.com/bsolomon1124/pycld3
+  @staticmethod
+  def langid(text):
+    prediction = cld3.get_language(text)
+    return {
+      'result': {
+        'language': prediction.language,
+        'confidence': prediction.probability
+      },
+      'raw': prediction
+    }
+
+  @staticmethod
+  def languages():
+    # FIXME
+    return []
+
+  @staticmethod
+  def test():
     return True

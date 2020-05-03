@@ -1,6 +1,5 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from elasticsearch import helpers, Elasticsearch, TransportError
 import json
 import numpy as np
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -17,15 +16,6 @@ model_similarity_request = api.model('model_similarity_request', {
     'vector2': fields.String(required=True, description='the second vector, as a JSON list'),
     'model': fields.String(required=True, description='model to be used')
 })
-
-@api.route('/')
-class ModelVectorResource(Resource):
-    @api.response(200, 'successfully retrieved list of running models.')
-    @api.doc('Retrieve list of running models')
-    def get(self):
-        return {
-            'models': SharedModel.get_servers()
-        }
 
 @api.route('/vector')
 class ModelVectorResource(Resource):
