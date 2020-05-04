@@ -73,6 +73,7 @@ class ImageSimilarityResource(Resource):
       db.session.rollback()
       raise e
 
+  @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def search_by_context(self, context):
     cmd = """
       SELECT * FROM images
@@ -85,6 +86,7 @@ class ImageSimilarityResource(Resource):
     results = [ dict(zip(keys, values)) for values in matches ]
     return results
 
+  @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def search_by_phash(self, phash, threshold, context):
     cmd = """
       SELECT * FROM (
