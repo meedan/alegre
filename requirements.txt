@@ -45,6 +45,7 @@ ImageHash==4.0
 itsdangerous==0.24
 Jinja2==2.11.1
 jmespath==0.9.3
+json-logging==1.2.0
 jsonschema==2.6.0
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.0
