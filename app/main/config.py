@@ -27,9 +27,12 @@ class Config:
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
     'host': os.getenv('DATABASE_HOST', 'postgres'),
-    'dbname': os.getenv('DATABASE_NAME', 'alegre'),
+    'dbname': os.getenv('DATABASE_NAME', 'alegre')
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
+  SQLALCHEMY_ENGINE_OPTIONS = {
+    'pool_pre_ping': True
+  }
   MODEL_CLASS = os.getenv('MODEL_CLASS')
   MODEL_KEY = os.getenv('MODEL_KEY')
   MODEL_OPTIONS = json.loads(os.getenv('MODEL_OPTIONS', '{}'))
@@ -48,7 +51,7 @@ class TestingConfig(Config):
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
     'host': os.getenv('DATABASE_HOST', 'postgres'),
-    'dbname': 'alegre_test',
+    'dbname': 'alegre_test'
   }
 
 class ProductionConfig(Config):
