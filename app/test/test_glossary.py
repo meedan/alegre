@@ -12,7 +12,7 @@ class TestGlossaryBlueprint(BaseTestCase):
     def setUp(self):
       super().setUp()
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_GLOSSARY'])
+      es.indices.delete(index=app.config['ELASTICSEARCH_GLOSSARY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_GLOSSARY'])
       es.indices.put_mapping(
         doc_type='_doc',

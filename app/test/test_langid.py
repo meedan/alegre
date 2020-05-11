@@ -8,28 +8,48 @@ from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.langid import GoogleLangidProvider, MicrosoftLangidProvider
+from app.main.lib.langid import GoogleLangidProvider, MicrosoftLangidProvider, Cld3LangidProvider
+from app.main.controller.langid_controller import LangidResource
 
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
-        { 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
-        { 'microsoft': 'en', 'google': 'hi', 'text': 'namaste mera naam Karim hai' },
-        { 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
-        { 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
-        { 'microsoft': 'id', 'google': 'bn', 'text': 'hyalo amara nama Karim' },
-        { 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
-        { 'microsoft': 'en', 'google': 'gu', 'text': 'helo, marum nama Karim che' },
-        { 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
-        { 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
-        { 'microsoft': 'fr', 'google': 'ta', 'text': 'vanakkam en peyar Karim' },
-        { 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
-        { 'microsoft': 'tl', 'google': 'tl', 'text': 'kamusta ang aking pangalan ay Karim' }
+        { 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
+        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': 'hi', 'text': 'namaste mera naam Karim hai' },
+        { 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
+        { 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
+        { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': 'bn', 'text': 'hyalo amara nama Karim' },
+        { 'cld3': 'gu', 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
+        { 'cld3': 'ja-Latn', 'microsoft': 'en', 'google': 'gu', 'text': 'helo, marum nama Karim che' },
+        { 'cld3': 'ml', 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
+        { 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
+        { 'cld3': 'id', 'microsoft': 'fr', 'google': 'ta', 'text': 'vanakkam en peyar Karim' },
+        { 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
+        { 'cld3': 'fil', 'microsoft': 'tl', 'google': 'tl', 'text': 'kamusta ang aking pangalan ay Karim' },
+        { 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
     ]
 
     def setUp(self):
         super().setUp()
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-        r.flushall()
+        for key in r.scan_iter("langid:*"):
+            r.delete(key)
+
+    def test_cleanup_input(self):
+        STRINGS = [
+            { 'text': 'this is a clean string', 'clean': 'this is a clean string' },
+            { 'text': 'http://twitter.com/これは日本語です。example.com中国語', 'clean': 'これは日本語です。中国語' },
+            { 'text': 'some emojis 🙋🏽👨‍🎤 for you', 'clean': 'some emojis  for you' }
+        ]
+        for test in STRINGS:
+            self.assertEqual(test['clean'], LangidResource.cleanup_input(test['text']))
+
+    def test_cleanup_result(self):
+        RESULTS = [
+            { 'test': { 'result': { 'language': 'tl', 'confidence': 1.0 }}, 'expected': { 'result': { 'language': 'fil', 'confidence': 1.0 }}},
+            { 'test': { 'result': { 'language': 'hi-Latn', 'confidence': 1.0 }}, 'expected': { 'result': { 'language': 'hi', 'confidence': 1.0 }}}
+        ]
+        for test in RESULTS:
+            self.assertEqual(test['expected'], LangidResource.cleanup_result(test['test']))
 
     @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
     def test_langid_google(self):
@@ -43,6 +63,11 @@ class TestLangidBlueprint(BaseTestCase):
             result = MicrosoftLangidProvider.langid(test['text'])
             self.assertEqual(test['microsoft'], result['result']['language'], test['text'])
 
+    def test_langid_cld3(self):
+        for test in TestLangidBlueprint.TESTS:
+            result = Cld3LangidProvider.langid(test['text'])
+            self.assertEqual(test['cld3'], result['result']['language'], test['text'])
+
     def test_langid_api(self):
         response = self.client.get(
             '/text/langid/',
@@ -54,7 +79,6 @@ class TestLangidBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual('en', result['result']['language'])
         self.assertEqual(app.config['PROVIDER_LANGID'], result['provider'])
-        self.assertTrue(math.isclose(1, result['result']['confidence']))
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
 
@@ -69,18 +93,28 @@ class TestLangidBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/langid/',
                 data=json.dumps(dict(
-                    text='Hello this is a test'
+                    text='Hello this is a test',
+                    provider='provider1'
                 )),
                 content_type='application/json'
             )
             response = self.client.get(
                 '/text/langid/',
                 data=json.dumps(dict(
-                    text='Hello this is a test'
+                    text='Hello this is a test',
+                    provider='provider1'
                 )),
                 content_type='application/json'
             )
-            self.assertEqual(mock_langid.call_count, 1)
+            response = self.client.get(
+                '/text/langid/',
+                data=json.dumps(dict(
+                    text='Hello this is a test',
+                    provider='provider2'
+                )),
+                content_type='application/json'
+            )
+            self.assertEqual(mock_langid.call_count, 2)
 
     def test_langid_error(self):
         with patch.dict(app.config, { 'PROVIDER_LANGID': 'google' }):

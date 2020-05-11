@@ -1,4 +1,5 @@
 import os
+import json
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,7 +12,7 @@ class Config:
   REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
   REDIS_PORT = os.getenv('REDIS_PORT', 6379)
   REDIS_DATABASE = os.getenv('REDIS_DATABASE', 0)
-  PYBRAKE={
+  PYBRAKE = {
     'project_id': 1,
     'project_key': os.getenv('AIRBRAKE_PROJECT_KEY'),
     'host': os.getenv('AIRBRAKE_URL'),
@@ -26,14 +27,18 @@ class Config:
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
     'host': os.getenv('DATABASE_HOST', 'postgres'),
-    'dbname': os.getenv('DATABASE_NAME', 'alegre'),
+    'dbname': os.getenv('DATABASE_NAME', 'alegre')
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
+  SQLALCHEMY_ENGINE_OPTIONS = {
+    'pool_pre_ping': True
+  }
+  MODEL_CLASS = os.getenv('MODEL_CLASS')
+  MODEL_KEY = os.getenv('MODEL_KEY')
+  MODEL_OPTIONS = json.loads(os.getenv('MODEL_OPTIONS', '{}'))
 
 class DevelopmentConfig(Config):
   DEBUG = True
-  FLASK_ENV = 'development'
-  FLASK_DEBUG = True
 
 class TestingConfig(Config):
   DEBUG = True
@@ -46,7 +51,7 @@ class TestingConfig(Config):
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
     'host': os.getenv('DATABASE_HOST', 'postgres'),
-    'dbname': 'alegre_test',
+    'dbname': 'alegre_test'
   }
 
 class ProductionConfig(Config):

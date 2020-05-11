@@ -9,18 +9,17 @@ services:
     ports:
       - "9200:9200"
     environment:
-      - "discovery.type=single-node"
-      - "transport.host=127.0.0.1"
-      - "xpack.security.enabled=false"
-      - "ALEGRE_URL=http://alegre:5000"
+      discovery.type: single-node
+      transport.host: 127.0.0.1
+      xpack.security.enabled: "false"
     volumes:
       - "elasticsearch:/usr/share/elasticsearch/data"
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.0
+    image: docker.elastic.co/kibana/kibana:6.8.5
     ports:
       - "5601:5601"
     environment:
-      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+      ELASTICSEARCH_URL: http://elasticsearch:9200
   redis:
     image: redis:5
     ports:
@@ -34,9 +33,22 @@ services:
     volumes:
       - "postgres:/var/lib/postgresql/data"
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=postgres"
-      - "POSTGRES_DB=alegre"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alegre
+  model_use_multilingual_large:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: UniversalSentenceEncoder
+      MODEL_KEY: universal-sentence-encoder-multilingual-large
+      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
   alegre:
     build: .
     ports:
@@ -47,9 +59,6 @@ services:
       - postgres
       - kibana
       - redis
+      - model_use_multilingual_large
     env_file:
       - .env_file
-    environment:
-      - "BOILERPLATE_ENV=dev"
-      - "FLASK_ENV=development"
-      - "FLASK_DEBUG=true"

@@ -1,15 +1,17 @@
 before_install:
-- git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-- d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
-- cd data && unzip glove-6B-50d-gensim.txt.zip && mv glove-6B-50d-gensim.txt model.txt && cd -
-- docker-compose pull
-- docker-compose up -d
-- docker-compose logs -t -f &
-- wget -q --waitretry=5 --retry-connrefused -t 20 -T 10 -O - http://127.0.0.1:9200
+  - sudo apt-get -y install redis-tools
+before_script:
+  - git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+  - d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+  - docker-compose build --pull
+  - docker-compose -f docker-compose.yml -f docker-test.yml up -d
+  - docker-compose logs -t -f &
+  - echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test,alegre_glossary_test"; do sleep 1; done
+  - echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
-- docker-compose exec alegre bash -c "make test"
+  - docker-compose exec alegre make test
 after_script:
-- docker-compose exec alegre bash -c "coverage report"
+  - docker-compose exec alegre coverage report
 notifications:
   slack:
     secure: PIYgKOnKjbWv7inSq4Gu0BZS24Ipte3DVZid71dD1iTSHiRtwWUV8jmhva7kVfhoyNst7Hck5v3rp6nY//W0a/frT0mdn1f4j41NA8VaAeKa7MOWQFyvaXBNTnjJJ+FMkpHhbQWGAE7tTKBMWeJDWCisgtvPNQvCd3GtnMMyeTeuQTZarJojTyGxJ00ubLCpKQICkCVEwapnZpONJLJV9h9XuScVo+69h7vpc3jL79/zSWHgH5YPmUEYqLoXArZUtZtsIxunp3ftBqRKoxRHJuUuVDfJ8skNradWoXLEA5Qf/sxxekh13FcYEXMIY37VOQgPJpF8cL0MWwANGrphTdrH2J4vsnoiJK0lZ8NMOIbnBXKhaMtF+PoBjWNgI+8y5xp5jYFV/sQkeqz1ZS3/3KsYFfUeXsy3gPjsASnV6WSk2EstWF4LZopjwqeTssF7nfpOUEf+KW1nCZrnvEt7Mc+Rat+TtTYXFjea5OXednBhAZf0woiRSMw7rlxp9KuxTZDgsbNvs/FoFpJMi7Rmw5+yVrshxxu1lO7hzdWw/8LzRvi6wWWF9mLzbxq3wPKOq/NHIjQrnp8M0o0ESgibQ/pyAU25mcjqNFgCyRLwPjV4s2Q4D/eESn3Vi6A4cvs/Oy4yHWDijm8QilqyrUR67M8NOip92X9FZT/5/BOfEoM=

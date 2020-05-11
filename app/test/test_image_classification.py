@@ -13,8 +13,10 @@ from app.main.lib.image_classification import GoogleImageClassificationProvider
 
 class TestImageClassificationBlueprint(BaseTestCase):
     def setUp(self):
+        super().setUp()
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-        r.flushall()
+        for key in r.scan_iter("image_classification:*"):
+            r.delete(key)
 
     @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
     def test_image_classification_google(self):
