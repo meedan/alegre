@@ -69,12 +69,13 @@ class SimilarityResource(Resource):
                     }
                 },
             ]
-
             # FIXME: `analyzer` and `minimum_should_match` don't play well together.
             if 'language' in request.json:
                 conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
                 del conditions[0]['match']['content']['minimum_should_match']
-
+            if 'fuzzy' in request.json:
+                if request.json['fuzzy'].lower() == "auto":
+                    conditions[0]['match']['content']['fuzzy'] = "AUTO"
         else:
             model = SharedModel.get_client(model_key)
             vector = model.get_shared_model_response(request.json['text'])
