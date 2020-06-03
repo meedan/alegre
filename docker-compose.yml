@@ -49,6 +49,32 @@ services:
       MODEL_CLASS: UniversalSentenceEncoder
       MODEL_KEY: universal-sentence-encoder-multilingual-large
       MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
+  model_laser:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: LaserSharedModel
+      MODEL_KEY: laser
+      MODEL_OPTIONS: '{}'
+  model_sbert:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: Sbert
+      MODEL_KEY: sbert
+      MODEL_OPTIONS: '{}'
   alegre:
     build: .
     ports:
@@ -60,5 +86,7 @@ services:
       - kibana
       - redis
       - model_use_multilingual_large
+      - model_laser
+      - model_sbert
     env_file:
       - .env_file

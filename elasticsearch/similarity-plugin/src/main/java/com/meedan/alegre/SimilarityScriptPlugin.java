@@ -38,7 +38,9 @@ import org.elasticsearch.search.lookup.LeafDocLookup;
 import org.elasticsearch.search.lookup.SourceLookup;
 import org.elasticsearch.SpecialPermission;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import mikera.vectorz.Vector;
+
 
 public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
     private static final Logger logger = LogManager.getLogger(SimilarityScriptPlugin.class);
@@ -81,6 +83,8 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
             private final Map<String, Object> params;
             private final SearchLookup lookup;
             private final List inputVector;
+            private final String inputContent;
+            private final String scoreType;
 
             private SimilarityLeafFactory(Map<String, Object> params, SearchLookup lookup) {
                 if (params.containsKey("vector") == false) {
@@ -89,6 +93,8 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
                 this.params = params;
                 this.lookup = lookup;
                 this.inputVector = (List)params.get("vector");
+                this.inputContent = (String)params.get("content");
+                this.scoreType = (String)params.get("score_type");
             }
 
             @Override
@@ -99,19 +105,31 @@ public class SimilarityScriptPlugin extends Plugin implements ScriptPlugin {
             @Override
             public ScoreScript newInstance(LeafReaderContext context) throws IOException {
                 List inputVector = this.inputVector;
-
+                String inputContent = this.inputContent;
+                String scoreType = this.scoreType;
                 return new ScoreScript(params, lookup, context) {
                     @Override
                     public double execute() {
                         double score = 0.0d;
                         try {
+                          double angular_score = 0.0d;
+                          double fuzzy_score = 0.0d;
                           SourceLookup source = lookup.getLeafSearchLookup(context).source();
                           Object key = "vector";
                           Object vector = source.get(key);
                           List sourceVector = (List)vector;
                           Vector v1 = Vector.create(inputVector);
                           Vector v2 = Vector.create(sourceVector);
-                          score = 1.0 - v1.angle(v2) / Math.PI;
+                          String sourceContent = (String)source.get("content");
+                          angular_score = 1.0 - v1.angle(v2) / Math.PI;
+                          fuzzy_score = FuzzySearch.partialRatio(inputContent,sourceContent) / 100.0;
+                          if (scoreType.equals("fuzzy")){
+                            score = fuzzy_score;
+                          } else if (scoreType.equals("mixed")){
+                            score = (angular_score + fuzzy_score) / 2;
+                          } else if (scoreType.equals("angular")){
+                            score = angular_score;
+                          }
                         }
                         catch (Exception e) {
                           score = 0.0d;

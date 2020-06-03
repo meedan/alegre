@@ -4,6 +4,7 @@ run: wait
 	python manage.py db upgrade
 	python manage.py run
 run_model:
+	python3 -m laserembeddings download-models
 	python manage.py run_model
 test: wait
 	coverage run manage.py test

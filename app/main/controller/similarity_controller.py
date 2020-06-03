@@ -92,7 +92,9 @@ class SimilarityResource(Resource):
                                         'source': 'similarity',
                                         'lang': 'meedan_scripts',
                                         'params': {
-                                            'vector': vector
+                                            'vector': vector,
+                                            'content': request.json['text'],
+                                            'score_type': request.json['score_type']
                                         }
                                     }
                                 }
