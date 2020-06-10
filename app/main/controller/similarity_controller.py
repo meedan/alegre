@@ -2,9 +2,25 @@ from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 
+from app.main.lib.langid import Cld3LangidProvider
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
+
+def get_model_key_and_language_from_request(request):
+    model_key = 'laser'
+    language = None
+    if 'language' in request.json and request.json['language']:
+        language = request.json['language']
+    else:
+        lang_response = Cld3LangidProvider.langid(request.json["text"])["raw"]
+        if lang_response.is_reliable and lang_response.language:
+            language = lang_response.language
+    if language == 'en':
+        model_key = 'sbert'
+    if 'model' in request.json:
+        model_key = request.json['model']
+    return model_key, language
 
 api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
@@ -14,16 +30,13 @@ similarity_request = api.model('similarity_request', {
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=False, description='context')
 })
-
 @api.route('/')
 class SimilarityResource(Resource):
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        model_key = 'elasticsearch'
-        if 'model' in request.json:
-            model_key = request.json['model']
+        model_key, _ = get_model_key_and_language_from_request(request)
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         body = { 'content': request.json['text'] }
         if model_key.lower() != 'elasticsearch':
@@ -49,9 +62,7 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.expect(similarity_request, validate=True)
     def get(self):
-        model_key = 'elasticsearch'
-        if 'model' in request.json:
-            model_key = request.json['model']
+        model_key, language = get_model_key_and_language_from_request(request)
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
         threshold = 0.9
@@ -72,7 +83,7 @@ class SimilarityResource(Resource):
 
             # FIXME: `analyzer` and `minimum_should_match` don't play well together.
             if 'language' in request.json:
-                conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
+                conditions[0]['match']['content']['analyzer'] = language_to_analyzer(language)
                 del conditions[0]['match']['content']['minimum_should_match']
 
         else:

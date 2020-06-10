@@ -67,7 +67,6 @@ class MicrosoftLangidProvider:
     MicrosoftLangidProvider.langid('hello, world')
     return True
 
-
 class Cld3LangidProvider:
 # https://github.com/bsolomon1124/pycld3
   @staticmethod
