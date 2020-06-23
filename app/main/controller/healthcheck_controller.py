@@ -25,7 +25,8 @@ class HealthcheckResource(Resource):
 
     # Elasticsearch
     try:
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+      es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=10, max_retries=3, retry_on_timeout=True)
+
     except Exception as e:
       result['ELASTICSEARCH'] = str(e)
     else:
