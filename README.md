@@ -1,7 +1,7 @@
 alegre
 ------
 
-A media analsyis service. Part of the [Check platform](https://meedan.com/check). Refer to the [main repository](https://github.com/meedan/check) for quick start instructions.
+A media analysis service. Part of the [Check platform](https://meedan.com/check). Refer to the [main repository](https://github.com/meedan/check) for quick start instructions.
 
 ## Development
 
