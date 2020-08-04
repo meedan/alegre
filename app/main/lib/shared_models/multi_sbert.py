@@ -18,4 +18,4 @@ class MultiSbert(SharedModel):
         """
         vectorize: Embed a text snippet in the vector space.
         """
-        return self.model.encode([doc])[0]
+        return self.model.encode([doc])[0].tolist()
