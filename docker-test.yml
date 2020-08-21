@@ -43,6 +43,7 @@ services:
       - redis
       - model_use_multilingual_large
       - model_test
+      - model_multi_sbert
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
