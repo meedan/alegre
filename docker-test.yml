@@ -13,6 +13,14 @@ services:
       MODEL_CLASS: UniversalSentenceEncoder
       MODEL_KEY: universal-sentence-encoder-multilingual-large
       MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
+  model_multi_sbert:
+    environment:
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "true"
+      MODEL_CLASS: MultiSbert
+      MODEL_KEY: multi-sbert
+      MODEL_OPTIONS: '{"model_name": "distiluse-base-multilingual-cased"}'
   model_test:
     build: .
     command: ["make", "run_model"]
@@ -35,6 +43,7 @@ services:
       - redis
       - model_use_multilingual_large
       - model_test
+      - model_multi_sbert
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test

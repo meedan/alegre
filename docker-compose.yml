@@ -49,6 +49,19 @@ services:
       MODEL_CLASS: UniversalSentenceEncoder
       MODEL_KEY: universal-sentence-encoder-multilingual-large
       MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
+  model_multi_sbert:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: MultiSbert
+      MODEL_KEY: multi-sbert
+      MODEL_OPTIONS: '{"model_name": "distiluse-base-multilingual-cased"}'
   alegre:
     build: .
     ports:
@@ -59,6 +72,7 @@ services:
       - postgres
       - kibana
       - redis
+      - model_multi_sbert
       - model_use_multilingual_large
     env_file:
       - .env_file
