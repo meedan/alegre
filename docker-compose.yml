@@ -36,19 +36,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre
-  model_use_multilingual_large:
-    build: .
-    command: ["make", "run_model"]
-    volumes:
-      - ".:/app"
-    depends_on:
-      - redis
-    env_file:
-      - .env_file
-    environment:
-      MODEL_CLASS: UniversalSentenceEncoder
-      MODEL_KEY: universal-sentence-encoder-multilingual-large
-      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
   model_multi_sbert:
     build: .
     command: ["make", "run_model"]
@@ -73,6 +60,5 @@ services:
       - kibana
       - redis
       - model_multi_sbert
-      - model_use_multilingual_large
     env_file:
       - .env_file
