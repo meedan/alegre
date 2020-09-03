@@ -61,7 +61,7 @@ services:
     environment:
       MODEL_CLASS: MultiSbert
       MODEL_KEY: multi-sbert
-      MODEL_OPTIONS: '{"model_url": "https://sbert.net/models/distiluse-base-multilingual-cased.zip", "model_name": "distiluse-base-multilingual-cased"}'
+      MODEL_OPTIONS: '{"model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/distiluse-base-multilingual-cased.zip", "model_name": "distiluse-base-multilingual-cased"}'
   alegre:
     build: .
     ports:
