@@ -6,7 +6,7 @@ from app.main.lib.similarity_measures import angular_similarity
 class MultiSbert(SharedModel):
     def load(self):
         model_name = self.options.get('model_name', 'distiluse-base-multilingual-cased')
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer(self.options.get("model_url") or model_name)
 
     def respond(self, doc):
       return self.vectorize(doc)
