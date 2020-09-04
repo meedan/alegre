@@ -20,7 +20,7 @@ cymem==2.0.2
 cytoolz==0.9.0.1
 dill==0.2.8.2
 docutils==0.14
-elasticsearch==6.8.1
+elasticsearch>=7.0.0,<8.0.0
 Flask==1.0.2
 Flask-Bcrypt==0.7.1
 Flask-Migrate==2.2.1

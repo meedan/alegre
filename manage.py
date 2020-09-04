@@ -62,12 +62,10 @@ def init():
       else:
         raise
   es.indices.put_mapping(
-    doc_type='_doc',
     body=json.load(open('./elasticsearch/alegre_glossary.json')),
     index=app.config['ELASTICSEARCH_GLOSSARY']
   )
   es.indices.put_mapping(
-    doc_type='_doc',
     body=json.load(open('./elasticsearch/alegre_similarity.json')),
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )

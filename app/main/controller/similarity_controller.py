@@ -34,7 +34,6 @@ class SimilarityResource(Resource):
             body['context'] = request.json['context']
         result = es.index(
             body=body,
-            doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -141,7 +140,6 @@ class SimilarityResource(Resource):
         }
         result = es.search(
             body=body,
-            doc_type='_doc',
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
         return {

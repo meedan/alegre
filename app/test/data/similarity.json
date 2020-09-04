@@ -1,14 +1,11 @@
 [
   {
-    "_type": "_doc",
     "content": "This is a test"
   },
   {
-    "_type": "_doc",
     "content": "This was a test"
   },
   {
-    "_type": "_doc",
     "content": "That is a test",
     "context": {
       "app": "check",
@@ -17,19 +14,15 @@
     }
   },
   {
-    "_type": "_doc",
     "content": "4.2-magnitude earthquake strikes near Fort St. John"
   },
   {
-    "_type": "_doc",
     "content": "Earthquake strikes near Fort St. John, B.C.; no damage reported after test"
   },
   {
-    "_type": "_doc",
     "content": "A big earthquake happened in San Francisco in 1906"
   },
   {
-    "_type": "_doc",
     "content": "Something different here"
   }
 ]
