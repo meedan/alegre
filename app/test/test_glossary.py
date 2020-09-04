@@ -24,7 +24,6 @@ class TestGlossaryBlueprint(BaseTestCase):
       mapping = es.indices.get_mapping(
         index=app.config['ELASTICSEARCH_GLOSSARY']
       )
-      print(mapping)
       self.assertDictEqual(
         json.load(open('./elasticsearch/alegre_glossary.json')),
         mapping[app.config['ELASTICSEARCH_GLOSSARY']]['mappings']
