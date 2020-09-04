@@ -9,7 +9,7 @@ from app.test.base import BaseTestCase
 class TestMultiSBERTModelBlueprint(BaseTestCase):
     use_model_key = "multi-sbert"
 
-    def test_universal_sentence_encoder_api(self):
+    def test_multi_sbert_api(self):
         with self.client:
             response = self.client.post(
                 '/model/vector',

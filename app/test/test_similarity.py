@@ -10,7 +10,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
-    use_model_key = 'universal-sentence-encoder-multilingual-large'
+    use_model_key = 'multi-sbert'
     test_model_key = 'shared-model-test'
 
     def setUp(self):

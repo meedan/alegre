@@ -5,14 +5,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
-  model_use_multilingual_large:
-    environment:
-      BOILERPLATE_ENV: test
-      FLASK_ENV: test
-      FLASK_DEBUG: "true"
-      MODEL_CLASS: UniversalSentenceEncoder
-      MODEL_KEY: universal-sentence-encoder-multilingual-large
-      MODEL_OPTIONS: '{"model_path": "https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3"}'
   model_multi_sbert:
     environment:
       BOILERPLATE_ENV: test
@@ -41,7 +33,6 @@ services:
       - postgres
       - elasticsearch
       - redis
-      - model_use_multilingual_large
       - model_test
       - model_multi_sbert
     environment:
