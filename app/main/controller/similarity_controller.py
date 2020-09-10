@@ -122,8 +122,12 @@ class SimilarityResource(Resource):
                     }
                 }
             }
+            if isinstance(conditions, list):
+                conditions.append(context)
+            else:
+                conditions['query']['script_score']['query']['bool']['must'].append(context)
+
         if isinstance(conditions, list):
-            conditions.append(context)
             body = {
                 'query': {
                     'bool': {
@@ -132,7 +136,6 @@ class SimilarityResource(Resource):
                 }
             }
         else:
-            conditions['query']['script_score']['query']['bool']['must'].append(context)
             body = conditions
 
         result = es.search(
