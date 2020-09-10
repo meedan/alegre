@@ -28,7 +28,8 @@ class SimilarityResource(Resource):
         body = { 'content': request.json['text'] }
         if model_key.lower() != 'elasticsearch':
             model = SharedModel.get_client(model_key)
-            body['vector'] = model.get_shared_model_response(request.json['text'])
+            vector = model.get_shared_model_response(request.json['text'])
+            body['vector_'+str(len(vector))] = vector
             body['model'] = model_key
         if 'context' in request.json:
             body['context'] = request.json['context']
@@ -77,41 +78,32 @@ class SimilarityResource(Resource):
         else:
             model = SharedModel.get_client(model_key)
             vector = model.get_shared_model_response(request.json['text'])
-            conditions = [
-                {
-                    'function_score': {
+            conditions = {
+                'query': {
+                    'script_score': {
                         'min_score': threshold,
                         'query': {
-                            'match_all': {}
-                        },
-                        'functions': [
-                            {
-                                'script_score': {
-                                    'script': {
-                                        'source': 'similarity',
-                                        'lang': 'meedan_scripts',
-                                        'params': {
-                                            'vector': vector
+                            'bool': {
+                                'must': [
+                                    {
+                                        'match': {
+                                            'model': {
+                                              'query': model_key,
+                                            }
                                         }
                                     }
-                                }
+                                ]
                             }
-                        ]
-                    }
-                }
-            ]
-
-            # Add model to be matched.
-            conditions.append(
-                {
-                    'match': {
-                        'model': {
-                          'query': model_key,
+                        },
+                        'script': {
+                            'source': "cosineSimilarity(params.query_vector, 'vector_"+str(len(vector))+"') + 1.0", 
+                            'params': {
+                                'query_vector': vector
+                            }
                         }
                     }
-                },
-            )
-
+                }
+            }
         if 'context' in request.json:
             matches = []
             for key in request.json['context']:
@@ -129,15 +121,20 @@ class SimilarityResource(Resource):
                     }
                 }
             }
-            conditions.append(context)
-
-        body = {
-            'query': {
-                'bool': {
-                    'must': conditions
+            if isinstance(conditions, list):
+                conditions.append(context)
+                body = {
+                    'query': {
+                        'bool': {
+                            'must': conditions
+                        }
+                    }
                 }
-            }
-        }
+            else:
+                conditions['query']['script_score']['query']['bool']['must'].append(context)
+                body = conditions
+
+        app.logger.info(body)
         result = es.search(
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']

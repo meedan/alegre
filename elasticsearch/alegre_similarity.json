@@ -1,5 +1,9 @@
 {
   "properties": {
+    "vector_512": {
+      "type": "dense_vector",
+      "dims": 512
+    },
     "content": {
       "type": "text"
     },
