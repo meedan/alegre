@@ -104,6 +104,7 @@ class SimilarityResource(Resource):
                     }
                 }
             }
+
         if 'context' in request.json:
             matches = []
             for key in request.json['context']:
@@ -121,20 +122,19 @@ class SimilarityResource(Resource):
                     }
                 }
             }
-            if isinstance(conditions, list):
-                conditions.append(context)
-                body = {
-                    'query': {
-                        'bool': {
-                            'must': conditions
-                        }
+        if isinstance(conditions, list):
+            conditions.append(context)
+            body = {
+                'query': {
+                    'bool': {
+                        'must': conditions
                     }
                 }
-            else:
-                conditions['query']['script_score']['query']['bool']['must'].append(context)
-                body = conditions
+            }
+        else:
+            conditions['query']['script_score']['query']['bool']['must'].append(context)
+            body = conditions
 
-        app.logger.info(body)
         result = es.search(
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']
