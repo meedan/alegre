@@ -15,7 +15,6 @@ class TestGlossaryBlueprint(BaseTestCase):
       es.indices.delete(index=app.config['ELASTICSEARCH_GLOSSARY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_GLOSSARY'])
       es.indices.put_mapping(
-        doc_type='_doc',
         body=json.load(open('./elasticsearch/alegre_glossary.json')),
         index=app.config['ELASTICSEARCH_GLOSSARY']
       )
@@ -23,12 +22,11 @@ class TestGlossaryBlueprint(BaseTestCase):
     def test_glossary_mapping(self):
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
       mapping = es.indices.get_mapping(
-        doc_type='_doc',
         index=app.config['ELASTICSEARCH_GLOSSARY']
       )
       self.assertDictEqual(
         json.load(open('./elasticsearch/alegre_glossary.json')),
-        mapping[app.config['ELASTICSEARCH_GLOSSARY']]['mappings']['_doc']
+        mapping[app.config['ELASTICSEARCH_GLOSSARY']]['mappings']
       )
 
     def test_glossary_queries(self):
@@ -40,7 +38,6 @@ class TestGlossaryBlueprint(BaseTestCase):
       self.assertTrue(success)
       es.indices.refresh(index=app.config['ELASTICSEARCH_GLOSSARY'])
       result = es.search(
-        doc_type='_doc',
         index=app.config['ELASTICSEARCH_GLOSSARY'],
         body={
           "query": {
@@ -53,7 +50,6 @@ class TestGlossaryBlueprint(BaseTestCase):
       )
       self.assertEqual("Por que minha mãe conversa com a TV?", result['hits']['hits'][0]['_source']['pt'])
       result = es.search(
-        doc_type='_doc',
         index=app.config['ELASTICSEARCH_GLOSSARY'],
         body={
           "_source": ["pt"],
@@ -92,7 +88,6 @@ class TestGlossaryBlueprint(BaseTestCase):
     def test_glossary_api(self):
         with self.client:
             for term in json.load(open('./app/test/data/glossary.json')):
-                del term['_type']
                 response = self.client.post('/text/glossary/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual('created', result['result']['result'])
