@@ -20,7 +20,6 @@ class GlossaryResource(Resource):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     result = es.index(
       body=request.json,
-      doc_type='_doc',
       index=app.config['ELASTICSEARCH_GLOSSARY']
     )
     es.indices.refresh(index=app.config['ELASTICSEARCH_GLOSSARY'])
@@ -35,7 +34,6 @@ class GlossaryResource(Resource):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     result = es.search(
       body=request.json,
-      doc_type='_doc',
       index=app.config['ELASTICSEARCH_GLOSSARY']
     )
     return {

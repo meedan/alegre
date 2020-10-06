@@ -6,16 +6,16 @@ from flask import current_app as app
 from app.main import db
 from app.test.base import BaseTestCase
 
-class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
-    use_model_key = "universal-sentence-encoder-multilingual-large"
+class TestMultiSBERTModelBlueprint(BaseTestCase):
+    use_model_key = "multi-sbert"
 
-    def test_universal_sentence_encoder_api(self):
+    def test_multi_sbert_api(self):
         with self.client:
             response = self.client.post(
                 '/model/vector',
                 data=json.dumps({
                   "text": "this is a test",
-                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
+                  "model": TestMultiSBERTModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -27,7 +27,7 @@ class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
                 data=json.dumps({
                   "vector1": vector,
                   "vector2": vector,
-                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
+                  "model": TestMultiSBERTModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -39,7 +39,7 @@ class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
                 '/model/vector',
                 data=json.dumps({
                   "text": "how to delete an invoice",
-                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
+                  "model": TestMultiSBERTModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -50,7 +50,7 @@ class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
                 '/model/vector',
                 data=json.dumps({
                   "text": "purge an invoice",
-                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
+                  "model": TestMultiSBERTModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )
@@ -62,7 +62,7 @@ class TestUniversalSentenceEncoderModelBlueprint(BaseTestCase):
                 data=json.dumps({
                   "vector1": vector1,
                   "vector2": vector2,
-                  "model": TestUniversalSentenceEncoderModelBlueprint.use_model_key,
+                  "model": TestMultiSBERTModelBlueprint.use_model_key,
                 }),
                 content_type='application/json'
             )

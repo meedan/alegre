@@ -10,7 +10,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilaryBlueprint(BaseTestCase):
     maxDiff = None
-    use_model_key = 'universal-sentence-encoder-multilingual-large'
+    use_model_key = 'multi-sbert'
     test_model_key = 'shared-model-test'
 
     def setUp(self):
@@ -19,7 +19,6 @@ class TestSimilaryBlueprint(BaseTestCase):
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_mapping(
-        doc_type='_doc',
         body=json.load(open('./elasticsearch/alegre_similarity.json')),
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
@@ -33,18 +32,16 @@ class TestSimilaryBlueprint(BaseTestCase):
     def test_similarity_mapping(self):
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
       mapping = es.indices.get_mapping(
-        doc_type='_doc',
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
       self.assertDictEqual(
         json.load(open('./elasticsearch/alegre_similarity.json')),
-        mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']['_doc']
+        mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']
       )
 
     def test_elasticsearch_similarity_english(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
-                del term['_type']
                 term['text'] = term['content']
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
