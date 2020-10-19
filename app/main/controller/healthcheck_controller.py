@@ -41,8 +41,7 @@ class HealthcheckResource(Resource):
     # Redis
     try:
       r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-      # FIXME Redis database is not being tested by info()
-      r.info()
+      r.ping()
       result['REDIS'] = True
     except Exception as e:
       result['REDIS'] = str(e)
