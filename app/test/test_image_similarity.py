@@ -26,7 +26,7 @@ class TestImageSimilaryBlueprint(BaseTestCase):
 
   def test_truncated_image_fetch(self):
     image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg')
-    self.assertEqual(image.phash, 45655524591978137)
+    self.assertEqual(image.phash, 25444816931300591)
 
   def test_image_fetch(self):
     image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png')
