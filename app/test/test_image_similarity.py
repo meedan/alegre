@@ -24,6 +24,10 @@ class TestImageSimilaryBlueprint(BaseTestCase):
     result = db.session.execute(text("SELECT BIT_COUNT(:p) AS test_count"), { 'p': p }).first()
     self.assertEqual(result['test_count'], 28)
 
+  def test_truncated_image_fetch(self):
+    image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg')
+    self.assertEqual(image.phash, 45655524591978137)
+
   def test_image_fetch(self):
     image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png')
     self.assertEqual(image.phash, 45655524591978137)
