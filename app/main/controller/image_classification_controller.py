@@ -35,7 +35,7 @@ class ImageClassificationResource(Resource):
 
         return result
 
-    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=4), stop=tenacity.stop_after_delay(10), after=_after_log)
+    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=4), stop=tenacity.stop_after_delay(10), after=_after_log, reraise=True)
     def classify(self, uri):
         # In module `app.main.lib.image_classification`,
         # look for a class called `#{ProviderName}ImageClassificationProvider`, e.g. `GoogleImageClassificationProvider`

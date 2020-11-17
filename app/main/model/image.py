@@ -1,6 +1,7 @@
 import io
 import urllib.request
-from PIL import Image
+from PIL import Image, ImageFile
+
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
@@ -25,6 +26,7 @@ class ImageModel(db.Model):
       :param url: Image URL
       :returns: ImageModel object
     """
+    ImageFile.LOAD_TRUNCATED_IMAGES = True
     remote_request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     remote_response = urllib.request.urlopen(remote_request)
     raw = remote_response.read()
