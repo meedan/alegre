@@ -4,7 +4,11 @@ if [ ! -d "configurator" ]; then git clone https://${GITHUB_TOKEN}:x-oauth-basic
 d=configurator/check/${DEPLOY_ENV}/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
 
 set -o allexport
-[[ -f .env_file ]] && source .env_file
+if [ -z "$SSM" ]
+then
+  [[ -f .env_file ]] && source .env_file
+fi
+
 set +o allexport
 
 python manage.py init
