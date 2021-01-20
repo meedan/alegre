@@ -2,10 +2,12 @@
 from google.cloud import vision
 from protobuf_to_dict import protobuf_to_dict
 
+from app.main.lib.google_client import get_credentialed_google_client
+
 class GoogleImageClassificationProvider:
     @staticmethod
     def classify(uri):
-        client = vision.ImageAnnotatorClient.from_service_account_json('./google_credentials.json')
+        client = get_credentialed_google_client(vision.ImageAnnotatorClient)
         response = client.annotate_image({
           'image': {'source': {'image_uri': uri}},
           'features': [
