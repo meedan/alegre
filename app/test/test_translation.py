@@ -3,11 +3,12 @@ import json
 from google.cloud import translate_v2 as translate
 
 from app.main import db
+from app.main.lib.google_client import get_credentialed_google_client
 from app.test.base import BaseTestCase
 
 class TestTranslationBlueprint(BaseTestCase):
     def test_translation(self):
-        client = translate.Client.from_service_account_json('./google_credentials.json')
+        client = get_credentialed_google_client(translate.Client)
         result = client.detect_language(['Me llamo', 'I am'])
         self.assertEqual('es', result[0]['language'])
         self.assertEqual('en', result[1]['language'])
