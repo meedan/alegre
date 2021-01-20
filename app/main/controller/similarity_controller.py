@@ -17,10 +17,7 @@ similarity_request = api.model('similarity_request', {
 
 @api.route('/')
 class SimilarityResource(Resource):
-    @api.response(200, 'text successfully stored in the similarity database.')
-    @api.doc('Store a text in the similarity database')
-    @api.expect(similarity_request, validate=True)
-    def post(self):
+    def get_body_for_request(self):
         model_key = 'elasticsearch'
         if 'model' in request.json:
             model_key = request.json['model']
@@ -33,6 +30,54 @@ class SimilarityResource(Resource):
             body['model'] = model_key
         if 'context' in request.json:
             body['context'] = request.json['context']
+        return body
+
+    @api.response(200, 'text successfully deleted in the similarity database.')
+    @api.doc('Delete a text in the similarity database')
+    @api.expect(similarity_request, validate=True)
+    def delete(self):
+        model_key = 'elasticsearch'
+        if 'model' in request.json:
+            model_key = request.json['model']
+        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        body = self.get_body_for_request()
+        conditions = []
+        for body_key in body.keys():
+            if body_key == 'context':
+                for key in body[body_key]:
+                    matches = []
+                    for key in body[body_key]:
+                        matches.append({
+                            'match': { 'context.' + key: body[body_key][key] }
+                    })
+                    context = {
+                            'nested': {
+                            'score_mode': 'none',
+                            'path': 'context',
+                            'query': {
+                                'bool': {
+                                    'must': matches
+                                }
+                            }
+                        }
+                    }
+                    conditions.append(context)
+            else:
+                conditions.append({'match': {body_key: body[body_key]}})
+        query = {
+            'query': {
+                'bool': {
+                    'must': conditions
+                }
+            }
+        }
+        return es.delete_by_query(app.config['ELASTICSEARCH_SIMILARITY'], query)
+        
+    @api.response(200, 'text successfully stored in the similarity database.')
+    @api.doc('Store a text in the similarity database')
+    @api.expect(similarity_request, validate=True)
+    def post(self):
+        body = self.get_body_for_request()
         result = es.index(
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']
