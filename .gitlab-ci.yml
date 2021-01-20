@@ -25,6 +25,7 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
+    - ssm-configuration
 
 deploy_qa:
   image: python:3-alpine
@@ -41,12 +42,13 @@ deploy_qa:
     - pip install botocore==1.17.47
     - pip install boto3==1.14.47
     - pip install ecs-deploy==1.11.0
-    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - source configurator/check/qa/alegre/.env_file
-    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA -e qa-alegre-c ELASTICSEARCH_URL $ELASTICSEARCH_URL -e qa-alegre-c PROVIDER_LANGID $PROVIDER_LANGID -e qa-alegre-c BOILERPLATE_ENV $BOILERPLATE_ENV -e qa-alegre-c REDIS_HOST $REDIS_HOST -e qa-alegre-c REDIS_PORT $REDIS_PORT -e qa-alegre-c REDIS_DATABASE $REDIS_DATABASE -e qa-alegre-c MS_TEXT_ANALYTICS_KEY $MS_TEXT_ANALYTICS_KEY -e qa-alegre-c MS_TEXT_ANALYTICS_URL $MS_TEXT_ANALYTICS_URL -e qa-alegre-c DATABASE_NAME $DATABASE_NAME -e qa-alegre-c DATABASE_HOST $DATABASE_HOST -e qa-alegre-c DATABASE_USER $DATABASE_USER -e qa-alegre-c DATABASE_PASS $DATABASE_PASS --timeout 3600
+    - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
+    - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 3600 `cat qa-alegre-c.env.args`
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
+    - ssm-configuration
 
 build_live:
   image: docker:latest
@@ -85,9 +87,9 @@ deploy_live:
     - pip install botocore==1.17.47
     - pip install boto3==1.14.47
     - pip install ecs-deploy==1.11.0
-    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - source configurator/check/live/alegre/.env_file
-    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 3600
+    - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
+    - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
+    - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 3600 `cat live-alegre-c.env.args`
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master
