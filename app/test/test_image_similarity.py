@@ -120,7 +120,7 @@ class TestImageSimilaryBlueprint(BaseTestCase):
       'url': url
     }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
-    self.assertEqual(1, result['total'])
+    self.assertEqual(True, result['deleted'])
     
 
   def test_image_api_error(self):
