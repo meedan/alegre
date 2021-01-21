@@ -78,6 +78,7 @@ class SimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         body = self.get_body_for_request()
+        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         result = es.index(
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']
