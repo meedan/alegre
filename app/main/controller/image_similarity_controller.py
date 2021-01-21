@@ -23,6 +23,15 @@ def _after_log(retry_state):
 class ImageSimilarityResource(Resource):
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')
+  def delete(self):
+    deleted = db.session.query(ImageModel).filter(ImageModel.url==request.json['url']).delete()
+    if deleted:
+      return {'deleted': True}
+    else:
+      return {'deleted': False}
+
+  @api.response(200, 'image signature successfully stored in the similarity database.')
+  @api.doc('Store an image signature in the similarity database')
   @api.expect(image_similarity_request, validate=True)
   def post(self):
     image = ImageModel.from_url(request.json['url'], request.json['context'])
