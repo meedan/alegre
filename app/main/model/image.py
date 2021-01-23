@@ -13,6 +13,7 @@ class ImageModel(db.Model):
 
   id = db.Column(db.Integer, primary_key=True)
   sha256 = db.Column(db.String(64, convert_unicode=True), nullable=False, index=True)
+  doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=False, index=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
@@ -21,7 +22,7 @@ class ImageModel(db.Model):
   )
 
   @staticmethod
-  def from_url(url, context={}):
+  def from_url(url, doc_id, context={}):
     """Fetch an image from a URL and load it
       :param url: Image URL
       :returns: ImageModel object
@@ -33,4 +34,4 @@ class ImageModel(db.Model):
     im = Image.open(io.BytesIO(raw)).convert('RGB')
     phash = compute_phash_int(im)
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, url=url, context=context)
+    return ImageModel(sha256=sha256, phash=phash, url=url, context=context, doc_id=doc_id)

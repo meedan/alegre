@@ -93,19 +93,35 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
+    def test_elasticsearch_update_text(self):
+        with self.client:
+            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
+            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': doc["_id"]}
+            post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
+            self.assertEqual(term2['text'], doc['_source']['content'])
+        
     def test_elasticsearch_delete_text(self):
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(post_response.data.decode())
             self.assertEqual(True, result['success'])
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
             delete_response = self.client.delete(
                 '/text/similarity/',
-                data=json.dumps(term),
+                data=json.dumps({"doc_id": doc["_id"]}),
                 content_type='application/json'
             )
             result = json.loads(delete_response.data.decode())
-            self.assertEqual(1, result['total'])
+            self.assertEqual('deleted', result['result'])
 
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
