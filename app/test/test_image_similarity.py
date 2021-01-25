@@ -141,7 +141,10 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     image = ImageModel.query.filter_by(url=url).all()[0]
-    self.assertEqual(2, image.context['team_id'])
+    if isinstance(image.context, list):
+        self.assertEqual(2, image.context[0]['team_id'])
+    else:
+        self.assertEqual(2, image.context['team_id'])
 
   def test_delete_image(self):
     url = 'file:///app/app/test/data/lenna-512.png'
