@@ -76,7 +76,7 @@ class ImageSimilarityResource(Resource):
     if 'url' not in request.json:
       result = self.search_by_context(request.json['context'])
     else:
-      image = ImageModel.from_url(request.json['url'])
+      image = ImageModel.from_url(request.json['url'], None)
       threshold = 0.9
       if 'threshold' in request.json:
         threshold = request.json['threshold']
