@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
-
+import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -46,11 +46,22 @@ class SimilarityResource(Resource):
         body = self.get_body_for_request()
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         if request.json.get("doc_id"):
-            result = es.update(
-                id=request.json["doc_id"],
-                body={"doc": body},
-                index=app.config['ELASTICSEARCH_SIMILARITY']
-            )
+            try:
+                found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=request.json.get("doc_id"))
+            except elasticsearch.exceptions.NotFoundError:
+                found_doc = None
+            if found_doc:
+                result = es.update(
+                    id=request.json["doc_id"],
+                    body={"doc": body},
+                    index=app.config['ELASTICSEARCH_SIMILARITY']
+                )
+            else:
+                result = es.index(
+                    id=request.json["doc_id"],
+                    body=body,
+                    index=app.config['ELASTICSEARCH_SIMILARITY']
+                )
         else:
             result = es.index(
                 body=body,
