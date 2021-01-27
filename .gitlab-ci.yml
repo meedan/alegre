@@ -46,6 +46,7 @@ deploy_qa:
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - echo -n "-s qa-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-c.env.args
+    - echo -n "Using deploy command: ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets"; cat qa-alegre-c.env.args
     - ecs deploy ecs-qa  qa-alegre --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
