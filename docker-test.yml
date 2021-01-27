@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: alegre_test2
+      POSTGRES_DB: alegre_test
   model_multi_sbert:
     environment:
       BOILERPLATE_ENV: test
