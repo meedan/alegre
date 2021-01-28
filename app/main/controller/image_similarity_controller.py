@@ -74,7 +74,6 @@ class ImageSimilarityResource(Resource):
       if 'threshold' in request.json:
         threshold = request.json['threshold']
       result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.json['context'])
-      app.logger.debug("Response result: "+json.dumps({'result': result}))
     return {
       'result': result
     }
