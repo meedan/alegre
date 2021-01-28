@@ -25,7 +25,6 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
-    - use-exclusive-secrets
 
 deploy_qa:
   image: python:3-alpine
@@ -50,7 +49,6 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - use-exclusive-secrets
 
 build_live:
   image: docker:latest
