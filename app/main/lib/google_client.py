@@ -11,7 +11,7 @@ def get_credentialed_google_client(client):
       "type": os.getenv("google_credentials_type", default_values.get("type")),
       "project_id": os.getenv("google_credentials_project_id", default_values.get("project_id")),
       "private_key_id": os.getenv("google_credentials_private_key_id", default_values.get("private_key_id")),
-      "private_key": os.getenv("google_credentials_private_key", default_values.get("private_key")),
+      "private_key": os.getenv("google_credentials_private_key", default_values.get("private_key")).replace('\\n', '\n'),
       "client_email": os.getenv("google_credentials_client_email", default_values.get("client_email")),
       "client_id": os.getenv("google_credentials_client_id", default_values.get("client_id")),
       "auth_uri": os.getenv("google_credentials_auth_uri", default_values.get("auth_uri")),
