@@ -8,7 +8,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel
 
-class TestSimilaryBlueprint(BaseTestCase):
+class TestSimilarityBlueprint(BaseTestCase):
     maxDiff = None
     use_model_key = 'multi-sbert'
     test_model_key = 'shared-model-test'
@@ -93,6 +93,20 @@ class TestSimilaryBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
+    def test_elasticsearch_delete_text(self):
+        with self.client:
+            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            result = json.loads(post_response.data.decode())
+            self.assertEqual(True, result['success'])
+            delete_response = self.client.delete(
+                '/text/similarity/',
+                data=json.dumps(term),
+                content_type='application/json'
+            )
+            result = json.loads(delete_response.data.decode())
+            self.assertEqual(1, result['total'])
+
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
             for term in [
@@ -127,7 +141,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_model_similarity(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'model': TestSimilaryBlueprint.use_model_key, 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -136,7 +150,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
-              'model': TestSimilaryBlueprint.use_model_key,
+              'model': TestSimilarityBlueprint.use_model_key,
               'context': {
                 'dbid': 54
               }
@@ -152,7 +166,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': TestSimilaryBlueprint.use_model_key,
+              'model': TestSimilarityBlueprint.use_model_key,
               'threshold': 0.7,
               'context': {
                 'dbid': 54
@@ -169,7 +183,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': TestSimilaryBlueprint.use_model_key,
+              'model': TestSimilarityBlueprint.use_model_key,
               'threshold': 0.7
             }),
             content_type='application/json'
@@ -181,7 +195,7 @@ class TestSimilaryBlueprint(BaseTestCase):
 
     def test_wrong_model_key(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': TestSimilaryBlueprint.use_model_key, 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -190,7 +204,7 @@ class TestSimilaryBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to slice a banana',
-              'model': TestSimilaryBlueprint.test_model_key,
+              'model': TestSimilarityBlueprint.test_model_key,
               'context': {
                 'dbid': 54
               }

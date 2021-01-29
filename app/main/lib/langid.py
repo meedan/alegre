@@ -4,11 +4,13 @@ from flask import current_app as app
 import requests
 import cld3
 
+from app.main.lib.google_client import get_credentialed_google_client
+
 class GoogleLangidProvider:
 # https://cloud.google.com/translate/docs/reference/libraries/v2/python
   @staticmethod
   def langid(text):
-    client = translate.Client.from_service_account_json('./google_credentials.json')
+    client = get_credentialed_google_client(translate.Client)
     response = client.detect_language([text])
     return {
       'result': {
@@ -20,7 +22,7 @@ class GoogleLangidProvider:
 
   @staticmethod
   def languages():
-    client = translate.Client.from_service_account_json('./google_credentials.json')
+    client = get_credentialed_google_client(translate.Client)
     response = client.get_languages()
     return {
       'result': response,
