@@ -21,7 +21,9 @@ def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
 def delete_record(params):
-  deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
+  deleted= False
+  if params.get('doc_id'):
+    deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
   if deleted:
     return {'deleted': True}
   else:
@@ -39,13 +41,17 @@ class ImageSimilarityResource(Resource):
   @api.doc('Store an image signature in the similarity database')
   @api.expect(image_similarity_request, validate=True)
   def post(self):
-    if request.json.get("doc_id"):
+    try:
+      if request.json.get("doc_id"):
         delete_record(request.json)
-    image = ImageModel.from_url(request.json['url'], request.json.get('doc_id'), request.json['context'])
-    self.save(image)
-    return {
-      'success': True
-    }
+      image = ImageModel.from_url(request.json['url'], request.json.get('doc_id'), request.json['context'])
+      self.save(image)
+      return {
+        'success': True
+      }
+    except Exception as e:
+      db.session.rollback()
+      raise e
 
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def save(self, image):
