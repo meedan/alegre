@@ -51,7 +51,7 @@ class TestingConfig(Config):
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
     'host': os.getenv('DATABASE_HOST', 'postgres'),
-    'dbname': os.getenv('DATABASE_NAME', 'alegre_test'),
+    'dbname': 'alegre_test'
   }
 
 class ProductionConfig(Config):

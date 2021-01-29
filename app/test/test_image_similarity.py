@@ -11,7 +11,7 @@ from app.test.base import BaseTestCase
 from app.main.lib.image_hash import compute_phash_int
 from app.main.model.image import ImageModel
 
-class TestImageSimilarityBlueprint(BaseTestCase):
+class TestImageSimilaryBlueprint(BaseTestCase):
   def test_image_phash(self):
     im1 = Image.open('./app/test/data/lenna-512.jpg').convert('RGB')
     p1 = compute_phash_int(im1)
@@ -25,11 +25,11 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(result['test_count'], 28)
 
   def test_truncated_image_fetch(self):
-    image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg', '1-2-3')
+    image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg')
     self.assertEqual(image.phash, 25444816931300591)
 
   def test_image_fetch(self):
-    image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png', '1-2-3')
+    image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png')
     self.assertEqual(image.phash, 45655524591978137)
 
   def test_image_api(self):
@@ -57,7 +57,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    image = ImageModel.from_url(url, '1-2-3')
+    image = ImageModel.from_url(url)
     self.assertListEqual([
       {
         'team_id': 1,
@@ -117,38 +117,11 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
-  def test_update_image(self):
-    url = 'file:///app/app/test/data/lenna-512.png'
-    # Test adding an image.
-    response = self.client.post('/image/similarity/', data=json.dumps({
-      'url': url,
-      'doc_id': '1-2-3',
-      'context': {
-        'team_id': 1,
-        'project_media_id': 1
-      }
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    url = 'file:///app/app/test/data/lenna-512.png'
-    # Test adding an image.
-    response = self.client.post('/image/similarity/', data=json.dumps({
-      'url': url,
-      'doc_id': '1-2-3',
-      'context': {
-        'team_id': 2,
-        'project_media_id': 2
-      }
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    image = ImageModel.query.filter_by(url=url).all()[0]
-    self.assertEqual(2, image.context[0]['team_id'])
-
   def test_delete_image(self):
     url = 'file:///app/app/test/data/lenna-512.png'
     # Test adding an image.
     response = self.client.post('/image/similarity/', data=json.dumps({
       'url': url,
-      'doc_id': '1-2-3',
       'context': {
         'team_id': 1,
         'project_media_id': 1
@@ -158,7 +131,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(True, result['success'])
     self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
     response = self.client.delete('/image/similarity/', data=json.dumps({
-      'doc_id': '1-2-3'
+      'url': url
     }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['deleted'])
