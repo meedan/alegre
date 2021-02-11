@@ -8,7 +8,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 api = Namespace('bulk_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_similarity_request', {
-    'documents': JsonObject(required=True, description='List of individual parameters typically sent to the similarity controller')
+    'documents': fields.List(required=True, description='List of individual parameters typically sent to the similarity controller', cls_or_instance=JsonObject)
 })
 @api.route('/')
 class SimilarityResource(Resource):
