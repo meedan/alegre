@@ -80,7 +80,7 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(delete_response.data.decode())
-            self.assertEqual('deleted', result['result'])
+            self.assertEqual('deleted', result[0]['result'])
 
 if __name__ == '__main__':
     unittest.main()
