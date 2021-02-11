@@ -38,15 +38,15 @@ class SimilarityResource(Resource):
     def delete(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         results = []
-        for doc_id in request.json["doc_ids"]:
-            results.append(es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id))
+        for doc in request.json["documents"]:
+            results.append(es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc["doc_id"]))
         return results
         
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        doc_ids, bodies = self.get_body_for_request()
+        doc_ids, bodies = self.get_bodies_for_request()
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         results = []
         for doc_id, body in zip(doc_ids, bodies):
