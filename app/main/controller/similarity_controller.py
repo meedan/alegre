@@ -24,7 +24,6 @@ class SimilarityResource(Resource):
                 found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
             except elasticsearch.exceptions.NotFoundError:
                 found_doc = None
-            app.logger.debug(found_doc)
             if found_doc:
                 result = es.update(
                     id=doc_id,
@@ -42,7 +41,6 @@ class SimilarityResource(Resource):
                 body=body,
                 index=app.config['ELASTICSEARCH_SIMILARITY']
             )
-        app.logger.debug(result)
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
         success = False
         if result['result'] == 'created' or result['result'] == 'updated':
