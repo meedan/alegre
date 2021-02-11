@@ -5,13 +5,14 @@ import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.controller.similarity_controller import SimilarityResource
 
 api = Namespace('bulk_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_similarity_request', {
     'documents': fields.List(required=True, description='List of individual parameters typically sent to the similarity controller', cls_or_instance=JsonObject)
 })
 @api.route('/')
-class SimilarityResource(Resource):
+class BulkSimilarityResource(Resource):
     def get_bodies_for_request(self):
         bodies = []
         doc_ids = []
@@ -36,10 +37,10 @@ class SimilarityResource(Resource):
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def delete(self):
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         results = []
+        sim_controller = SimilarityResource()
         for doc in request.json["documents"]:
-            results.append(es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc["doc_id"]))
+            results.append(sim_controller.delete_document(doc["doc_id"]))
         return results
         
     @api.response(200, 'text successfully stored in the similarity database.')
@@ -49,40 +50,7 @@ class SimilarityResource(Resource):
         doc_ids, bodies = self.get_bodies_for_request()
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         results = []
+        sim_controller = SimilarityResource()
         for doc_id, body in zip(doc_ids, bodies):
-            app.logger.debug("Body is:")
-            app.logger.debug(body)
-            if doc_id:
-                app.logger.debug("DOC ID PASSED")
-                try:
-                    found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
-                except elasticsearch.exceptions.NotFoundError:
-                    found_doc = None
-                app.logger.debug(found_doc)
-                if found_doc:
-                    result = es.update(
-                        id=doc_id,
-                        body={"doc": body},
-                        index=app.config['ELASTICSEARCH_SIMILARITY']
-                    )
-                else:
-                    result = es.index(
-                        id=doc_id,
-                        body=body,
-                        index=app.config['ELASTICSEARCH_SIMILARITY']
-                    )
-            else:
-                result = es.index(
-                    body=body,
-                    index=app.config['ELASTICSEARCH_SIMILARITY']
-                )
-            app.logger.debug(result)
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            success = False
-            if result['result'] == 'created' or result['result'] == 'updated':
-                success = True
-            results.append({
-                'doc_id': doc_id,
-                'success': success
-            })
+            results.append(sim_controller.store_document(body, doc_id))
         return results

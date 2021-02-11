@@ -17,6 +17,44 @@ similarity_request = api.model('similarity_request', {
 })
 @api.route('/')
 class SimilarityResource(Resource):
+    def store_document(self, body, doc_id):
+        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        if doc_id:
+            try:
+                found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+            except elasticsearch.exceptions.NotFoundError:
+                found_doc = None
+            app.logger.debug(found_doc)
+            if found_doc:
+                result = es.update(
+                    id=doc_id,
+                    body={"doc": body},
+                    index=app.config['ELASTICSEARCH_SIMILARITY']
+                )
+            else:
+                result = es.index(
+                    id=doc_id,
+                    body=body,
+                    index=app.config['ELASTICSEARCH_SIMILARITY']
+                )
+        else:
+            result = es.index(
+                body=body,
+                index=app.config['ELASTICSEARCH_SIMILARITY']
+            )
+        app.logger.debug(result)
+        es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+        success = False
+        if result['result'] == 'created' or result['result'] == 'updated':
+            success = True
+        return {
+            'success': success
+        }
+
+    def delete_document(self, doc_id):
+        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+
     def get_body_for_request(self):
         model_key = 'elasticsearch'
         if 'model' in request.json:
@@ -36,49 +74,16 @@ class SimilarityResource(Resource):
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def delete(self):
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=request.json["doc_id"])
-        
+        return self.delete_document(request.json["doc_id"])
+
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        body = self.get_body_for_request()
-        app.logger.debug("Body is:")
-        app.logger.debug(body)
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        if request.json.get("doc_id"):
-            app.logger.debug("DOC ID PASSED")
-            try:
-                found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=request.json.get("doc_id"))
-            except elasticsearch.exceptions.NotFoundError:
-                found_doc = None
-            app.logger.debug(found_doc)
-            if found_doc:
-                result = es.update(
-                    id=request.json["doc_id"],
-                    body={"doc": body},
-                    index=app.config['ELASTICSEARCH_SIMILARITY']
-                )
-            else:
-                result = es.index(
-                    id=request.json["doc_id"],
-                    body=body,
-                    index=app.config['ELASTICSEARCH_SIMILARITY']
-                )
-        else:
-            result = es.index(
-                body=body,
-                index=app.config['ELASTICSEARCH_SIMILARITY']
-            )
-        app.logger.debug(result)
-        es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-        success = False
-        if result['result'] == 'created' or result['result'] == 'updated':
-            success = True
-        return {
-            'success': success
-        }
+        return self.store_document(
+            self.get_body_for_request(),
+            request.json.get("doc_id")
+        )
 
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query')
