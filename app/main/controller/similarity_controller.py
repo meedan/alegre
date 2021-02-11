@@ -44,12 +44,16 @@ class SimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         body = self.get_body_for_request()
+        app.logger.debug("Body is:")
+        app.logger.debug(body)
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         if request.json.get("doc_id"):
+            app.logger.debug("DOC ID PASSED")
             try:
                 found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=request.json.get("doc_id"))
             except elasticsearch.exceptions.NotFoundError:
                 found_doc = None
+            app.logger.debug(found_doc)
             if found_doc:
                 result = es.update(
                     id=request.json["doc_id"],
@@ -67,9 +71,10 @@ class SimilarityResource(Resource):
                 body=body,
                 index=app.config['ELASTICSEARCH_SIMILARITY']
             )
+        app.logger.debug(result)
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
         success = False
-        if result['result'] == 'created':
+        if result['result'] == 'created' or result['result'] == 'updated':
             success = True
         return {
             'success': success
