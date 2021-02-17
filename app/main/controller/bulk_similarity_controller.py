@@ -64,9 +64,9 @@ class BulkSimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         sim_controller = SimilarityResource()
         results = []
-        for doc_id_set, body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
+        for doc_body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
             to_write = []
-            for doc_id, body in zip(doc_id_set, body_set):
+            for doc_id, body in doc_body_set:
                 to_write.append(self.get_bulk_write_object(doc_id, body))
             results.append(helpers.bulk(es, to_write))
         return results
