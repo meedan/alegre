@@ -44,6 +44,7 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
             post_response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
             self.assertTrue(post_response)
+            self.assertTrue(post_response[0]['doc_id'], "123456")
 
 if __name__ == '__main__':
     unittest.main()
