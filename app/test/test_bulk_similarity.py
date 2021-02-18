@@ -50,7 +50,7 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
             result = json.loads(post_response.data.decode())
-            self.assertIsInstance(list, result)
+            self.assertIsInstance(result, list)
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
