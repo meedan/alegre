@@ -51,10 +51,11 @@ class BulkSimilarityResource(Resource):
     def post(self):
         doc_ids, bodies = self.get_bodies_for_request()
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        results = []
+        writables = []
         for doc_body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
             to_write = []
             for doc_id, body in doc_body_set:
                 to_write.append(self.get_bulk_write_object(doc_id, body))
-            results.append(helpers.bulk(es, to_write))
-        return results
+                writables.append(to_write[-1])
+            helpers.bulk(es, to_write)
+        return writables
