@@ -6,7 +6,6 @@ import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
-from app.main.controller.similarity_controller import SimilarityResource
 
 api = Namespace('bulk_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_similarity_request', {
@@ -45,16 +44,6 @@ class BulkSimilarityResource(Resource):
             doc_ids.append(document.get("doc_id"))
             bodies.append(body)
         return doc_ids, bodies
-
-    @api.response(200, 'text successfully deleted in the similarity database.')
-    @api.doc('Delete a text in the similarity database')
-    @api.expect(similarity_request, validate=True)
-    def delete(self):
-        results = []
-        sim_controller = SimilarityResource()
-        for doc in request.json["documents"]:
-            results.append(sim_controller.delete_document(doc["doc_id"]))
-        return results
         
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')

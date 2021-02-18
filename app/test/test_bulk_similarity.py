@@ -45,22 +45,5 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
             post_response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
             self.assertTrue(post_response)
 
-    def test_elasticsearch_delete_text(self):
-        with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
-            result = json.loads(post_response.data.decode())
-            self.assertIsInstance(result, list)
-            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
-            doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            delete_response = self.client.delete(
-                '/text/bulk_similarity/',
-                data=json.dumps({"documents": [{"doc_id": doc["_id"]}]}),
-                content_type='application/json'
-            )
-            result = json.loads(delete_response.data.decode())
-            self.assertEqual('deleted', result[0]['result'])
-
 if __name__ == '__main__':
     unittest.main()
