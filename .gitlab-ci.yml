@@ -25,6 +25,7 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
+    - fix-sbert
 
 deploy_qa:
   image: python:3-alpine
@@ -43,12 +44,16 @@ deploy_qa:
     - pip install boto3==1.14.47
     - pip install ecs-deploy==1.11.0
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-sbert$NAME /qa/alegre/$NAME " >> qa-alegre-sbert.env.args; done
+    - echo -n "-s qa-alegre-sbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-sbert.env.args
+    - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-sbert $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-sbert APP alegre -e qa-alegre-sbert DEPLOY_ENV qa -e qa-alegre-sbert ALEGRE_PORT 8000 -e qa-alegre-sbert MODEL_CLASS MultiSbert -e qa-alegre-sbert MODEL_KEY multi-sbert -e qa-alegre-sbert MODEL_OPTIONS "{\"model_url\": \"https://sbert.net/models/distiluse-base-multilingual-cased.zip\",\"model_name\": \"distiluse-base-multilingual-cased\"}" --exclusive-secrets `cat qa-alegre-sbert.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - echo -n "-s qa-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-c.env.args
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
+    - fix-sbert
 
 build_live:
   image: docker:latest
