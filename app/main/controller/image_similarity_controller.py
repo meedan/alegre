@@ -11,7 +11,8 @@ import tenacity
 
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
-  'url': fields.String(required=True, description='image URL to be stored or queried for similarity'),
+  'url': fields.String(required=False, description='image URL to be stored or queried for similarity'),
+  'doc_id': fields.String(required=False, description='image ID to constrain uniqueness'),
   'threshold': fields.Float(required=False, default=0.9, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
   'context': JsonObject(required=False, default=[], description='context')
 })
@@ -19,26 +20,38 @@ image_similarity_request = api.model('image_similarity_request', {
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
+def delete_record(params):
+  deleted= False
+  if params.get('doc_id'):
+    deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
+  if deleted:
+    return {'deleted': True}
+  else:
+    return {'deleted': False}
+
 @api.route('/')
 class ImageSimilarityResource(Resource):
+      
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')
   def delete(self):
-    deleted = db.session.query(ImageModel).filter(ImageModel.url==request.json['url']).delete()
-    if deleted:
-      return {'deleted': True}
-    else:
-      return {'deleted': False}
+      return delete_record(request.json)
 
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')
   @api.expect(image_similarity_request, validate=True)
   def post(self):
-    image = ImageModel.from_url(request.json['url'], request.json['context'])
-    self.save(image)
-    return {
-      'success': True
-    }
+    try:
+      if request.json.get("doc_id"):
+        delete_record(request.json)
+      image = ImageModel.from_url(request.json['url'], request.json.get('doc_id'), request.json['context'])
+      self.save(image)
+      return {
+        'success': True
+      }
+    except Exception as e:
+      db.session.rollback()
+      raise e
 
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def save(self, image):
@@ -69,7 +82,7 @@ class ImageSimilarityResource(Resource):
     if 'url' not in request.json:
       result = self.search_by_context(request.json['context'])
     else:
-      image = ImageModel.from_url(request.json['url'])
+      image = ImageModel.from_url(request.json['url'], None)
       threshold = 0.9
       if 'threshold' in request.json:
         threshold = request.json['threshold']
