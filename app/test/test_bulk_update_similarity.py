@@ -1,5 +1,7 @@
 import unittest
 import json
+from unittest.mock import patch
+from collections import namedtuple
 from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
