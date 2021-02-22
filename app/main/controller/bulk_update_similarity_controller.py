@@ -6,7 +6,7 @@ import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
-from app.main.controller.bulk_similarity_controller import BulkSimilarityController
+from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
 
 api = Namespace('bulk_update_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_update_similarity_request', {
