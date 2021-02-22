@@ -3,9 +3,11 @@ import json
 from elasticsearch import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
+import redis
 
 from app.main import db
 from app.test.base import BaseTestCase
+from app.test.test_shared_model import SharedModelStub
 from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
@@ -28,6 +30,10 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
       es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+      r.delete(SharedModelStub.model_key)
+      r.delete('SharedModel:%s' % SharedModelStub.model_key)
+      r.srem('SharedModel', SharedModelStub.model_key)
 
     def test_similarity_mapping(self):
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
@@ -41,11 +47,16 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_insert_text_with_doc_id(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'multi-sbert', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
-            response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
-            result = json.loads(response.data.decode())
-            self.assertTrue(result)
-            self.assertTrue(result[0]['_id'], "123456")
+          with patch('importlib.import_module', ) as mock_import:
+            with patch('app.main.lib.shared_models.shared_model.SharedModel.bulk_run') as mock_bulk_run:
+              ModuleStub = namedtuple('ModuleStub', 'SharedModelStub')
+              mock_import.return_value = ModuleStub(SharedModelStub=SharedModelStub)
+              SharedModel.start_server('SharedModelStub', SharedModelStub.model_key)
+              term = { 'text': 'how to slice a banana', 'model': SharedModelStub.model_key, 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+              response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
+              result = json.loads(response.data.decode())
+              self.assertTrue(result)
+              self.assertTrue(result[0]['_id'], "123456")
 
 if __name__ == '__main__':
     unittest.main()
