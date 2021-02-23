@@ -28,7 +28,7 @@ services:
       FLASK_DEBUG: "true"
       MODEL_CLASS: IndianSbert
       MODEL_KEY: indian-sbert
-      MODEL_OPTIONS: '{"model_url": "https://meedan.github.io/research/models/indian-sbert.zip", "model_name": "meedan/indian-sbert"}'
+      MODEL_OPTIONS: '{"model_name": "meedan/indian-sbert"}'
   model_test:
     build: .
     command: ["make", "run_model"]
