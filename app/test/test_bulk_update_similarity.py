@@ -50,15 +50,15 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
     def test_elasticsearch_insert_text_with_doc_id(self):
         with self.client:
           with patch('importlib.import_module', ) as mock_import:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.bulk_run') as mock_bulk_run:
-              ModuleStub = namedtuple('ModuleStub', 'SharedModelStub')
-              mock_import.return_value = ModuleStub(SharedModelStub=SharedModelStub)
-              SharedModel.start_server('SharedModelStub', SharedModelStub.model_key)
-              term = { 'text': 'how to slice a banana', 'model': SharedModelStub.model_key, 'context': { 'dbid': 54 }, 'doc_id': "123456" }
-              response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
-              result = json.loads(response.data.decode())
-              self.assertTrue(result)
-              self.assertTrue(result[0]['_id'], "123456")
+            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
+              with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
+                mock_get_shared_model_client.return_value = SharedModelStub(TestBulkUpdateSimilarityBlueprint.test_model_key)
+                mock_get_shared_model_response.return_value = [0.0]
+                term = { 'text': 'how to slice a banana', 'model': 'multi-sbert', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+                response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
+                result = json.loads(response.data.decode())
+                self.assertTrue(result)
+                self.assertTrue(result[0]['_id'], "123456")
 
 if __name__ == '__main__':
     unittest.main()
