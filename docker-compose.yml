@@ -59,9 +59,22 @@ services:
     env_file:
       - .env_file
     environment:
-      MODEL_CLASS: XLMRBertBaseNliStsbMeanTokens
+      MODEL_CLASS: XlmRBertBaseNliStsbMeanTokens
       MODEL_KEY: xlm-r-bert-base-nli-stsb-mean-tokens
       MODEL_OPTIONS: '{"model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"}'
+  indian_sbert:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: IndianSbert
+      MODEL_KEY: indian-sbert
+      MODEL_OPTIONS: '{"model_url": "https://meedan.github.io/research/models/indian-sbert.zip", "model_name": "meedan/indian-sbert"}'
   alegre:
     build: .
     ports:
@@ -74,5 +87,6 @@ services:
       - redis
       - model_multi_sbert
       - xlm_r_bert_base_nli_stsb_mean_tokens
+      - indian_sbert
     env_file:
       - .env_file

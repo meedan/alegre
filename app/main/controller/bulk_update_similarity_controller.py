@@ -31,8 +31,8 @@ class BulkUpdateSimilarityResource(Resource):
         doc_ids = []
         for document in request.json.get("documents", []):
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-            body = {'model': model_key}
-            model = SharedModel.get_client(model_key)
+            body = {'model': document['model']}
+            model = SharedModel.get_client(document['model'])
             vector = model.get_shared_model_response(document['text'])
             body['vector_'+str(len(vector))] = vector
             if 'context' in document:

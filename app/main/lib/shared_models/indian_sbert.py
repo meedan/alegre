@@ -5,9 +5,9 @@ from flask import current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import angular_similarity
 
-class XlmRBertBaseNliStsbMeanTokens(SharedModel):
+class IndianSbert(SharedModel):
     def load(self):
-        model_name = self.options.get('model_name', 'xlm-r-bert-base-nli-stsb-mean-tokens')
+        model_name = self.options.get('model_name', 'meedan/indian-sbert')
         if self.options.get("model_url"):
             try:
                 self.model = SentenceTransformer(self.options.get("model_url"))
