@@ -49,6 +49,32 @@ services:
       MODEL_CLASS: MultiSbert
       MODEL_KEY: multi-sbert
       MODEL_OPTIONS: '{"model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/distiluse-base-multilingual-cased.zip", "model_name": "distiluse-base-multilingual-cased"}'
+  xlm_r_bert_base_nli_stsb_mean_tokens:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: XlmRBertBaseNliStsbMeanTokens
+      MODEL_KEY: xlm-r-bert-base-nli-stsb-mean-tokens
+      MODEL_OPTIONS: '{"model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/xlm-r-bert-base-nli-stsb-mean-tokens.zip", "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"}'
+  indian_sbert:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_CLASS: IndianSbert
+      MODEL_KEY: indian-sbert
+      MODEL_OPTIONS: '{"model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/indian-sbert.zip", "model_name": "meedan/indian-sbert"}'
   alegre:
     build: .
     ports:
@@ -60,5 +86,7 @@ services:
       - kibana
       - redis
       - model_multi_sbert
+      - xlm_r_bert_base_nli_stsb_mean_tokens
+      - indian_sbert
     env_file:
       - .env_file
