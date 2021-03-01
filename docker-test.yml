@@ -5,30 +5,18 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
-  model_multi_sbert:
-    environment:
-      BOILERPLATE_ENV: test
-      FLASK_ENV: test
-      FLASK_DEBUG: "true"
-      MODEL_CLASS: MultiSbert
-      MODEL_KEY: multi-sbert
-      MODEL_OPTIONS: '{"model_url": "https://sbert.net/models/distiluse-base-multilingual-cased.zip", "model_name": "distiluse-base-multilingual-cased"}'
   xlm_r_bert_base_nli_stsb_mean_tokens:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
-      MODEL_CLASS: XlmRBertBaseNliStsbMeanTokens
-      MODEL_KEY: xlm-r-bert-base-nli-stsb-mean-tokens
-      MODEL_OPTIONS: '{"model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"}'
+      MODEL_NAME: meantokens
   indian_sbert:
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
-      MODEL_CLASS: IndianSbert
-      MODEL_KEY: indian-sbert
-      MODEL_OPTIONS: '{"model_name": "meedan/indian-sbert"}'
+      MODEL_NAME: indiansbert
   model_test:
     build: .
     command: ["make", "run_model"]
@@ -50,7 +38,6 @@ services:
       - elasticsearch
       - redis
       - model_test
-      - model_multi_sbert
       - xlm_r_bert_base_nli_stsb_mean_tokens
       - indian_sbert
     environment:
