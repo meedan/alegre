@@ -1,10 +1,12 @@
 .PHONY: run test wait
 run: wait
 	python manage.py init
-	python manage.py db stamp head
-	python manage.py db upgrade
+	# python manage.py db stamp head
+	# python manage.py db upgrade
 	python manage.py run
 run_model:
+	mkdir -p ~/.cache/torch/
+	rm -r ~/.cache/torch/
 	python manage.py run_model
 test: wait
 	coverage run manage.py test
