@@ -33,6 +33,7 @@ class Config:
   SQLALCHEMY_ENGINE_OPTIONS = {
     'pool_pre_ping': True
   }
+  MODEL_NAME = os.getenv('MODEL_NAME')
 
 class DevelopmentConfig(Config):
   DEBUG = True
