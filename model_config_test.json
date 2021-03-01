@@ -1,0 +1,16 @@
+{
+  "meantokens": {
+    "class": "XlmRBertBaseNliStsbMeanTokens",
+    "key": "xlm-r-bert-base-nli-stsb-mean-tokens",
+    "options": {
+      "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"
+    }
+  },
+  "indiansbert": {
+    "class": "IndianSbert",
+    "key": "indian-sbert",
+    "options": {
+      "model_name": "meedan/indian-sbert"
+    }
+  }
+}
