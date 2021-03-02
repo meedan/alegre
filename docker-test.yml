@@ -5,26 +5,26 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
-  # model_test:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     BOILERPLATE_ENV: test
-  #     FLASK_ENV: test
-  #     FLASK_DEBUG: "true"
-  #     MODEL_NAME: meantokens
+  model_test:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "true"
+      MODEL_NAME: meantokens
   alegre:
     depends_on:
       - postgres
       - elasticsearch
       - redis
-      # - model_test
+      - model_test
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
