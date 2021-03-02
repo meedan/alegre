@@ -10,7 +10,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilarityBlueprint(BaseTestCase):
     maxDiff = None
-    use_model_key = 'multi-sbert'
+    use_model_key = 'xlm-r-bert-base-nli-stsb-mean-tokens'
     test_model_key = 'shared-model-test'
 
     def setUp(self):
