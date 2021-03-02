@@ -11,7 +11,6 @@ from app.main.lib.shared_models.shared_model import SharedModel
 class TestSimilarityBlueprint(BaseTestCase):
     maxDiff = None
     use_model_key = 'xlm-r-bert-base-nli-stsb-mean-tokens'
-    test_model_key = 'shared-model-test'
 
     def setUp(self):
       super().setUp()
@@ -233,7 +232,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to slice a banana',
-              'model': TestSimilarityBlueprint.test_model_key,
+              'model': 'indian-sbert',
               'context': {
                 'dbid': 54
               }

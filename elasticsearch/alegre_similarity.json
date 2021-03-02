@@ -4,6 +4,10 @@
       "type": "dense_vector",
       "dims": 512
     },
+    "vector_768": {
+      "type": "dense_vector",
+      "dims": 768
+    },
     "content": {
       "type": "text"
     },
