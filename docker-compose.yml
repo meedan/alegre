@@ -36,28 +36,29 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre
-  xlm_r_bert_base_nli_stsb_mean_tokens:
-    build: .
-    command: ["make", "run_model"]
-    volumes:
-      - ".:/app"
-    depends_on:
-      - redis
-    env_file:
-      - .env_file
-    environment:
-      MODEL_NAME: meantokens
-  indian_sbert:
-    build: .
-    command: ["make", "run_model"]
-    volumes:
-      - ".:/app"
-    depends_on:
-      - redis
-    env_file:
-      - .env_file
-    environment:
-      MODEL_NAME: indiansbert
+  # Uncomment to run models locally
+  # xlm_r_bert_base_nli_stsb_mean_tokens:
+  #   build: .
+  #   command: ["make", "run_model"]
+  #   volumes:
+  #     - ".:/app"
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - .env_file
+  #   environment:
+  #     MODEL_NAME: meantokens
+  # indian_sbert:
+  #   build: .
+  #   command: ["make", "run_model"]
+  #   volumes:
+  #     - ".:/app"
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - .env_file
+  #   environment:
+  #     MODEL_NAME: indiansbert
   alegre:
     build: .
     ports:
