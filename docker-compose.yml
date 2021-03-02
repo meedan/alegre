@@ -69,7 +69,5 @@ services:
       - postgres
       - kibana
       - redis
-      - xlm_r_bert_base_nli_stsb_mean_tokens
-      - indian_sbert
     env_file:
       - .env_file
