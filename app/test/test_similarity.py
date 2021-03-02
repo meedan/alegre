@@ -221,26 +221,5 @@ class TestSimilarityBlueprint(BaseTestCase):
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
-    def test_wrong_model_key(self):
-        with self.client:
-            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
-            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            result = json.loads(response.data.decode())
-            self.assertEqual(True, result['success'])
-
-        response = self.client.get(
-            '/text/similarity/',
-            data=json.dumps({
-              'text': 'how to slice a banana',
-              'model': 'indian-sbert',
-              'context': {
-                'dbid': 54
-              }
-            }),
-            content_type='application/json'
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual(0, len(result['result']))
-
 if __name__ == '__main__':
     unittest.main()
