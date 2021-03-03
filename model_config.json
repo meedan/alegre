@@ -1,0 +1,18 @@
+{
+  "meantokens": {
+    "class": "XlmRBertBaseNliStsbMeanTokens",
+    "key": "xlm-r-bert-base-nli-stsb-mean-tokens",
+    "options": {
+      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/xlm-r-bert-base-nli-stsb-mean-tokens.zip",
+      "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"
+    }
+  },
+  "indiansbert": {
+    "class": "IndianSbert",
+    "key": "indian-sbert",
+    "options": {
+      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/indian-sbert.zip",
+      "model_name": "meedan/indian-sbert"
+    }
+  }
+}

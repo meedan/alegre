@@ -33,9 +33,7 @@ class Config:
   SQLALCHEMY_ENGINE_OPTIONS = {
     'pool_pre_ping': True
   }
-  MODEL_CLASS = os.getenv('MODEL_CLASS')
-  MODEL_KEY = os.getenv('MODEL_KEY')
-  MODEL_OPTIONS = json.loads(os.getenv('MODEL_OPTIONS', '{}'))
+  MODEL_NAME = os.getenv('MODEL_NAME')
 
 class DevelopmentConfig(Config):
   DEBUG = True
