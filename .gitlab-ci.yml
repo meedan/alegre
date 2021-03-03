@@ -47,6 +47,9 @@ deploy_qa:
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-indiansbert $NAME /qa/alegre/$NAME " >> qa-alegre-indiansbert.env.args; done
     - echo -n "-s qa-alegre-indiansbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-indiansbert.env.args
     - ecs deploy ecs-qa  qa-alegre-indiansbert --diff --image qa-alegre-indiansbert $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-indiansbert MODEL_NAME indiansbert -e qa-alegre-indiansbert APP alegre -e qa-alegre-indiansbert DEPLOY_ENV qa -e qa-alegre-indiansbert ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-indiansbert.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-meantoken $NAME /qa/alegre/$NAME " >> qa-alegre-meantoken.env.args; done
+    - echo -n "-s qa-alegre-meantoken GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-meantoken.env.args
+    - ecs deploy ecs-qa  qa-alegre-meantoken --diff --image qa-alegre-meantoken $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-meantoken MODEL_NAME meantokens -e qa-alegre-meantoken APP alegre -e qa-alegre-meantoken DEPLOY_ENV qa -e qa-alegre-meantoken ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-meantoken.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - echo -n "-s qa-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-c.env.args
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
