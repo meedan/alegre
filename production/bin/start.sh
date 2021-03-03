@@ -7,6 +7,9 @@ then
   [[ -f .env_file ]] && source .env_file
 fi
 
+# Make sure the model config is in CWD
+ln ../model_config.json
+
 set +o allexport
 
 python manage.py init
