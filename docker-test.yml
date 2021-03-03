@@ -5,6 +5,20 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
+  other_model_test:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      BOILERPLATE_ENV: test
+      FLASK_ENV: test
+      FLASK_DEBUG: "true"
+      MODEL_NAME: indiansbert
   model_test:
     build: .
     command: ["make", "run_model"]
@@ -25,6 +39,7 @@ services:
       - elasticsearch
       - redis
       - model_test
+      - other_model_test
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test

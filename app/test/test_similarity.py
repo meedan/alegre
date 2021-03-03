@@ -11,6 +11,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 class TestSimilarityBlueprint(BaseTestCase):
     maxDiff = None
     use_model_key = 'xlm-r-bert-base-nli-stsb-mean-tokens'
+    test_model_key = 'indian-sbert'
 
     def setUp(self):
       super().setUp()
@@ -220,6 +221,27 @@ class TestSimilarityBlueprint(BaseTestCase):
         self.assertEqual(1, len(result['result']))
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
+
+    def test_wrong_model_key(self):	
+        with self.client:	
+            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }	
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')	
+            result = json.loads(response.data.decode())	
+            self.assertEqual(True, result['success'])	
+
+        response = self.client.get(	
+            '/text/similarity/',	
+            data=json.dumps({	
+              'text': 'how to slice a banana',	
+              'model': TestSimilarityBlueprint.test_model_key,	
+              'context': {	
+                'dbid': 54	
+              }	
+            }),	
+            content_type='application/json'	
+        )	
+        result = json.loads(response.data.decode())	
+        self.assertEqual(0, len(result['result']))	
 
 if __name__ == '__main__':
     unittest.main()
