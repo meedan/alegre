@@ -10,6 +10,12 @@ fi
 # Make sure the model config is in CWD
 ln ../model_config.json
 
+# Clear existing model caches
+if [[ -d $HOME/.cache ]]; then
+  echo "Clearing existing cache directory: $HOME/.cache ..."
+  rm -rf $HOME/.cache
+fi
+
 set +o allexport
 
 python manage.py init
