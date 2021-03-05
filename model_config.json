@@ -11,7 +11,6 @@
     "class": "IndianSbert",
     "key": "indian-sbert",
     "options": {
-      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/indian-sbert.zip",
       "model_name": "meedan/indian-sbert"
     }
   }
