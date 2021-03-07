@@ -7,8 +7,8 @@ then
   [[ -f .env_file ]] && source .env_file
 fi
 
-# Make sure the model config is in CWD
-ln ../model_config.json
+# Make sure the model config is in CWD, using models stored on EFS
+ln ../local_model_config.json ./model_config.json
 
 # Clear existing model caches
 if [[ -d $HOME/.cache ]]; then
