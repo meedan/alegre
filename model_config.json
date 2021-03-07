@@ -11,7 +11,7 @@
     "class": "IndianSbert",
     "key": "indian-sbert",
     "options": {
-      "model_url": "file:///mnt/models/indiansbert",
+      "model_url": "/mnt/models/indiansbert",
       "model_name": "meedan/indian-sbert"
     }
   }
