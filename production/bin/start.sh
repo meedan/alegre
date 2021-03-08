@@ -19,7 +19,9 @@ fi
 set +o allexport
 
 # TEMP: sleep to check container mounts before exit
-sleep 3600
+echo "Delay for testing..."
+sleep 600
+echo "Starting service..."
 
 python manage.py init
 python manage.py db upgrade
