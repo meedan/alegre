@@ -5,6 +5,8 @@ run: wait
 	python manage.py db upgrade
 	python manage.py run
 run_model:
+	# Try force clearing the torch model cache, see CHECK-277.
+	rm -rf $HOME/.cache/torch
 	python manage.py run_model
 test: wait
 	coverage run manage.py test
