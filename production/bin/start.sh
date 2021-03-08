@@ -8,7 +8,7 @@ then
 fi
 
 # Make sure the model config is in CWD
-ln ../model_config.json ./model_config.json
+ln ../model_config.json
 
 set +o allexport
 
