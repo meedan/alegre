@@ -18,11 +18,6 @@ fi
 
 set +o allexport
 
-# TEMP: sleep to check container mounts before exit
-echo "Delay for testing..."
-sleep 600
-echo "Starting service..."
-
 python manage.py init
 python manage.py db upgrade
 gunicorn --preload -w 2 --threads 2 -b 0.0.0.0:${ALEGRE_PORT} --access-logfile - --error-logfile - wsgi:app
