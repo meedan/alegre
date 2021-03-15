@@ -113,6 +113,34 @@ class TestSimilarityBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/similarity/',
                 data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [15],
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': 15,
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John',
                   'threshold': 0.7
                 }),
