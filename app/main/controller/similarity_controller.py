@@ -146,9 +146,14 @@ class SimilarityResource(Resource):
         if 'context' in request.json:
             matches = []
             for key in request.json['context']:
-                matches.append({
-                    'match': { 'context.' + key: request.json['context'][key] }
-                })
+                if isinstance(request.json['context'][key], list):
+                    matches.append({
+                        'query_string': { 'query': str.join(" OR ", [f"context.{key}: {v}" for v in request.json['context'][key]])}
+                    })
+                else:
+                    matches.append({
+                        'match': { 'context.' + key: request.json['context'][key] }
+                    })
             context = {
                 'nested': {
                     'score_mode': 'none',
