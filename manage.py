@@ -39,10 +39,14 @@ def run():
 @manager.command
 def run_model():
   """Runs the model server."""
+  if config_name == "test":
+      model_config = json.load(open('./model_config_test.json'))[app.config["MODEL_NAME"]]
+  else:
+      model_config = json.load(open('./model_config.json'))[app.config["MODEL_NAME"]]
   SharedModel.start_server(
-    app.config['MODEL_CLASS'],
-    app.config['MODEL_KEY'],
-    app.config['MODEL_OPTIONS']
+    model_config['class'],
+    model_config['key'],
+    model_config['options']
   )
 
 @manager.command

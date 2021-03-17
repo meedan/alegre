@@ -5,14 +5,20 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: alegre_test
-  model_multi_sbert:
+  other_model_test:
+    build: .
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
-      MODEL_CLASS: MultiSbert
-      MODEL_KEY: multi-sbert
-      MODEL_OPTIONS: '{"model_url": "https://sbert.net/models/distiluse-base-multilingual-cased.zip", "model_name": "distiluse-base-multilingual-cased"}'
+      MODEL_NAME: indiansbert
   model_test:
     build: .
     command: ["make", "run_model"]
@@ -26,15 +32,14 @@ services:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
       FLASK_DEBUG: "true"
-      MODEL_CLASS: SharedModelTest
-      MODEL_KEY: shared-model-test
+      MODEL_NAME: meantokens
   alegre:
     depends_on:
       - postgres
       - elasticsearch
       - redis
       - model_test
-      - model_multi_sbert
+      - other_model_test
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test

@@ -1,0 +1,16 @@
+{
+  "meantokens": {
+    "class": "XlmRBertBaseNliStsbMeanTokens",
+    "key": "xlm-r-bert-base-nli-stsb-mean-tokens",
+    "options": {
+      "model_name": "distilroberta-base"
+    }
+  },
+  "indiansbert": {
+    "class": "IndianSbert",
+    "key": "indian-sbert",
+    "options": {
+      "model_name": "distilroberta-base"
+    }
+  }
+}

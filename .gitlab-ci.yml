@@ -43,9 +43,12 @@ deploy_qa:
     - pip install boto3==1.14.47
     - pip install ecs-deploy==1.11.0
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
-    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-sbert $NAME /qa/alegre/$NAME " >> qa-alegre-sbert.env.args; done
-    - echo -n "-s qa-alegre-sbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-sbert.env.args
-    - ecs deploy ecs-qa  qa-alegre-sbert --diff --image qa-alegre-sbert $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-sbert APP alegre -e qa-alegre-sbert DEPLOY_ENV qa -e qa-alegre-sbert ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-sbert.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-indiansbert $NAME /qa/alegre/$NAME " >> qa-alegre-indiansbert.env.args; done
+    - echo -n "-s qa-alegre-indiansbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-indiansbert.env.args
+    - ecs deploy ecs-qa  qa-alegre-indiansbert --diff --image qa-alegre-indiansbert $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-indiansbert MODEL_NAME indiansbert -e qa-alegre-indiansbert SENTENCE_TRANSFORMERS_HOME /mnt/models/indiansbert-cache -e qa-alegre-indiansbert APP alegre -e qa-alegre-indiansbert DEPLOY_ENV qa -e qa-alegre-indiansbert ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-indiansbert.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-meantokens $NAME /qa/alegre/$NAME " >> qa-alegre-meantokens.env.args; done
+    - echo -n "-s qa-alegre-meantokens GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-meantokens.env.args
+    - ecs deploy ecs-qa  qa-alegre-meantokens --diff --image qa-alegre-meantokens $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-meantokens MODEL_NAME meantokens -e qa-alegre-meantokens SENTENCE_TRANSFORMERS_HOME /mnt/models/meantokens-cache -e qa-alegre-meantokens APP alegre -e qa-alegre-meantokens DEPLOY_ENV qa -e qa-alegre-meantokens ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-meantokens.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - echo -n "-s qa-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-c.env.args
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
@@ -95,6 +98,12 @@ deploy_live:
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
     - echo -n "-s live-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> live-alegre-c.env.args
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-c APP alegre -e live-alegre-c DEPLOY_ENV live -e live-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-c.env.args`
+    - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-indiansbert $NAME /live/alegre/$NAME " >> live-alegre-indiansbert.env.args; done
+    - echo -n "-s live-alegre-indiansbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> live-alegre-indiansbert.env.args
+    - ecs deploy ecs-live  live-alegre-indiansbert --diff --image live-alegre-indiansbert $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-indiansbert MODEL_NAME indiansbert -e live-alegre-indiansbert SENTENCE_TRANSFORMERS_HOME /mnt/models/indiansbert-cache -e live-alegre-indiansbert APP alegre -e live-alegre-indiansbert DEPLOY_ENV live -e live-alegre-indiansbert ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-indiansbert.env.args`
+    - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-meantokens $NAME /live/alegre/$NAME " >> live-alegre-meantokens.env.args; done
+    - echo -n "-s live-alegre-meantokens GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> live-alegre-meantokens.env.args
+    - ecs deploy ecs-live  live-alegre-meantokens --diff --image live-alegre-meantokens $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-meantokens MODEL_NAME meantokens -e live-alegre-meantokens SENTENCE_TRANSFORMERS_HOME /mnt/models/meantokens-cache -e live-alegre-meantokens APP alegre -e live-alegre-meantokens DEPLOY_ENV live -e live-alegre-meantokens ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-meantokens.env.args`
     - echo "new Image was deployed $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - master

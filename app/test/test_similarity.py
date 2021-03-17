@@ -10,8 +10,8 @@ from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestSimilarityBlueprint(BaseTestCase):
     maxDiff = None
-    use_model_key = 'multi-sbert'
-    test_model_key = 'shared-model-test'
+    use_model_key = 'xlm-r-bert-base-nli-stsb-mean-tokens'
+    test_model_key = 'indian-sbert'
 
     def setUp(self):
       super().setUp()
@@ -56,7 +56,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual(3, len(result['result']))
+            self.assertEqual(4, len(result['result']))
 
             response = self.client.get(
                 '/text/similarity/',
@@ -85,6 +85,62 @@ class TestSimilarityBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/similarity/',
                 data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [12, 13],
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [13],
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(0, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [15],
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': 15,
+                    'app': 'check'
+                  }
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John',
                   'threshold': 0.7
                 }),
@@ -92,6 +148,19 @@ class TestSimilarityBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
+
+    def test_elasticsearch_update_text_listed_context(self):
+        with self.client:
+            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
+            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] }, 'doc_id': doc["_id"]}
+            post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
+            self.assertEqual(term2['text'], doc['_source']['content'])
 
     def test_elasticsearch_update_text(self):
         with self.client:
@@ -222,26 +291,26 @@ class TestSimilarityBlueprint(BaseTestCase):
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
-    def test_wrong_model_key(self):
-        with self.client:
-            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
-            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            result = json.loads(response.data.decode())
-            self.assertEqual(True, result['success'])
+    def test_wrong_model_key(self):	
+        with self.client:	
+            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }	
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')	
+            result = json.loads(response.data.decode())	
+            self.assertEqual(True, result['success'])	
 
-        response = self.client.get(
-            '/text/similarity/',
-            data=json.dumps({
-              'text': 'how to slice a banana',
-              'model': TestSimilarityBlueprint.test_model_key,
-              'context': {
-                'dbid': 54
-              }
-            }),
-            content_type='application/json'
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual(0, len(result['result']))
+        response = self.client.get(	
+            '/text/similarity/',	
+            data=json.dumps({	
+              'text': 'how to slice a banana',	
+              'model': TestSimilarityBlueprint.test_model_key,	
+              'context': {	
+                'dbid': 54	
+              }	
+            }),	
+            content_type='application/json'	
+        )	
+        result = json.loads(response.data.decode())	
+        self.assertEqual(0, len(result['result']))	
 
 if __name__ == '__main__':
     unittest.main()
