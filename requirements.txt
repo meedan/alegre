@@ -43,7 +43,7 @@ h5py==2.10.0
 idna==2.7
 ImageHash==4.0
 itsdangerous==0.24
-Jinja2==2.11.1
+Jinja2==2.11.3
 jmespath==0.9.3
 json-logging==1.2.0
 jsonschema==2.6.0
