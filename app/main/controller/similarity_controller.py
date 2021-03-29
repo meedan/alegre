@@ -69,10 +69,6 @@ class SimilarityResource(Resource):
             'success': success
         }
 
-    @api.errorhandler(404)
-    def resource_not_found(e):
-        return jsonify(error=str(e)), 404
-
     def delete_document(self, doc_id):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         try:
