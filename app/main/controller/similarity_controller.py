@@ -1,4 +1,5 @@
 from flask import request, current_app as app
+from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 import elasticsearch
@@ -70,7 +71,10 @@ class SimilarityResource(Resource):
 
     def delete_document(self, doc_id):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        try:
+            return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        except:
+            abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
 
     def get_body_for_request(self):
         model_key = 'elasticsearch'
