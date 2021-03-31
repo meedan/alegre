@@ -1,4 +1,5 @@
 from flask import request, current_app as app
+from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 import elasticsearch
@@ -17,6 +18,25 @@ similarity_request = api.model('similarity_request', {
 })
 @api.route('/')
 class SimilarityResource(Resource):
+    def generate_matches(self, context):
+        matches = []
+        clause_count = 0
+        for key in context:
+            if isinstance(context[key], list):
+                clause_count += len(context[key])
+                matches.append({
+                    'query_string': { 'query': str.join(" OR ", [f"context.{key}: {v}" for v in context[key]])}
+                })
+            else:
+                clause_count += 1
+                matches.append({
+                    'match': { 'context.' + key: context[key] }
+                })
+        return matches, clause_count
+
+    def truncate_query(self, query, clause_count):
+        return str.join(" ", query.split(" ")[:(app.config['MAX_CLAUSE_COUNT']-clause_count)])
+
     def store_document(self, body, doc_id):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         if doc_id:
@@ -51,7 +71,10 @@ class SimilarityResource(Resource):
 
     def delete_document(self, doc_id):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        try:
+            return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        except:
+            abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
 
     def get_body_for_request(self):
         model_key = 'elasticsearch'
@@ -93,6 +116,10 @@ class SimilarityResource(Resource):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
         threshold = 0.9
+        matches = []
+        clause_count = 0
+        if 'context' in request.json:
+            matches, clause_count = self.generate_matches(request.json['context'])
         if 'threshold' in request.json:
             threshold = request.json['threshold']
 
@@ -101,7 +128,7 @@ class SimilarityResource(Resource):
                 {
                     'match': {
                       'content': {
-                          'query': request.json['text'],
+                          'query': self.truncate_query(request.json['text'], clause_count),
                           'minimum_should_match': str(int(round(threshold * 100))) + '%'
                       }
                     }
@@ -144,16 +171,6 @@ class SimilarityResource(Resource):
             }
 
         if 'context' in request.json:
-            matches = []
-            for key in request.json['context']:
-                if isinstance(request.json['context'][key], list):
-                    matches.append({
-                        'query_string': { 'query': str.join(" OR ", [f"context.{key}: {v}" for v in request.json['context'][key]])}
-                    })
-                else:
-                    matches.append({
-                        'match': { 'context.' + key: request.json['context'][key] }
-                    })
             context = {
                 'nested': {
                     'score_mode': 'none',

@@ -34,6 +34,7 @@ class Config:
     'pool_pre_ping': True
   }
   MODEL_NAME = os.getenv('MODEL_NAME')
+  MAX_CLAUSE_COUNT = 1000
 
 class DevelopmentConfig(Config):
   DEBUG = True
