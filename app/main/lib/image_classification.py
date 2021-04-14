@@ -4,11 +4,14 @@ from protobuf_to_dict import protobuf_to_dict
 
 from app.main.lib.google_client import get_credentialed_google_client
 
+CLIENT = get_credentialed_google_client(vision.ImageAnnotatorClient)
+
 class GoogleImageClassificationProvider:
     @staticmethod
     def classify(uri):
-        client = get_credentialed_google_client(vision.ImageAnnotatorClient)
-        response = client.annotate_image({
+        print("in classify...")
+        # client = get_credentialed_google_client(vision.ImageAnnotatorClient)
+        response = CLIENT.annotate_image({
           'image': {'source': {'image_uri': uri}},
           'features': [
             {'type': vision.enums.Feature.Type.SAFE_SEARCH_DETECTION},
