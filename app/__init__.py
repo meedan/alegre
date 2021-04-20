@@ -6,7 +6,6 @@ from flask import Blueprint
 from .main.controller.about_controller import api as about_ns
 from .main.controller.healthcheck_controller import api as healthcheck_ns
 from .main.controller.langid_controller import api as langid_ns
-from .main.controller.glossary_controller import api as glossary_ns
 from .main.controller.similarity_controller import api as similarity_ns
 from .main.controller.bulk_similarity_controller import api as bulk_similarity_ns
 from .main.controller.bulk_update_similarity_controller import api as bulk_update_similarity_ns
@@ -27,7 +26,6 @@ api.add_namespace(about_ns, path='/about')
 api.add_namespace(healthcheck_ns, path='/healthcheck')
 api.add_namespace(model_ns, path='/model')
 api.add_namespace(langid_ns, path='/text/langid')
-api.add_namespace(glossary_ns, path='/text/glossary')
 api.add_namespace(similarity_ns, path='/text/similarity')
 api.add_namespace(bulk_similarity_ns, path='/text/bulk_similarity')
 api.add_namespace(bulk_update_similarity_ns, path='/text/bulk_update_similarity')

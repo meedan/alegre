@@ -7,7 +7,6 @@ class Config:
   SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious_secret_key')
   DEBUG = False
   ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL', 'http://elasticsearch:9200')
-  ELASTICSEARCH_GLOSSARY = 'alegre_glossary'
   ELASTICSEARCH_SIMILARITY = 'alegre_similarity'
   REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
   REDIS_PORT = os.getenv('REDIS_PORT', 6379)
@@ -43,7 +42,6 @@ class TestingConfig(Config):
   DEBUG = True
   TESTING = True
   PRESERVE_CONTEXT_ON_EXCEPTION = False
-  ELASTICSEARCH_GLOSSARY = 'alegre_glossary_test'
   ELASTICSEARCH_SIMILARITY = 'alegre_similarity_test'
   REDIS_DATABASE = 1
   SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://%(user)s:%(password)s@%(host)s/%(dbname)s?client_encoding=utf8' % {
