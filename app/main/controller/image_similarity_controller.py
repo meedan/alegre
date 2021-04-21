@@ -114,11 +114,15 @@ class ImageSimilarityResource(Resource):
       context_hash = {}
       for key, value in context.items():
           if isinstance(value, list):
+              context_query += "AND ("
               for i,v in enumerate(value):
-                  context_query += f"AND context->>'{key}' = :context_{key}_{i}\n"
+                  context_query += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+                  if len(value)-1 != i:
+                      context_query += " OR "
                   context_hash[f"context_{key}_{i}"] = v
+              context_query += ")"
           else:
-              context_query += f"AND context->>'{key}' = :context_{key}\n"
+              context_query += "AND context @>'[{\""+key+"\": :context_"+key+"}]'"
               context_hash[f"context_{key}"] = value
       cmd = """
         SELECT * FROM (
