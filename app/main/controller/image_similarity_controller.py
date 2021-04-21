@@ -110,20 +110,29 @@ class ImageSimilarityResource(Resource):
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def search_by_phash(self, phash, threshold, context):
     try:
+      context_query = ""
+      context_hash = {}
+      for key, value in context.items():
+          if isinstance(value, list):
+              for i,v in enumerate(value):
+                  context_query += f"AND context->>'{key}' = :context_{key}_{i}\n"
+                  context_hash[f"context_{key}_{i}"] = v
+          else:
+              context_query += f"AND context->>'{key}' = :context_{key}\n"
+              context_hash[f"context_{key}"] = value
       cmd = """
         SELECT * FROM (
           SELECT images.*, BIT_COUNT(phash # :phash)
           AS score FROM images
         ) f
         WHERE score <= :threshold
-        AND context @> (:context)::jsonb
+        """+context_query+"""
         ORDER BY score ASC
       """
-      matches = db.session.execute(text(cmd), {
+      matches = db.session.execute(text(cmd), dict(**{
         'phash': phash,
         'threshold': threshold,
-        'context': json.dumps([context])
-      }).fetchall()
+      }, **context_hash)).fetchall()
       keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
       return [dict(zip(keys, values)) for values in matches]
     except Exception as e:
