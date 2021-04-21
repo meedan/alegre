@@ -95,10 +95,15 @@ class ImageSimilarityResource(Resource):
   def search_by_context(self, context):
     try:
       context_query, context_hash = self.get_context_query(context)
-      cmd = """
-        SELECT * FROM images
-        WHERE 
-      """+context_query
+      if context_query:
+          cmd = """
+            SELECT * FROM images
+            WHERE 
+          """+context_query
+      else:
+          cmd = """
+            SELECT * FROM images
+          """
       matches = db.session.execute(text(cmd), context_hash).fetchall()
       keys = ('id', 'sha256', 'phash', 'url', 'context')
       return [dict(zip(keys, values)) for values in matches]
@@ -130,16 +135,26 @@ class ImageSimilarityResource(Resource):
   def search_by_phash(self, phash, threshold, context):
     try:
       context_query, context_hash = self.get_context_query(context)
-      cmd = """
-        SELECT * FROM (
-          SELECT images.*, BIT_COUNT(phash # :phash)
-          AS score FROM images
-        ) f
-        WHERE score <= :threshold
-        AND 
-        """+context_query+"""
-        ORDER BY score ASC
-      """
+      if context_query:
+          cmd = """
+            SELECT * FROM (
+              SELECT images.*, BIT_COUNT(phash # :phash)
+              AS score FROM images
+            ) f
+            WHERE score <= :threshold
+            AND 
+            """+context_query+"""
+            ORDER BY score ASC
+          """
+      else:
+          cmd = """
+            SELECT * FROM (
+              SELECT images.*, BIT_COUNT(phash # :phash)
+              AS score FROM images
+            ) f
+            WHERE score <= :threshold
+            ORDER BY score ASC
+          """
       matches = db.session.execute(text(cmd), dict(**{
         'phash': phash,
         'threshold': threshold,
