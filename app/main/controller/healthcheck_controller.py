@@ -16,7 +16,6 @@ class HealthcheckResource(Resource):
   def get(self):
     result = {
       'ELASTICSEARCH': False,
-      'ELASTICSEARCH_GLOSSARY': False,
       'ELASTICSEARCH_SIMILARITY': False,
       'REDIS': False,
       'DATABASE': False,
@@ -31,9 +30,6 @@ class HealthcheckResource(Resource):
       result['ELASTICSEARCH'] = str(e)
     else:
       result['ELASTICSEARCH'] = True
-      result['ELASTICSEARCH_GLOSSARY'] = True if es.indices.exists(
-        index=[app.config['ELASTICSEARCH_GLOSSARY']]
-      ) else 'Index not found `%s`' % app.config['ELASTICSEARCH_GLOSSARY']
       result['ELASTICSEARCH_SIMILARITY'] = True if es.indices.exists(
         index=[app.config['ELASTICSEARCH_SIMILARITY']]
       ) else 'Index not found `%s`' % app.config['ELASTICSEARCH_SIMILARITY']

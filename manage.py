@@ -54,22 +54,16 @@ def init():
   """Initializes the service."""
   # Create ES indexes.
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-  for key in ['ELASTICSEARCH_GLOSSARY', 'ELASTICSEARCH_SIMILARITY']:
-    try:
-      if config_name == 'test':
-        es.indices.delete(index=app.config[key], ignore=[400, 404])
-      es.indices.create(index=app.config[key])
-    except TransportError as e:
-      # ignore already existing index
-      if e.error == 'resource_already_exists_exception':
-        pass
-      else:
-        raise
-  es.indices.put_mapping(
-    body=json.load(open('./elasticsearch/alegre_glossary.json')),
-    # include_type_name=True,
-    index=app.config['ELASTICSEARCH_GLOSSARY']
-  )
+  try:
+    if config_name == 'test':
+      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
+    es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+  except TransportError as e:
+    # ignore already existing index
+    if e.error == 'resource_already_exists_exception':
+      pass
+    else:
+      raise
   es.indices.put_mapping(
     body=json.load(open('./elasticsearch/alegre_similarity.json')),
     # include_type_name=True,
