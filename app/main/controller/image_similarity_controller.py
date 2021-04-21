@@ -94,42 +94,49 @@ class ImageSimilarityResource(Resource):
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def search_by_context(self, context):
     try:
+      context_query, context_hash = self.get_context_query(context)
       cmd = """
         SELECT * FROM images
-        WHERE context @> (:context)::jsonb
-      """
-      matches = db.session.execute(text(cmd), {
-        'context': json.dumps([context])
-      }).fetchall()
+        WHERE 
+      """+context_query
+      matches = db.session.execute(text(cmd), context_hash).fetchall()
       keys = ('id', 'sha256', 'phash', 'url', 'context')
       return [dict(zip(keys, values)) for values in matches]
     except Exception as e:
       db.session.rollback()
       raise e
 
+
+  def get_context_query(self, context):
+    context_query = []
+    context_hash = {}
+    for key, value in context.items():
+      if isinstance(value, list):
+        context_clause = "("
+        for i,v in enumerate(value):
+          context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+          if len(value)-1 != i:
+            context_clause += " OR "
+          context_hash[f"context_{key}_{i}"] = v
+        context_clause += ")"
+        context_query.append(context_clause)
+      else:
+        context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
+        context_hash[f"context_{key}"] = value
+    return str.join(" AND ",  context_query), context_hash
+    
+    
   @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
   def search_by_phash(self, phash, threshold, context):
     try:
-      context_query = ""
-      context_hash = {}
-      for key, value in context.items():
-          if isinstance(value, list):
-              context_query += "AND ("
-              for i,v in enumerate(value):
-                  context_query += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
-                  if len(value)-1 != i:
-                      context_query += " OR "
-                  context_hash[f"context_{key}_{i}"] = v
-              context_query += ")"
-          else:
-              context_query += "AND context @>'[{\""+key+"\": :context_"+key+"}]'"
-              context_hash[f"context_{key}"] = value
+      context_query, context_hash = self.get_context_query(context)
       cmd = """
         SELECT * FROM (
           SELECT images.*, BIT_COUNT(phash # :phash)
           AS score FROM images
         ) f
         WHERE score <= :threshold
+        AND 
         """+context_query+"""
         ORDER BY score ASC
       """
