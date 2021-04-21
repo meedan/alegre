@@ -94,7 +94,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       }
     }), content_type='application/json')
     result = json.loads(response.data.decode())
-    self.assertEqual(1, len(result['result']))
+    self.assertEqual(0, len(result['result']))
 
     # Test querying for identical images.
     url = 'file:///app/app/test/data/lenna-512.jpg'
