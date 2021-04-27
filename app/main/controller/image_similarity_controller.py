@@ -97,12 +97,12 @@ class ImageSimilarityResource(Resource):
       context_query, context_hash = self.get_context_query(context)
       if context_query:
           cmd = """
-            SELECT * FROM images
+            SELECT id, sha256, phash, url, context FROM images
             WHERE 
           """+context_query
       else:
           cmd = """
-            SELECT * FROM images
+            SELECT id, sha256, phash, url, context FROM images
           """
       matches = db.session.execute(text(cmd), context_hash).fetchall()
       keys = ('id', 'sha256', 'phash', 'url', 'context')
@@ -138,7 +138,7 @@ class ImageSimilarityResource(Resource):
       if context_query:
           cmd = """
             SELECT * FROM (
-              SELECT images.*, BIT_COUNT(phash # :phash)
+              SELECT id, sha256, phash, url, context, BIT_COUNT(phash # :phash)
               AS score FROM images
             ) f
             WHERE score <= :threshold
@@ -149,7 +149,7 @@ class ImageSimilarityResource(Resource):
       else:
           cmd = """
             SELECT * FROM (
-              SELECT images.*, BIT_COUNT(phash # :phash)
+              SELECT id, sha256, phash, url, context, BIT_COUNT(phash # :phash)
               AS score FROM images
             ) f
             WHERE score <= :threshold
