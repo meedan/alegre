@@ -11,6 +11,8 @@ class GoogleImageClassificationProvider:
     def classify(uri):
         print("in classify...")
         # client = get_credentialed_google_client(vision.ImageAnnotatorClient)
+        if CLIENT == None:
+          raise "Client not credentialed, can't use google image classification."
         response = CLIENT.annotate_image({
           'image': {'source': {'image_uri': uri}},
           'features': [
