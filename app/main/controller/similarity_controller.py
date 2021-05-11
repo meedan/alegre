@@ -202,6 +202,7 @@ class SimilarityResource(Resource):
             body = conditions
 
         result = es.search(
+            size=10000,
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
