@@ -1,17 +1,22 @@
 before_install:
-  - sudo apt-get -y install redis-tools
+- sudo apt-get -y install redis-tools
 before_script:
-  - git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-  - d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
-  - docker-compose build --pull
-  - docker-compose -f docker-compose.yml -f docker-test.yml up -d
-  - docker-compose logs -t -f &
-  - echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
-  - echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+- git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+- d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- docker-compose build --pull
+- docker-compose -f docker-compose.yml -f docker-test.yml up -d
+- docker-compose logs -t -f &
+- echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+- echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
-  - docker-compose exec alegre make test
+- docker-compose exec alegre make test
 after_script:
-  - docker-compose exec alegre coverage report
+- docker-compose exec alegre coverage report
 notifications:
   slack:
     secure: PIYgKOnKjbWv7inSq4Gu0BZS24Ipte3DVZid71dD1iTSHiRtwWUV8jmhva7kVfhoyNst7Hck5v3rp6nY//W0a/frT0mdn1f4j41NA8VaAeKa7MOWQFyvaXBNTnjJJ+FMkpHhbQWGAE7tTKBMWeJDWCisgtvPNQvCd3GtnMMyeTeuQTZarJojTyGxJ00ubLCpKQICkCVEwapnZpONJLJV9h9XuScVo+69h7vpc3jL79/zSWHgH5YPmUEYqLoXArZUtZtsIxunp3ftBqRKoxRHJuUuVDfJ8skNradWoXLEA5Qf/sxxekh13FcYEXMIY37VOQgPJpF8cL0MWwANGrphTdrH2J4vsnoiJK0lZ8NMOIbnBXKhaMtF+PoBjWNgI+8y5xp5jYFV/sQkeqz1ZS3/3KsYFfUeXsy3gPjsASnV6WSk2EstWF4LZopjwqeTssF7nfpOUEf+KW1nCZrnvEt7Mc+Rat+TtTYXFjea5OXednBhAZf0woiRSMw7rlxp9KuxTZDgsbNvs/FoFpJMi7Rmw5+yVrshxxu1lO7hzdWw/8LzRvi6wWWF9mLzbxq3wPKOq/NHIjQrnp8M0o0ESgibQ/pyAU25mcjqNFgCyRLwPjV4s2Q4D/eESn3Vi6A4cvs/Oy4yHWDijm8QilqyrUR67M8NOip92X9FZT/5/BOfEoM=
+env:
+  global:
+  - secure: RXJQ6+ke7GYXOCF8REbUOElUTY6ZsNqxuyfSCkFXNw5RE/XqTHp4QfOBzLWM7CdpXtfHY0LN+1DemufxdY3O71dMDWraIxIMssd5LXnZ+jF0HLq2lwFxAOCjDYh4xAkoA6l2VnlKVDSLhB78M/fjrLOcbTf8uEWMiQN/ZzB7v/GukS65Bp/Xn53/V77JPAKIrez9BulKDogoMi9NYnDDPzKxK0oOW8UV74vIfe2UcVajfMIxUDloaMcdjffVwYkbd/gPE2+Kkuj8LLclJvDiuMCBby2vWpOzZp+I+D7WSd088rJq80yhbBAaKAiOKF6g70nh7VgmSERTvsBn0AOW6oV9hD0Jrnq0sKsKIohmjcKYtJ39IDYIe0tWnWw8mOG6JVFflUQ1rNXRMSxFolrYNCWjUQxBVEap5gln35JTP/oSJ/OxkBwnc5AdFRAlqzayY5tjHh5nPAHME9NHZZoCD1yVuHLw44uFI3Azse+UMH1mauzNde/PVw3jQxObSXtrlnahqBel7Fq0/MHlyMPUjScyULuhntLlYKiTNxBZ7mlUTGbT8Ch7TFQL7LEy832TyFr3b4CjPCBEb0LyJ0HlSfNo50Jv9tmVHGxAC6NbRTnBzop8q0WJPg6mm4iUAxBsBWLbAfJmC5GALoL1S5W3z0Wxu3i+10F7I/3kewB4/4s=
+  - secure: rRike8e8nlVup6LtIqaKJLMtoyv2lRbY+x5nN5qoGWEND1kmnioNtkLmWonLqXw9PrBviCZN1fedjCXHRjkvlAYakkw1Hb7fYvp57L/2kJ7jZj5xyMHxhL2kwL7BzYi22KFLBvjJEFPMSJbbeJ5NPo31SOqmCSTjGvp3xkMQ71Wl+XB3RUsMCbkrHde2FW6plR0yL2AWnhrChXRbsAbOg/riVGyWonkFwBl/47L0C8mIxWnGn9UySvxGbJbsJXMia+1MRMewWWMoWhbtTZLsAt+ETH872H8zZy7Hj4/2V66ETdp1tzLAxmkXA0JLHpCKmoyU5htEBMLN3LXZegpXinYI4+pmPkbbg0x/1xUBEi8yh8u7fChkgeVRi9mEJvwCHBQ731LWuFxfGVnAhECMWFkzhuU76cjobea+c2eya1XBtPojwJbZGzUqJKHgzCVpGsoUEQvgbVhKvhlm2TI6NJhXMEpyzODXYauIEDSg+Ka6kXFhsovCoRBPfGSXXs3mox6FyqyJxIlsOTUwxqNE40/DfKgT2eFbG3kzTS0PFipojRreeK5MHE62BPkx1qup0d5+Wb3ZNgw4LnZcf2GlavRvB/0BKbdJzhDHZC14snL7I4K3FWZ6qPzfdiqSHiNY3smnWQHsyQTb4lHBOyvsaJVRpLAaF5ULB2peLDVbOxQ=
