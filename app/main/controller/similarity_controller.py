@@ -123,6 +123,8 @@ class SimilarityResource(Resource):
             matches, clause_count = self.generate_matches(request.json['context'])
         if 'threshold' in request.json:
             threshold = request.json['threshold']
+        if clause_count >= app.config['MAX_CLAUSE_COUNT']:
+            return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}, 500
         if model_key.lower() == 'elasticsearch':
             conditions = [
                 {
