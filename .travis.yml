@@ -1,8 +1,8 @@
 before_install:
+- openssl aes-256-cbc -K $encrypted_f11eea276ba0_key -iv $encrypted_f11eea276ba0_iv -in google_credentials.json.enc -out google_credentials.json -d
 - sudo apt-get -y install redis-tools
 before_script:
 - cp .env_file.example .env_file
-- cp google_credentials.json.example google_credentials.json && echo $CREDENTIALS > google_credentials.json
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - docker-compose build --pull
 - docker-compose -f docker-compose.yml -f docker-test.yml up -d
