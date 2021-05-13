@@ -1,8 +1,8 @@
 before_install:
+- openssl aes-256-cbc -K $encrypted_126f44c7828e_key -iv $encrypted_126f44c7828e_iv -in google_credentials.json.enc -out google_credentials.json -d
 - sudo apt-get -y install redis-tools
 before_script:
-- git clone https://${TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-- d=configurator/check/travis/alegre/; for f in $(find $d -type f); do cp "$f" "${f/$d/}"; done
+- cp .env_file.test .env_file
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - docker-compose build --pull
 - docker-compose -f docker-compose.yml -f docker-test.yml up -d
