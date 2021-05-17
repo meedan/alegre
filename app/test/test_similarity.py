@@ -162,6 +162,19 @@ class TestSimilarityBlueprint(BaseTestCase):
             doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
             self.assertEqual(term2['text'], doc['_source']['content'])
 
+    def test_elasticsearch_performs_correct_fuzzy_search(self):
+        with self.client:
+            term = { 'text': 'what even is a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            post_response = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            lookup["fuzzy"] = True
+            post_response_fuzzy = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
+            lookup["fuzzy"] = False
+            post_response_fuzzy = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            self.assertEqual(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
+
     def test_elasticsearch_update_text(self):
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }

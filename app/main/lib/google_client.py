@@ -19,5 +19,9 @@ def get_credentialed_google_client(client):
       "auth_provider_x509_cert_url": os.getenv("google_credentials_auth_provider_x509_cert_url", default_values.get("auth_provider_x509_cert_url")),
       "client_x509_cert_url": os.getenv("google_credentials_client_x509_cert_url", default_values.get("client_x509_cert_url")),
     }
-    credentials = service_account.Credentials.from_service_account_info(credentials_dict)
-    return client(credentials=credentials)
+    try:
+      credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+      return client(credentials=credentials)
+    except ValueError as e:
+      print(f"Couldn't authenticate to google client: {str(e)}")
+      return None

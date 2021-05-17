@@ -14,7 +14,8 @@ similarity_request = api.model('similarity_request', {
     'model': fields.String(required=False, description='similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
-    'context': JsonObject(required=False, description='context')
+    'context': JsonObject(required=False, description='context'),
+    'fuzzy': fields.Boolean(required=False, description='whether or not to use fuzzy search on GET queries (only used when model is set to \'elasticsearch\')'),
 })
 @api.route('/')
 class SimilarityResource(Resource):
@@ -122,7 +123,8 @@ class SimilarityResource(Resource):
             matches, clause_count = self.generate_matches(request.json['context'])
         if 'threshold' in request.json:
             threshold = request.json['threshold']
-
+        if clause_count >= app.config['MAX_CLAUSE_COUNT']:
+            return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}, 500
         if model_key.lower() == 'elasticsearch':
             conditions = [
                 {
@@ -134,7 +136,10 @@ class SimilarityResource(Resource):
                     }
                 },
             ]
-
+            fuzzy = None
+            if 'fuzzy' in request.json:
+                if str(request.json['fuzzy']).lower() == 'true':
+                    conditions[0]['match']['content']['fuzziness'] = 'AUTO'
             # FIXME: `analyzer` and `minimum_should_match` don't play well together.
             if 'language' in request.json:
                 conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
@@ -199,6 +204,7 @@ class SimilarityResource(Resource):
             body = conditions
 
         result = es.search(
+            size=10000,
             body=body,
             index=app.config['ELASTICSEARCH_SIMILARITY']
         )
