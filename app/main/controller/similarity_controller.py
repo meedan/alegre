@@ -151,7 +151,7 @@ class SimilarityResource(Resource):
             conditions = {
                 'query': {
                     'script_score': {
-                        'min_score': threshold,
+                        'min_score': threshold+1,
                         'query': {
                             'bool': {
                                 'must': [
