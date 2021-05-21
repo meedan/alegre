@@ -70,12 +70,17 @@ class SimilarityResource(Resource):
             'success': success
         }
 
-    def delete_document(self, doc_id):
+    def delete_document(self, doc_id, quiet):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         try:
             return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
         except:
-            abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
+            if quiet:
+                return {
+                    'failed': f"Doc Not Found for id {doc_id}! No Deletion Occurred - quiet failure requested, so 200 code returned."
+                }
+            else:
+                abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
 
     def get_body_for_request(self):
         model_key = 'elasticsearch'
@@ -96,7 +101,7 @@ class SimilarityResource(Resource):
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def delete(self):
-        return self.delete_document(request.json["doc_id"])
+        return self.delete_document(request.json["doc_id"], request.json.get("quiet", False))
 
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
