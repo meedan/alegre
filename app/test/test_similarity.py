@@ -211,6 +211,16 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual(404, delete_response.status_code)
 
+    def test_elasticsearch_delete_200(self):
+        with self.client:
+            delete_response = self.client.delete(
+                '/text/similarity/',
+                data=json.dumps({"doc_id": "abcdef", "quiet": True}),
+                content_type='application/json'
+            )
+            result = json.loads(delete_response.data.decode())
+            self.assertEqual(200, delete_response.status_code)
+
     def test_elasticsearch_delete_text(self):
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
