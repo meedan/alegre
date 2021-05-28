@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
-import json_logging
+# import json_logging
 from .config import config_by_name
 
 db = SQLAlchemy()
@@ -30,9 +30,9 @@ def create_app(config_name):
 
   with app.app_context():
     # Init JSON logging, only once to avoid exceptions during tests
-    if json_logging._current_framework is None:
-      json_logging.init_flask(enable_json=True)
-      json_logging.init_request_instrument(app)
+    # if json_logging._current_framework is None:
+    #   json_logging.init_flask(enable_json=True)
+    #   json_logging.init_request_instrument(app)
     if app.config['PYBRAKE']['project_key']:
       pybrake.flask.init_app(app)
       app.logger.addHandler(
