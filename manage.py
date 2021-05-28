@@ -8,6 +8,7 @@ from elasticsearch import Elasticsearch, TransportError
 import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
+import json_logging
 
 from app import blueprint
 from app.main import create_app, db
@@ -34,6 +35,9 @@ manager.add_command('db', MigrateCommand)
 def run():
   """Runs the API server."""
   port = os.getenv('ALEGRE_PORT', 5000)
+  if json_logging._current_framework is None:
+    json_logging.init_flask(enable_json=True)
+    json_logging.init_request_instrument(app)
   app.run(host='0.0.0.0', port=port, threaded=True)
 
 @manager.command
