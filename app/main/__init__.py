@@ -28,12 +28,11 @@ def create_app(config_name):
   flask_bcrypt.init_app(app)
   migrate.init_app(app, db)
 
-  # Init JSON logging, only once to avoid exceptions during tests
-  if json_logging._current_framework is None:
-    json_logging.init_flask(enable_json=True)
-    json_logging.init_request_instrument(app)
-
   with app.app_context():
+    # Init JSON logging, only once to avoid exceptions during tests
+    if json_logging._current_framework is None:
+      json_logging.init_flask(enable_json=True)
+      json_logging.init_request_instrument(app)
     if app.config['PYBRAKE']['project_key']:
       pybrake.flask.init_app(app)
       app.logger.addHandler(
