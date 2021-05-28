@@ -62,7 +62,7 @@ class SimilarityResource(Resource):
                 body=body,
                 index=app.config['ELASTICSEARCH_SIMILARITY']
             )
-        es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+        # es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
         success = False
         if result['result'] == 'created' or result['result'] == 'updated':
             success = True
