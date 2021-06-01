@@ -26,12 +26,6 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         body=json.load(open('./elasticsearch/alegre_similarity.json')),
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
-      es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
-      es.indices.put_settings(
-        body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
-      )
-      es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
       r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
       r.delete(SharedModelStub.model_key)
       r.delete('SharedModel:%s' % SharedModelStub.model_key)

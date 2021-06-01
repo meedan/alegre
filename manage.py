@@ -73,12 +73,6 @@ def init():
     # include_type_name=True,
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
-  es.indices.close(index=app.config['ELASTICSEARCH_SIMILARITY'])
-  es.indices.put_settings(
-    body=json.load(open('./elasticsearch/alegre_similarity_settings.json')),
-    index=app.config['ELASTICSEARCH_SIMILARITY']
-  )
-  es.indices.open(index=app.config['ELASTICSEARCH_SIMILARITY'])
 
   # Create database.
   with app.app_context():
