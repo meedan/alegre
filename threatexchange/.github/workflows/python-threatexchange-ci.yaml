@@ -1,0 +1,52 @@
+name: python-threatexchange CI
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "python-threatexchange/**"
+      - ".github/workflows/python-threatexchange-ci.yaml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "python-threatexchange/**"
+      - ".github/workflows/python-threatexchange-ci.yaml"
+
+defaults:
+  run:
+    working-directory: python-threatexchange
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+      - name: Check code format
+        run: |
+          black --check .
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[test]"
+      - name: Test with pytest
+        run: |
+          py.test

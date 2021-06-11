@@ -34,6 +34,9 @@ class Config:
   }
   MODEL_NAME = os.getenv('MODEL_NAME')
   MAX_CLAUSE_COUNT = 1000
+  PERSISTENT_DISK_PATH = os.getenv('PERSISTENT_DISK_PATH', '/app/persistent_disk')
+  VIDEO_MODEL = 'video'
+  
 
 class DevelopmentConfig(Config):
   DEBUG = True
