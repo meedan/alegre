@@ -40,7 +40,6 @@ services:
       - redis
       - model_test
       - other_model_test
-      - video
     environment:
       BOILERPLATE_ENV: test
       FLASK_ENV: test
