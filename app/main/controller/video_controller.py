@@ -41,4 +41,4 @@ class VideoSimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.expect(video_similarity_request, validate=True)
     def get(self):
-        return self.request_video_task(request, "search")
+        return {"result": self.request_video_task(request, "search")}

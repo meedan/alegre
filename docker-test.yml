@@ -33,20 +33,6 @@ services:
       FLASK_ENV: test
       FLASK_DEBUG: "true"
       MODEL_NAME: meantokens
-  video:
-    build: .
-    command: ["make", "run_model"]
-    volumes:
-      - ".:/app"
-    depends_on:
-      - redis
-    env_file:
-      - .env_file
-    environment:
-      BOILERPLATE_ENV: test
-      FLASK_ENV: test
-      FLASK_DEBUG: "true"
-      MODEL_NAME: video
   alegre:
     depends_on:
       - postgres

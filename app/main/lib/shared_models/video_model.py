@@ -92,11 +92,13 @@ class VideoModel(SharedModel):
     def parse_search_results(self, result, context_hash):
         results = []
         for row in result.split("\n")[:-1]:
-            level1, threshold, first_file, second_file = row.split(" ")
+            level1, level2, first_file, second_file = row.split(" ")
+            context = context_hash.context
+            context["project_media_id"] = self.media_id_from_filepath(first_file)
             results.append({
                 "hash_key": context_hash.hash_key,
-                "threshold": threshold,
+                "context": context,
+                "score": level2,
                 "filename": first_file,
-                "media_id": self.media_id_from_filepath(first_file)
             })
         return results
