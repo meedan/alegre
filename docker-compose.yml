@@ -80,7 +80,7 @@ services:
       - postgres
       - kibana
       - redis
-      - video
+      # - video
       # - xlm_r_bert_base_nli_stsb_mean_tokens
       # - indian_sbert
     env_file:
