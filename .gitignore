@@ -3,3 +3,4 @@ google_credentials.json
 .env_file
 .coverage
 .idea
+persistent_disk
