@@ -44,14 +44,20 @@ def run():
 def run_model():
   """Runs the model server."""
   if config_name == "test":
-      model_config = json.load(open('./model_config_test.json'))[app.config["MODEL_NAME"]]
+      model_config = json.load(open('./model_config_test.json')).get(app.config["MODEL_NAME"], {})
   else:
-      model_config = json.load(open('./model_config.json'))[app.config["MODEL_NAME"]]
+      model_config = json.load(open('./model_config.json')).get(app.config["MODEL_NAME"], {})
   SharedModel.start_server(
     model_config['class'],
     model_config['key'],
     model_config['options']
   )
+
+
+@manager.command
+def run_video_matcher():
+  """Runs the video matcher."""
+  VideoMatcher.start_server()
 
 @manager.command
 def init():

@@ -1,0 +1,13 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+
+python-threatexchange:
+  - python-threatexchange/**/*
+  
+hma:
+  - hasher-matcher-actioner/**/*
+
+pdq:
+  - pdq/**/*
+
+hma-ui:
+  - hasher-matcher-actioner/webapp/**/* 

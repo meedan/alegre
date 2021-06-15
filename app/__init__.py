@@ -7,6 +7,7 @@ from .main.controller.about_controller import api as about_ns
 from .main.controller.healthcheck_controller import api as healthcheck_ns
 from .main.controller.langid_controller import api as langid_ns
 from .main.controller.similarity_controller import api as similarity_ns
+from .main.controller.video_controller import api as video_similarity_ns
 from .main.controller.bulk_similarity_controller import api as bulk_similarity_ns
 from .main.controller.bulk_update_similarity_controller import api as bulk_update_similarity_ns
 from .main.controller.translation_controller import api as translation_ns
@@ -28,6 +29,7 @@ api.add_namespace(healthcheck_ns, path='/healthcheck')
 api.add_namespace(model_ns, path='/model')
 api.add_namespace(langid_ns, path='/text/langid')
 api.add_namespace(similarity_ns, path='/text/similarity')
+api.add_namespace(video_similarity_ns, path='/video/similarity')
 api.add_namespace(bulk_similarity_ns, path='/text/bulk_similarity')
 api.add_namespace(bulk_update_similarity_ns, path='/text/bulk_update_similarity')
 api.add_namespace(translation_ns, path='/text/translation')
