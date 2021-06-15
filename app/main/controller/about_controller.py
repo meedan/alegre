@@ -22,7 +22,8 @@ class AboutResource(Resource):
             'text/bulk_similarity': ['elasticsearch'],
             'text/bulk_upload_similarity': SharedModel.get_servers(),
             'image/classification': AboutResource.list_providers('app.main.lib.image_classification', 'ImageClassificationProvider'),
-            'image/similarity': ['phash']
+            'image/similarity': ['phash'],
+            'image/ocr': ['google']
         }
 
     @staticmethod
