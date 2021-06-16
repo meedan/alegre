@@ -41,7 +41,8 @@ class VideoModel(SharedModel):
     def add(self, task):
         context_hash = ContextHash.from_context(task.get("context", {}))
         temp_video_file = self.get_tempfile()
-        with urllib.request.urlopen(task["url"]) as response, open(temp_video_file.name, 'wb') as out_file:
+        remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
         outfile = self.tmk_file_path(task, context_hash)
         hash_video_command = self.tmk_hash_video_command()
@@ -64,10 +65,10 @@ class VideoModel(SharedModel):
         return "./threatexchange/tmk/cpp/"
 
     def tmk_query_command(self):
-        return f"{self.tmk_dir}tmk-query"
+        return f"{self.tmk_dir()}tmk-query"
 
     def tmk_hash_video_command(self):
-        return f"{self.tmk_dir}tmk-hash-video"
+        return f"{self.tmk_dir()}tmk-hash-video"
 
     def tmk_directory(self, context_hash):
         return f"{self.directory}/{context_hash.hash_key}"
