@@ -19,11 +19,15 @@ RUN chmod 755 /opt/bin/*.sh
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y ffmpeg
+RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
+
 COPY requirements.txt ./
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN cd /app/threatexchange/tmk/cpp && make
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]

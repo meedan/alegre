@@ -65,10 +65,10 @@ class VideoModel(SharedModel):
         return "./threatexchange/tmk/cpp/"
 
     def tmk_query_command(self):
-        return f"{self.tmk_dir}tmk-query"
+        return f"{self.tmk_dir()}tmk-query"
 
     def tmk_hash_video_command(self):
-        return f"{self.tmk_dir}tmk-hash-video"
+        return f"{self.tmk_dir()}tmk-hash-video"
 
     def tmk_directory(self, context_hash):
         return f"{self.directory}/{context_hash.hash_key}"
