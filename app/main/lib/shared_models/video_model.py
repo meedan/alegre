@@ -41,7 +41,8 @@ class VideoModel(SharedModel):
     def add(self, task):
         context_hash = ContextHash.from_context(task.get("context", {}))
         temp_video_file = self.get_tempfile()
-        with urllib.request.urlopen(task["url"]) as response, open(temp_video_file.name, 'wb') as out_file:
+        remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
         outfile = self.tmk_file_path(task, context_hash)
         hash_video_command = self.tmk_hash_video_command()
