@@ -23,6 +23,9 @@ class ImageOcrResource(Resource):
         response = client.document_text_detection(image=image)
         texts = response.text_annotations
 
+        if not texts:
+            return
+
         return {
             'text': texts[0].description
         }
