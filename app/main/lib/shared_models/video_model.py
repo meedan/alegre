@@ -7,11 +7,16 @@ import shutil
 from sentence_transformers import SentenceTransformer
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
+from sqlalchemy import text
 import tenacity
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main import db
-from app.main.model.context_hash import ContextHash
+from app.main.model.video import Video
+
+def _after_log(retry_state):
+  app.logger.debug("Retrying video similarity...")
 
 task = {"url": "http://devingaffney.com/files/sample-videos/sample-videos/pattern-sd-with-large-logo-bar.mp4", "id": 12343}
 class VideoModel(SharedModel):
@@ -56,10 +61,18 @@ class VideoModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        if 'doc_id' in task:
+            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
+            if videos:
+                video = videos[0]
+        elif 'url' in task:
+            videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
+            if videos:
+                video = videos[0]
         filepath = self.tmk_file_path(video.folder, video.filepath)
         if os.path.exists(filepath):
             os.remove(filepath)
-        deleted = db.session.query(Video).filter(Video.url==params['doc_id']).delete()
+        deleted = db.session.query(Video).filter(Video.id==video.id).delete()
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
     def add(self, task):
@@ -103,6 +116,14 @@ class VideoModel(SharedModel):
             if videos:
                 video = videos[0]
                 context = video.context
+        if 'doc_id' in task:
+            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
+            if videos:
+                video = videos[0]
+        elif 'url' in task:
+            videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
+            if videos:
+                video = videos[0]
         matches = self.search_by_context(context)
         temp_search_file = self.get_tempfile()
         temp_comparison_file = self.get_tempfile()
@@ -112,7 +133,7 @@ class VideoModel(SharedModel):
             out_file.write(self.tmk_file_path(video.folder, video.filepath))
         tmk_query_command = self.tmk_query_command()
         result = self.execute_command(f"{tmk_query_command} --c1 -1.0 --c2 0.0 {temp_search_file.name} {temp_comparison_file.name}")
-        return self.parse_search_results(result, context_hash)
+        return self.parse_search_results(result, video.context)
 
     def get_context_query(self, context):
         context_query = []
@@ -151,13 +172,11 @@ class VideoModel(SharedModel):
             full_paths.append(self.tmk_file_path(match["folder"], match["filepath"]))
         return full_paths
 
-    def parse_search_results(self, result, context_hash):
+    def parse_search_results(self, result, context):
         results = []
         for row in result.split("\n")[:-1]:
             level1, level2, first_file, second_file = row.split(" ")
-            context = context_hash.context
             results.append({
-                "hash_key": context_hash.hash_key,
                 "context": context,
                 "score": level2,
                 "filename": first_file,

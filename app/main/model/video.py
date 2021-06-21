@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
