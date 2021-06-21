@@ -1,3 +1,4 @@
+import base64
 import os
 import tempfile
 import pathlib
@@ -74,7 +75,10 @@ class VideoModel(SharedModel):
         return f"{self.directory}/{context_hash.hash_key}"
 
     def tmk_file_path(self, task, context_hash):
-        task_id = task["id"]
+        if context_hash.context.get("has_custom_id"):
+            task_id = "custom_"+task.get("doc_id")
+        else:
+            task_id = "id_"+task.get("project_media_id")
         pathlib.Path(f"{self.directory}/{context_hash.hash_key}").mkdir(parents=True, exist_ok=True)
         return f"{self.directory}/{context_hash.hash_key}/{task_id}.tmk"
         
@@ -88,7 +92,10 @@ class VideoModel(SharedModel):
         return full_paths
 
     def media_id_from_filepath(self, filepath):
-        return os.path.basename(filepath).replace(".tmk", "")
+        if filepath[0:3] == "id_":
+            return os.path.basename(filepath).replace(".tmk", "")
+        elif filepath[0:7] == "custom_":
+            return base64.standard_b64decode(filepath.replace(".tmk", "==").replace("custom_", "")).split("-")[2]
 
     def parse_search_results(self, result, context_hash):
         results = []

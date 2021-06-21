@@ -16,6 +16,7 @@ class VideoSimilarityResource(Resource):
     def model_response_package(self, request, command):
         return {
             "url": request.json.get("url", {}),
+            "doc_id": request.json.get("doc_id"),
             "context": request.json.get("context", {}),
             "command": command
         }

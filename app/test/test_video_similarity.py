@@ -32,9 +32,9 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         mock_get_shared_model_response.return_value = {"url": url, "id": 123}
         response = self.client.post('/video/similarity/', data=json.dumps({
           'url': url,
+          'project_media_id': 1,
           'context': {
             'team_id': 1,
-            'project_media_id': 1
           }
         }), content_type='application/json')
     result = json.loads(response.data.decode())
@@ -46,9 +46,9 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         mock_get_shared_model_response.return_value = {"url": url, "id": 123}
         response = self.client.delete('/video/similarity/', data=json.dumps({
           'url': url,
+          'project_media_id': 1,
           'context': {
             'team_id': 1,
-            'project_media_id': 1
           }
         }), content_type='application/json')
     result = json.loads(response.data.decode())
@@ -59,9 +59,9 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         mock_get_shared_model_response.return_value = [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]
         response = self.client.get('/video/similarity/', data=json.dumps({
           'url': url,
+          'project_media_id': 1,
           'context': {
             'team_id': 1,
-            'project_media_id': 1
           }
         }), content_type='application/json')
     result = json.loads(response.data.decode())
