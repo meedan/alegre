@@ -7,9 +7,9 @@ class Video(db.Model):
   __tablename__ = 'videos'
 
   id = db.Column(db.Integer, primary_key=True)
-  doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
-  folder = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
-  filepath = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  doc_id = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True, unique=True)
+  folder = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
+  filepath = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   __table_args__ = (
