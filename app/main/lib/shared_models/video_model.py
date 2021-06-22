@@ -137,7 +137,7 @@ class VideoModel(SharedModel):
             out_file.write(self.tmk_file_path(video.folder, video.filepath))
         tmk_query_command = self.tmk_query_command()
         result = self.execute_command(f"{tmk_query_command} --c1 -1.0 --c2 0.0 {temp_search_file.name} {temp_comparison_file.name}")
-        return self.parse_search_results(result, video.context)
+        return {"result": self.parse_search_results(result, video.context)}
 
     def get_context_query(self, context):
         context_query = []
