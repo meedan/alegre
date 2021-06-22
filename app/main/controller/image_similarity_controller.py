@@ -20,22 +20,22 @@ image_similarity_request = api.model('image_similarity_request', {
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
-def delete_record(params):
-  deleted= False
-  if params.get('doc_id'):
-    deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
-  if deleted:
-    return {'deleted': True}
-  else:
-    return {'deleted': False}
+# def delete_record(params):
+#   deleted= False
+#   if params.get('doc_id'):
+#     deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
+#   if deleted:
+#     return {'deleted': True}
+#   else:
+#     return {'deleted': False}
 
 @api.route('/')
 class ImageSimilarityResource(Resource):
       
-  @api.response(200, 'image signature successfully stored in the similarity database.')
-  @api.doc('Store an image signature in the similarity database')
-  def delete(self):
-      return delete_record(request.json)
+  # @api.response(200, 'image signature successfully stored in the similarity database.')
+  # @api.doc('Store an image signature in the similarity database')
+  # def delete(self):
+  #     return delete_record(request.json)
 
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')
