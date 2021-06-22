@@ -22,6 +22,6 @@ RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN cd /app/threatexchange/tmk/cpp && make
+RUN make -C /app/threatexchange/tmk/cpp
 
 CMD ["make", "run"]

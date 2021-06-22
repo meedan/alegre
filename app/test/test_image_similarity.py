@@ -183,26 +183,26 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     image = ImageModel.query.filter_by(url=url).all()[0]
     self.assertEqual(2, image.context[0]['team_id'])
 
-  def test_delete_image(self):
-    url = 'file:///app/app/test/data/lenna-512.png'
-    # Test adding an image.
-    response = self.client.post('/image/similarity/', data=json.dumps({
-      'url': url,
-      'doc_id': '1-2-3',
-      'context': {
-        'team_id': 1,
-        'project_media_id': 1
-      }
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    self.assertEqual(True, result['success'])
-    self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
-    response = self.client.delete('/image/similarity/', data=json.dumps({
-      'doc_id': '1-2-3'
-    }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
-    result = json.loads(response.data.decode())
-    self.assertEqual(True, result['deleted'])
-    self.assertEqual(0, len(ImageModel.query.filter_by(url=url).all()))
+  # def test_delete_image(self):
+  #   url = 'file:///app/app/test/data/lenna-512.png'
+  #   # Test adding an image.
+  #   response = self.client.post('/image/similarity/', data=json.dumps({
+  #     'url': url,
+  #     'doc_id': '1-2-3',
+  #     'context': {
+  #       'team_id': 1,
+  #       'project_media_id': 1
+  #     }
+  #   }), content_type='application/json')
+  #   result = json.loads(response.data.decode())
+  #   self.assertEqual(True, result['success'])
+  #   self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
+  #   response = self.client.delete('/image/similarity/', data=json.dumps({
+  #     'doc_id': '1-2-3'
+  #   }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
+  #   result = json.loads(response.data.decode())
+  #   self.assertEqual(True, result['deleted'])
+  #   self.assertEqual(0, len(ImageModel.query.filter_by(url=url).all()))
 
 
   def test_image_api_error(self):
