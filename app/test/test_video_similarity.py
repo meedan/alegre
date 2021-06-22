@@ -40,20 +40,20 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                 }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-          with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-              mock_get_shared_model_client.return_value = SharedModelStub('video')
-              mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-              response = self.client.delete('/video/similarity/', data=json.dumps({
-                  'url': url,
-                  'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                  'context': {
-                      'team_id': 1,
-                      'has_custom_id': True
-                  }
-              }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
+        # with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
+        #   with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
+        #       mock_get_shared_model_client.return_value = SharedModelStub('video')
+        #       mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
+        #       response = self.client.delete('/video/similarity/', data=json.dumps({
+        #           'url': url,
+        #           'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
+        #           'context': {
+        #               'team_id': 1,
+        #               'has_custom_id': True
+        #           }
+        #       }), content_type='application/json')
+        # result = json.loads(response.data.decode())
+        # self.assertEqual(result, {"url": url, "project_media_id": 123})
         with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
@@ -84,19 +84,19 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                 }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.delete('/video/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
+        # with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
+        #     with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
+        #         mock_get_shared_model_client.return_value = SharedModelStub('video')
+        #         mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
+        #         response = self.client.delete('/video/similarity/', data=json.dumps({
+        #             'url': url,
+        #             'project_media_id': 1,
+        #             'context': {
+        #                 'team_id': 1,
+        #             }
+        #         }), content_type='application/json')
+        # result = json.loads(response.data.decode())
+        # self.assertEqual(result, {"url": url, "project_media_id": 123})
         with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
