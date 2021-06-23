@@ -32,10 +32,10 @@ def delete_record(params):
 @api.route('/')
 class ImageSimilarityResource(Resource):
       
-  @api.response(200, 'image signature successfully stored in the similarity database.')
-  @api.doc('Store an image signature in the similarity database')
-  def delete(self):
-      return delete_record(request.json)
+  # @api.response(200, 'image signature successfully stored in the similarity database.')
+  # @api.doc('Store an image signature in the similarity database')
+  # def delete(self):
+  #     return delete_record(request.json)
 
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')

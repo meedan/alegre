@@ -16,6 +16,7 @@ class VideoSimilarityResource(Resource):
     def model_response_package(self, request, command):
         return {
             "url": request.json.get("url", {}),
+            "doc_id": request.json.get("doc_id"),
             "context": request.json.get("context", {}),
             "command": command
         }
@@ -25,11 +26,11 @@ class VideoSimilarityResource(Resource):
         response = model.get_shared_model_response(self.model_response_package(request, command))
         return response
 
-    @api.response(200, 'text successfully deleted in the similarity database.')
-    @api.doc('Delete a text in the similarity database')
-    @api.expect(video_similarity_request, validate=True)
-    def delete(self):
-        return self.request_video_task(request, "delete")
+    # @api.response(200, 'text successfully deleted in the similarity database.')
+    # @api.doc('Delete a text in the similarity database')
+    # @api.expect(video_similarity_request, validate=True)
+    # def delete(self):
+    #     return self.request_video_task(request, "delete")
 
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
