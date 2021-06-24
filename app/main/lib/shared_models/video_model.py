@@ -19,6 +19,7 @@ def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
 # task = {"doc_id":"Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8","url":"https://qa-assets.checkmedia.org/uploads/uploaded_video/538836/IMG_6828.MOV","context":{"team_id":4874,"project_media_id":554571,"has_custom_id":True}}
+# task = {"doc_id":None,"url":"https://qa-assets.checkmedia.org/uploads/uploaded_video/538836/IMG_6828.MOV","context":{"team_id":4874,"project_media_id":554571,"has_custom_id":True}}
 # from app.main.lib.shared_models.video_model import VideoModel
 # vm = VideoModel("video")
 # vm.load()
@@ -121,9 +122,6 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task):
-        print(task)
-        app.logger.debug("HERE IS SEARCH TASK")
-        app.logger.debug(task)
         context = {}
         video = None
         if task.get('context'):
@@ -140,16 +138,19 @@ class VideoModel(SharedModel):
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
             if videos and not video:
                 video = videos[0]
-        matches = self.search_by_context(context)
-        temp_search_file = self.get_tempfile()
-        temp_comparison_file = self.get_tempfile()
-        with open(temp_search_file.name, 'w') as out_file:
-            out_file.write(str.join("\n", self.get_fullpath_files(matches)))
-        with open(temp_comparison_file.name, 'w') as out_file:
-            out_file.write(self.tmk_file_path(video.folder, video.filepath))
-        tmk_query_command = self.tmk_query_command()
-        result = self.execute_command(f"{tmk_query_command} --c1 -1.0 --c2 0.0 {temp_search_file.name} {temp_comparison_file.name}")
-        return {"result": self.parse_search_results(result, video.context)}
+        if video:
+            matches = self.search_by_context(context)
+            temp_search_file = self.get_tempfile()
+            temp_comparison_file = self.get_tempfile()
+            with open(temp_search_file.name, 'w') as out_file:
+                out_file.write(str.join("\n", self.get_fullpath_files(matches)))
+            with open(temp_comparison_file.name, 'w') as out_file:
+                out_file.write(self.tmk_file_path(video.folder, video.filepath))
+            tmk_query_command = self.tmk_query_command()
+            result = self.execute_command(f"{tmk_query_command} --c1 -1.0 --c2 0.0 {temp_search_file.name} {temp_comparison_file.name}")
+            return {"result": self.parse_search_results(result, video.context)}
+        else:
+            return {"error": "Video not found for provided task", "task": task}
 
     def get_context_query(self, context):
         context_query = []
