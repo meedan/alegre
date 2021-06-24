@@ -234,9 +234,11 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertIsInstance(self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}]), list)
         with patch('os.listdir', ) as mock_list:
             with patch('os.path.isfile', ) as mock_is_file:
-                mock_list.return_value = ['/app/persistent_disk/blah/1.tmk']
-                mock_is_file.return_value = True
-                result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
+                with patch('os.path.exists', ) as mock_exists:
+                    mock_list.return_value = ['/app/persistent_disk/blah/1.tmk']
+                    mock_is_file.return_value = True
+                    mock_exists.return_value = True
+                    result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
         self.assertEqual(result, ['/app/persistent_disk/blah/foo.tmk'])
 
     def parse_search_results(self):
