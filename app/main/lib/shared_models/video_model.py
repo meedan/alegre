@@ -126,17 +126,17 @@ class VideoModel(SharedModel):
         app.logger.debug(task)
         context = {}
         video = None
-        if 'context' in task:
+        if task.get('context'):
             context = task.get('context')
-        elif 'url' in task:
+        elif task.get('url'):
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
             if videos and not video:
                 video = videos[0]
-        if 'doc_id' in task:
+        if task.get('doc_id'):
             videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
             if videos and not video:
                 video = videos[0]
-        elif 'url' in task:
+        elif task.get('url'):
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
             if videos and not video:
                 video = videos[0]
