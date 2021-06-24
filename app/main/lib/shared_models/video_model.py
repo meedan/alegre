@@ -37,7 +37,7 @@ class VideoModel(SharedModel):
             if video.context not in existing.context:
                 existing.context.append(video.context)
                 flag_modified(existing, 'context')
-                saved_video = existing
+            saved_video = existing
         except NoResultFound as e:
             # Otherwise, add new video, but with context as an array
             if video.context:
