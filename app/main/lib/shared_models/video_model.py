@@ -29,8 +29,9 @@ class VideoModel(SharedModel):
         try:
             # First locate existing video and append new context
             existing = db.session.query(Video).filter(Video.url==video.url).one()
-            existing.context.append(video.context)
-            flag_modified(existing, 'context')
+            if video.context not in existing.context:
+                existing.context.append(video.context)
+                flag_modified(existing, 'context')
         except NoResultFound as e:
             # Otherwise, add new image, but with context as an array
             if video.context:
@@ -113,20 +114,20 @@ class VideoModel(SharedModel):
 
     def search(self, task):
         context = {}
+        video = None
         if 'context' in task:
             context = task.get('context')
         elif 'url' in task:
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
-            if videos:
+            if videos and not video:
                 video = videos[0]
-                context = video.context
         if 'doc_id' in task:
             videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-            if videos:
+            if videos and not video:
                 video = videos[0]
         elif 'url' in task:
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
-            if videos:
+            if videos and not video:
                 video = videos[0]
         matches = self.search_by_context(context)
         temp_search_file = self.get_tempfile()
