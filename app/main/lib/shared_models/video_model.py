@@ -203,9 +203,10 @@ class VideoModel(SharedModel):
         match_dictionary = self.get_match_dictionary(matches)
         for row in result.split("\n")[:-1]:
             level1, level2, first_file, second_file = row.split(" ")
-            results.append({
-                "context": match_dictionary[first_file]["context"],
-                "score": level2,
-                "filename": first_file,
-            })
+            for context in match_dictionary[first_file]["context"]:
+                results.append({
+                    "context": context,
+                    "score": level2,
+                    "filename": first_file,
+                })
         return results
