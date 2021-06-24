@@ -18,11 +18,6 @@ from app.main.model.video import Video
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
-task = {"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "url": "http://devingaffney.com/files/sample-videos/sample-videos/pattern-sd-with-large-logo-bar.mp4", "context": {"project_media_id": 12343}}
-# from app.main.lib.shared_models.video_model import VideoModel
-# vm = VideoModel("video")
-# vm.load()
-# vm.add(task)
 class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def save(self, video):
@@ -174,7 +169,9 @@ class VideoModel(SharedModel):
     def get_fullpath_files(self, matches):
         full_paths = []
         for match in matches:
-            full_paths.append(self.tmk_file_path(match["folder"], match["filepath"]))
+            filename = self.tmk_file_path(match["folder"], match["filepath"])
+            if os.path.exists(filename):
+                full_paths.append(filename)
         return full_paths
 
     def parse_search_results(self, result, context):
