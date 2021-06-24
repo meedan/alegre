@@ -19,7 +19,7 @@ class Video(db.Model):
 
   def __init__(self, doc_id, url, context):
     self.doc_id = doc_id
-    self.folder = str(uuid.uuid4()).split("-")[1]
     self.filepath = str(uuid.uuid4())
+    self.folder = self.filepath.split("-")[1]
     self.url = url
     self.context = context
