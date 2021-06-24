@@ -241,10 +241,10 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
         self.assertEqual(result, ['/app/persistent_disk/blah/foo.tmk'])
 
-    def parse_search_results(self):
+    def test_parse_search_results(self):
         result = "-0.088088 0.033167 /app/persistent_disk/blah/12342.tmk /app/persistent_disk/blah/12343.tmk\n1.000000 1.000000 /app/persistent_disk/blah/12343.tmk /app/persistent_disk/blah/12343.tmk\n"
-        response = self.model.parse_search_results(result, {})
-        self.assertEqual(response, [{'hash_key': 'blah', 'threshold': '0.033167', 'filename': '/app/persistent_disk/blah/12342.tmk', 'media_id': '12342'}, {'hash_key': 'blah', 'threshold': '1.000000', 'filename': '/app/persistent_disk/blah/12343.tmk', 'media_id': '12343'}])
+        response = self.model.parse_search_results(result, [{"folder": "blah", "filepath": "12342", "context": {}}, {"folder": "blah", "filepath": "12343", "context": {}}])
+        self.assertEqual(response, [{'context': {}, 'score': '0.033167', 'filename': '/app/persistent_disk/blah/12342.tmk'}, {'context': {}, 'score': '1.000000', 'filename': '/app/persistent_disk/blah/12343.tmk'}])
 
 if __name__ == '__main__':
   unittest.main()
