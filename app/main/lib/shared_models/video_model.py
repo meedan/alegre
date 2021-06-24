@@ -18,25 +18,38 @@ from app.main.model.video import Video
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
+# task = {"doc_id":"Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8","url":"https://qa-assets.checkmedia.org/uploads/uploaded_video/538836/IMG_6828.MOV","context":{"team_id":4874,"project_media_id":554571,"has_custom_id":True}}
+# from app.main.lib.shared_models.video_model import VideoModel
+# vm = VideoModel("video")
+# vm.load()
+# vm.add(task)
+# from app.main.lib.shared_models.video_model import VideoModel
+# vm = VideoModel("video")
+# vm.load()
+# vm.search(task)
 class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def save(self, video):
+        saved_video = None
         try:
             # First locate existing video and append new context
             existing = db.session.query(Video).filter(Video.url==video.url).one()
             if video.context not in existing.context:
                 existing.context.append(video.context)
                 flag_modified(existing, 'context')
+                saved_video = existing
         except NoResultFound as e:
-            # Otherwise, add new image, but with context as an array
+            # Otherwise, add new video, but with context as an array
             if video.context:
                 video.context = [video.context]
             db.session.add(video)
+            saved_video = video
         except Exception as e:
             db.session.rollback()
             raise e
         try:
             db.session.commit()
+            return saved_video
         except Exception as e:
             db.session.rollback()
             raise e
@@ -77,7 +90,7 @@ class VideoModel(SharedModel):
 
     def add(self, task):
         video = Video(task.get("doc_id"), task["url"], task.get("context", {}))
-        self.save(video)
+        video = self.save(video)
         temp_video_file = self.get_tempfile()
         remote_request = urllib.request.Request(video.url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
