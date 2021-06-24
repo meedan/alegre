@@ -121,6 +121,9 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task):
+        print(task)
+        app.logger.debug("HERE IS SEARCH TASK")
+        app.logger.debug(task)
         context = {}
         video = None
         if 'context' in task:
