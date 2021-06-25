@@ -57,7 +57,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]
+                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
                 response = self.client.get('/video/similarity/', data=json.dumps({
                     'url': url,
                     'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
@@ -100,7 +100,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]
+                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
                 response = self.client.get('/video/similarity/', data=json.dumps({
                     'url': url,
                     'project_media_id': 1,
@@ -146,12 +146,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command', ) as mock_execute_command:
-            mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
-            self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
-            result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+            with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
+                self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+                result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, "has_custom_id": True, 'project_media_id': 12343}], 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -177,12 +179,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command', ) as mock_execute_command:
-            mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
-            self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
-            result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+            with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
+                self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+                result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12343}], 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_respond_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -208,12 +212,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command', ) as mock_execute_command:
-            mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
-            self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
-            result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
+            with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                mock_execute_command.return_value = f"-0.088088 0.033167 /app/persistent_disk/{hash_key}/12342.tmk /app/persistent_disk/{hash_key}/12343.tmk\n1.000000 1.000000 /app/persistent_disk/{hash_key}/12343.tmk /app/persistent_disk/{hash_key}/12343.tmk\n"
+                self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
+                result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12343}], 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': '0.033167', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_tmk_dir(self):
         self.assertIsInstance(self.model.tmk_dir(), str)
@@ -241,10 +247,11 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
         self.assertEqual(result, ['/app/persistent_disk/blah/foo.tmk'])
 
-    def parse_search_results(self):
+    def test_parse_search_results(self):
+        self.model.load()
         result = "-0.088088 0.033167 /app/persistent_disk/blah/12342.tmk /app/persistent_disk/blah/12343.tmk\n1.000000 1.000000 /app/persistent_disk/blah/12343.tmk /app/persistent_disk/blah/12343.tmk\n"
-        response = self.model.parse_search_results(result, {})
-        self.assertEqual(response, [{'hash_key': 'blah', 'threshold': '0.033167', 'filename': '/app/persistent_disk/blah/12342.tmk', 'media_id': '12342'}, {'hash_key': 'blah', 'threshold': '1.000000', 'filename': '/app/persistent_disk/blah/12343.tmk', 'media_id': '12343'}])
+        response = self.model.parse_search_results(result, [{"folder": "blah", "filepath": "12342", "context": [{}]}, {"folder": "blah", "filepath": "12343", "context": [{}]}])
+        self.assertEqual(response, [{'context': {}, 'score': '0.033167', 'filename': '/app/persistent_disk/blah/12342.tmk'}, {'context': {}, 'score': '1.000000', 'filename': '/app/persistent_disk/blah/12343.tmk'}])
 
 if __name__ == '__main__':
   unittest.main()

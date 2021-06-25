@@ -148,7 +148,7 @@ class VideoModel(SharedModel):
                 out_file.write(self.tmk_file_path(video.folder, video.filepath))
             tmk_query_command = self.tmk_query_command()
             result = self.execute_command(f"{tmk_query_command} --c1 -1.0 --c2 0.0 {temp_search_file.name} {temp_comparison_file.name}")
-            return {"result": self.parse_search_results(result, video.context)}
+            return {"result": self.parse_search_results(result, matches)}
         else:
             return {"error": "Video not found for provided task", "task": task}
 
@@ -192,13 +192,21 @@ class VideoModel(SharedModel):
                 full_paths.append(filename)
         return full_paths
 
-    def parse_search_results(self, result, context):
+    def get_match_dictionary(self, matches):
+        match_dictionary = {}
+        for match in matches:
+            match_dictionary[self.tmk_file_path(match["folder"], match["filepath"])] = match
+        return match_dictionary
+
+    def parse_search_results(self, result, matches):
         results = []
+        match_dictionary = self.get_match_dictionary(matches)
         for row in result.split("\n")[:-1]:
             level1, level2, first_file, second_file = row.split(" ")
-            results.append({
-                "context": context,
-                "score": level2,
-                "filename": first_file,
-            })
+            for context in match_dictionary[first_file]["context"]:
+                results.append({
+                    "context": context,
+                    "score": level2,
+                    "filename": first_file,
+                })
         return results

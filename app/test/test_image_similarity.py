@@ -72,7 +72,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     # Test searching by context.
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
-        'project_media_id': 2
+        'team_id': 2
       }
     }), content_type='application/json')
     result = json.loads(response.data.decode())
@@ -81,7 +81,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     # Test searching by context with array of possible values.
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
-        'project_media_id': [2, 3]
+        'team_id': [2, 3]
       }
     }), content_type='application/json')
     result = json.loads(response.data.decode())
@@ -90,7 +90,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     # Test searching by context with array of possible values, where no response should be found.
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
-        'project_media_id': [-1, -2]
+        'team_id': [-1, -2]
       }
     }), content_type='application/json')
     result = json.loads(response.data.decode())

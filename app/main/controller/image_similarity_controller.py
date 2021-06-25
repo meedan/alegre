@@ -116,18 +116,19 @@ class ImageSimilarityResource(Resource):
     context_query = []
     context_hash = {}
     for key, value in context.items():
-      if isinstance(value, list):
-        context_clause = "("
-        for i,v in enumerate(value):
-          context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
-          if len(value)-1 != i:
-            context_clause += " OR "
-          context_hash[f"context_{key}_{i}"] = v
-        context_clause += ")"
-        context_query.append(context_clause)
-      else:
-        context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
-        context_hash[f"context_{key}"] = value
+      if key != "project_media_id":
+        if isinstance(value, list):
+          context_clause = "("
+          for i,v in enumerate(value):
+            context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+            if len(value)-1 != i:
+              context_clause += " OR "
+            context_hash[f"context_{key}_{i}"] = v
+          context_clause += ")"
+          context_query.append(context_clause)
+        else:
+          context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
+          context_hash[f"context_{key}"] = value
     return str.join(" AND ",  context_query), context_hash
     
     
