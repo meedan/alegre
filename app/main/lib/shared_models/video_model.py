@@ -2,7 +2,7 @@ import uuid
 import os
 import tempfile
 import pathlib
-import urllib
+import urllib.error
 import urllib.request
 import shutil
 from sentence_transformers import SentenceTransformer
