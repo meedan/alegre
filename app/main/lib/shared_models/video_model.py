@@ -103,7 +103,7 @@ class VideoModel(SharedModel):
             result = self.execute_command(f"{hash_video_command} -f {self.ffmpeg_dir} -i {temp_video_file.name} -o {outfile}")
             return {"requested": task, "result": {"outfile": outfile}, "success": True}
         except urllib.error.HTTPError:
-            return {"requested": task, "result": {"outfile": outfile}, "success": False}
+            return {"requested": task, "result": {"url": video.url}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
