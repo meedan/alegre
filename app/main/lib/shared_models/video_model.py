@@ -2,6 +2,7 @@ import uuid
 import os
 import tempfile
 import pathlib
+import urllib.error
 import urllib.request
 import shutil
 from sentence_transformers import SentenceTransformer
@@ -93,13 +94,16 @@ class VideoModel(SharedModel):
         video = Video(task.get("doc_id"), task["url"], task.get("context", {}))
         video = self.save(video)
         temp_video_file = self.get_tempfile()
-        remote_request = urllib.request.Request(video.url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
-            shutil.copyfileobj(response, out_file)
-        outfile = self.tmk_file_path(video.folder, video.filepath)
-        hash_video_command = self.tmk_hash_video_command()
-        result = self.execute_command(f"{hash_video_command} -f {self.ffmpeg_dir} -i {temp_video_file.name} -o {outfile}")
-        return {"requested": task, "result": {"outfile": outfile}}
+        try:
+            remote_request = urllib.request.Request(video.url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
+                shutil.copyfileobj(response, out_file)
+            outfile = self.tmk_file_path(video.folder, video.filepath)
+            hash_video_command = self.tmk_hash_video_command()
+            result = self.execute_command(f"{hash_video_command} -f {self.ffmpeg_dir} -i {temp_video_file.name} -o {outfile}")
+            return {"requested": task, "result": {"outfile": outfile}, "success": True}
+        except urllib.error.HTTPError:
+            return {"requested": task, "result": {"outfile": outfile}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
