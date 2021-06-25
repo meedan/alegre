@@ -137,7 +137,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['outfile'])
 
@@ -170,7 +170,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         result = self.model.add({"url": url, "project_media_id": 1})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['outfile'])
 
@@ -203,7 +203,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         result = self.model.respond({"url": url, "project_media_id": 1, "command": "add"})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['command', 'project_media_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['outfile'])
 
