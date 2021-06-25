@@ -206,7 +206,7 @@ class VideoModel(SharedModel):
             for context in match_dictionary[first_file]["context"]:
                 results.append({
                     "context": context,
-                    "score": level2,
+                    "score": float(level2),
                     "filename": first_file,
                 })
         return results
