@@ -18,7 +18,8 @@ class VideoSimilarityResource(Resource):
             "url": request.json.get("url", {}),
             "doc_id": request.json.get("doc_id"),
             "context": request.json.get("context", {}),
-            "command": command
+            "command": command,
+            "threshold": request.json.get("threshold", 0.0)
         }
 
     def request_video_task(self, request, command):
