@@ -14,5 +14,10 @@
       "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/indiansbert-repack.zip",
       "model_name": "meedan/indian-sbert"
     }
+  },
+  "video": {
+    "class": "VideoModel",
+    "key": "video-model",
+    "options": {}
   }
 }

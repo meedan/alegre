@@ -6,6 +6,8 @@ run: wait
 	python manage.py run
 run_model:
 	python manage.py run_model
+run_video_matcher:
+	python manage.py run_video_matcher
 test: wait
 	coverage run manage.py test
 wait:

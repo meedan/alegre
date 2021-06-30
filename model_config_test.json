@@ -12,5 +12,10 @@
     "options": {
       "model_name": "distilroberta-base"
     }
+  },
+  "video": {
+    "class": "VideoModel",
+    "key": "video-model",
+    "options": {}
   }
 }

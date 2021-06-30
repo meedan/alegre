@@ -59,6 +59,17 @@ services:
   #     - .env_file
   #   environment:
   #     MODEL_NAME: indiansbert
+  # video:
+  #   build: .
+  #   command: ["make", "run_model"]
+  #   volumes:
+  #     - ".:/app"
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - .env_file
+  #   environment:
+  #     MODEL_NAME: video
   alegre:
     build: .
     ports:
@@ -69,6 +80,7 @@ services:
       - postgres
       - kibana
       - redis
+      # - video
       # - xlm_r_bert_base_nli_stsb_mean_tokens
       # - indian_sbert
     env_file:
