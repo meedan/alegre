@@ -23,14 +23,12 @@ class LangidResource(Resource):
     @api.expect(langid_request, validate=False)
     def get(self):
         provider = app.config['PROVIDER_LANGID']
-        if(request.args.get('text')):
+        if(request.args):
             text=request.args.get('text')
-            if 'provider' in request.args:
-                provider = request.args.get('provider')
+            if 'provider' in request.args: provider = request.args.get('provider')
         else:
             text=request.json['text']
-            if 'provider' in request.json:
-                provider = request.json['provider']
+            if 'provider' in request.json: provider = request.json['provider']
 
         # Read from cache first.
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
