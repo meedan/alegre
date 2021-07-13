@@ -137,7 +137,12 @@ class AudioModel(SharedModel):
                 'threshold': threshold,
             }, **context_hash)).fetchall()
             keys = ('id', 'doc_id', 'hash_value', 'url', 'context', 'score')
-            return [dict(zip(keys, values)) for values in matches]
+            rows = []
+            for values in matches:
+                row = dict(zip(keys, values))
+                row["score"] = 1-(row["score"]/float(Audio.hash_value.type.length))
+                rows.append(row)
+            return rows
         except Exception as e:
             db.session.rollback()
             raise e
