@@ -21,7 +21,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
 
   def test_bit_count(self):
     p = 45655524591978137 # the hash of the image above
-    result = db.session.execute(text("SELECT BIT_COUNT(:p) AS test_count"), { 'p': p }).first()
+    result = db.session.execute(text("SELECT BIT_COUNT_IMAGE(:p) AS test_count"), { 'p': p }).first()
     self.assertEqual(result['test_count'], 28)
 
   def test_truncated_image_fetch(self):
