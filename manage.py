@@ -102,7 +102,7 @@ def init():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION bit_count_audio(value bit(256))
+        CREATE OR REPLACE FUNCTION bit_count_audio(value bit(128))
         RETURNS integer
         AS $$ SELECT length(replace(value::text,'0','')); $$
         LANGUAGE SQL IMMUTABLE STRICT;

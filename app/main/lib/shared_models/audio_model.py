@@ -35,7 +35,7 @@ class AudioModel(SharedModel):
             saved_audio = existing
         except NoResultFound as e:
             # Otherwise, add new audio, but with context as an array
-            if audio.context:
+            if audio.context and not isinstance(audio.context, list):
                 audio.context = [audio.context]
             db.session.add(audio)
             saved_audio = audio
@@ -160,7 +160,7 @@ class AudioModel(SharedModel):
             if audios and not audio:
                 audio = audios[0]
         if audio:
-            threshold = task.get('threshold', 0.0) or 0.0
+            threshold = round((1-(task.get('threshold', 0.0) or 0.0))*Audio.hash_value.type.length)
             matches = self.search_by_hash_value(audio.hash_value, threshold, context)
             return {"result": matches}
         else:

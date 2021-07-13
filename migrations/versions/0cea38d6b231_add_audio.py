@@ -22,7 +22,7 @@ def upgrade():
     sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('doc_id', sa.VARCHAR(length=255), autoincrement=False, nullable=True),
     sa.Column('url', sa.VARCHAR(length=255), autoincrement=False, nullable=False),
-    sa.Column('hash_value', postgresql.BIT(length=256), autoincrement=False, nullable=False),
+    sa.Column('hash_value', postgresql.BIT(length=128), autoincrement=False, nullable=False),
     sa.Column('context', postgresql.JSONB(astext_type=sa.Text()), autoincrement=False, nullable=False),
     sa.PrimaryKeyConstraint('id', name='audios_pkey')
     )
