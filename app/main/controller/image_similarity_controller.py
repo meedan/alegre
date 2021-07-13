@@ -139,7 +139,7 @@ class ImageSimilarityResource(Resource):
       if context_query:
           cmd = """
             SELECT * FROM (
-              SELECT id, sha256, phash, url, context, BIT_COUNT(phash # :phash)
+              SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
               AS score FROM images
             ) f
             WHERE score <= :threshold
@@ -150,7 +150,7 @@ class ImageSimilarityResource(Resource):
       else:
           cmd = """
             SELECT * FROM (
-              SELECT id, sha256, phash, url, context, BIT_COUNT(phash # :phash)
+              SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
               AS score FROM images
             ) f
             WHERE score <= :threshold

@@ -5,7 +5,6 @@ import pathlib
 import urllib.error
 import urllib.request
 import shutil
-from sentence_transformers import SentenceTransformer
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text

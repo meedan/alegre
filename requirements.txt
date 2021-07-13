@@ -69,6 +69,7 @@ pyasn1-modules==0.2.2
 pybrake==0.4.5
 pycld3==0.20
 pycparser==2.19
+pydub==0.25.1
 PyJWT==1.6.4
 python-dateutil==2.7.3
 python-editor==1.0.3
