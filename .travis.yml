@@ -11,6 +11,7 @@ before_script:
 - echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
 - docker-compose exec alegre make test
+#FIXME: For now this file pact/check_api-alegre.json is manually downloaded from here: https://github.com/meedan/check-api/blob/develop/spec/pacts/check_api-alegre.json
 - docker-compose exec alegre bash -c "pact-verifier --provider-base-url=http://alegre:5000 --pact-url=./app/test/pact/check_api-alegre.json"
 after_script:
 - docker-compose exec alegre coverage report
