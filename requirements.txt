@@ -69,6 +69,7 @@ pyasn1-modules==0.2.2
 pybrake==0.4.5
 pycld3==0.20
 pycparser==2.19
+pydub==0.25.1
 PyJWT==1.6.4
 python-dateutil==2.7.3
 python-editor==1.0.3
@@ -96,6 +97,7 @@ tensorflow-hub==0.8.0
 tensorflow-text==2.3.0
 termcolor==1.1.0
 thinc==7.3.1
+timeout-decorator==0.5.0
 toolz==0.9.0
 tqdm==4.27.0
 twitter-text-parser==1.0.0

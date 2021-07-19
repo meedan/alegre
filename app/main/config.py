@@ -36,6 +36,7 @@ class Config:
   MAX_CLAUSE_COUNT = 1000
   PERSISTENT_DISK_PATH = os.getenv('PERSISTENT_DISK_PATH', '/app/persistent_disk')
   VIDEO_MODEL = os.getenv('VIDEO_MODEL', 'video-model')
+  AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   
 
 class DevelopmentConfig(Config):
