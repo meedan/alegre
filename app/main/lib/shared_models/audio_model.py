@@ -150,12 +150,9 @@ class AudioModel(SharedModel):
     def search(self, task):
         context = {}
         audio = None
+        temporary = False
         if task.get('context'):
             context = task.get('context')
-        elif task.get('url'):
-            audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
-            if audios and not audio:
-                audio = audios[0]
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
@@ -164,12 +161,16 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
-        if audio:
-            threshold = round((1-(task.get('threshold', 0.0) or 0.0))*Audio.hash_value.type.length)
-            matches = self.search_by_hash_value(audio.hash_value, threshold, context)
-            return {"result": matches}
         else:
-            return {"error": "Audio not found for provided task", "task": task}
+            temporary = True
+            if not task.get("doc_id"):
+                task["doc_id"] = str(uuid.uuid4())
+            self.add(task)
+        threshold = round((1-(task.get('threshold', 0.0) or 0.0))*Audio.hash_value.type.length)
+        matches = self.search_by_hash_value(audio.hash_value, threshold, context)
+        if temporary:
+            self.delete(task)
+        return {"result": matches}
 
     def get_context_query(self, context):
         context_query = []
