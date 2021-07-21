@@ -25,7 +25,7 @@ class VideoSimilarityResource(Resource):
 
     def request_video_task(self, request, command):
         model = SharedModel.get_client(app.config['VIDEO_MODEL'])
-        app.logger.debug("Request JSON for Video Similarity Request looks like "+str(json.dumps(request.json)))
+        app.logger.info("Request JSON for Video Similarity Request looks like "+str(json.dumps(request.json)))
         response = model.get_shared_model_response(self.model_response_package(request, command))
         return response
 
