@@ -1,4 +1,3 @@
-import json
 from flask import request, current_app as app
 from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
@@ -7,13 +6,13 @@ import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.shared_models.shared_model import SharedModel
 
-api = Namespace('video_similarity', description='video similarity operations')
-video_similarity_request = api.model('similarity_request', {
+api = Namespace('audio_similarity', description='audio similarity operations')
+audio_similarity_request = api.model('similarity_request', {
     'url': fields.String(required=True, description='text to be stored or queried for similarity'),
     'context': JsonObject(required=False, description='context'),
 })
 @api.route('/')
-class VideoSimilarityResource(Resource):
+class AudioSimilarityResource(Resource):
     def model_response_package(self, request, command):
         return {
             "url": request.json.get("url", {}),
@@ -23,26 +22,25 @@ class VideoSimilarityResource(Resource):
             "threshold": request.json.get("threshold", 0.0)
         }
 
-    def request_video_task(self, request, command):
-        model = SharedModel.get_client(app.config['VIDEO_MODEL'])
-        app.logger.info("Request JSON for Video Similarity Request looks like "+str(json.dumps(request.json)))
+    def request_audio_task(self, request, command):
+        model = SharedModel.get_client(app.config['AUDIO_MODEL'])
         response = model.get_shared_model_response(self.model_response_package(request, command))
         return response
 
-    # @api.response(200, 'video successfully deleted in the similarity database.')
-    # @api.doc('Delete a video in the similarity database')
-    # @api.expect(video_similarity_request, validate=True)
+    # @api.response(200, 'audio successfully deleted in the similarity database.')
+    # @api.doc('Delete an audio in the similarity database')
+    # @api.expect(audio_similarity_request, validate=True)
     # def delete(self):
-    #     return self.request_video_task(request, "delete")
+    #     return self.request_audio_task(request, "delete")
 
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')
-    @api.expect(video_similarity_request, validate=True)
+    @api.expect(audio_similarity_request, validate=True)
     def post(self):
-        return self.request_video_task(request, "add")
+        return self.request_audio_task(request, "add")
 
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query')
-    @api.expect(video_similarity_request, validate=True)
+    @api.expect(audio_similarity_request, validate=True)
     def get(self):
-        return self.request_video_task(request, "search")
+        return self.request_audio_task(request, "search")

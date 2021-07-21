@@ -19,5 +19,10 @@
     "class": "VideoModel",
     "key": "video-model",
     "options": {}
+  },
+  "audio": {
+    "class": "AudioModel",
+    "key": "audio-model",
+    "options": {}
   }
 }

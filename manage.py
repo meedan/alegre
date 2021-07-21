@@ -92,9 +92,19 @@ def init():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION bit_count(value bigint)
+        CREATE OR REPLACE FUNCTION bit_count_image(value bigint)
         RETURNS integer
         AS $$ SELECT length(replace(value::bit(64)::text,'0','')); $$
+        LANGUAGE SQL IMMUTABLE STRICT;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION bit_count_audio(value bit(128))
+        RETURNS integer
+        AS $$ SELECT length(replace(value::text,'0','')); $$
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )
@@ -104,7 +114,7 @@ def init():
 @manager.command
 def test(pattern='test*.py'):
   """Runs the unit tests."""
-  tests = unittest.TestLoader().discover('app/test', pattern=pattern)
+  tests = unittest.TestLoader().discover('app/test/', pattern=pattern)
   result = unittest.TextTestRunner(verbosity=2).run(tests)
   return 0 if result.wasSuccessful() else 1
 

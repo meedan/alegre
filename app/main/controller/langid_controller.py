@@ -20,15 +20,19 @@ def _after_log(retry_state):
 class LangidResource(Resource):
     @api.response(200, 'langid successfully queried.')
     @api.doc('Identify the language of a text document')
-    @api.expect(langid_request, validate=True)
+    @api.expect(langid_request, validate=False)
     def get(self):
         provider = app.config['PROVIDER_LANGID']
-        if 'provider' in request.json:
-            provider = request.json['provider']
+        if(request.args):
+            text=request.args.get('text')
+            if 'provider' in request.args: provider = request.args.get('provider')
+        else:
+            text=request.json['text']
+            if 'provider' in request.json: provider = request.json['provider']
 
         # Read from cache first.
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-        key = 'langid:' + provider + ':' + hashlib.md5(request.json['text'].encode('utf-8')).hexdigest()
+        key = 'langid:' + provider + ':' + hashlib.md5(text.encode('utf-8')).hexdigest()
         try:
             result = json.loads(r.get(key))
         except:
@@ -36,7 +40,7 @@ class LangidResource(Resource):
 
         # Otherwise, call the service and cache the result.
         if result == None:
-            result = self.langid(LangidResource.cleanup_input(request.json['text']), provider)
+            result = self.langid(LangidResource.cleanup_input(text), provider)
             r.set(key, json.dumps(result))
 
         return result

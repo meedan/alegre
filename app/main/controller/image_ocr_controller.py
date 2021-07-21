@@ -13,12 +13,15 @@ ocr_request = api.model('ocr_request', {
 class ImageOcrResource(Resource):
     @api.response(200, 'text successfully extracted.')
     @api.doc('Perform text extraction from an image')
-    @api.expect(ocr_request, validate=True)
+    @api.expect(ocr_request, validate=False)
     def get(self):
         client = get_credentialed_google_client(vision.ImageAnnotatorClient)
 
         image = vision.types.Image()
-        image.source.image_uri = request.json['url']
+        if(request.args.get('url')):
+            image.source.image_uri=request.args.get('url')
+        else:
+            image.source.image_uri = request.json['url']
 
         response = client.document_text_detection(image=image)
         texts = response.text_annotations

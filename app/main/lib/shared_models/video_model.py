@@ -1,3 +1,4 @@
+import json
 import uuid
 import os
 import tempfile
@@ -5,7 +6,6 @@ import pathlib
 import urllib.error
 import urllib.request
 import shutil
-from sentence_transformers import SentenceTransformer
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
@@ -19,16 +19,6 @@ from app.main.model.video import Video
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
-# task = {"doc_id":"Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8","url":"https://qa-assets.checkmedia.org/uploads/uploaded_video/538836/IMG_6828.MOV","context":{"team_id":4874,"project_media_id":554571,"has_custom_id":True}}
-# task = {"doc_id":None,"url":"https://qa-assets.checkmedia.org/uploads/uploaded_video/538836/IMG_6828.MOV","context":{"team_id":4874,"project_media_id":554571,"has_custom_id":True}}
-# from app.main.lib.shared_models.video_model import VideoModel
-# vm = VideoModel("video")
-# vm.load()
-# vm.add(task)
-# from app.main.lib.shared_models.video_model import VideoModel
-# vm = VideoModel("video")
-# vm.load()
-# vm.search(task)
 class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def save(self, video):
@@ -42,7 +32,7 @@ class VideoModel(SharedModel):
             saved_video = existing
         except NoResultFound as e:
             # Otherwise, add new video, but with context as an array
-            if video.context:
+            if video.context and not isinstance(video.context, list):
                 video.context = [video.context]
             db.session.add(video)
             saved_video = video
@@ -68,6 +58,7 @@ class VideoModel(SharedModel):
         pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
 
     def respond(self, task):
+        app.logger.info('Received task that looks like: '+str(json.dumps(task)))
         if task["command"] == "delete":
             return self.delete(task)
         elif task["command"] == "add":
@@ -128,18 +119,23 @@ class VideoModel(SharedModel):
     def search(self, task):
         context = {}
         video = None
+        temporary = False
         if task.get('context'):
             context = task.get('context')
-        elif task.get('url'):
-            videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
-            if videos and not video:
-                video = videos[0]
         if task.get('doc_id'):
             videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
             if videos and not video:
                 video = videos[0]
         elif task.get('url'):
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
+            if videos and not video:
+                video = videos[0]
+        if video is None:
+            temporary = True
+            if not task.get("doc_id"):
+                task["doc_id"] = str(uuid.uuid4())
+            self.add(task)
+            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
             if videos and not video:
                 video = videos[0]
         if video:
@@ -153,6 +149,8 @@ class VideoModel(SharedModel):
             tmk_query_command = self.tmk_query_command()
             threshold = task.get("threshold", 0.0) or 0.0
             result = self.execute_command(f"{tmk_query_command} --c1 0.7 --c2 {threshold} {temp_search_file.name} {temp_comparison_file.name}")
+            if temporary:
+                self.delete(task)
             return {"result": self.parse_search_results(result, matches)}
         else:
             return {"error": "Video not found for provided task", "task": task}

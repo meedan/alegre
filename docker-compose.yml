@@ -70,6 +70,17 @@ services:
   #     - .env_file
   #   environment:
   #     MODEL_NAME: video
+  # audio:
+  #   build: .
+  #   command: ["make", "run_model"]
+  #   volumes:
+  #     - ".:/app"
+  #   depends_on:
+  #     - redis
+  #   env_file:
+  #     - .env_file
+  #   environment:
+  #     MODEL_NAME: audio
   alegre:
     build: .
     ports:

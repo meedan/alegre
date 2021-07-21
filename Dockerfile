@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y ffmpeg
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 RUN pip install --upgrade pip
+RUN pip install pact-python
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN make -C /app/threatexchange/tmk/cpp
