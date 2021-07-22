@@ -143,12 +143,13 @@ class VideoModel(SharedModel):
             temp_search_file = self.get_tempfile()
             temp_comparison_file = self.get_tempfile()
             with open(temp_search_file.name, 'w') as out_file:
-                out_file.write(str.join("\n", self.get_fullpath_files(matches)))
+                out_file.write(str.join("\n", self.get_fullpath_files(matches, False)))
+            temp_filtered_search_file = narrow_search_to_existing_files(temp_search_file)
             with open(temp_comparison_file.name, 'w') as out_file:
                 out_file.write(self.tmk_file_path(video.folder, video.filepath))
             tmk_query_command = self.tmk_query_command()
             threshold = task.get("threshold", 0.0) or 0.0
-            result = self.execute_command(f"{tmk_query_command} --c1 0.7 --c2 {threshold} {temp_search_file.name} {temp_comparison_file.name}")
+            result = self.execute_command(f"{tmk_query_command} --c1 0.7 --c2 {threshold} {temp_filtered_search_file.name} {temp_comparison_file.name}")
             if temporary:
                 self.delete(task)
             return {"result": self.parse_search_results(result, matches)}
@@ -183,15 +184,21 @@ class VideoModel(SharedModel):
     def tmk_hash_video_command(self):
         return f"{self.tmk_dir()}tmk-hash-video"
 
-    def tmk_file_path(self, folder, filepath):
-        pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
+    def tmk_file_path(self, folder, filepath, create_path=True):
+        if create_path:
+            pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
         return f"{self.directory}/{folder}/{filepath}.tmk"
         
-    def get_fullpath_files(self, matches):
+    def narrow_search_to_existing_files(self, temp_search_file):
+        temp_filtered_search_file = self.get_tempfile()
+        os.popen(f"bash -c \"comm -1 -2 <(cat {temp_search_file.name} | xargs ls 2>/dev/null | sort) <(sort {temp_search_file.name}) > {temp_filtered_search_file.name}\"")
+        return temp_filtered_search_file
+        
+    def get_fullpath_files(self, matches, check_exists=True):
         full_paths = []
         for match in matches:
-            filename = self.tmk_file_path(match["folder"], match["filepath"])
-            if os.path.exists(filename):
+            filename = self.tmk_file_path(match["folder"], match["filepath"], check_exists)
+            if check_exists and os.path.exists(filename) or not check_exists:
                 full_paths.append(filename)
         return full_paths
 
