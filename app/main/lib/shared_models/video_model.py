@@ -191,7 +191,7 @@ class VideoModel(SharedModel):
         
     def narrow_search_to_existing_files(self, temp_search_file):
         temp_filtered_search_file = self.get_tempfile()
-        os.popen(f"bash -c \"comm -1 -2 <(cat {temp_search_file.name} | xargs ls 2>/dev/null | sort) <(sort {temp_search_file.name}) > {temp_filtered_search_file.name}\"")
+        os.popen(f"bash -c \"comm -1 -2 <(cat {temp_search_file.name} | xargs ls 2>/dev/null | sort) <(sort {temp_search_file.name}) > {temp_filtered_search_file.name}\"").read()
         return temp_filtered_search_file
         
     def get_fullpath_files(self, matches, check_exists=True):
