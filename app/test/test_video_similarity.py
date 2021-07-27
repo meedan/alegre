@@ -215,15 +215,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
         self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': 0.033167, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
-    def test_tmk_dir(self):
-        self.assertIsInstance(self.model.tmk_dir(), str)
-
-    def test_tmk_query_command(self):
-        self.assertIsInstance(self.model.tmk_query_command(), str)
-
-    def test_tmk_hash_video_command(self):
-        self.assertIsInstance(self.model.tmk_hash_video_command(), str)
-
     def test_tmk_file_path(self):
         self.model.load()
         print(self.model.tmk_file_path("foo", "bar"))
@@ -240,12 +231,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     mock_exists.return_value = True
                     result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
         self.assertEqual(result, ['/app/persistent_disk/blah/foo.tmk'])
-
-    def test_parse_search_results(self):
-        self.model.load()
-        result = "-0.088088 0.033167 /app/persistent_disk/blah/12342.tmk /app/persistent_disk/blah/12343.tmk\n1.000000 1.000000 /app/persistent_disk/blah/12343.tmk /app/persistent_disk/blah/12343.tmk\n"
-        response = self.model.parse_search_results(result, [{"folder": "blah", "filepath": "12342", "context": [{}]}, {"folder": "blah", "filepath": "12343", "context": [{}]}])
-        self.assertEqual(response, [{'context': {}, 'score': 0.033167, 'filename': '/app/persistent_disk/blah/12342.tmk'}, {'context': {}, 'score': 1.0, 'filename': '/app/persistent_disk/blah/12343.tmk'}])
 
 if __name__ == '__main__':
   unittest.main()

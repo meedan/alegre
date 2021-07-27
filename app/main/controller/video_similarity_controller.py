@@ -16,11 +16,11 @@ video_similarity_request = api.model('similarity_request', {
 class VideoSimilarityResource(Resource):
     def model_response_package(self, request, command):
         return {
-            "url": request_json.get("url", {}),
-            "doc_id": request_json.get("doc_id"),
-            "context": request_json.get("context", {}),
+            "url": request.json.get("url", {}),
+            "doc_id": request.json.get("doc_id"),
+            "context": request.json.get("context", {}),
             "command": command,
-            "threshold": request_json.get("threshold", 0.0)
+            "threshold": request.json.get("threshold", 0.0)
         }
 
     def request_video_task(self, request, command):
