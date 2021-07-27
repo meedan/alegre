@@ -146,12 +146,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
-            mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
-            self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
-            result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+            with patch('tmkpy.query', ) as mock_tmk_query:
+                mock_tmk_query.return_value = (0.99, 0.03)
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+                result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': 0.033167, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -177,12 +179,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
-            mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
-            self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
-            result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+            with patch('tmkpy.query', ) as mock_tmk_query:
+                mock_tmk_query.return_value = (0.99, 0.03)
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+                result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': 0.033167, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_respond_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -208,12 +212,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.model.load()
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
-            mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
-            self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
-            result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
+            with patch('tmkpy.query', ) as mock_tmk_query:
+                mock_tmk_query.return_value = (0.99, 0.03)
+                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
+                self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
+                result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'score'])
-        self.assertEqual(result["result"][0], {'context': {'blah': 1, 'project_media_id': 12342}, 'score': 0.033167, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
 
     def test_tmk_file_path(self):
         self.model.load()

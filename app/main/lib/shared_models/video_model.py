@@ -139,10 +139,11 @@ class VideoModel(SharedModel):
             if videos and not video:
                 video = videos[0]
         if video:
+            # import code;code.interact(local=dict(globals(), **locals()))
             matches = self.search_by_context(context)
             files = self.get_fullpath_files(matches, False)
             try:
-            	scores=tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
+            	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
             except RuntimeError as e:
             	print(e)
             threshold = task.get("threshold", 0.0) or 0.0
