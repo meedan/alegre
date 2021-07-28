@@ -13,7 +13,7 @@ class Video(db.Model):
   folder = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
   filepath = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
-  hash_value = ARRAY(db.Float)
+  hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   __table_args__ = (
     db.Index('ix_videos_context', context, postgresql_using='gin'),
