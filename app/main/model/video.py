@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
 
