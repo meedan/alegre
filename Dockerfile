@@ -16,7 +16,7 @@ COPY requirements.txt ./
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg swig
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 RUN pip install --upgrade pip
