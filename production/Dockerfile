@@ -19,7 +19,7 @@ RUN chmod 755 /opt/bin/*.sh
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg swig
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 COPY requirements.txt ./
