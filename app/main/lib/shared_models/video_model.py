@@ -6,6 +6,8 @@ import pathlib
 import urllib.error
 import urllib.request
 import shutil
+import numpy as np
+from scipy.spatial import distance
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
@@ -83,15 +85,16 @@ class VideoModel(SharedModel):
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
     def add(self, task):
-        video = Video(task.get("doc_id"), task["url"], task.get("context", {}))
-        video = self.save(video)
-        temp_video_file = self.get_tempfile()
         try:
-            remote_request = urllib.request.Request(video.url, headers={'User-Agent': 'Mozilla/5.0'})
+            temp_video_file = self.get_tempfile()
+            remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
                 shutil.copyfileobj(response, out_file)
             tmk_file_output = tmkpy.hashVideo(temp_video_file.name,self.ffmpeg_dir)
-            tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath),self.tmk_program_name())
+            hash_value=tmk_file_output.getPureAverageFeature()
+            video = Video(task.get("doc_id"), task["url"], task.get("context", {}), hash_value)
+            video = self.save(video)
+            tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
             return {"requested": task, "result": {"outfile": self.tmk_file_path(video.folder, video.filepath)}, "success": True}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": video.url}, "success": False}
@@ -102,16 +105,17 @@ class VideoModel(SharedModel):
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                   WHERE 
                 """+context_query
             else:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
-            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context')
-            return [dict(zip(keys, values)) for values in matches]
+            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
+            rows = [dict(zip(keys, values)) for values in matches]
+            return [r for r in rows if r.get("hash_value")]
         except Exception as e:
             db.session.rollback()
             raise e
@@ -139,9 +143,13 @@ class VideoModel(SharedModel):
             if videos and not video:
                 video = videos[0]
         if video:
-            # import code;code.interact(local=dict(globals(), **locals()))
             matches = self.search_by_context(context)
-            files = self.get_fullpath_files(matches, False)
+            l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
+            qualified_matches = []
+            for i,match in enumerate(matches):
+                if l1_scores[i] > 0.7:
+                    qualified_matches.append(match)
+            files = self.get_fullpath_files(qualified_matches, False)
             try:
             	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
             except RuntimeError as e:
@@ -151,7 +159,7 @@ class VideoModel(SharedModel):
             for i,score in enumerate(scores):
                 if score > threshold:
                     results.append({
-                        "context": matches[i].get("context", {}),
+                        "context": qualified_matches[i].get("context", {}),
                         "filename": files[i],
                         "score": score
                     })
