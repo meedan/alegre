@@ -36,7 +36,6 @@ class TestArticleBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual('application/json', response.content_type)
-            self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
             self.assertEqual(200, response.status_code)
             self.assertDictEqual(sorted(result.keys()), ['authors', 'keywords', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
 
