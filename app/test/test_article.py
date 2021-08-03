@@ -6,11 +6,13 @@ import redis
 from flask import current_app as app
 from unittest.mock import patch
 from google.cloud import vision
+from newspaper import Article
 
 from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.image_classification import GoogleImageClassificationProvider
-class TestImageClassificationBlueprint(BaseTestCase):
+
+class TestArticleBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
