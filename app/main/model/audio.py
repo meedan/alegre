@@ -58,12 +58,9 @@ class Audio(db.Model):
     temp_file = tempfile.NamedTemporaryFile()
     with open(temp_file.name, 'wb') as out_file:
       out_file.write(remote_response.read())
-    if ".wav" in url:
-      sampling_rate, audio = wavfile.read(temp_file)
+    if ".aac" in url:
+      sound = AudioSegment.from_file(temp_file, "aac")
     else:
-      if ".aac" in url:
-        sound = AudioSegment.from_file(temp_file, "aac")
-      else:
-        sound = AudioSegment.from_file(temp_file)
+      sound = AudioSegment.from_file(temp_file)
     # sound = sound.set_channels(1)
     return Audio(audio_hasher(sound), doc_id, url, context)

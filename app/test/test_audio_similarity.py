@@ -145,6 +145,15 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['url'])
 
+    def test_add_wav(self):
+        url = 'file:///app/app/test/data/sample.wav'
+        self.model.load()
+        result = self.model.add({"url": url, "project_media_id": 1})
+        self.assertIsInstance(result, dict)
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
+        self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
+        self.assertEqual(sorted(result['result'].keys()), ['url'])
+
     def test_search(self):
         url = 'file:///app/app/test/data/eddy_wally_wow.mp3'
         self.model.load()
