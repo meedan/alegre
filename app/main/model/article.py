@@ -53,5 +53,4 @@ class ArticleModel(db.Model):
         summary=article.summary,
         source_url=article.source_url,
         tags=article.tags,
-        text=article.text,
     )
