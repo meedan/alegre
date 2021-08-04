@@ -23,17 +23,9 @@ class ArticleResource(Resource):
             url=request.args.get('url')
         else:
             url=request.json['url']
-        article = self.get_article(url)
-        return {
-            "title": article.title,
-            "authors": article.authors,
-            "publish_date": article.publish_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "text": article.text,
-            "top_image": article.top_image,
-            "movies": article.movies,
-            "keywords": article.keywords,
-            "summary": article.summary,
-            "source_url": article.source_url,
-            "tags": article.tags,
-            "text": article.text,
-        }
+        existing = db.session.query(ArticleModel).filter(ArticleModel.url==url).one()
+        if existing:
+            return existing.to_dict()
+        else:
+            article = ArticleModel.from_newspaper3k(self.get_article(url))
+            return article.to_dict()
