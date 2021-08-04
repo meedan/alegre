@@ -1,6 +1,8 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from newspaper import Article
+from app.main import db
+from app.main.model.article import ArticleModel
 
 api = Namespace('article', description='article operations')
 article_request = api.model('article_request', {

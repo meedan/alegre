@@ -1,11 +1,9 @@
 import io
 import urllib.request
-from PIL import Image, ImageFile
 
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
-from app.main.lib.image_hash import compute_phash_int, sha256_stream
 
 class ArticleModel(db.Model):
   """ Model for storing image related details """
