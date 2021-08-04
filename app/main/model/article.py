@@ -12,20 +12,17 @@ class ArticleModel(db.Model):
   __tablename__ = 'articles'
 
   id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String(500, convert_unicode=True), nullable=False, index=True)
+  title = db.Column(db.String(500, convert_unicode=True), nullable=False)
   authors = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
-  publish_date = db.Column(db.DateTime, nullable=False, index=True)
-  text = db.Column(db.Text, nullable=False, index=True)
-  top_image = db.Column(db.String(500, convert_unicode=True), nullable=False, index=True)
+  publish_date = db.Column(db.DateTime, nullable=False)
+  text = db.Column(db.Text, nullable=False)
+  top_image = db.Column(db.String(500, convert_unicode=True), nullable=False)
   movies = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
   keywords = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
-  summary = db.Column(db.Text, nullable=False, index=True)
-  source_url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  summary = db.Column(db.Text, nullable=False)
+  source_url = db.Column(db.String(255, convert_unicode=True), nullable=False)
   tags = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
-  __table_args__ = (
-    db.Index('ix_articles_url', url, postgresql_using='gin'),
-  )
 
   def to_dict(self):
     return {
