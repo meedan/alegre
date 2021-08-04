@@ -1,7 +1,8 @@
 import uuid
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
+
 
 class Video(db.Model):
   """ Model for storing video related details """
@@ -12,14 +13,17 @@ class Video(db.Model):
   folder = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
   filepath = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   __table_args__ = (
     db.Index('ix_videos_context', context, postgresql_using='gin'),
   )
 
-  def __init__(self, doc_id, url, context):
+  def __init__(self, doc_id, url, context, hash_value):
     self.doc_id = doc_id
     self.filepath = str(uuid.uuid4())
     self.folder = self.filepath.split("-")[1]
     self.url = url
     self.context = context
+    self.hash_value = hash_value
+

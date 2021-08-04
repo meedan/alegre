@@ -6,10 +6,13 @@ import pathlib
 import urllib.error
 import urllib.request
 import shutil
+import numpy as np
+from scipy.spatial import distance
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import tenacity
+import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -82,17 +85,17 @@ class VideoModel(SharedModel):
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
     def add(self, task):
-        video = Video(task.get("doc_id"), task["url"], task.get("context", {}))
-        video = self.save(video)
-        temp_video_file = self.get_tempfile()
         try:
-            remote_request = urllib.request.Request(video.url, headers={'User-Agent': 'Mozilla/5.0'})
+            temp_video_file = self.get_tempfile()
+            remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
                 shutil.copyfileobj(response, out_file)
-            outfile = self.tmk_file_path(video.folder, video.filepath)
-            hash_video_command = self.tmk_hash_video_command()
-            result = self.execute_command(f"{hash_video_command} -f {self.ffmpeg_dir} -i {temp_video_file.name} -o {outfile}")
-            return {"requested": task, "result": {"outfile": outfile}, "success": True}
+            tmk_file_output = tmkpy.hashVideo(temp_video_file.name,self.ffmpeg_dir)
+            hash_value=tmk_file_output.getPureAverageFeature()
+            video = Video(task.get("doc_id"), task["url"], task.get("context", {}), hash_value)
+            video = self.save(video)
+            tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
+            return {"requested": task, "result": {"outfile": self.tmk_file_path(video.folder, video.filepath)}, "success": True}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": video.url}, "success": False}
 
@@ -102,16 +105,17 @@ class VideoModel(SharedModel):
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                   WHERE 
                 """+context_query
             else:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
-            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context')
-            return [dict(zip(keys, values)) for values in matches]
+            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
+            rows = [dict(zip(keys, values)) for values in matches]
+            return [r for r in rows if r.get("hash_value")]
         except Exception as e:
             db.session.rollback()
             raise e
@@ -140,18 +144,28 @@ class VideoModel(SharedModel):
                 video = videos[0]
         if video:
             matches = self.search_by_context(context)
-            temp_search_file = self.get_tempfile()
-            temp_comparison_file = self.get_tempfile()
-            with open(temp_search_file.name, 'w') as out_file:
-                out_file.write(str.join("\n", self.get_fullpath_files(matches)))
-            with open(temp_comparison_file.name, 'w') as out_file:
-                out_file.write(self.tmk_file_path(video.folder, video.filepath))
-            tmk_query_command = self.tmk_query_command()
+            l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
+            qualified_matches = []
+            for i,match in enumerate(matches):
+                if l1_scores[i] > 0.7:
+                    qualified_matches.append(match)
+            files = self.get_fullpath_files(qualified_matches, False)
+            try:
+            	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
+            except RuntimeError as e:
+            	print(e)
             threshold = task.get("threshold", 0.0) or 0.0
-            result = self.execute_command(f"{tmk_query_command} --c1 0.7 --c2 {threshold} {temp_search_file.name} {temp_comparison_file.name}")
+            results = []
+            for i,score in enumerate(scores):
+                if score > threshold:
+                    results.append({
+                        "context": qualified_matches[i].get("context", {}),
+                        "filename": files[i],
+                        "score": score
+                    })
             if temporary:
                 self.delete(task)
-            return {"result": self.parse_search_results(result, matches)}
+            return {"result": results}
         else:
             return {"error": "Video not found for provided task", "task": task}
 
@@ -174,42 +188,18 @@ class VideoModel(SharedModel):
                     context_hash[f"context_{key}"] = value
         return str.join(" AND ",  context_query), context_hash
     
-    def tmk_dir(self):
-        return "./threatexchange/tmk/cpp/"
+    def tmk_program_name(self):
+        return "AlegreVideoEncoder"
 
-    def tmk_query_command(self):
-        return f"{self.tmk_dir()}tmk-query"
-
-    def tmk_hash_video_command(self):
-        return f"{self.tmk_dir()}tmk-hash-video"
-
-    def tmk_file_path(self, folder, filepath):
-        pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
+    def tmk_file_path(self, folder, filepath, create_path=True):
+        if create_path:
+            pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
         return f"{self.directory}/{folder}/{filepath}.tmk"
         
-    def get_fullpath_files(self, matches):
+    def get_fullpath_files(self, matches, check_exists=True):
         full_paths = []
         for match in matches:
-            filename = self.tmk_file_path(match["folder"], match["filepath"])
-            if os.path.exists(filename):
+            filename = self.tmk_file_path(match["folder"], match["filepath"], check_exists)
+            if check_exists and os.path.exists(filename) or not check_exists:
                 full_paths.append(filename)
         return full_paths
-
-    def get_match_dictionary(self, matches):
-        match_dictionary = {}
-        for match in matches:
-            match_dictionary[self.tmk_file_path(match["folder"], match["filepath"])] = match
-        return match_dictionary
-
-    def parse_search_results(self, result, matches):
-        results = []
-        match_dictionary = self.get_match_dictionary(matches)
-        for row in result.split("\n")[:-1]:
-            level1, level2, first_file, second_file = row.split(" ")
-            for context in match_dictionary[first_file]["context"]:
-                results.append({
-                    "context": context,
-                    "score": float(level2),
-                    "filename": first_file,
-                })
-        return results
