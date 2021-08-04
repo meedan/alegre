@@ -25,9 +25,9 @@ class ArticleResource(Resource):
             url=request.args.get('url')
         else:
             url=request.json['url']
-        existing = db.session.query(ArticleModel).filter(ArticleModel.url==url).one()
-        if existing:
-            return existing.to_dict()
+        existing_cases = db.session.query(ArticleModel).filter(ArticleModel.url==url).all()
+        if existing_cases:
+            return existing_cases[-1].to_dict()
         else:
             article = ArticleModel.from_newspaper3k(self.get_article(url))
             return article.to_dict()
