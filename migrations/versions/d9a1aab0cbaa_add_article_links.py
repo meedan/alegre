@@ -17,7 +17,7 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('articles', sa.Column('hash_value', postgresql.ARRAY(sa.String(length=255, _expect_unicode=True)), nullable=True))
+    op.add_column('articles', sa.Column('links', postgresql.ARRAY(sa.String(length=255, _expect_unicode=True)), nullable=True))
 
 def downgrade():
     op.drop_column('articles', 'links')
