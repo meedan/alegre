@@ -7,6 +7,13 @@ from urllib.parse import urlparse
 
 from app.main import db
 
+def uri_validator(x):
+    try:
+        result = urlparse(x)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
+
 class ArticleModel(db.Model):
   """ Model for storing article related details """
   __tablename__ = 'articles'
