@@ -23,6 +23,7 @@ class ArticleResource(Resource):
         article.download()
         article.parse()
         article.nlp()
+        return article
 
     @api.response(200, 'article successfully queried.')
     @api.doc('Download and parse an article')
