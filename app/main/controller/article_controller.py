@@ -9,6 +9,13 @@ article_request = api.model('article_request', {
     'url': fields.String(required=True, description='article URL to be processed')
 })
 
+def uri_validator(x):
+    try:
+        result = urlparse(x)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
+
 @api.route('/')
 class ArticleResource(Resource):
     def get_article(self, url):
