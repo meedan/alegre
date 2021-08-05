@@ -41,7 +41,7 @@ class ArticleModel(db.Model):
     }
 
   @staticmethod
-  def from_newspaper3k(article, full_links):
+  def from_newspaper3k(article):
     """Fetch an article from a URL and load it
       :param article: Article object from Newspaper3k
       :returns: ArticleModel object
