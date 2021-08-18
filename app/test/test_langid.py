@@ -68,8 +68,22 @@ class TestLangidBlueprint(BaseTestCase):
             result = Cld3LangidProvider.langid(test['text'])
             self.assertEqual(test['cld3'], result['result']['language'], test['text'])
 
-    def test_langid_api(self):
+    def test_langid_api_get(self):
         response = self.client.get(
+            '/text/langid/',
+            data=json.dumps(dict(
+                text='Hello this is a test'
+            )),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('en', result['result']['language'])
+        self.assertEqual(app.config['PROVIDER_LANGID'], result['provider'])
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(200, response.status_code)
+
+    def test_langid_api_post(self):
+        response = self.client.post(
             '/text/langid/',
             data=json.dumps(dict(
                 text='Hello this is a test'
