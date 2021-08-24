@@ -60,7 +60,9 @@ class ArticleModel(db.Model):
     article.doc = article.config.get_parser().fromstring(article.html)
     article.doc = document_cleaner.clean(article.doc)
     top_node = article.extractor.calculate_best_node(article.doc)
-    links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
+    links = []
+    if top_node:
+        links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
     full_links = []
     for link in links:
       if uri_validator(link):
