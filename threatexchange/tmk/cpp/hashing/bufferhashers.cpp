@@ -10,6 +10,7 @@
 #include <tmk/cpp/hashing/bufferhashers.h>
 #include <pdq/cpp/downscaling/downscaling.h>
 #include <stdio.h>
+#include <stdexcept>
 
 namespace facebook {
 namespace tmk {

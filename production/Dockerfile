@@ -25,7 +25,7 @@ RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 COPY requirements.txt ./
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN python3 -c 'import nltk; nltk.download("punkt")'
 COPY . .
 RUN cd /app/threatexchange/tmk/cpp && make
 

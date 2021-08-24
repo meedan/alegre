@@ -5,6 +5,7 @@ import hashlib
 import json
 import importlib
 import tenacity
+
 from twitter_text import extract_urls_with_indices, extract_emojis_with_indices
 
 api = Namespace('langid', description='langid operations')
@@ -18,10 +19,7 @@ def _after_log(retry_state):
 
 @api.route('/')
 class LangidResource(Resource):
-    @api.response(200, 'langid successfully queried.')
-    @api.doc('Identify the language of a text document')
-    @api.expect(langid_request, validate=False)
-    def get(self):
+    def respond(self):
         provider = app.config['PROVIDER_LANGID']
         if(request.args):
             text=request.args.get('text')
@@ -44,6 +42,18 @@ class LangidResource(Resource):
             r.set(key, json.dumps(result))
 
         return result
+        
+    @api.response(200, 'langid successfully queried.')
+    @api.doc('Identify the language of a text document')
+    @api.expect(langid_request, validate=False)
+    def get(self):
+        return self.respond()
+
+    @api.response(200, 'langid successfully queried.')
+    @api.doc('Identify the language of a text document')
+    @api.expect(langid_request, validate=False)
+    def post(self):
+        return self.respond()
 
     @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=4), stop=tenacity.stop_after_delay(10), after=_after_log)
     def langid(self, text, provider):
