@@ -33,10 +33,13 @@ class ArticleModel(db.Model):
   links = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
 
   def to_dict(self):
+    date_strftime = None
+    if self.publish_date:
+        date_strftime = self.publish_date.strftime("%Y-%m-%d %H:%M:%S")
     return {
       "title": self.title,
       "authors": self.authors,
-      "publish_date": self.publish_date.strftime("%Y-%m-%d %H:%M:%S"),
+      "publish_date": date_strftime,
       "text": self.text,
       "top_image": self.top_image,
       "movies": self.movies,
