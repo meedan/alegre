@@ -18,10 +18,7 @@ class ArticleResource(Resource):
         article.nlp()
         return article
 
-    @api.response(200, 'article successfully queried.')
-    @api.doc('Download and parse an article')
-    @api.expect(article_request, validate=False)
-    def get(self):
+    def respond(self, request):
         if(request.args.get('url')):
             url=request.args.get('url')
         else:
@@ -32,3 +29,15 @@ class ArticleResource(Resource):
         else:
             article = ArticleModel.from_newspaper3k(self.get_article(url))
             return article.to_dict()
+
+    @api.response(200, 'article successfully queried.')
+    @api.doc('Download and parse an article')
+    @api.expect(article_request, validate=False)
+    def get(self):
+        return self.respond(request)
+
+    @api.response(200, 'article successfully queried.')
+    @api.doc('Download and parse an article')
+    @api.expect(article_request, validate=False)
+    def post(self):
+        return self.respond(request)

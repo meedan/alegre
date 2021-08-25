@@ -33,10 +33,13 @@ class ArticleModel(db.Model):
   links = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
 
   def to_dict(self):
+    date_strftime = None
+    if self.publish_date:
+        date_strftime = self.publish_date.strftime("%Y-%m-%d %H:%M:%S")
     return {
       "title": self.title,
       "authors": self.authors,
-      "publish_date": self.publish_date.strftime("%Y-%m-%d %H:%M:%S"),
+      "publish_date": date_strftime,
       "text": self.text,
       "top_image": self.top_image,
       "movies": self.movies,
@@ -57,7 +60,9 @@ class ArticleModel(db.Model):
     article.doc = article.config.get_parser().fromstring(article.html)
     article.doc = document_cleaner.clean(article.doc)
     top_node = article.extractor.calculate_best_node(article.doc)
-    links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
+    links = []
+    if top_node:
+        links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
     full_links = []
     for link in links:
       if uri_validator(link):
