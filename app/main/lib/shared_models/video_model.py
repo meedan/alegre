@@ -84,6 +84,9 @@ class VideoModel(SharedModel):
         deleted = db.session.query(Video).filter(Video.id==video.id).delete()
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
+    def overload_context_to_denote_content_type(self, task):
+        return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
+
     def add(self, task):
         try:
             temp_video_file = self.get_tempfile()
@@ -95,6 +98,9 @@ class VideoModel(SharedModel):
             video = Video(task.get("doc_id"), task["url"], task.get("context", {}), hash_value)
             video = self.save(video)
             tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
+            if task.get("match_across_content_types", False):
+                am = AudioModel('audio')
+                am.add(self.overload_context_to_denote_content_type(task))
             return {"requested": task, "result": {"outfile": self.tmk_file_path(video.folder, video.filepath)}, "success": True}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": video.url}, "success": False}

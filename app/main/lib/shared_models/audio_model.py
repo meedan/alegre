@@ -153,6 +153,8 @@ class AudioModel(SharedModel):
         temporary = False
         if task.get('context'):
             context = task.get('context')
+        if not task.get("match_across_content_types"):
+            context.pop("content_type", None)
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
