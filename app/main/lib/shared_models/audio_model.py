@@ -1,3 +1,4 @@
+import json
 import binascii
 import uuid
 import os
@@ -153,7 +154,7 @@ class AudioModel(SharedModel):
         temporary = False
         if task.get('context'):
             context = task.get('context')
-        if not task.get("match_across_content_types"):
+        if task.get("match_across_content_types"):
             context.pop("content_type", None)
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
@@ -188,14 +189,14 @@ class AudioModel(SharedModel):
                 if isinstance(value, list):
                     context_clause = "("
                     for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
                         if len(value)-1 != i:
                             context_clause += " OR "
                         context_hash[f"context_{key}_{i}"] = v
                     context_clause += ")"
                     context_query.append(context_clause)
                 else:
-                    context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
+                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
                     context_hash[f"context_{key}"] = value
         return str.join(" AND ",  context_query), context_hash
     
