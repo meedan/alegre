@@ -15,6 +15,7 @@ import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main import db
 from app.main.model.video import Video
@@ -183,14 +184,14 @@ class VideoModel(SharedModel):
                 if isinstance(value, list):
                     context_clause = "("
                     for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
                         if len(value)-1 != i:
                             context_clause += " OR "
                         context_hash[f"context_{key}_{i}"] = v
                     context_clause += ")"
                     context_query.append(context_clause)
                 else:
-                    context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
+                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
                     context_hash[f"context_{key}"] = value
         return str.join(" AND ",  context_query), context_hash
     
