@@ -15,6 +15,7 @@ import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main import db
 from app.main.model.video import Video
@@ -84,6 +85,9 @@ class VideoModel(SharedModel):
         deleted = db.session.query(Video).filter(Video.id==video.id).delete()
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
+    def overload_context_to_denote_content_type(self, task):
+        return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
+
     def add(self, task):
         try:
             temp_video_file = self.get_tempfile()
@@ -95,6 +99,9 @@ class VideoModel(SharedModel):
             video = Video(task.get("doc_id"), task["url"], task.get("context", {}), hash_value)
             video = self.save(video)
             tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
+            if task.get("match_across_content_types", False):
+                am = AudioModel('audio')
+                am.add(self.overload_context_to_denote_content_type(task))
             return {"requested": task, "result": {"outfile": self.tmk_file_path(video.folder, video.filepath)}, "success": True}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": video.url}, "success": False}
@@ -177,14 +184,14 @@ class VideoModel(SharedModel):
                 if isinstance(value, list):
                     context_clause = "("
                     for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
+                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
                         if len(value)-1 != i:
                             context_clause += " OR "
                         context_hash[f"context_{key}_{i}"] = v
                     context_clause += ")"
                     context_query.append(context_clause)
                 else:
-                    context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
+                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
                     context_hash[f"context_{key}"] = value
         return str.join(" AND ",  context_query), context_hash
     
