@@ -56,29 +56,34 @@ class ArticleModel(db.Model):
       :param article: Article object from Newspaper3k
       :returns: ArticleModel object
     """
-    document_cleaner = DocumentCleaner(article.config)
-    article.doc = article.config.get_parser().fromstring(article.html)
-    article.doc = document_cleaner.clean(article.doc)
-    top_node = article.extractor.calculate_best_node(article.doc)
-    links = []
-    if top_node:
-        links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
-    full_links = []
-    for link in links:
-      if uri_validator(link):
-        full_links.append(link)
-      else:
-        full_links.append(article.source_url+link)
-    return ArticleModel(
-        title=article.title,
-        authors=article.authors,
-        publish_date=article.publish_date,
-        text=article.text,
-        top_image=article.top_image,
-        movies=article.movies,
-        keywords=article.keywords,
-        summary=article.summary,
-        source_url=article.source_url,
-        tags=article.tags,
-        links=full_links
-    )
+    if article:
+        document_cleaner = DocumentCleaner(article.config)
+        article.doc = article.config.get_parser().fromstring(article.html)
+        article.doc = document_cleaner.clean(article.doc)
+        top_node = article.extractor.calculate_best_node(article.doc)
+        links = []
+        if top_node:
+            links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
+        full_links = []
+        for link in links:
+          if uri_validator(link):
+            full_links.append(link)
+          else:
+            full_links.append(article.source_url+link)
+        article_obj = ArticleModel(
+            title=article.title,
+            authors=article.authors,
+            publish_date=article.publish_date,
+            text=article.text,
+            top_image=article.top_image,
+            movies=article.movies,
+            keywords=article.keywords,
+            summary=article.summary,
+            source_url=article.source_url,
+            tags=article.tags,
+            links=full_links
+        )
+        db.session.add(article_obj)
+        article_obj.to_dict()
+    else:
+        return {"error": "Article Couldn't be parsed!"}
