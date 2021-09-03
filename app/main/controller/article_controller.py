@@ -12,7 +12,7 @@ article_request = api.model('article_request', {
 
 @api.route('/')
 class ArticleResource(Resource):
-    def get_article(url):
+    def get_article(self, url):
         try:
             article = Article(url)
             article.download()
