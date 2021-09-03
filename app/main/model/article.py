@@ -84,6 +84,6 @@ class ArticleModel(db.Model):
             links=full_links
         )
         db.session.add(article_obj)
-        article_obj.to_dict()
+        return article_obj.to_dict()
     else:
         return {"error": "Article Couldn't be parsed!"}
