@@ -1,3 +1,4 @@
+import sys
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from newspaper import Article
@@ -11,12 +12,16 @@ article_request = api.model('article_request', {
 
 @api.route('/')
 class ArticleResource(Resource):
-    def get_article(self, url):
-        article = Article(url)
-        article.download()
-        article.parse()
-        article.nlp()
-        return article
+    def get_article(url):
+        try:
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+            return article
+        except:
+            e = sys.exc_info()[0]
+            app.logger.info(e)
 
     def respond(self, request):
         if(request.args.get('url')):
@@ -28,16 +33,24 @@ class ArticleResource(Resource):
             return existing_cases[-1].to_dict()
         else:
             article = ArticleModel.from_newspaper3k(self.get_article(url))
-            return article.to_dict()
+            return article
 
     @api.response(200, 'article successfully queried.')
     @api.doc('Download and parse an article')
     @api.expect(article_request, validate=False)
     def get(self):
-        return self.respond(request)
+        response = self.respond(request)
+        if response.get("error"):
+            abort(400, description=response.get("error"))
+        else:
+            return response
 
     @api.response(200, 'article successfully queried.')
     @api.doc('Download and parse an article')
     @api.expect(article_request, validate=False)
     def post(self):
-        return self.respond(request)
+        response = self.respond(request)
+        if response.get("error"):
+            abort(400, description=response.get("error"))
+        else:
+            return response
