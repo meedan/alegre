@@ -104,10 +104,19 @@ class AudioModel(SharedModel):
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
             keys = ('id', 'doc_id', 'url', 'hash_value', 'context')
-            return [dict(zip(keys, values)) for values in matches]
+            rows = [dict(zip(keys, values)) for values in matches]
+            for row in rows:
+                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+            return rows
         except Exception as e:
             db.session.rollback()
             raise e
+
+    def context_matches(self, context, search_context):
+        for k,v in context.items():
+            if search_context.get(k) != v:
+                return False
+        return True
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, hash_value, threshold, context):

@@ -120,12 +120,21 @@ class VideoModel(SharedModel):
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
+            matches = db.session.execute(text(cmd)).fetchall()
             keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
-            return [r for r in rows if r.get("hash_value")]
+            for row in rows:
+                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+            return rows
         except Exception as e:
             db.session.rollback()
             raise e
+
+    def context_matches(self, context, search_context):
+        for k,v in context.items():
+            if search_context.get(k) != v:
+                return False
+        return True
 
     def search(self, task):
         context = {}
