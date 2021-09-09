@@ -131,7 +131,7 @@ class VideoModel(SharedModel):
             raise e
 
     def context_matches(self, context, search_context):
-        for k,v in context:
+        for k,v in context.items():
             if search_context.get(k) != v:
                 return False
         return True

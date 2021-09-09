@@ -96,26 +96,26 @@ class ImageSimilarityResource(Resource):
     try:
       context_query, context_hash = self.get_context_query(context)
       if context_query:
-          cmd = """
+        cmd = """
             SELECT id, sha256, phash, url, context FROM images
             WHERE 
           """+context_query
       else:
-          cmd = """
+        cmd = """
             SELECT id, sha256, phash, url, context FROM images
           """
       matches = db.session.execute(text(cmd), context_hash).fetchall()
       keys = ('id', 'sha256', 'phash', 'url', 'context')
       rows = [dict(zip(keys, values)) for values in matches]
       for row in rows:
-          row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+        row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
       return rows
     except Exception as e:
       db.session.rollback()
       raise e
 
   def context_matches(self, context, search_context):
-    for k,v in context:
+    for k,v in context.items():
       if search_context.get(k) != v:
         return False
     return True
