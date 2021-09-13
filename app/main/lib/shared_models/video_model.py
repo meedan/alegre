@@ -163,7 +163,7 @@ class VideoModel(SharedModel):
             l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
             qualified_matches = []
             for i,match in enumerate(matches):
-                if l1_scores[i] > 0.7:
+                if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
