@@ -120,12 +120,21 @@ class VideoModel(SharedModel):
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
+            matches = db.session.execute(text(cmd)).fetchall()
             keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
-            return [r for r in rows if r.get("hash_value")]
+            for row in rows:
+                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+            return rows
         except Exception as e:
             db.session.rollback()
             raise e
+
+    def context_matches(self, context, search_context):
+        for k,v in context.items():
+            if search_context.get(k) != v:
+                return False
+        return True
 
     def search(self, task):
         context = {}
@@ -154,7 +163,7 @@ class VideoModel(SharedModel):
             l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
             qualified_matches = []
             for i,match in enumerate(matches):
-                if l1_scores[i] > 0.7:
+                if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
