@@ -11,7 +11,7 @@ before_script:
 - echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 script:
 - docker-compose exec alegre make test
-- docker-compose exec alegre bash -c "curl --max-time 10.0 -OL https://raw.githubusercontent.com/meedan/check-api/develop/spec/pacts/check_api-alegre.json"
+- docker-compose exec alegre bash -c "curl --max-time 50.0 -OL https://raw.githubusercontent.com/meedan/check-api/develop/spec/pacts/check_api-alegre.json"
 - docker-compose exec alegre bash -c "pact-verifier --provider-base-url=http://alegre:5000 --pact-url=./check_api-alegre.json"
 after_script:
 - docker-compose exec alegre coverage report
