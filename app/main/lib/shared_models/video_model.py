@@ -160,8 +160,11 @@ class VideoModel(SharedModel):
                 video = videos[0]
         if video:
             matches = self.search_by_context(context)
-            app.logger.info('Running search for video id of '+str(video.id)+' match ids of : '+str([e.get("id") for e in matches]))
-            l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
+            try:
+                l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value") for r in matches], [video.hash_value], 'cosine'))).tolist()
+            except:
+                app.logger.info('L1 scoring failed while running search for video id of '+str(video.id)+' match ids of : '+str([e.get("id") for e in matches]))
+                l1_scores = [0.0 for e in matches]
             qualified_matches = []
             for i,match in enumerate(matches):
                 if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
