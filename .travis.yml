@@ -13,7 +13,7 @@ script:
 - docker-compose exec alegre make test
 #comment until fix timeout curl: (28) Operation timed out
 # - docker-compose exec alegre bash -c "curl --max-time 600.0 -OL https://raw.githubusercontent.com/meedan/check-api/develop/spec/pacts/check_api-alegre.json"
-- docker-compose exec alegre bash -c "pact-verifier --provider-base-url=http://alegre:5000 --pact-url=./app/test/pact/check_api-alegre.json"
+- docker-compose exec alegre make contract_testing
 after_script:
 - docker-compose exec alegre coverage report
 notifications:

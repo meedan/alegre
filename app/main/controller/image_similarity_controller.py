@@ -84,7 +84,10 @@ class ImageSimilarityResource(Resource):
       threshold = 0.9
       if(request.args.get('threshold')):
         threshold = request.args.get('threshold')
-      result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), request.args.get('context'))
+      context = {}
+      if(request.args.get('context')):
+        context = threshold = request.args.get('context')
+      result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), context)
     elif 'url' not in request.json:
       result = self.search_by_context(request.json['context'])
     else:
