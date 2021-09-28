@@ -30,10 +30,14 @@ class AudioModel(SharedModel):
         try:
             # First locate existing audio and append new context
             existing = db.session.query(Audio).filter(Audio.url==audio.url).one()
-            if audio.context not in existing.context:
-                existing.context.append(audio.context)
-                flag_modified(existing, 'context')
-            saved_audio = existing
+            if existing:
+                if audio.hash_value and not existing.hash_value:
+                    existing.hash_value = audio.hash_value
+                    flag_modified(existing, 'hash_value')
+                if audio.context not in existing.context:
+                    existing.context.append(audio.context)
+                    flag_modified(existing, 'context')
+                saved_audio = existing
         except NoResultFound as e:
             # Otherwise, add new audio, but with context as an array
             if audio.context and not isinstance(audio.context, list):
