@@ -14,11 +14,11 @@ before_script:
 jobs:
   include:
     - stage: tests
-    name: unit-tests
-    script: docker-compose exec alegre make test
+      name: unit-tests
+      script: docker-compose exec alegre make test
     - stage: tests
-    name: contract-testing
-    script: docker-compose exec alegre make contract_testing
+      name: contract-testing
+      script: docker-compose exec alegre make contract_testing
 after_script:
 - docker-compose exec alegre coverage report
 notifications:
