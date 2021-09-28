@@ -30,10 +30,14 @@ class VideoModel(SharedModel):
         try:
             # First locate existing video and append new context
             existing = db.session.query(Video).filter(Video.url==video.url).one()
-            if video.context not in existing.context:
-                existing.context.append(video.context)
-                flag_modified(existing, 'context')
-            saved_video = existing
+            if existing:
+                if video.hash_value and not existing.hash_value:
+                    existing.hash_value = video.hash_value
+                    flag_modified(existing, 'hash_value')
+                if video.context not in existing.context:
+                    existing.context.append(video.context)
+                    flag_modified(existing, 'context')
+                saved_video = existing
         except NoResultFound as e:
             # Otherwise, add new video, but with context as an array
             if video.context and not isinstance(video.context, list):
