@@ -4,6 +4,7 @@ import boto3
 import botocore
 import requests
 import json
+import os
 
 api = Namespace('audio_transcription', description='audio transcription operations')
 transcription_post = api.model('transcription_post', {
@@ -17,7 +18,7 @@ transcription_get = api.model('transcription_get', {
 
 transcribe = boto3.client(
     'transcribe',
-    'eu-west-1',
+    os.getenv('AWS_DEFAULT_REGION', 'eu-west-1')
 )
 
 @api.route('/')
