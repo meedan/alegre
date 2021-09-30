@@ -33,7 +33,7 @@ class AudioTranscriptionResource(Resource):
 
         # try:
         response = transcribe.start_transcription_job(
-        TranscriptionJobName=jobName,
+            TranscriptionJobName=jobName,
             IdentifyLanguage=True,
             Media={
                 'MediaFileUri': audioUri
