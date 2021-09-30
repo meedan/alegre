@@ -1,6 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 import boto3
+import botocore
 import requests
 import json
 
@@ -65,28 +66,36 @@ class AudioTranscriptionResource(Resource):
 
         result = None
 
-        # try:
-        response = transcribe.get_transcription_job(TranscriptionJobName=jobName)
+        try:
+            response = transcribe.get_transcription_job(TranscriptionJobName=jobName)
 
-        if response['TranscriptionJob']:
-            job_name = response['TranscriptionJob']['TranscriptionJobName']
-            job_status = response['TranscriptionJob']['TranscriptionJobStatus']
+            if response['TranscriptionJob']:
+                job_name = response['TranscriptionJob']['TranscriptionJobName']
+                job_status = response['TranscriptionJob']['TranscriptionJobStatus']
+                language_code = response['TranscriptionJob']['LanguageCode']
 
+                result = {
+                    'job_name': job_name,
+                    'job_status': job_status,
+                    'language_code': language_code
+                }
+
+                if job_status == 'COMPLETED':
+                    transcriptionUri = response['TranscriptionJob']['Transcript']['TranscriptFileUri']
+                    transcriptionResponse = requests.get(transcriptionUri)
+                    transcriptionResponseDict = json.loads(transcriptionResponse.text)
+                    result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
+
+        except botocore.exceptions.ClientError as error:
             result = {
-                'job_name': job_name,
-                'job_status': job_status,
+                'error': error.response['Error']['Code'],
+                'message': error.response['Error']['Message'],
             }
 
-            if job_status == 'COMPLETED':
-                transcriptionUri = response['TranscriptionJob']['Transcript']['TranscriptFileUri']
-                transcriptionResponse = requests.get(transcriptionUri)
-                transcriptionResponseDict = json.loads(transcriptionResponse.text)
-                result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
-
-        # except Exception as e:
-        #     print("Oops!", e.__class__, "occurred.")
-        #     result = {
-        #         'error': e.__class__,
-        #     }
+        except Exception as e:
+            print("Oops!", e.__class__, "occurred.")
+            result = {
+                'error': e.__class__,
+            }
 
         return result
