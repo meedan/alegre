@@ -24,6 +24,7 @@ class AboutResource(Resource):
             'image/classification': AboutResource.list_providers('app.main.lib.image_classification', 'ImageClassificationProvider'),
             'image/similarity': ['phash'],
             'image/ocr': ['google'],
+            'audio/transcription': ['aws'],
             'audio/similarity': ['hash'],
             'video/similarity': ['tmk'],
         }
