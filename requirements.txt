@@ -123,7 +123,7 @@ tdigest==0.5.2.2
 tenacity==6.1.0
 tensorboard==2.3.0
 tensorboard-plugin-wit==1.8.0
-tensorflow==2.3.1
+tensorflow==2.5.1
 tensorflow-estimator==2.3.0
 tensorflow-hub==0.8.0
 tensorflow-text==2.3.0
