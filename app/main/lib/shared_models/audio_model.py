@@ -69,7 +69,7 @@ def max_index(listx):
     max_index = 0
     max_value = listx[0]
     for i, value in enumerate(listx):
-        if value > max_value:
+        if value and max_value and value > max_value:
             max_value = value
             max_index = i
     return max_index
