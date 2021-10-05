@@ -58,11 +58,7 @@ def cross_correlation(listx, listy, offset, min_overlap=20):
 # cross correlate listx and listy with offsets from -span to span
 def compare(listx, listy, span, step):
     if span > min(len(listx), len(listy)):
-        # Error checking in main program should prevent us from ever being
-        # able to get here.
-        raise Exception('span >= sample size: %i >= %i\n'
-                        % (span, min(len(listx), len(listy)))
-                        + 'Reduce span, reduce crop or increase sample_time.')
+        span = min(len(listx), len(listy)) -1
     corr_xy = []
     for offset in np.arange(-span, span + 1, step):
         corr_xy.append(cross_correlation(listx, listy, offset))
