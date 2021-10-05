@@ -201,7 +201,7 @@ class AudioModel(SharedModel):
                   SELECT id, doc_id, chromaprint_fingerprint, url, context FROM audios
                 """
             matches = db.session.execute(text(cmd), dict(**{
-                'chromaprint_fingerprint': chroma_fingerprint,
+                'chromaprint_fingerprint': chromaprint_fingerprint,
                 'threshold': threshold,
             }, **context_hash)).fetchall()
             keys = ('id', 'doc_id', 'chromaprint_fingerprint', 'url', 'context', 'score')
