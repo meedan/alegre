@@ -74,14 +74,14 @@ def max_index(listx):
             max_index = i
     return max_index
   
-def get_max_corr(corr, source, target, threshold):
+def get_max_corr(corr, source, target, threshold, span):
     max_corr_index = max_index(corr)
     max_corr_offset = -span + max_corr_index * step
     return corr[max_corr_index]
 
 def get_score(first, second, threshold, span=150, step=1):
     corr = compare(first, second, span, step)
-    return get_max_corr(corr, first, second, threshold)
+    return get_max_corr(corr, first, second, threshold, span)
 
 class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
