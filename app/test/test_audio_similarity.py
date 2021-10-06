@@ -163,11 +163,12 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         hash_key = "blah"
         with patch('app.main.lib.shared_models.audio_model.AudioModel.search_by_context', ) as mock_search_by_context:
             mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
-            self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+            self.model.add({"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
             result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
         self.assertEqual(result["result"][0]['id'], 1)
+        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/eddy_wally_wow.mp3')
         self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
 
@@ -196,11 +197,12 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         hash_key = "blah"
         with patch('app.main.lib.shared_models.audio_model.AudioModel.search_by_context', ) as mock_search_by_context:
             mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}]}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}]}]
-            self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
+            self.model.respond({"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
             result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
         self.assertEqual(result["result"][0]['id'], 1)
+        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/eddy_wally_wow.mp3')
         self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
 
