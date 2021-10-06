@@ -111,6 +111,130 @@ def init():
 
     db.create_all()
 
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION correlation(listx, listy)
+        RETURNS float
+        AS $$ 
+            if len(listx) == 0 or len(listy) == 0:
+                # Error checking in main program should prevent us from ever being
+                # able to get here.
+                raise Exception('Empty lists cannot be correlated.')
+            if len(listx) > len(listy):
+                listx = listx[:len(listy)]
+            elif len(listx) < len(listy):
+                listy = listy[:len(listx)]
+            covariance = 0
+            for i in range(len(listx)):
+                covariance += 32 - bin(listx[i] ^ listy[i]).count("1")
+            covariance = covariance / float(len(listx))
+            return covariance/32
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION cross_correlation(listx, listy, offset, min_overlap)
+        RETURNS float
+        AS $$ 
+            if offset > 0:
+                listx = listx[offset:]
+                listy = listy[:len(listx)]
+            elif offset < 0:
+                offset = -offset
+                listy = listy[offset:]
+                listx = listx[:len(listy)]
+            if min(len(listx), len(listy)) < min_overlap:
+                # Error checking in main program should prevent us from ever being
+                # able to get here.
+                return 
+            #raise Exception('Overlap too small: %i' % min(len(listx), len(listy)))
+            return correlation(listx, listy)
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION max_index(listx)
+        RETURNS integer
+        AS $$ 
+            max_index = 0
+            max_value = listx[0]
+            for i, value in enumerate(listx):
+                if value and max_value and value > max_value:
+                    max_value = value
+                    max_index = i
+            return max_index
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION compare(listx, listy, span, step)
+        RETURNS float[]
+        AS $$ 
+            if span > min(len(listx), len(listy)):
+                span = min(len(listx), len(listy)) -1
+            corr = []
+            for offset in np.arange(-span, span + 1, step):
+                corr.append(cross_correlation(listx, listy, offset))
+            return corr
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION get_max_corr(corr, source, target, threshold, span, step)
+        RETURNS integer
+        AS $$ 
+            max_corr_index = max_index(corr)
+            max_corr_offset = -span + max_corr_index * step
+            return corr[max_corr_index]
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION get_max_corr(corr, source, target, threshold, span, step)
+        RETURNS integer
+        AS $$ 
+            max_corr_index = max_index(corr)
+            max_corr_offset = -span + max_corr_index * step
+            return corr[max_corr_index]
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION get_score(first, second, threshold, span, step)
+        RETURNS float
+        AS $$ 
+            corr = compare(first, second, span, step)
+            return get_max_corr(corr, first, second, threshold, span, step)
+         $$ LANGUAGE plpythonu;
+      """)
+    )
+
 @manager.command
 def test(pattern='test*.py'):
   """Runs the unit tests."""
