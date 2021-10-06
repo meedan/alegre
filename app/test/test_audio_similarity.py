@@ -123,7 +123,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
             result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'hash_value', 'id', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
         self.assertEqual(result["result"][0], {'id': 1, 'doc_id': 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8', 'hash_value': '01010101010101010101010101010111010100111010101010101010101011001100001111100000000001010111110101010101010101010101010101010101', 'url': 'file:///app/app/test/data/eddy_wally_wow.mp3', 'context': [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}], 'score': 1.0})
 
     def test_delete(self):
@@ -163,7 +163,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
             result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'hash_value', 'id', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
         self.assertEqual(result["result"][0], {'id': 1, 'doc_id': None, 'hash_value': '01010101010101010101010101010111010100111010101010101010101011001100001111100000000001010111110101010101010101010101010101010101', 'url': 'file:///app/app/test/data/eddy_wally_wow.mp3', 'context': [{'blah': 1, 'project_media_id': 12343}], 'score': 1.0})
 
     def test_respond_delete(self):
@@ -194,7 +194,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
             result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'hash_value', 'id', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
         self.assertEqual(result["result"][0], {'id': 1, 'doc_id': None, 'hash_value': '01010101010101010101010101010111010100111010101010101010101011001100001111100000000001010111110101010101010101010101010101010101', 'url': 'file:///app/app/test/data/eddy_wally_wow.mp3', 'context': [{'blah': 1, 'project_media_id': 12343}], 'score': 1.0})
 
 if __name__ == '__main__':
