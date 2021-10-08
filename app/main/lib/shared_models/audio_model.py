@@ -188,13 +188,23 @@ class AudioModel(SharedModel):
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
-                  SELECT id, doc_id, chromaprint_fingerprint, url, context FROM audios
-                  WHERE
+                  SELECT * FROM (
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint # :chromaprint_fingerprint)
+                    AS score FROM audios
+                  ) f
+                  WHERE score <= :threshold
+                  AND 
                   """+context_query+"""
+                  ORDER BY score ASC
                 """
             else:
                 cmd = """
-                  SELECT id, doc_id, chromaprint_fingerprint, url, context FROM audios
+                  SELECT * FROM (
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint # :chromaprint_fingerprint)
+                    AS score FROM audios
+                  ) f
+                  WHERE score <= :threshold
+                  ORDER BY score ASC
                 """
             matches = db.session.execute(text(cmd), dict(**{
                 'chromaprint_fingerprint': chromaprint_fingerprint,
@@ -204,7 +214,7 @@ class AudioModel(SharedModel):
             rows = []
             for values in matches:
                 row = dict(zip(keys, values))
-                row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
+                # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
                 rows.append(row)
             return rows
         except Exception as e:

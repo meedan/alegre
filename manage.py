@@ -32,6 +32,157 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 @manager.command
+def init_perl_functions():
+  with app.app_context():
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION Correlation(integer[], integer[]) RETURNS float
+        AS $$
+            my @x=@{ $_[0]; };
+            my @y=@{ $_[1]; };
+            $len=scalar(@x);
+            if (scalar(@x) > scalar(@y)) { 
+               $len = scalar(@y);
+            }
+            $covariance = 0;
+            for $i (0..$len-1) {
+            $bits=0;
+            $xor=@x[$i] ^ @y[$i];
+            $bits=$xor;
+            $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
+            $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
+            $bits = ($bits & 0x0F0F0F0F) + (($bits & 0xF0F0F0F0) >> 4);
+            $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
+            $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
+            $covariance +=32 - $bits;
+            }
+            $covariance = $covariance / $len;
+            return $covariance/32;
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION CrossCorrelation(integer[], integer[], integer) RETURNS float
+        AS $$
+            my @x=@{ $_[0]; };
+            my @y=@{ $_[1]; };
+            my $offset=$_[2];
+            my $min_overlap=20; #Change to 2 for debug.
+            if ($offset > 0) {
+                @x = @x[$offset..scalar(@x)-1]
+            } if ($offset < 0) {
+                $offset *= -1;
+                @y = @y[$offset..scalar(@y)-1]
+            }
+            if (scalar(@x)<$min_overlap || scalar(@y) < $min_overlap) {
+                # Error checking in main program should prevent us from ever being
+                # able to get here.
+                return 0;
+             }
+            return Correlation(\@x, \@y);
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION CrossCorrelation(integer[], integer[], integer) RETURNS float
+        AS $$
+            my @x=@{ $_[0]; };
+            my @y=@{ $_[1]; };
+            my $offset=$_[2];
+            my $min_overlap=20; #Change to 2 for debug.
+            if ($offset > 0) {
+                @x = @x[$offset..scalar(@x)-1]
+            } if ($offset < 0) {
+                $offset *= -1;
+                @y = @y[$offset..scalar(@y)-1]
+            }
+            if (scalar(@x)<$min_overlap || scalar(@y) < $min_overlap) {
+                # Error checking in main program should prevent us from ever being
+                # able to get here.
+                return 0;
+             }
+            return Correlation(\@x, \@y);
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION Compare(integer[], integer[], integer) RETURNS float
+        AS $$
+            my @x=@{ $_[0]; };
+            my @y=@{ $_[1]; };
+            my $span=$_[2];
+            my $step=1;
+            if ($span > scalar(@x) || $span > scalar(@y)){
+            	$span=scalar(@x)>scalar(@y)? scalar(@y) : scalar(@x);
+            	$span--;
+            }
+            my @corr_xy;
+            for $offset (-1*$span..$span){
+            	push @corr_xy, CrossCorrelation(\@x, \@y, $offset);
+            }
+            return @corr_xy;
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION MaxIndex(integer[]) RETURNS integer
+        AS $$
+            my @x=@{ $_[0]; };
+            $maxi = 0;
+            for $i (1..scalar(@x)-1) {
+            	if (@x[$i]>@x[$maxi]) {
+            		$maxi = $i;
+            	}
+            }
+            return $maxi;
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION GetScore(integer[], integer[]) RETURNS float
+        AS $$
+            my @first=@{ $_[0]; };
+            my @second=@{ $_[1]; };
+            my $span=150;
+            my @corr = Compare(\@first, \@second, $span);
+            my $max_corr_index = MaxIndex(\@corr);
+            return @corr[$max_corr_index]
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    db.create_all()
+
+@manager.command
 def run():
   """Runs the API server."""
   port = os.getenv('ALEGRE_PORT', 5000)
@@ -98,6 +249,7 @@ def init():
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )
+
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
@@ -108,7 +260,6 @@ def init():
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )
-
     db.create_all()
 
 @manager.command
