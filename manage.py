@@ -36,7 +36,7 @@ def test_simple_perl_function():
     from sqlalchemy import text
     cmd = """
       SELECT * FROM (
-        SELECT Test(chromaprint_fingerprint, :chromaprint_fingerprint)
+        SELECT Test2(chromaprint_fingerprint, :chromaprint_fingerprint)
         AS score FROM audios
       ) f
       WHERE score <= :threshold
@@ -46,7 +46,7 @@ def test_simple_perl_function():
         'chromaprint_fingerprint': [1,2,3,4],
         'threshold': 0.7,
     }, **{})).fetchall()
-    # import code;code.interact(local=dict(globals(), **locals()))
+    import code;code.interact(local=dict(globals(), **locals()))
 
 @manager.command
 def init_simple_perl_function():
@@ -71,14 +71,32 @@ def init_simple_perl_function():
       DDL("""
         CREATE OR REPLACE FUNCTION Test(integer[], integer[]) RETURNS float
         AS $$
+            $_SHARED{test} = sub {
+                my @x=@{ $_[0]; };
+                my @y=@{ $_[1]; };
+                return 0.8;
+            }
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION Test2(integer[], integer[]) RETURNS float
+        AS $$
             my @x=@{ $_[0]; };
             my @y=@{ $_[1]; };
-            return 0.8;
+            my $test = $_SHARED{test};
+            return &$test(\@x, \@y);
         $$
         LANGUAGE plperl;
       """)
     )
     db.create_all()
+
+
 
 @manager.command
 def init_perl_functions():
@@ -94,28 +112,30 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION correlation(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION f_correlation(integer[], integer[]) RETURNS float
         AS $$
-            my @x=@{ $_[0]; };
-            my @y=@{ $_[1]; };
-            $len=scalar(@x);
-            if (scalar(@x) > scalar(@y)) { 
-               $len = scalar(@y);
+            $_SHARED{correlation} = sub {
+                my @x=@{ $_[0]; };
+                my @y=@{ $_[1]; };
+                $len=scalar(@x);
+                if (scalar(@x) > scalar(@y)) { 
+                   $len = scalar(@y);
+                }
+                $covariance = 0;
+                for $i (0..$len-1) {
+                $bits=0;
+                $xor=@x[$i] ^ @y[$i];
+                $bits=$xor;
+                $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
+                $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
+                $bits = ($bits & 0x0F0F0F0F) + (($bits & 0xF0F0F0F0) >> 4);
+                $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
+                $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
+                $covariance +=32 - $bits;
+                }
+                $covariance = $covariance / $len;
+                return $covariance/32;
             }
-            $covariance = 0;
-            for $i (0..$len-1) {
-            $bits=0;
-            $xor=@x[$i] ^ @y[$i];
-            $bits=$xor;
-            $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
-            $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
-            $bits = ($bits & 0x0F0F0F0F) + (($bits & 0xF0F0F0F0) >> 4);
-            $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
-            $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
-            $covariance +=32 - $bits;
-            }
-            $covariance = $covariance / $len;
-            return $covariance/32;
         $$
         LANGUAGE plperl;
       """)
@@ -124,24 +144,27 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION crosscorrelation(integer[], integer[], integer) RETURNS float
+        CREATE OR REPLACE FUNCTION f_crosscorrelation(integer[], integer[], integer) RETURNS float
         AS $$
-            my @x=@{ $_[0]; };
-            my @y=@{ $_[1]; };
-            my $offset=$_[2];
-            my $min_overlap=20; #Change to 2 for debug.
-            if ($offset > 0) {
-                @x = @x[$offset..scalar(@x)-1]
-            } if ($offset < 0) {
-                $offset *= -1;
-                @y = @y[$offset..scalar(@y)-1]
+            $_SHARED{crosscorrelation} = sub {
+                my @x=@{ $_[0]; };
+                my @y=@{ $_[1]; };
+                my $offset=$_[2];
+                my $min_overlap=20; #Change to 2 for debug.
+                if ($offset > 0) {
+                    @x = @x[$offset..scalar(@x)-1]
+                } if ($offset < 0) {
+                    $offset *= -1;
+                    @y = @y[$offset..scalar(@y)-1]
+                }
+                if (scalar(@x)<$min_overlap || scalar(@y) < $min_overlap) {
+                    # Error checking in main program should prevent us from ever being
+                    # able to get here.
+                    return 0;
+                 }
+                my $correlation = $_SHARED{correlation};
+                return &$correlation(\@x, \@y);
             }
-            if (scalar(@x)<$min_overlap || scalar(@y) < $min_overlap) {
-                # Error checking in main program should prevent us from ever being
-                # able to get here.
-                return 0;
-             }
-            return correlation(\@x, \@y);
         $$
         LANGUAGE plperl;
       """)
@@ -150,21 +173,24 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION compare(integer[], integer[], integer) RETURNS float
+        CREATE OR REPLACE FUNCTION f_compare(integer[], integer[], integer) RETURNS float
         AS $$
-            my @x=@{ $_[0]; };
-            my @y=@{ $_[1]; };
-            my $span=$_[2];
-            my $step=1;
-            if ($span > scalar(@x) || $span > scalar(@y)){
-            	$span=scalar(@x)>scalar(@y)? scalar(@y) : scalar(@x);
-            	$span--;
+            $_SHARED{compare} = sub {
+                my @x=@{ $_[0]; };
+                my @y=@{ $_[1]; };
+                my $crosscorrelation = $_SHARED{crosscorrelation};
+                my $span=$_[2];
+                my $step=1;
+                if ($span > scalar(@x) || $span > scalar(@y)){
+                	$span=scalar(@x)>scalar(@y)? scalar(@y) : scalar(@x);
+                	$span--;
+                }
+                my @corr_xy;
+                for $offset (-1*$span..$span){
+                	push @corr_xy, &$crosscorrelation(\@x, \@y, $offset);
+                }
+                return @corr_xy;
             }
-            my @corr_xy;
-            for $offset (-1*$span..$span){
-            	push @corr_xy, crosscorrelation(\@x, \@y, $offset);
-            }
-            return @corr_xy;
         $$
         LANGUAGE plperl;
       """)
@@ -173,7 +199,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION maxindex(integer[]) RETURNS integer
+        CREATE OR REPLACE FUNCTION f_maxindex(integer[]) RETURNS integer
         AS $$
             my @x=@{ $_[0]; };
             $maxi = 0;
@@ -196,8 +222,10 @@ def init_perl_functions():
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
             my $span=150;
-            my @corr = compare(\@first, \@second, $span);
-            my $max_corr_index = maxindex(\@corr);
+            my $compare = $_SHARED{compare};
+            my @corr = &$compare(\@first, \@second, $span);
+            my $maxindex = $_SHARED{maxindex};
+            my $max_corr_index = &$maxindex(\@corr);
             return @corr[$max_corr_index]
         $$
         LANGUAGE plperl;
