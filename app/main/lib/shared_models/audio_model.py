@@ -189,7 +189,7 @@ class AudioModel(SharedModel):
             if context_query:
                 cmd = """
                   SELECT * FROM (
-                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint # :chromaprint_fingerprint)
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
                   WHERE score <= :threshold
@@ -200,7 +200,7 @@ class AudioModel(SharedModel):
             else:
                 cmd = """
                   SELECT * FROM (
-                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint # :chromaprint_fingerprint)
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
                   WHERE score <= :threshold
