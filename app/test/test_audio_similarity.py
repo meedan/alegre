@@ -10,8 +10,6 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
-from app.main.model.audio import Audio
-
 class SharedModelStub(SharedModel):
   model_key = 'audio'
 
@@ -207,6 +205,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/eddy_wally_wow.mp3')
         self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'project_media_id': 12343}])
+
 
 if __name__ == '__main__':
   unittest.main()
