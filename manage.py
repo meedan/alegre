@@ -32,6 +32,55 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 @manager.command
+def test_simple_perl_function():
+    from sqlalchemy import text
+    cmd = """
+      SELECT * FROM (
+        SELECT Test(chromaprint_fingerprint, :chromaprint_fingerprint)
+        AS score FROM audios
+      ) f
+      WHERE score <= :threshold
+      ORDER BY score ASC
+    """
+    matches = db.session.execute(text(cmd), dict(**{
+        'chromaprint_fingerprint': [1,2,3,4],
+        'threshold': 0.7,
+    }, **{})).fetchall()
+    # import code;code.interact(local=dict(globals(), **locals()))
+
+@manager.command
+def init_simple_perl_function():
+  with app.app_context():
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE LANGUAGE plperl;
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        DROP FUNCTION Test(integer[], integer[]);
+      """)
+    )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+        CREATE OR REPLACE FUNCTION Test(integer[], integer[]) RETURNS float
+        AS $$
+            my @x=@{ $_[0]; };
+            my @y=@{ $_[1]; };
+            return 0.8;
+        $$
+        LANGUAGE plperl;
+      """)
+    )
+    db.create_all()
+
+@manager.command
 def init_perl_functions():
   with app.app_context():
     sqlalchemy.event.listen(
@@ -45,7 +94,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION Correlation(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION correlation(integer[], integer[]) RETURNS float
         AS $$
             my @x=@{ $_[0]; };
             my @y=@{ $_[1]; };
@@ -75,7 +124,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION CrossCorrelation(integer[], integer[], integer) RETURNS float
+        CREATE OR REPLACE FUNCTION crosscorrelation(integer[], integer[], integer) RETURNS float
         AS $$
             my @x=@{ $_[0]; };
             my @y=@{ $_[1]; };
@@ -92,7 +141,7 @@ def init_perl_functions():
                 # able to get here.
                 return 0;
              }
-            return Correlation(\@x, \@y);
+            return correlation(\@x, \@y);
         $$
         LANGUAGE plperl;
       """)
@@ -101,33 +150,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION CrossCorrelation(integer[], integer[], integer) RETURNS float
-        AS $$
-            my @x=@{ $_[0]; };
-            my @y=@{ $_[1]; };
-            my $offset=$_[2];
-            my $min_overlap=20; #Change to 2 for debug.
-            if ($offset > 0) {
-                @x = @x[$offset..scalar(@x)-1]
-            } if ($offset < 0) {
-                $offset *= -1;
-                @y = @y[$offset..scalar(@y)-1]
-            }
-            if (scalar(@x)<$min_overlap || scalar(@y) < $min_overlap) {
-                # Error checking in main program should prevent us from ever being
-                # able to get here.
-                return 0;
-             }
-            return Correlation(\@x, \@y);
-        $$
-        LANGUAGE plperl;
-      """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-        CREATE OR REPLACE FUNCTION Compare(integer[], integer[], integer) RETURNS float
+        CREATE OR REPLACE FUNCTION compare(integer[], integer[], integer) RETURNS float
         AS $$
             my @x=@{ $_[0]; };
             my @y=@{ $_[1]; };
@@ -139,7 +162,7 @@ def init_perl_functions():
             }
             my @corr_xy;
             for $offset (-1*$span..$span){
-            	push @corr_xy, CrossCorrelation(\@x, \@y, $offset);
+            	push @corr_xy, crosscorrelation(\@x, \@y, $offset);
             }
             return @corr_xy;
         $$
@@ -150,7 +173,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION MaxIndex(integer[]) RETURNS integer
+        CREATE OR REPLACE FUNCTION maxindex(integer[]) RETURNS integer
         AS $$
             my @x=@{ $_[0]; };
             $maxi = 0;
@@ -168,13 +191,13 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION GetScore(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION getscore(integer[], integer[]) RETURNS float
         AS $$
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
             my $span=150;
-            my @corr = Compare(\@first, \@second, $span);
-            my $max_corr_index = MaxIndex(\@corr);
+            my @corr = compare(\@first, \@second, $span);
+            my $max_corr_index = maxindex(\@corr);
             return @corr[$max_corr_index]
         $$
         LANGUAGE plperl;
