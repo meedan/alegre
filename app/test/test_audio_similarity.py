@@ -176,7 +176,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
+        self.assertEqual(result["result"][0]['doc_id'], 'blah')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/eddy_wally_wow.mp3')
         self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'project_media_id': 12343}])
 
@@ -209,7 +209,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
+        self.assertEqual(result["result"][0]['doc_id'], 'blah')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/eddy_wally_wow.mp3')
         self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'project_media_id': 12343}])
 
@@ -224,7 +224,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results[0]['doc_id'], 'blah')
         self.assertEqual(results[0]['url'], "http://blah.com")
         self.assertEqual(results[0]['score'], 1.0)
-        self.assertEqual(results[0]['context'], {"blah": 1})
+        self.assertEqual(results[0]['context'], [{"blah": 1}])
 
 if __name__ == '__main__':
   unittest.main()
