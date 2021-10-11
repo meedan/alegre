@@ -201,14 +201,16 @@ def init_perl_functions():
       DDL("""
         CREATE OR REPLACE FUNCTION f_maxindex(integer[]) RETURNS integer
         AS $$
-            my @x=@{ $_[0]; };
-            $maxi = 0;
-            for $i (1..scalar(@x)-1) {
-            	if (@x[$i]>@x[$maxi]) {
-            		$maxi = $i;
-            	}
+            $_SHARED{maxindex} = sub {
+                my @x=@{ $_[0]; };
+                $maxi = 0;
+                for $i (1..scalar(@x)-1) {
+                	if (@x[$i]>@x[$maxi]) {
+                		$maxi = $i;
+                	}
+                }
+                return $maxi;
             }
-            return $maxi;
         $$
         LANGUAGE plperl;
       """)
