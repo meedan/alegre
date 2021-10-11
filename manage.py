@@ -35,8 +35,9 @@ manager.add_command('db', MigrateCommand)
 def test_simple_perl_function():
     from sqlalchemy import text
     cmd = """
+      SELECT audio_similarity_functions();
       SELECT * FROM (
-        SELECT Test2(chromaprint_fingerprint, :chromaprint_fingerprint)
+        SELECT Test(chromaprint_fingerprint, :chromaprint_fingerprint)
         AS score FROM audios
       ) f
       WHERE score <= :threshold
@@ -44,7 +45,7 @@ def test_simple_perl_function():
     """
     matches = db.session.execute(text(cmd), dict(**{
         'chromaprint_fingerprint': [1,2,3,4],
-        'threshold': 0.7,
+        'threshold': 10,
     }, **{})).fetchall()
     import code;code.interact(local=dict(globals(), **locals()))
 
@@ -58,24 +59,34 @@ def init_simple_perl_function():
         CREATE OR REPLACE LANGUAGE plperl;
       """)
     )
+    # sqlalchemy.event.listen(
+    #   db.metadata,
+    #   'before_create',
+    #   DDL("""
+    #     DROP FUNCTION Test(integer[], integer[]);
+    #   """)
+    # )
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
       DDL("""
-        DROP FUNCTION Test(integer[], integer[]);
-      """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-        CREATE OR REPLACE FUNCTION Test(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION functions() RETURNS void
         AS $$
-            $_SHARED{test} = sub {
+            $_SHARED{maxindex} = sub {
+                my @x=@{ $_[0]; };
+                $maxi = 0;
+                for $i (1..scalar(@x)-1) {
+                	if (@x[$i]>@x[$maxi]) {
+                		$maxi = $i;
+                	}
+                }
+                return $maxi;
+            };
+            $_SHARED{test2} = sub {
                 my @x=@{ $_[0]; };
                 my @y=@{ $_[1]; };
                 return 0.8;
-            }
+            };
         $$
         LANGUAGE plperl;
       """)
@@ -84,12 +95,12 @@ def init_simple_perl_function():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION Test2(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION Test(integer[], integer[]) RETURNS float
         AS $$
             my @x=@{ $_[0]; };
             my @y=@{ $_[1]; };
-            my $test = $_SHARED{test};
-            return &$test(\@x, \@y);
+            my $maxindex = $_SHARED{maxindex};
+            return &$maxindex(\@x);
         $$
         LANGUAGE plperl;
       """)
@@ -112,7 +123,7 @@ def init_perl_functions():
       db.metadata,
       'before_create',
       DDL("""
-        CREATE OR REPLACE FUNCTION f_correlation(integer[], integer[]) RETURNS float
+        CREATE OR REPLACE FUNCTION audio_similarity_functions() RETURNS void
         AS $$
             $_SHARED{correlation} = sub {
                 my @x=@{ $_[0]; };
@@ -135,17 +146,7 @@ def init_perl_functions():
                 }
                 $covariance = $covariance / $len;
                 return $covariance/32;
-            }
-        $$
-        LANGUAGE plperl;
-      """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-        CREATE OR REPLACE FUNCTION f_crosscorrelation(integer[], integer[], integer) RETURNS float
-        AS $$
+            };
             $_SHARED{crosscorrelation} = sub {
                 my @x=@{ $_[0]; };
                 my @y=@{ $_[1]; };
@@ -164,17 +165,7 @@ def init_perl_functions():
                  }
                 my $correlation = $_SHARED{correlation};
                 return &$correlation(\@x, \@y);
-            }
-        $$
-        LANGUAGE plperl;
-      """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-        CREATE OR REPLACE FUNCTION f_compare(integer[], integer[], integer) RETURNS float
-        AS $$
+            };
             $_SHARED{compare} = sub {
                 my @x=@{ $_[0]; };
                 my @y=@{ $_[1]; };
@@ -190,17 +181,7 @@ def init_perl_functions():
                 	push @corr_xy, &$crosscorrelation(\@x, \@y, $offset);
                 }
                 return @corr_xy;
-            }
-        $$
-        LANGUAGE plperl;
-      """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-        CREATE OR REPLACE FUNCTION f_maxindex(integer[]) RETURNS integer
-        AS $$
+            };
             $_SHARED{maxindex} = sub {
                 my @x=@{ $_[0]; };
                 $maxi = 0;
@@ -210,7 +191,7 @@ def init_perl_functions():
                 	}
                 }
                 return $maxi;
-            }
+            };
         $$
         LANGUAGE plperl;
       """)

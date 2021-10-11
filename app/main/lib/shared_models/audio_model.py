@@ -188,6 +188,7 @@ class AudioModel(SharedModel):
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
+                  SELECT audio_similarity_functions();
                   SELECT * FROM (
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
@@ -199,6 +200,7 @@ class AudioModel(SharedModel):
                 """
             else:
                 cmd = """
+                  SELECT audio_similarity_functions();
                   SELECT * FROM (
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, GetScore(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
