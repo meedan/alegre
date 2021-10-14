@@ -1,10 +1,26 @@
 version: '2'
 services:
   postgres:
+    build: ./postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
     environment:
+      POSTGRESQL_POSTGRES_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_DATABASE: alegre
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: alegre_test
+      POSTGRES_DB: alegre
+      REPMGR_PASSWORD: repmgrpassword
+      REPMGR_PRIMARY_HOST: pg-0
+      REPMGR_PRIMARY_PORT: 5432
+      REPMGR_PARTNER_NODES: pg-0,pg-1:5432
+      REPMGR_NODE_NAME: pg-0
+      REPMGR_NODE_NETWORK_NAME: pg-0
+      REPMGR_PORT_NUMBER: 5432
   other_model_test:
     build: .
     command: ["make", "run_model"]
