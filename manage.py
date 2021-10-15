@@ -207,15 +207,17 @@ def init_perl_functions():
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
             my $span=150;
-            my $compare = $_SHARED{compare};
-            my @corr = &$compare(\@first, \@second, $span);
-            my $maxindex = $_SHARED{maxindex};
-            my $max_corr_index = &$maxindex(\@corr);
-            return @corr[$max_corr_index]
+            my $correlation = $_SHARED{correlation};
+            return &$correlation(\@first, \@second, $span);
         $$
         LANGUAGE plperl;
       """)
     )
+            # my $compare = $_SHARED{compare};
+            # my @corr = &$compare(\@first, \@second, $span);
+            # my $maxindex = $_SHARED{maxindex};
+            # my $max_corr_index = &$maxindex(\@corr);
+            # return @corr[$max_corr_index]
     db.create_all()
 
 @manager.command
