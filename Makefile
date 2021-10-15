@@ -13,3 +13,6 @@ test: wait
 	coverage run manage.py test
 wait:
 	until curl --silent -XGET --fail $(ELASTICSEARCH_URL); do printf '.'; sleep 1; done
+contract_testing: wait
+	curl -vvv -X POST "http://alegre:5000/image/similarity/" -H "Content-Type: application/json" -d '{"url":"https://i.imgur.com/ewGClFQ.png","threshold":0.9,"context":{}}'
+	pact-verifier --provider-base-url=http://alegre:5000 --pact-url=./app/test/pact/check_api-alegre.json
