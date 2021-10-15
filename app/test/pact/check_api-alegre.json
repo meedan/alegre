@@ -82,7 +82,7 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "text": "X X X\n3\nTranslate this sentence\nو عندي وقت في الساعة العاشرة.\n"
+          "text": "X X\n3\nTranslate this sentence\nو عندي وقت في الساعة العاشرة.\n»\n"
         }
       }
     },
