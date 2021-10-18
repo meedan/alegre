@@ -11,7 +11,6 @@ from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import tenacity
-import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -23,65 +22,6 @@ def _after_log(retry_state):
 
 def parse_db_hash_value(hash_value):
     return binascii.b2a_hex(hash_value).decode("utf-8")[1::2]
-
-def correlation(listx, listy):
-    if len(listx) == 0 or len(listy) == 0:
-        # Error checking in main program should prevent us from ever being
-        # able to get here.
-        raise Exception('Empty lists cannot be correlated.')
-    if len(listx) > len(listy):
-        listx = listx[:len(listy)]
-    elif len(listx) < len(listy):
-        listy = listy[:len(listx)]
-    covariance = 0
-    for i in range(len(listx)):
-        covariance += 32 - bin(listx[i] ^ listy[i]).count("1")
-    covariance = covariance / float(len(listx))
-    return covariance/32
-  
-# return cross correlation, with listy offset from listx
-def cross_correlation(listx, listy, offset, min_overlap=20):
-    if offset > 0:
-        listx = listx[offset:]
-        listy = listy[:len(listx)]
-    elif offset < 0:
-        offset = -offset
-        listy = listy[offset:]
-        listx = listx[:len(listy)]
-    if min(len(listx), len(listy)) < min_overlap:
-        # Error checking in main program should prevent us from ever being
-        # able to get here.
-        return 
-    #raise Exception('Overlap too small: %i' % min(len(listx), len(listy)))
-    return correlation(listx, listy)
-  
-# cross correlate listx and listy with offsets from -span to span
-def compare(listx, listy, span, step):
-    if span > min(len(listx), len(listy)):
-        span = min(len(listx), len(listy)) -1
-    corr_xy = []
-    for offset in np.arange(-span, span + 1, step):
-        corr_xy.append(cross_correlation(listx, listy, offset))
-    return corr_xy
-  
-# return index of maximum value in list
-def max_index(listx):
-    max_index = 0
-    max_value = listx[0]
-    for i, value in enumerate(listx):
-        if value and max_value and value > max_value:
-            max_value = value
-            max_index = i
-    return max_index
-  
-def get_max_corr(corr, source, target, threshold, span, step):
-    max_corr_index = max_index(corr)
-    max_corr_offset = -span + max_corr_index * step
-    return corr[max_corr_index]
-
-def get_score(first, second, threshold, span=150, step=1):
-    corr = compare(first, second, span, step)
-    return get_max_corr(corr, first, second, threshold, span, step)
 
 class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
@@ -183,40 +123,38 @@ class AudioModel(SharedModel):
         return True
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-    def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
+    def search_by_hash_value(self, hash_value, threshold, context):
         try:
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
-                  SELECT audio_similarity_functions();
                   SELECT * FROM (
-                    SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
+                    SELECT id, doc_id, hash_value, url, context, bit_count_audio(hash_value # :hash_value)
                     AS score FROM audios
                   ) f
-                  WHERE score >= :threshold
+                  WHERE score <= :threshold
                   AND 
                   """+context_query+"""
-                  ORDER BY score DESC
+                  ORDER BY score ASC
                 """
             else:
                 cmd = """
-                  SELECT audio_similarity_functions();
                   SELECT * FROM (
-                    SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
+                    SELECT id, doc_id, hash_value, phash, url, context, bit_count_audio(hash_value # :hash_value)
                     AS score FROM audios
                   ) f
-                  WHERE score >= :threshold
-                  ORDER BY score DESC
+                  WHERE score <= :threshold
+                  ORDER BY score ASC
                 """
             matches = db.session.execute(text(cmd), dict(**{
-                'chromaprint_fingerprint': chromaprint_fingerprint,
+                'hash_value': hash_value,
                 'threshold': threshold,
             }, **context_hash)).fetchall()
-            keys = ('id', 'doc_id', 'chromaprint_fingerprint', 'url', 'context', 'score')
+            keys = ('id', 'doc_id', 'hash_value', 'url', 'context', 'score')
             rows = []
             for values in matches:
                 row = dict(zip(keys, values))
-                # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
+                row["score"] = 1-(row["score"]/float(Audio.hash_value.type.length))
                 rows.append(row)
             return rows
         except Exception as e:
@@ -248,8 +186,8 @@ class AudioModel(SharedModel):
             if audios and not audio:
                 audio = audios[0]
         if audio:
-            threshold = round((1-(task.get('threshold', 1.0) or 1.0))*Audio.hash_value.type.length)
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
+            threshold = round((1-(task.get('threshold', 0.0) or 0.0))*Audio.hash_value.type.length)
+            matches = self.search_by_hash_value(audio.hash_value, threshold, context)
             if temporary:
                 self.delete(task)
             return {"result": matches}
@@ -274,4 +212,3 @@ class AudioModel(SharedModel):
                     context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
                     context_hash[f"context_{key}"] = value
         return str.join(" AND ",  context_query), context_hash
-    
