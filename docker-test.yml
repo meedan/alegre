@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: alegre_test
+      POSTGRES_DB: alegre
   other_model_test:
     build: .
     command: ["make", "run_model"]
