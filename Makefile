@@ -1,5 +1,6 @@
 .PHONY: run test wait
 run: wait
+	python manage.py init_perl_functions
 	python manage.py init
 	python manage.py db stamp head
 	python manage.py db upgrade
