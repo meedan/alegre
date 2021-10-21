@@ -146,6 +146,9 @@ def init_perl_functions():
                 $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
                 $covariance +=32 - $bits;
                 }
+                if ($len == 0){
+                    return 0.0
+                }
                 $covariance = $covariance / $len;
                 return $covariance/32;
             };
