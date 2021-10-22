@@ -119,6 +119,7 @@ def init_perl_functions():
       'before_create',
       DDL("""
         CREATE OR REPLACE LANGUAGE plperl;
+        DROP FUNCTION get_audio_chromaprint_score(integer[],integer[]);
       """)
     )
     sqlalchemy.event.listen(
@@ -137,7 +138,7 @@ def init_perl_functions():
                 $covariance = 0;
                 for $i (0..$len-1) {
                 $bits=0;
-                $xor=@x[$i] ^ @y[$i];
+                $xor=(int(@x[$i]) ^ int(@y[$i]));
                 $bits=$xor;
                 $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
                 $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
@@ -145,9 +146,6 @@ def init_perl_functions():
                 $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
                 $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
                 $covariance +=32 - $bits;
-                }
-                if ($len == 0){
-                    return 0.0
                 }
                 $covariance = $covariance / $len;
                 return $covariance/32;
@@ -209,18 +207,16 @@ def init_perl_functions():
         AS $$
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
-            my $span=150;
-            my $correlation = $_SHARED{correlation};
-            return &$correlation(\@first, \@second, $span);
+            my $span=20;
+            my $compare = $_SHARED{compare};
+            my @corr = &$compare(\@first, \@second, $span);
+            my $maxindex = $_SHARED{maxindex};
+            my $max_corr_index = &$maxindex(\@corr);
+            return @corr[$max_corr_index]
         $$
         LANGUAGE plperl;
       """)
     )
-            # my $compare = $_SHARED{compare};
-            # my @corr = &$compare(\@first, \@second, $span);
-            # my $maxindex = $_SHARED{maxindex};
-            # my $max_corr_index = &$maxindex(\@corr);
-            # return @corr[$max_corr_index]
     db.create_all()
 
 @manager.command
