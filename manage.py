@@ -119,7 +119,6 @@ def init_perl_functions():
       'before_create',
       DDL("""
         CREATE OR REPLACE LANGUAGE plperl;
-        DROP FUNCTION get_audio_chromaprint_score(integer[],integer[]);
       """)
     )
     sqlalchemy.event.listen(
