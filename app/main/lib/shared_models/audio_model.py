@@ -186,7 +186,7 @@ class AudioModel(SharedModel):
             if audios and not audio:
                 audio = audios[0]
         if audio:
-            threshold = round((1-(task.get('threshold', 1.0) or 1.0))*Audio.hash_value.type.length)
+            threshold = task.get('threshold', 1.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
             if temporary:
                 self.delete(task)

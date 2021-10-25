@@ -10,6 +10,7 @@ run_model:
 run_video_matcher:
 	python manage.py run_video_matcher
 test: wait
+	python manage.py init_perl_functions
 	coverage run manage.py test
 wait:
 	until curl --silent -XGET --fail $(ELASTICSEARCH_URL); do printf '.'; sleep 1; done
