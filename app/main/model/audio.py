@@ -12,9 +12,12 @@ from app.main import db
 
 # @timeout_decorator.timeout(15)
 def audio_hasher(filename):
-  return acoustid.chromaprint.decode_fingerprint(
-    acoustid.fingerprint_file(filename)[1]
-  )[0]
+  try:
+    return acoustid.chromaprint.decode_fingerprint(
+      acoustid.fingerprint_file(filename)[1]
+    )[0]
+  except acoustid.FingerprintGenerationError:
+    return []
 
 class Audio(db.Model):
   """ Model for storing video related details """
