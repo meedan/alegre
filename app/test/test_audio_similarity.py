@@ -10,7 +10,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
-from app.main.model.audio import Audio
+from app.main.model.audio import Audio, audio_hasher
 
 class SharedModelStub(SharedModel):
   model_key = 'audio'
@@ -225,6 +225,9 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results[0]['url'], "http://blah.com")
         self.assertEqual(results[0]['score'], 1.0)
         self.assertEqual(results[0]['context'], [{"blah": 1}])
+    
+    def test_video_with_no_audio_channel(self):
+        self.assertEqual(audio_hasher('/app/app/test/data/no-audio-video.mp4'), [])
 
 if __name__ == '__main__':
   unittest.main()
