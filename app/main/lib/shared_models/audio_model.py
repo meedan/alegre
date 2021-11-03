@@ -11,6 +11,7 @@ from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import tenacity
+import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -19,9 +20,6 @@ from app.main.model.audio import Audio
 
 def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
-
-def parse_db_hash_value(hash_value):
-    return binascii.b2a_hex(hash_value).decode("utf-8")[1::2]
 
 class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
@@ -123,38 +121,40 @@ class AudioModel(SharedModel):
         return True
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-    def search_by_hash_value(self, hash_value, threshold, context):
+    def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
             context_query, context_hash = self.get_context_query(context)
             if context_query:
                 cmd = """
+                  SELECT audio_similarity_functions();
                   SELECT * FROM (
-                    SELECT id, doc_id, hash_value, url, context, bit_count_audio(hash_value # :hash_value)
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score <= :threshold
+                  WHERE score >= :threshold
                   AND 
                   """+context_query+"""
-                  ORDER BY score ASC
+                  ORDER BY score DESC
                 """
             else:
                 cmd = """
+                  SELECT audio_similarity_functions();
                   SELECT * FROM (
-                    SELECT id, doc_id, hash_value, phash, url, context, bit_count_audio(hash_value # :hash_value)
+                    SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score <= :threshold
-                  ORDER BY score ASC
+                  WHERE score >= :threshold
+                  ORDER BY score DESC
                 """
             matches = db.session.execute(text(cmd), dict(**{
-                'hash_value': hash_value,
+                'chromaprint_fingerprint': chromaprint_fingerprint,
                 'threshold': threshold,
             }, **context_hash)).fetchall()
-            keys = ('id', 'doc_id', 'hash_value', 'url', 'context', 'score')
+            keys = ('id', 'doc_id', 'chromaprint_fingerprint', 'url', 'context', 'score')
             rows = []
             for values in matches:
                 row = dict(zip(keys, values))
-                row["score"] = 1-(row["score"]/float(Audio.hash_value.type.length))
+                # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
                 rows.append(row)
             return rows
         except Exception as e:
@@ -186,8 +186,8 @@ class AudioModel(SharedModel):
             if audios and not audio:
                 audio = audios[0]
         if audio:
-            threshold = round((1-(task.get('threshold', 0.0) or 0.0))*Audio.hash_value.type.length)
-            matches = self.search_by_hash_value(audio.hash_value, threshold, context)
+            threshold = task.get('threshold', 1.0)
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
             if temporary:
                 self.delete(task)
             return {"result": matches}
