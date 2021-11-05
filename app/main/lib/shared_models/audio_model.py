@@ -32,6 +32,9 @@ class AudioModel(SharedModel):
                 if audio.hash_value and not existing.hash_value:
                     existing.hash_value = audio.hash_value
                     flag_modified(existing, 'hash_value')
+                if audio.chromaprint_fingerprint and not existing.chromaprint_fingerprint:
+                    existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
+                    flag_modified(existing, 'chromaprint_fingerprint')
                 if audio.context not in existing.context:
                     existing.context.append(audio.context)
                     flag_modified(existing, 'context')
@@ -89,7 +92,7 @@ class AudioModel(SharedModel):
             audio = self.save(audio)
             return {"requested": task, "result": {"url": audio.url}, "success": True}
         except urllib.error.HTTPError:
-            return {"requested": task, "result": {"url": audio.url}, "success": False}
+            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
