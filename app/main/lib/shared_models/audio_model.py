@@ -29,10 +29,10 @@ class AudioModel(SharedModel):
             # First locate existing audio and append new context
             existing = db.session.query(Audio).filter(Audio.url==audio.url).one()
             if existing:
-                if audio.hash_value and not existing.hash_value:
+                if audio.hash_value is not None  and not existing.hash_value:
                     existing.hash_value = audio.hash_value
                     flag_modified(existing, 'hash_value')
-                if audio.chromaprint_fingerprint and not existing.chromaprint_fingerprint:
+                if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
                     existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
                     flag_modified(existing, 'chromaprint_fingerprint')
                 if audio.context not in existing.context:
