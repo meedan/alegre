@@ -25,7 +25,7 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
-    - meedan-1002-less-intense-acoustid
+    - deploy-all-models-to-qa
 
 deploy_qa:
   image: python:3-alpine
@@ -47,13 +47,22 @@ deploy_qa:
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - echo -n "-s qa-alegre-c GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-c.env.args
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-indiansbert $NAME /qa/alegre/$NAME " >> qa-alegre-indiansbert.env.args; done
+    - echo -n "-s qa-alegre-indiansbert GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-indiansbert.env.args
+    - ecs deploy ecs-qa  qa-alegre-indiansbert --diff --image qa-alegre-indiansbert $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-indiansbert MODEL_NAME indiansbert -e qa-alegre-indiansbert SENTENCE_TRANSFORMERS_HOME /mnt/models/indiansbert-cache -e qa-alegre-indiansbert APP alegre -e qa-alegre-indiansbert DEPLOY_ENV qa -e qa-alegre-indiansbert ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-indiansbert.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-meantokens $NAME /qa/alegre/$NAME " >> qa-alegre-meantokens.env.args; done
+    - echo -n "-s qa-alegre-meantokens GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-meantokens.env.args
+    - ecs deploy ecs-qa  qa-alegre-meantokens --diff --image qa-alegre-meantokens $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-meantokens MODEL_NAME meantokens -e qa-alegre-meantokens SENTENCE_TRANSFORMERS_HOME /mnt/models/meantokens-cache -e qa-alegre-meantokens APP alegre -e qa-alegre-meantokens DEPLOY_ENV qa -e qa-alegre-meantokens ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-meantokens.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-video $NAME /qa/alegre/$NAME " >> qa-alegre-video.env.args; done
+    - echo -n "-s qa-alegre-video GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-video.env.args
+    - ecs deploy ecs-qa  qa-alegre-video --diff --image qa-alegre-video $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-video MODEL_NAME video -e qa-alegre-video PERSISTENT_DISK_PATH /mnt/models/video -e qa-alegre-video APP alegre -e qa-alegre-video DEPLOY_ENV qa -e qa-alegre-video ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-video.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-audio $NAME /qa/alegre/$NAME " >> qa-alegre-audio.env.args; done
     - echo -n "-s qa-alegre-audio GITHUB_TOKEN arn:aws:secretsmanager:eu-west-1:848416313321:secret:GithubToken-Plain-BUhwIw" >> qa-alegre-audio.env.args
     - ecs deploy ecs-qa  qa-alegre-audio --diff --image qa-alegre-audio $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-audio MODEL_NAME audio -e qa-alegre-audio APP alegre -e qa-alegre-audio DEPLOY_ENV qa -e qa-alegre-audio ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-audio.env.args`
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - meedan-1002-less-intense-acoustid
+    - deploy-all-models-to-qa
 
 build_live:
   image: docker:latest
