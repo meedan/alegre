@@ -17,6 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.helpers import context_matches
 from app.main import db
 from app.main.model.video import Video
 
@@ -128,17 +129,11 @@ class VideoModel(SharedModel):
             keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
-                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+                row["context"] = [c for c in row["context"] if context_matches(context, c)]
             return rows
         except Exception as e:
             db.session.rollback()
             raise e
-
-    def context_matches(self, context, search_context):
-        for k,v in context.items():
-            if search_context.get(k) != v:
-                return False
-        return True
 
     def search(self, task):
         context = {}

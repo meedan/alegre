@@ -15,6 +15,7 @@ import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.helpers import context_matches
 from app.main import db
 from app.main.model.audio import Audio
 
@@ -29,9 +30,12 @@ class AudioModel(SharedModel):
             # First locate existing audio and append new context
             existing = db.session.query(Audio).filter(Audio.url==audio.url).one()
             if existing:
-                if audio.hash_value and not existing.hash_value:
+                if audio.hash_value is not None  and not existing.hash_value:
                     existing.hash_value = audio.hash_value
                     flag_modified(existing, 'hash_value')
+                if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
+                    existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
+                    flag_modified(existing, 'chromaprint_fingerprint')
                 if audio.context not in existing.context:
                     existing.context.append(audio.context)
                     flag_modified(existing, 'context')
@@ -89,7 +93,7 @@ class AudioModel(SharedModel):
             audio = self.save(audio)
             return {"requested": task, "result": {"url": audio.url}, "success": True}
         except urllib.error.HTTPError:
-            return {"requested": task, "result": {"url": audio.url}, "success": False}
+            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
@@ -108,17 +112,11 @@ class AudioModel(SharedModel):
             keys = ('id', 'doc_id', 'url', 'hash_value', 'context')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
-                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+                row["context"] = [c for c in row["context"] if context_matches(context, c)]
             return rows
         except Exception as e:
             db.session.rollback()
             raise e
-
-    def context_matches(self, context, search_context):
-        for k,v in context.items():
-            if search_context.get(k) != v:
-                return False
-        return True
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
