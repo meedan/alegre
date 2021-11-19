@@ -1,3 +1,4 @@
+from flask import current_app as app
 from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches

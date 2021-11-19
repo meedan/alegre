@@ -1,4 +1,5 @@
 # Elasticsearch helpers
+import elasticsearch
 from elasticsearch import Elasticsearch
 
 from elasticsearch.helpers import scan

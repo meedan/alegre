@@ -1,5 +1,3 @@
-from elasticsearch import Elasticsearch
-import elasticsearch
 from app.main.lib.elasticsearch import get_all_documents_matching_context
 from app.main.lib.text_similarity import search_text
 from app.main.lib.image_similarity import search_image
