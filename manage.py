@@ -49,7 +49,6 @@ def test_simple_perl_function():
         'chromaprint_fingerprint': fingerprint,
         'threshold': 10000,
     }, **{})).fetchall()
-    import code;code.interact(local=dict(globals(), **locals()))
 
 @manager.command
 def init_simple_perl_function():

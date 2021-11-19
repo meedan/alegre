@@ -27,7 +27,7 @@ class ImageSimilarityResource(Resource):
     return save_image(request.json)
 
   def get_from_args_or_json(self, request, key):
-    return request.args.get(key) or request.json.get(key)
+    return request.args.get(key) or (request.json and request.json.get(key))
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make an image similarity query')
