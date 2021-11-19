@@ -33,7 +33,7 @@ class ImageSimilarityResource(Resource):
   @api.doc('Make an image similarity query')
   @api.expect(image_similarity_request, validate=False)
   def get(self):
-    search_image(
+    return search_image(
       self.get_from_args_or_json(request, 'url'),
       self.get_from_args_or_json(request, 'context'),
       self.get_from_args_or_json(request, 'threshold'),
