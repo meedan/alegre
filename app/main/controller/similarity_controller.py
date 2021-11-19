@@ -38,7 +38,11 @@ class SimilarityResource(Resource):
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def delete(self):
-        return delete_text(request.json["doc_id"], request.json.get("quiet", False))
+        response = delete_text(request.json["doc_id"], request.json.get("quiet", False))
+        if response == False:
+          abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
+        else:
+          return response
 
     @api.response(200, 'text successfully stored in the similarity database.')
     @api.doc('Store a text in the similarity database')

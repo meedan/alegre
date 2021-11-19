@@ -94,7 +94,7 @@ def delete_document(doc_id, quiet):
                 'failed': f"Doc Not Found for id {doc_id}! No Deletion Occurred - quiet failure requested, so 200 code returned."
             }
         else:
-            abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
+            return False
 
 def language_to_analyzer(lang):
     analyzer_dict = {

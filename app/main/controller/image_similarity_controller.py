@@ -2,6 +2,7 @@ import json
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
+from app.main.lib.image_similarity import save_image, search_image
 
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
