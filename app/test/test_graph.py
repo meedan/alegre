@@ -1,9 +1,13 @@
-import igraph
 import unittest
 import json
+import uuid
 from flask import current_app as app
 from unittest.mock import patch
+from collections import namedtuple
+
+import igraph
 import numpy as np
+import rq
 
 from app.test.base import BaseTestCase
 from app.main.model.graph import Graph
@@ -23,43 +27,49 @@ def get_iterable_objects(graph, data_type):
 def get_matches_for_item(graph, item, data_type):
   return [{"id": e, "context": {"blah": 1, "project_media_id": e}, "score": np.random.random()*0.2 + 0.8} for e in mapped.get(item["id"], [])]
 
+Job = namedtuple('Job', ('id'))
+
 class TestGraph(BaseTestCase):
   def test_graphs_can_be_written_and_read(self):
-    graph_id = Graph.store({"threshold": 0.8, "data_types": ["image"], "context": {"blah": 1}})
-    self.assertIsInstance(graph_id, int)
-    graph = Graph.enrich(graph_id, get_iterable_objects, get_matches_for_item)
-    self.assertIsInstance(graph, Graph)
-    graph_response = Graph.fetch({"graph_id": graph_id})
-    self.assertIsInstance(graph_response, list)
-    self.assertIsInstance(graph_response[0], list)
-    self.assertIsInstance(graph_response[0][0], dict)
-    response = self.client.get('/graph/', data=json.dumps({
-        'graph_id': graph_id,
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    self.assertIsInstance(result, dict)
-    self.assertIsInstance(result["clusters"], list)
-    self.assertIsInstance(result["clusters"][0], list)
-    self.assertIsInstance(result["clusters"][0][0], dict)
+    with patch('app.main.model.graph.Graph.enqueue', ) as mock_enqueue:
+      mock_enqueue.return_value = Job(str(uuid.uuid1()))
+      graph_id, job_id = Graph.store({"threshold": 0.8, "data_types": ["image"], "context": {"blah": 1}})
+      self.assertIsInstance(graph_id, int)
+      graph = Graph.enrich(graph_id, get_iterable_objects, get_matches_for_item)
+      self.assertIsInstance(graph, Graph)
+      graph_response = Graph.fetch({"graph_id": graph_id})
+      self.assertIsInstance(graph_response, list)
+      self.assertIsInstance(graph_response[0], list)
+      self.assertIsInstance(graph_response[0][0], dict)
+      response = self.client.get('/graph/', data=json.dumps({
+          'graph_id': graph_id,
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertIsInstance(result, dict)
+      self.assertIsInstance(result["clusters"], list)
+      self.assertIsInstance(result["clusters"][0], list)
+      self.assertIsInstance(result["clusters"][0][0], dict)
 
   def test_graph_endpoints(self):
-    response = self.client.post('/graph/', data=json.dumps({
-      "threshold": 0.8,
-      "data_types": ["image"],
-      "context": {"blah": 1}
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    self.assertIsInstance(result, dict)
-    self.assertIsInstance(result["graph_id"], int)
-    graph = Graph.enrich(result["graph_id"], get_iterable_objects, get_matches_for_item)
-    response = self.client.get('/graph/', data=json.dumps({
-        'graph_id': result["graph_id"],
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    self.assertIsInstance(result, dict)
-    self.assertIsInstance(result["clusters"], list)
-    self.assertIsInstance(result["clusters"][0], list)
-    self.assertIsInstance(result["clusters"][0][0], dict)
+    with patch('app.main.model.graph.Graph.enqueue', ) as mock_enqueue:
+      mock_enqueue.return_value = Job(str(uuid.uuid1()))
+      response = self.client.post('/graph/', data=json.dumps({
+        "threshold": 0.8,
+        "data_types": ["image"],
+        "context": {"blah": 1}
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertIsInstance(result, dict)
+      self.assertIsInstance(result["graph_id"], int)
+      graph = Graph.enrich(result["graph_id"], get_iterable_objects, get_matches_for_item)
+      response = self.client.get('/graph/', data=json.dumps({
+          'graph_id': result["graph_id"],
+      }), content_type='application/json')
+      result = json.loads(response.data.decode())
+      self.assertIsInstance(result, dict)
+      self.assertIsInstance(result["clusters"], list)
+      self.assertIsInstance(result["clusters"][0], list)
+      self.assertIsInstance(result["clusters"][0][0], dict)
 
 if __name__ == '__main__':
     unittest.main()

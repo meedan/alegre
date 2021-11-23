@@ -9,6 +9,8 @@ import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
 import json_logging
+import redis
+from rq import Connection, Worker
 
 from app import blueprint
 from app.main import create_app, db
@@ -311,5 +313,13 @@ def phash(path):
   phash = compute_phash_int(im)
   print(phash, "{0:b}".format(phash), sep=" ")
 
+@manager.command
+def run_rq_worker():
+  redis_server = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+  with Connection(redis_server):
+      qs = ['default']
+      w = Worker(qs)
+      w.work()
+  
 if __name__ == '__main__':
   manager.run()

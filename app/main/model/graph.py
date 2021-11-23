@@ -1,5 +1,9 @@
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 import igraph
+import redis
+from rq import Queue
+from flask import request, current_app as app
+
 from app.main.model.node import Node
 from app.main import db
 from app.main.lib.graph_writer import generate_edges_for_type, get_iterable_objects, get_matches_for_item
@@ -21,6 +25,12 @@ class Graph(db.Model):
     self.status = status
     db.session.commit()
     
+  def enqueue(self):
+    redis_server = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+    queue = Queue(connection=redis_server)
+    job = queue.enqueue(Graph.enrich, self.id)
+    return job
+    
   @classmethod
   def enrich(cls, graph_id, item_iterator=get_iterable_objects, match_resolver=get_matches_for_item):
     graph = Graph.query.get(graph_id)
@@ -36,8 +46,8 @@ class Graph(db.Model):
     db.session.add(graph)
     db.session.commit()
     db.session.refresh(graph)
-    #todo add to queue, call via Graph.enrich(graph.id)
-    return graph.id
+    job = graph.enqueue()
+    return graph.id, job.id
 
   @classmethod
   def fetch(cls, request_json):

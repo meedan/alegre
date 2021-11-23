@@ -24,7 +24,8 @@ class GraphController(Resource):
     @api.doc('Request a new graph')
     @api.expect(graph_request, validate=True)
     def post(self):
-      return {"graph_id": Graph.store(request.json)}
+      graph_id, job_id = Graph.store(request.json)
+      return {"graph_id": graph_id, "job_id": job_id}
 
     @api.response(200, 'graph successfully created')
     @api.doc('Load an existing graph')
