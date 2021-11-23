@@ -28,14 +28,14 @@ def upgrade():
     )
     op.create_table('nodes',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('node_data_type', sa.String(length=500, _expect_unicode=True), nullable=False),
-    sa.Column('node_data_type_id', sa.Integer(), nullable=False),
-    sa.Column('node_context', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
-    sa.Column('node_data', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('data_type', sa.String(length=500, _expect_unicode=True), nullable=False),
+    sa.Column('data_type_id', sa.Integer(), nullable=False),
+    sa.Column('context', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('data', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_nodes_node_data_type_id'), 'nodes', ['node_data_type_id'], unique=False)
-    op.create_index('node_id_constraint', 'nodes', ['node_data_type', 'node_data_type_id'], unique=True)
+    op.create_index(op.f('ix_nodes_data_type_id'), 'nodes', ['data_type_id'], unique=False)
+    op.create_index('node_id_constraint', 'nodes', ['data_type', 'data_type_id'], unique=True)
     op.create_table('edges',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('graph_id', sa.Integer(), nullable=True),
@@ -63,7 +63,7 @@ def downgrade():
     op.drop_index('edge_source_target_graph', table_name='edges')
     op.drop_table('edges')
     op.drop_index('node_id_constraint', table_name='nodes')
-    op.drop_index(op.f('ix_nodes_node_data_type_id'), table_name='nodes')
+    op.drop_index(op.f('ix_nodes_data_type_id'), table_name='nodes')
     op.drop_table('nodes')
     op.drop_table('graphs')
     # ### end Alembic commands ###

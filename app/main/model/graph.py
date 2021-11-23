@@ -42,7 +42,6 @@ class Graph(db.Model):
   @classmethod
   def fetch(cls, request_json):
     graph = Graph.query.get(request_json.get("graph_id"))
-    import code;code.interact(local=dict(globals(), **locals())) 
     graph_obj=igraph.Graph.TupleList([(e.source_id, e.target_id) for e in graph.edges])
     clustered_result = []
     for cluster in graph_obj.clusters():
