@@ -43,7 +43,8 @@ class TestGraph(BaseTestCase):
     self.assertIsInstance(result["clusters"][0][0], dict)
 
   def test_graph_endpoints(self):
-    response = self.client.post('/audio/similarity/', data=json.dumps({
+    import code;code.interact(local=dict(globals(), **locals())) 
+    response = self.client.post('/graph/', data=json.dumps({
       "threshold": 0.8,
       "data_types": ["image"],
       "context": {"blah": 1}
@@ -52,13 +53,11 @@ class TestGraph(BaseTestCase):
     self.assertIsInstance(result, dict)
     self.assertIsInstance(result["graph_id"], int)
     response = self.client.get('/graph/', data=json.dumps({
-        'graph_id': graph_id,
+        'graph_id': result["graph_id"],
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertIsInstance(result, dict)
     self.assertIsInstance(result["clusters"], list)
-    self.assertIsInstance(result["clusters"][0], list)
-    self.assertIsInstance(result["clusters"][0][0], dict)
 
 if __name__ == '__main__':
     unittest.main()
