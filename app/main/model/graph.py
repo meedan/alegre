@@ -1,5 +1,8 @@
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+import igraph
+from app.main.model.node import Node
 from app.main import db
+from app.main.lib.graph_writer import generate_edges_for_type, get_iterable_objects, get_matches_for_item
 
 class Graph(db.Model):
   """ Model for storing graphs """
@@ -11,27 +14,39 @@ class Graph(db.Model):
   status = db.Column(db.String(255, convert_unicode=True), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
 
+  def nodes(self):
+    return Node.query.filter(Node.id.in_([item for sublist in [[e.source_id, e.target_id] for e in self.edges] for item in sublist]))
+
   def set_status(self, status):
-    graph.status = status
-    db.sesion.commit()
+    self.status = status
+    db.session.commit()
     
   @classmethod
-  def enrich(cls, graph_id):
+  def enrich(cls, graph_id, item_iterator=get_iterable_objects, match_resolver=get_matches_for_item):
     graph = Graph.query.get(graph_id)
     graph.set_status("enriching")
-    db.sesion.commit()
-    for data_type in data_types:
-      graph.generate_edges_for_type(data_type)
+    for data_type in graph.data_types:
+      generate_edges_for_type(graph, data_type, item_iterator, match_resolver)
     graph.set_status("enriched")
+    return graph
 
   @classmethod
-  def store(cls, request):
-    graph = Graph(threshold=request.json["threshold"], data_types=request.json["data_types"], context=request.json["context"], status="created")
+  def store(cls, request_json):
+    graph = Graph(threshold=request_json["threshold"], data_types=request_json["data_types"], context=request_json["context"], status="created")
     db.session.add(graph)
+    db.session.commit()
+    db.session.refresh(graph)
     #todo add to queue, call via Graph.enrich(graph.id)
     return graph.id
 
   @classmethod
-  def fetch(cls, request):
-    return [edge.to_dict() for edge in graph.edges]
-      
+  def fetch(cls, request_json):
+    graph = Graph.query.get(request_json.get("graph_id"))
+    import code;code.interact(local=dict(globals(), **locals())) 
+    graph_obj=igraph.Graph.TupleList([(e.source_id, e.target_id) for e in graph.edges])
+    clustered_result = []
+    for cluster in graph_obj.clusters():
+      clustered_result.append(
+        [n.to_dict() for n in Node.query.filter(Node.id.in_([v['name'] for v in graph_obj.vs(cluster)]))]
+      )
+    return clustered_result

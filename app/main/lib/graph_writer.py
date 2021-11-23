@@ -1,9 +1,10 @@
 from app.main.lib.elasticsearch import get_all_documents_matching_context
-from app.main.lib.text_similarity import search_text
-from app.main.lib.image_similarity import search_image
+from app.main.lib import text_similarity
+from app.main.lib import image_similarity
 from app.main.lib.shared_models.shared_model import SharedModel
 from flask import current_app as app
 
+from app.main import db
 from app.main.lib.helpers import context_matches
 from app.main.model.video import Video
 from app.main.model.image import ImageModel
@@ -40,7 +41,7 @@ def get_iterable_objects(graph, data_type):
 
 def get_matches_for_item(graph, item, data_type):
   if data_type == "image":
-    response = search_image(item.url, graph.context, graph.threshold) #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
+    response = image_similarity.search_image(item.url, graph.context, graph.threshold) #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
   elif data_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item.url, item.doc_id))
   elif data_type == "audio":
@@ -57,7 +58,7 @@ def get_matches_for_item(graph, item, data_type):
       "vector": item.get("_source").get(vector_key),
     }
     project_media_id = item.get("_source", {}).get("context", {}).get("project_media_id", 0) #ugly hack to grab only cases where they arrived earlier, we have no datestamps or implicit timing otherwise... this will need a refactor for all the items across alegre in order to address.
-    response = restrict_text_result_to_predecessors(search_text(search_params))
+    response = restrict_text_result_to_predecessors(text_similarity.search_text(search_params))
   if response:
     results = response.get("result", [])
     if results:
@@ -82,17 +83,19 @@ def get_node_context_from_item_or_match(item_or_match):
   elif isinstance(iom_context, list):
     for c in iom_context:
       context.append(c)
-  return {"context": context}
+  return context
 
-def generate_edges_for_type(graph, data_type):
-  for item in get_iterable_objects(graph, data_type):
-    for match in get_matches_for_item(graph, item, data_type):
-      item_node_data = get_node_context_from_item_or_match(item_or_match)
-      match_node_data = get_node_context_from_item_or_match(item_or_match)
-      item_node = get_or_init_node(get_item_or_match_id(item), data_type, get_node_context_from_item_or_match(item_or_match))
-      match_node = get_or_init_node(get_item_or_match_id(match), data_type, get_node_context_from_item_or_match(item_or_match))
-      source, target = [item_node, match_node].sort(key=lambda x:x.id)
-      edge = generate_edge(source, target, graph, data_type)
+def generate_edges_for_type(graph, data_type, item_iterator=get_iterable_objects, match_resolver=get_matches_for_item):
+  for item in item_iterator(graph, data_type):
+    for match in match_resolver(graph, item, data_type):
+      item_node_data = get_node_context_from_item_or_match(item)
+      match_node_data = get_node_context_from_item_or_match(match)
+      item_node = get_or_init_node(get_item_or_match_id(item), data_type, get_node_context_from_item_or_match(item))
+      match_node = get_or_init_node(get_item_or_match_id(match), data_type, get_node_context_from_item_or_match(match))
+      nodes = [item_node, match_node]
+      nodes.sort(key=lambda x:x.id)
+      source, target = nodes
+      edge = generate_edge(source, target, match, graph, data_type)
 
 def get_context_for_node(node, graph):
   contexts = [c for c in node.context if context_matches(graph.context, c)]
@@ -101,45 +104,50 @@ def get_context_for_node(node, graph):
   else:
     return {}
   
-def generate_edge(source, target, graph, data_type):
+def generate_edge(source, target, match, graph, data_type):
   source_context = get_context_for_node(source, graph)
   target_context = get_context_for_node(target, graph)
-  edge = Edge(
-    source_id=source.id,
-    source_context=source_context,
-    target_id=target.id,
-    target_context=target_context,
-    graph_id=graph.id,
-    edge_type="similarity",
-    edge_weight=get_edge_score(match),
-    edge_context={"data_type": data_type},
-    context=graph.context
-  )
-  db.session.add(entity)
-  db.session.flush()
+  edge = Edge.query.filter_by(source_id=source.id, target_id=target.id, graph_id=graph.id, edge_context={"data_type": data_type}).first()
+  if not edge:
+    edge = Edge(
+      source_id=source.id,
+      source_context=source_context,
+      target_id=target.id,
+      target_context=target_context,
+      graph_id=graph.id,
+      edge_type="similarity",
+      edge_weight=get_edge_score(match),
+      edge_context={"data_type": data_type},
+      context=graph.context
+    )
+    db.session.add(edge)
+    db.session.flush()
   return edge
 
 def get_or_init_node(node_data_type_id, node_data_type, node_context):
-  node = Node.query.filter(node_data_type_id=node_data_type_id, node_data_type=node_data_type).first_or_none()
+  node = Node.query.filter_by(data_type_id=node_data_type_id, data_type=node_data_type).first()
   if node:
     return node
   else:
     node = Node(
-      node_data_type_id=node_data_type_id,
-      node_data_type=node_data_type,
-      node_context=node_context,
-      node_data=None
+      data_type_id=node_data_type_id,
+      data_type=node_data_type,
+      context=node_context,
+      data=None
     )
-    db.session.add(entity)
+    db.session.add(node)
     db.session.flush()
   return node
 
 def get_edge_score(match):
-  return match.get("score") or match.get("_score")
+  return match.get("score") or match.get("_score") or 0
 
 def get_item_or_match_id(item_or_match):
   if "id" in dir(item_or_match):
     return item_or_match.id
   elif isinstance(item_or_match, dict):
-    return item_or_match.get("id") or item_or_match.get("_id")
+    if "id" in item_or_match:
+      return item_or_match.get("id")
+    elif "_id" in item_or_match:
+      return item_or_match.get("_id")
 

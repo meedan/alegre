@@ -21,10 +21,10 @@ class Graph(Resource):
     @api.doc('Request a new graph')
     @api.expect(request, validate=True)
     def post(self):
-      return {"graph_id": Graph.store(request)}
+      return {"graph_id": Graph.store(request.json)}
 
     @api.response(200, 'graph successfully created')
     @api.doc('Load an existing graph')
     @api.expect(request, validate=True)
     def get(self):
-      return {"edges": Graph.fetch(request)}
+      return {"clusters": Graph.fetch(request_json)}
