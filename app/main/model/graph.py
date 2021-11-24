@@ -18,6 +18,15 @@ class Graph(db.Model):
   status = db.Column(db.String(255, convert_unicode=True), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
 
+  def to_dict(self):
+    return {
+      "id": self.id,
+      "threshold": self.threshold,
+      "data_types": self.data_types,
+      "status": self.status,
+      "context": self.context,
+    }
+
   def nodes(self):
     return Node.query.filter(Node.id.in_([item for sublist in [[e.source_id, e.target_id] for e in self.edges] for item in sublist]))
 
@@ -52,10 +61,16 @@ class Graph(db.Model):
   @classmethod
   def fetch(cls, request_json):
     graph = Graph.query.get(request_json.get("graph_id"))
-    graph_obj=igraph.Graph.TupleList([(e.source_id, e.target_id) for e in graph.edges])
-    clustered_result = []
-    for cluster in graph_obj.clusters():
-      clustered_result.append(
-        [n.to_dict() for n in Node.query.filter(Node.id.in_([v['name'] for v in graph_obj.vs(cluster)]))]
-      )
-    return clustered_result
+    if graph:
+      if graph.status == "enriched":
+        graph_obj=igraph.Graph.TupleList([(e.source_id, e.target_id) for e in graph.edges])
+        clustered_result = []
+        for cluster in graph_obj.clusters():
+          clustered_result.append(
+            [n.to_dict() for n in Node.query.filter(Node.id.in_([v['name'] for v in graph_obj.vs(cluster)]))]
+          )
+        return {"clusters": clustered_result, "graph": graph.to_dict()}
+      else:
+        return {"clusters": [], "graph": graph.to_dict()}
+    else:
+      return {"error": "Graph with id of "+str(request_json.get("graph_id"))+" not found!"}

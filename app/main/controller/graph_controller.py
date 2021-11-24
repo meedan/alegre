@@ -31,4 +31,4 @@ class GraphController(Resource):
     @api.doc('Load an existing graph')
     @api.expect(graph_fetch, validate=True)
     def get(self):
-      return {"clusters": Graph.fetch(request.json)}
+      return Graph.fetch(request.json)
