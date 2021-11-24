@@ -72,7 +72,7 @@ class TestGraph(BaseTestCase):
       self.assertEqual(result["graph"]["status"], "created")
       graph = Graph.enrich(result["graph"]["id"], get_iterable_objects, get_matches_for_item)
       response = self.client.get('/graph/', data=json.dumps({
-          'graph_id': result["graph_id"],
+          'graph_id': result["graph"]["id"],
       }), content_type='application/json')
       result = json.loads(response.data.decode())
       self.assertIsInstance(result, dict)
