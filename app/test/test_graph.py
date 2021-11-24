@@ -38,9 +38,10 @@ class TestGraph(BaseTestCase):
       graph = Graph.enrich(graph_id, get_iterable_objects, get_matches_for_item)
       self.assertIsInstance(graph, Graph)
       graph_response = Graph.fetch({"graph_id": graph_id})
-      self.assertIsInstance(graph_response, list)
-      self.assertIsInstance(graph_response[0], list)
-      self.assertIsInstance(graph_response[0][0], dict)
+      self.assertIsInstance(graph_response, dict)
+      self.assertIsInstance(graph_response["graph"], dict)
+      self.assertIsInstance(graph_response["clusters"][0], list)
+      self.assertIsInstance(graph_response["clusters"][0][0], dict)
       response = self.client.get('/graph/', data=json.dumps({
           'graph_id': graph_id,
       }), content_type='application/json')
@@ -69,7 +70,7 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(result["clusters"], list)
       self.assertIsInstance(result["graph"], dict)
       self.assertEqual(result["graph"]["status"], "created")
-      graph = Graph.enrich(result["graph_id"], get_iterable_objects, get_matches_for_item)
+      graph = Graph.enrich(result["graph"]["id"], get_iterable_objects, get_matches_for_item)
       response = self.client.get('/graph/', data=json.dumps({
           'graph_id': result["graph_id"],
       }), content_type='application/json')
