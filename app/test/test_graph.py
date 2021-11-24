@@ -80,7 +80,7 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(result["clusters"][0], list)
       self.assertIsInstance(result["clusters"][0][0], dict)
       self.assertIsInstance(result["graph"], dict)
-      self.assertEqual(result["graph"]["status"], "created")
+      self.assertEqual(result["graph"]["status"], "enriched")
 
 if __name__ == '__main__':
     unittest.main()
