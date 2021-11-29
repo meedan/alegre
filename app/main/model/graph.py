@@ -42,12 +42,16 @@ class Graph(db.Model):
     
   @classmethod
   def enrich(cls, graph_id, item_iterator=get_iterable_objects, match_resolver=get_matches_for_item):
-    graph = Graph.query.get(graph_id)
-    graph.set_status("enriching")
-    for data_type in graph.data_types:
-      generate_edges_for_type(graph, data_type, item_iterator, match_resolver)
-    graph.set_status("enriched")
-    return graph
+    try:
+      graph = Graph.query.get(graph_id)
+      graph.set_status("enriching")
+      for data_type in graph.data_types:
+        generate_edges_for_type(graph, data_type, item_iterator, match_resolver)
+      graph.set_status("enriched")
+      return graph
+    except:
+      graph.set_status("errored")
+      return graph
 
   @classmethod
   def store(cls, request_json):
