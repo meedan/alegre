@@ -42,7 +42,7 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(graph_response["graph"], dict)
       self.assertIsInstance(graph_response["clusters"][0], list)
       self.assertIsInstance(graph_response["clusters"][0][0], dict)
-      response = self.client.get('/graph/cluster', data=json.dumps({
+      response = self.client.get('/graph/cluster/', data=json.dumps({
           'graph_id': graph_id,
       }), content_type='application/json')
       result = json.loads(response.data.decode())
@@ -54,7 +54,7 @@ class TestGraph(BaseTestCase):
   def test_graph_endpoints(self):
     with patch('app.main.model.graph.Graph.enqueue', ) as mock_enqueue:
       mock_enqueue.return_value = Job(str(uuid.uuid1()))
-      response = self.client.post('/graph/cluster', data=json.dumps({
+      response = self.client.post('/graph/cluster/', data=json.dumps({
         "threshold": 0.8,
         "data_types": ["image"],
         "context": {"blah": 1}
@@ -62,7 +62,7 @@ class TestGraph(BaseTestCase):
       result = json.loads(response.data.decode())
       self.assertIsInstance(result, dict)
       self.assertIsInstance(result["graph_id"], int)
-      response = self.client.get('/graph/cluster', data=json.dumps({
+      response = self.client.get('/graph/cluster/', data=json.dumps({
           'graph_id': result["graph_id"],
       }), content_type='application/json')
       result = json.loads(response.data.decode())
@@ -71,7 +71,7 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(result["graph"], dict)
       self.assertEqual(result["graph"]["status"], "created")
       graph = Graph.enrich(result["graph"]["id"], get_iterable_objects, get_matches_for_item)
-      response = self.client.get('/graph/cluster', data=json.dumps({
+      response = self.client.get('/graph/cluster/', data=json.dumps({
           'graph_id': result["graph"]["id"],
       }), content_type='application/json')
       result = json.loads(response.data.decode())
