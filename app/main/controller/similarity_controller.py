@@ -49,7 +49,10 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
-        return similarity.add_item(self.get_body_for_request(), "text")
+        doc_id = request.json.get("doc_id")
+        item = self.get_body_for_request()
+        item["doc_id"] = doc_id
+        return similarity.add_item(item, "text")
 
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query')
