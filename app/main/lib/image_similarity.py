@@ -44,7 +44,7 @@ def save(image):
 def add_image(save_params):
   try:
     if save_params.get("doc_id"):
-      delete_record(save_params)
+      delete_image(save_params)
     image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'])
     save(image)
     return {
