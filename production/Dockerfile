@@ -21,6 +21,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
 RUN apt-get update && apt-get install -y ffmpeg swig
+RUN apt-get clean
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 COPY . .
@@ -32,7 +33,6 @@ RUN rm /usr/lib/x86_64-linux-gnu/libchromaprint.so.1.5.0
 RUN rm /usr/lib/x86_64-linux-gnu/libchromaprint.so.1
 RUN ln -s /usr/local/lib/libchromaprint.so.1.5.0 /usr/lib/x86_64-linux-gnu/libchromaprint.so.1.5.0
 RUN ln -s /usr/local/lib/libchromaprint.so.1 /usr/lib/x86_64-linux-gnu/libchromaprint.so.1
-RUN apt-get clean
 RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
 COPY requirements.txt ./
 RUN pip install --upgrade pip
