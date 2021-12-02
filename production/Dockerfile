@@ -22,6 +22,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
 RUN apt-get update && apt-get install -y ffmpeg swig
 RUN apt-get clean
+# More aggressive option to conserve disk usage:
+#RUN apt-get autoremove --purge
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 COPY . .
@@ -41,6 +43,7 @@ RUN pip install --upgrade pip
 RUN pip install pact-python
 RUN pip install --no-cache-dir -r requirements.txt
 RUN python3 -c 'import nltk; nltk.download("punkt")'
+RUN pip uninstall requirements.txt
 
 EXPOSE 80
 CMD ["/opt/bin/start.sh"]
