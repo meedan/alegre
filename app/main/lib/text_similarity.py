@@ -5,7 +5,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
-def store_text(body, doc_id):
+def add_text(body, doc_id):
   return store_document(body, doc_id)
 
 def search_text(search_params):

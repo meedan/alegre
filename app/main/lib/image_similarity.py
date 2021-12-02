@@ -10,7 +10,7 @@ import tenacity
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
-def delete_record(params):
+def delete_image(params):
   deleted= False
   if params.get('doc_id'):
     deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
@@ -41,7 +41,7 @@ def save(image):
     db.session.rollback()
     raise e
 
-def save_image(save_params):
+def add_image(save_params):
   try:
     if save_params.get("doc_id"):
       delete_record(save_params)
@@ -54,7 +54,10 @@ def save_image(save_params):
     db.session.rollback()
     raise e
 
-def search_image(url, context, threshold):
+def search_image(params):
+  url = params.get("url")
+  context = params.get("context")
+  threshold = params.get("threshold")
   if not context:
     context = {}
   if not threshold:

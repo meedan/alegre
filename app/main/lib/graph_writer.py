@@ -1,7 +1,6 @@
 from app.main.lib.elasticsearch import get_all_documents_matching_context
 from app.main.lib import text_similarity
 from app.main.lib import image_similarity
-from app.main.lib.shared_models.shared_model import SharedModel
 from flask import current_app as app
 
 from app.main import db
@@ -11,6 +10,8 @@ from app.main.model.image import ImageModel
 from app.main.model.audio import Audio
 from app.main.model.edge import Edge
 from app.main.model.node import Node
+
+from app.main.lib import similarity
 
 def model_response_package(graph, url, doc_id):
   return {
@@ -39,26 +40,34 @@ def get_iterable_objects(graph, data_type):
   elif data_type == "text":
     return get_all_documents_matching_context(graph.context)
 
-def get_matches_for_item(graph, item, data_type):
+def package_item_for_query(item, graph, data_type):
   if data_type == "image":
-    response = image_similarity.search_image(item.url, graph.context, graph.threshold) #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
+    return {"url": item.url, "context": graph.context, "threshold": graph.threshold}
   elif data_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item.url, item.doc_id))
+    return {"url": item.url, "doc_id": item.doc_id, "context": graph.context, "threshold": graph.threshold}
   elif data_type == "audio":
-    response = audio_model().get_shared_model_response(model_response_package(item.url, item.doc_id))#[{'id': 1234, 'doc_id': 'boop', 'chromaprint_fingerprint': [1,2,3], 'url': 'https://assets.checkmedia.org/uploads/blah.mp4', 'context': [{'team_id': 1, 'content_type': 'video', 'has_custom_id': True, 'project_media_id': 123456}], 'score': 1.0}]
+    return {"url": item.url, "doc_id": item.doc_id, "context": graph.context, "threshold": graph.threshold}
   elif data_type == "text":
     vector_keys = [k for k in item["_source"].keys() if "vector" in k]
     vector_key = ""
     if vector_keys:
       vector_key = vector_keys[0]
-    search_params = {
+    return {
       "model": graph.context.get("model") or "elasticsearch",
       "threshold": graph.threshold,
       "text": item.get("_source").get("content"),
       "vector": item.get("_source").get(vector_key),
     }
+
+def get_matches_for_item(graph, item, data_type):
+  response = similarity.get_similar_items(package_item_for_query(item, graph, data_type), data_type) 
+  # image:
+  #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
+  # audio/video:
+  #[{'id': 1234, 'doc_id': 'boop', 'chromaprint_fingerprint': [1,2,3], 'url': 'https://assets.checkmedia.org/uploads/blah.mp4', 'context': [{'team_id': 1, 'content_type': 'video', 'has_custom_id': True, 'project_media_id': 123456}], 'score': 1.0}]
+  if data_type == "text":
     project_media_id = item.get("_source", {}).get("context", {}).get("project_media_id", 0) #ugly hack to grab only cases where they arrived earlier, we have no datestamps or implicit timing otherwise... this will need a refactor for all the items across alegre in order to address.
-    response = restrict_text_result_to_predecessors(text_similarity.search_text(search_params))
+    response = restrict_text_result_to_predecessors(response, project_media_id)
   if response:
     results = response.get("result", [])
     if results:
