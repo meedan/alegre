@@ -1,8 +1,10 @@
 from flask import request, current_app as app
 from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
-from app.main.lib.fields import JsonObject
+from elasticsearch import Elasticsearch
+from app.main.lib.shared_models.shared_model import SharedModel
 
+from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 
 api = Namespace('similarity', description='text similarity operations')
@@ -36,6 +38,7 @@ class SimilarityResource(Resource):
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def delete(self):
+        doc_id = request.json.get("doc_id")
         response = similarity.delete_item(request.json, "text")
         if response == False:
             abort(404, description=f"Doc Not Found for id {doc_id}! No Deletion Occurred.")
