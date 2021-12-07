@@ -29,7 +29,7 @@ def upgrade():
     op.create_table('nodes',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('data_type', sa.String(length=500, _expect_unicode=True), nullable=False),
-    sa.Column('data_type_id', sa.Integer(), nullable=False),
+    sa.Column('data_type_id', sa.String(length=500, _expect_unicode=True), nullable=False),
     sa.Column('context', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
     sa.Column('data', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
     sa.PrimaryKeyConstraint('id')

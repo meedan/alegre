@@ -78,7 +78,7 @@ def get_matches_for_item(graph, item, data_type):
     return []
 
 def restrict_text_result_to_predecessors(text_result, project_media_id):
-  {"result": [e for e in text_result.get("result", []) if e.get("_source", {}).get("context", {}).get("project_media_id", project_media_id + 1) < project_media_id]} #[{'_index': 'alegre_similarity', '_type': '_doc', '_id': '1232413rfaefa43ghgqfq', '_score': 82.726, '_source': {'content': 'Some content', 'context': {'team_id': 1, 'field': 'original_title', 'project_media_id': 1, 'has_custom_id': True}}}]
+  return {"result": [e for e in text_result.get("result", []) if e.get("_source", {}).get("context", {}).get("project_media_id", project_media_id) < project_media_id]} #[{'_index': 'alegre_similarity', '_type': '_doc', '_id': '1232413rfaefa43ghgqfq', '_score': 82.726, '_source': {'content': 'Some content', 'context': {'team_id': 1, 'field': 'original_title', 'project_media_id': 1, 'has_custom_id': True}}}]
 
 def get_node_context_from_item_or_match(item_or_match):
   context = []
