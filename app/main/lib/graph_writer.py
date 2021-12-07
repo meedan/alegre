@@ -134,12 +134,12 @@ def generate_edge(source, target, match, graph, data_type):
   return edge
 
 def get_or_init_node(node_data_type_id, node_data_type, node_context):
-  node = Node.query.filter_by(data_type_id=node_data_type_id, data_type=node_data_type).first()
+  node = Node.query.filter_by(data_type_id=str(node_data_type_id), data_type=node_data_type).first()
   if node:
     return node
   else:
     node = Node(
-      data_type_id=node_data_type_id,
+      data_type_id=str(node_data_type_id),
       data_type=node_data_type,
       context=node_context,
       data=None
