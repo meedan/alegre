@@ -29,6 +29,7 @@ class Audio(db.Model):
   hash_value = db.Column(BIT(length=128), nullable=True, index=True)
   chromaprint_fingerprint = db.Column(ARRAY(db.Integer), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
+  created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )

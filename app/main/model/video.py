@@ -15,6 +15,7 @@ class Video(db.Model):
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
+  created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
     db.Index('ix_videos_context', context, postgresql_using='gin'),
   )

@@ -30,6 +30,7 @@ class SimilarityResource(Resource):
             vector = model.get_shared_model_response(request.json['text'])
             body['vector_'+str(len(vector))] = vector
             body['model'] = model_key
+            body['created_at'] = request.json.get("created_at", datetime.now())
         if 'context' in request.json:
             body['context'] = request.json['context']
         return body

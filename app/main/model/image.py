@@ -17,6 +17,7 @@ class ImageModel(db.Model):
   phash = db.Column(db.BigInteger, nullable=False, index=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
+  created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )

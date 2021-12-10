@@ -3,6 +3,7 @@ import igraph
 import redis
 from rq import Queue
 from flask import request, current_app as app
+from dateutil import parser
 
 from app.main.model.node import Node
 from app.main import db
@@ -16,6 +17,8 @@ class Graph(db.Model):
   threshold = db.Column(db.Float, nullable=False)
   data_types = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
   status = db.Column(db.String(255, convert_unicode=True), nullable=True)
+  start_time = db.Column(db.DateTime, nullable=True)
+  end_time = db.Column(db.DateTime, nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
 
   def to_dict(self):
@@ -55,7 +58,7 @@ class Graph(db.Model):
 
   @classmethod
   def store(cls, request_json):
-    graph = Graph(threshold=request_json["threshold"], data_types=request_json["data_types"], context=request_json["context"], status="created")
+    graph = Graph(threshold=request_json["threshold"], data_types=request_json["data_types"], context=request_json["context"], start_date=start_date, end_date=end_date, status="created")
     db.session.add(graph)
     db.session.commit()
     db.session.refresh(graph)
