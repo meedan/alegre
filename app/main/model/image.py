@@ -23,7 +23,7 @@ class ImageModel(db.Model):
   )
 
   @staticmethod
-  def from_url(url, doc_id, context={}):
+  def from_url(url, doc_id, context={}, created_at=None):
     """Fetch an image from a URL and load it
       :param url: Image URL
       :returns: ImageModel object
@@ -35,4 +35,4 @@ class ImageModel(db.Model):
     im = Image.open(io.BytesIO(raw)).convert('RGB')
     phash = compute_phash_int(im)
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, url=url, context=context, doc_id=doc_id)
+    return ImageModel(sha256=sha256, phash=phash, url=url, context=context, doc_id=doc_id, created_at=created_at)

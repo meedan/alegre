@@ -14,6 +14,7 @@ def model_response_package(item, command):
     "url": item.get("url"),
     "doc_id": item.get("doc_id"),
     "context": item.get("context", {}),
+    "created_at": item.get("created_at"),
     "command": command,
     "threshold": item.get("threshold", 0.0),
     "match_across_content_types": item.get("match_across_current_type", False)
