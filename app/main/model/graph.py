@@ -58,6 +58,12 @@ class Graph(db.Model):
 
   @classmethod
   def store(cls, request_json):
+    start_date = None
+    end_date = None
+    if request_json.get("start_date"):
+      start_date = parser.parse(request_json.get("start_date"))
+    if request_json.get("end_date"):
+      end_date = parser.parse(request_json.get("end_date"))
     graph = Graph(threshold=request_json["threshold"], data_types=request_json["data_types"], context=request_json["context"], start_date=start_date, end_date=end_date, status="created")
     db.session.add(graph)
     db.session.commit()
