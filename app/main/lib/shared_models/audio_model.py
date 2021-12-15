@@ -43,8 +43,11 @@ class AudioModel(SharedModel):
             # Otherwise, add new audio, but with context as an array
             if audio.context and not isinstance(audio.context, list):
                 audio.context = [audio.context]
-            db.session.add(audio)
-            saved_audio = audio
+            if audio.hash_value is not None:
+              db.session.add(audio)
+              saved_audio = audio
+            else:
+              saved_audio = None
         except Exception as e:
             db.session.rollback()
             raise e
@@ -54,6 +57,7 @@ class AudioModel(SharedModel):
         except Exception as e:
             db.session.rollback()
             raise e
+        return saved_audio
 
     def get_tempfile(self):
         return tempfile.NamedTemporaryFile()
@@ -90,7 +94,10 @@ class AudioModel(SharedModel):
         try:
             audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
             audio = self.save(audio)
-            return {"requested": task, "result": {"url": audio.url}, "success": True}
+            if audio:
+              return {"requested": task, "result": {"url": audio.url}, "success": True}
+            else:
+              return {"requested": task, "result": {"url": task.get("url")}, "success": False}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
