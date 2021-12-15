@@ -79,6 +79,7 @@ class AudioModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        audio = None
         if 'doc_id' in task:
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios:
@@ -87,8 +88,11 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios:
                 audio = audios[0]
-        deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-        return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        if audio:
+          deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
+          return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        else:
+          return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
     def add(self, task):
         try:
