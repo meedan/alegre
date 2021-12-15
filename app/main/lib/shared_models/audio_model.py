@@ -10,6 +10,7 @@ import shutil
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
+import sqlalchemy
 import tenacity
 import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
@@ -43,11 +44,8 @@ class AudioModel(SharedModel):
             # Otherwise, add new audio, but with context as an array
             if audio.context and not isinstance(audio.context, list):
                 audio.context = [audio.context]
-            if audio.hash_value is not None:
-              db.session.add(audio)
-              saved_audio = audio
-            else:
-              saved_audio = None
+            db.session.add(audio)
+            saved_audio = audio
         except Exception as e:
             db.session.rollback()
             raise e
@@ -97,7 +95,10 @@ class AudioModel(SharedModel):
     def add(self, task):
         try:
             audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
-            audio = self.save(audio)
+            try:
+              audio = self.save(audio)
+            except sqlalchemy.exc.IntegrityError:
+              audio = None
             if audio:
               return {"requested": task, "result": {"url": audio.url}, "success": True}
             else:
@@ -175,14 +176,8 @@ class AudioModel(SharedModel):
             db.session.rollback()
             raise e
 
-    def search(self, task):
-        context = {}
+    def get_by_doc_id_or_url(self, task):
         audio = None
-        temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
@@ -191,6 +186,17 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
+        return audio
+
+    def search(self, task):
+        context = {}
+        audio = None
+        temporary = False
+        if task.get('context'):
+            context = task.get('context')
+        if task.get("match_across_content_types"):
+            context.pop("content_type", None)
+        audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
             if not task.get("doc_id"):
