@@ -114,45 +114,60 @@ class SimilarityResource(Resource):
 
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query')
-    @api.expect(similarity_request, validate=True)
+    @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def get(self):
         model_key = 'elasticsearch'
-        if 'model' in request.json:
+        if(request.args.get('model')):
+            model_key = request.args.get('model')
+        elif 'model' in request.json:
             model_key = request.json['model']
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         conditions = []
         threshold = 0.9
         matches = []
         clause_count = 0
-        if 'context' in request.json:
+        if not request.args and 'context' in request.json:
             matches, clause_count = self.generate_matches(request.json['context'])
-        if 'threshold' in request.json:
+        if(request.args.get('threshold')):
+            threshold = float(request.args.get('threshold'))
+        elif 'threshold' in request.json:
             threshold = request.json['threshold']
         if clause_count >= app.config['MAX_CLAUSE_COUNT']:
             return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}, 500
         if model_key.lower() == 'elasticsearch':
+            text = ''
+            if(request.args.get('text')):
+                text = request.args.get('text')
+            elif 'text' in request.json:
+                text = request.json['text']
+
             conditions = [
                 {
                     'match': {
                       'content': {
-                          'query': self.truncate_query(request.json['text'], clause_count),
+                          'query': self.truncate_query(text, clause_count),
                           'minimum_should_match': str(int(round(threshold * 100))) + '%'
                       }
                     }
                 },
             ]
             fuzzy = None
-            if 'fuzzy' in request.json:
-                if str(request.json['fuzzy']).lower() == 'true':
-                    conditions[0]['match']['content']['fuzziness'] = 'AUTO'
-            # FIXME: `analyzer` and `minimum_should_match` don't play well together.
-            if 'language' in request.json:
-                conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
-                del conditions[0]['match']['content']['minimum_should_match']
+            if not request.args:
+                if 'fuzzy' in request.json:
+                    if str(request.json['fuzzy']).lower() == 'true':
+                        conditions[0]['match']['content']['fuzziness'] = 'AUTO'
+                # FIXME: `analyzer` and `minimum_should_match` don't play well together.
+                if 'language' in request.json:
+                    conditions[0]['match']['content']['analyzer'] = language_to_analyzer(request.json['language'])
+                    del conditions[0]['match']['content']['minimum_should_match']
 
         else:
+            if(request.args.get('text')):
+                text = request.args.get('text')
+            elif 'text' in request.json:
+                text = request.json['text']
             model = SharedModel.get_client(model_key)
-            vector = model.get_shared_model_response(request.json['text'])
+            vector = model.get_shared_model_response(text)
             conditions = {
                 'query': {
                     'script_score': {
@@ -179,8 +194,7 @@ class SimilarityResource(Resource):
                     }
                 }
             }
-
-        if 'context' in request.json:
+        if not request.args and 'context' in request.json:
             context = {
                 'nested': {
                     'score_mode': 'none',
