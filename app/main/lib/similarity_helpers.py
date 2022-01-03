@@ -1,3 +1,4 @@
+import json
 def get_context_query(context, value_as_json=False, vars_as_hash=True):
     context_query = []
     context_hash = {}

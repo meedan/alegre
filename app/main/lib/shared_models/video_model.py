@@ -102,7 +102,7 @@ class VideoModel(SharedModel):
                 shutil.copyfileobj(response, out_file)
             tmk_file_output = tmkpy.hashVideo(temp_video_file.name,self.ffmpeg_dir)
             hash_value=tmk_file_output.getPureAverageFeature()
-            video = Video(task.get("doc_id"), task["url"], task.get("context", {}), hash_value)
+            video = Video(doc_id=task.get("doc_id"), url=task["url"], context=task.get("context", {}), hash_value=hash_value)
             video = self.save(video)
             tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
             if task.get("match_across_content_types", False):

@@ -34,13 +34,6 @@ class Audio(db.Model):
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )
 
-  def __init__(self, chromaprint_fingerprint, doc_id, url, context):
-    self.doc_id = doc_id
-    self.chromaprint_fingerprint = chromaprint_fingerprint
-    self.url = url
-    self.context = context
-
-
   @staticmethod
   def from_url(url, doc_id, context={}):
     """Fetch an audio from a URL and load it
@@ -52,4 +45,4 @@ class Audio(db.Model):
     temp_file = tempfile.NamedTemporaryFile()
     with open(temp_file.name, 'wb') as out_file:
       out_file.write(remote_response.read())
-    return Audio(audio_hasher(temp_file.name), doc_id, url, context)
+    return Audio(chromaprint_fingerprint=audio_hasher(temp_file.name), doc_id=doc_id, url=url, context=context)

@@ -20,11 +20,7 @@ class Video(db.Model):
     db.Index('ix_videos_context', context, postgresql_using='gin'),
   )
 
-  def __init__(self, doc_id, url, context, hash_value):
-    self.doc_id = doc_id
+  def __init__(self, **kwargs):
     self.filepath = str(uuid.uuid4())
     self.folder = self.filepath.split("-")[1]
-    self.url = url
-    self.context = context
-    self.hash_value = hash_value
-
+    super().__init__(**kwargs)

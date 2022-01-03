@@ -2,6 +2,7 @@ from app.main.lib.elasticsearch import get_all_documents_matching_context
 from app.main.lib import text_similarity
 from app.main.lib import image_similarity
 from flask import current_app as app
+from sqlalchemy import text
 
 from app.main import db
 from app.main.lib.helpers import context_matches
@@ -32,7 +33,7 @@ def video_model():
 
 def get_iterable_objects(graph, data_type):
   _ = graph.context.pop('project_media_id', None)
-  context_query, _ = get_context_query(context, False, False)
+  context_query, _ = get_context_query(graph.context, False, False)
   if data_type == "image":
     return ImageModel.query.filter(text(context_query)).order_by(ImageModel.id.asc())
   elif data_type == "video":
