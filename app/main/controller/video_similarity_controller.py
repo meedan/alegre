@@ -16,27 +16,23 @@ video_similarity_request = api.model('similarity_request', {
 @api.route('/')
 class VideoSimilarityResource(Resource):
     def model_response_package(self, request, command):
-        if request.args.get('url'):
+        url = doc_id = context = threshold = match_across_content_types = ''
+        if request.args.get:
             url = request.args.get('url')
-        elif request.json.get("url"):
-            request.json.get("url", {})
-        if(request.args.get('threshold')):
             threshold = request.args.get('threshold')
-        elif(request.json.get("threshold")):
-            threshold = request.json.get("threshold", {})
-        if(request.args.get('context')):
-            context = request.args.get('context')
-        elif(request.json.get("context")):
-            context = request.json.get("context", {})
-        if(request.args.get('doc_id')):
             doc_id = request.args.get('doc_id')
-        if not request.args.get('doc_id') and 'doc_id' in request.json:
-            doc_id = request.json.get("doc_id", {})
-        if(request.args.get('match_across_content_types')):
             match_across_content_types = request.args.get('match_across_content_types', False)
+            if(request.args.get('context')):
+                context = request.args.get('context')
+                context["content_type"] = "video"
         if not request.args.get:
+            url = request.json.get("url", {})
+            threshold = request.json.get("threshold", {})
+            doc_id = request.json.get("doc_id", {})
             match_across_content_types = request.json.get("match_across_content_types", False)
-        context["content_type"] = "video"
+            context = request.json.get("context", {})
+            context["content_type"] = "video"
+
         return {
             "url": url,
             "doc_id": doc_id,
