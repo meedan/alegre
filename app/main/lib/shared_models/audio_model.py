@@ -10,6 +10,7 @@ import shutil
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
+import sqlalchemy
 import tenacity
 import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
@@ -56,6 +57,7 @@ class AudioModel(SharedModel):
         except Exception as e:
             db.session.rollback()
             raise e
+        return saved_audio
 
     def get_tempfile(self):
         return tempfile.NamedTemporaryFile()
@@ -77,6 +79,7 @@ class AudioModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        audio = None
         if 'doc_id' in task:
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios:
@@ -85,14 +88,23 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios:
                 audio = audios[0]
-        deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-        return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        if audio:
+          deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
+          return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        else:
+          return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
     def add(self, task):
         try:
             audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
-            audio = self.save(audio)
-            return {"requested": task, "result": {"url": audio.url}, "success": True}
+            try:
+              audio = self.save(audio)
+            except sqlalchemy.exc.IntegrityError:
+              audio = None
+            if audio:
+              return {"requested": task, "result": {"url": audio.url}, "success": True}
+            else:
+              return {"requested": task, "result": {"url": task.get("url")}, "success": False}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
@@ -160,14 +172,8 @@ class AudioModel(SharedModel):
             db.session.rollback()
             raise e
 
-    def search(self, task):
-        context = {}
+    def get_by_doc_id_or_url(self, task):
         audio = None
-        temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
@@ -176,6 +182,17 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
+        return audio
+
+    def search(self, task):
+        context = {}
+        audio = None
+        temporary = False
+        if task.get('context'):
+            context = task.get('context')
+        if task.get("match_across_content_types"):
+            context.pop("content_type", None)
+        audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
             if not task.get("doc_id"):
