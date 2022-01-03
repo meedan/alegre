@@ -130,7 +130,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
         hash_key = "blah"
-        audio = Audio(first_print, "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url, [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
         with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
@@ -175,7 +175,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
         hash_key = "blah"
-        audio = Audio(first_print, "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url, [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
         with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
@@ -211,7 +211,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
         hash_key = "blah"
-        audio = Audio(first_print, "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url, [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
         with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
