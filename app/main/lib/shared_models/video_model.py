@@ -17,6 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.similarity_helpers import get_context_query
 from app.main.lib.helpers import context_matches
 from app.main import db
 from app.main.model.video import Video
@@ -114,7 +115,7 @@ class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = self.get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
@@ -189,25 +190,6 @@ class VideoModel(SharedModel):
         else:
             return {"error": "Video not found for provided task", "task": task}
 
-    def get_context_query(self, context):
-        context_query = []
-        context_hash = {}
-        for key, value in context.items():
-            if key != "project_media_id":
-                if isinstance(value, list):
-                    context_clause = "("
-                    for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
-                        if len(value)-1 != i:
-                            context_clause += " OR "
-                        context_hash[f"context_{key}_{i}"] = v
-                    context_clause += ")"
-                    context_query.append(context_clause)
-                else:
-                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
-                    context_hash[f"context_{key}"] = value
-        return str.join(" AND ",  context_query), context_hash
-    
     def tmk_program_name(self):
         return "AlegreVideoEncoder"
 

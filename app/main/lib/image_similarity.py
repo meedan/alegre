@@ -2,6 +2,7 @@ from flask import current_app as app
 from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches
+from app.main.lib.similarity_helpers import get_context_query
 from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
@@ -92,27 +93,7 @@ def search_by_context(context):
     return rows
   except Exception as e:
     db.session.rollback()
-    raise e
-
-def get_context_query(context):
-  context_query = []
-  context_hash = {}
-  for key, value in context.items():
-    if key != "project_media_id":
-      if isinstance(value, list):
-        context_clause = "("
-        for i,v in enumerate(value):
-          context_clause += "context @> '[{\""+key+"\": :context_"+key+"_"+str(i)+"}]'"
-          if len(value)-1 != i:
-            context_clause += " OR "
-          context_hash[f"context_{key}_{i}"] = v
-        context_clause += ")"
-        context_query.append(context_clause)
-      else:
-        context_query.append("context @>'[{\""+key+"\": :context_"+key+"}]'")
-        context_hash[f"context_{key}"] = value
-  return str.join(" AND ",  context_query), context_hash
-  
+    raise e  
   
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context):

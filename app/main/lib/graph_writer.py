@@ -5,6 +5,7 @@ from flask import current_app as app
 
 from app.main import db
 from app.main.lib.helpers import context_matches
+from app.main.lib.similarity_helpers import get_context_query
 from app.main.model.video import Video
 from app.main.model.image import ImageModel
 from app.main.model.audio import Audio
@@ -31,12 +32,13 @@ def video_model():
 
 def get_iterable_objects(graph, data_type):
   _ = graph.context.pop('project_media_id', None)
+  context_query, _ = get_context_query(context, False, False)
   if data_type == "image":
-    return ImageModel.query.filter(ImageModel.context.contains([graph.context])).order_by(ImageModel.id.asc())
+    return ImageModel.query.filter(text(context_query)).order_by(ImageModel.id.asc())
   elif data_type == "video":
-    return Video.query.filter(Video.context.contains([graph.context])).order_by(Video.id.asc())
+    return Video.query.filter(text(context_query)).order_by(Video.id.asc())
   elif data_type == "audio":
-    return Audio.query.filter(Audio.context.contains([graph.context])).order_by(Audio.id.asc())
+    return Audio.query.filter(text(context_query)).order_by(Audio.id.asc())
   elif data_type == "text":
     return get_all_documents_matching_context(graph.context)
 
