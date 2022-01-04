@@ -77,7 +77,7 @@ class ImageSimilarityResource(Resource):
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make an image similarity query')
-  @api.expect(image_similarity_request, validate=False)
+  @api.doc(params={'url': 'image URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'})
   def get(self):
     if request.args.get('url'):
       image = ImageModel.from_url(request.args.get('url'), None)
@@ -86,7 +86,7 @@ class ImageSimilarityResource(Resource):
         threshold = request.args.get('threshold')
       context = {}
       if(request.args.get('context')):
-        context = threshold = request.args.get('context')
+        context = request.args.get('context')
       result = self.search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), context)
     elif 'url' not in request.json:
       result = self.search_by_context(request.json['context'])

@@ -37,7 +37,7 @@ class ArticleResource(Resource):
 
     @api.response(200, 'article successfully queried.')
     @api.doc('Download and parse an article')
-    @api.expect(article_request, validate=False)
+    @api.doc(params={'url': 'article URL to be processed'})
     def get(self):
         response = self.respond(request)
         if response.get("error"):
