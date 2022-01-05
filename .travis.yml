@@ -24,7 +24,7 @@ jobs:
       name: contract-testing
       script: docker-compose exec alegre make contract_testing
 after_script:
-- docker-compose exec alegre coverage json
+- docker-compose exec alegre coverage xml
 - ./cc-test-reporter format-coverage -t coverage.py
 - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
 notifications:
