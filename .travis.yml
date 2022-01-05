@@ -25,8 +25,7 @@ jobs:
       script: docker-compose exec alegre make contract_testing
 after_script:
 - docker-compose exec alegre coverage xml
-- ./cc-test-reporter format-coverage -t coverage.py
-- if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+- if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT; fi
 notifications:
   slack:
     secure: PIYgKOnKjbWv7inSq4Gu0BZS24Ipte3DVZid71dD1iTSHiRtwWUV8jmhva7kVfhoyNst7Hck5v3rp6nY//W0a/frT0mdn1f4j41NA8VaAeKa7MOWQFyvaXBNTnjJJ+FMkpHhbQWGAE7tTKBMWeJDWCisgtvPNQvCd3GtnMMyeTeuQTZarJojTyGxJ00ubLCpKQICkCVEwapnZpONJLJV9h9XuScVo+69h7vpc3jL79/zSWHgH5YPmUEYqLoXArZUtZtsIxunp3ftBqRKoxRHJuUuVDfJ8skNradWoXLEA5Qf/sxxekh13FcYEXMIY37VOQgPJpF8cL0MWwANGrphTdrH2J4vsnoiJK0lZ8NMOIbnBXKhaMtF+PoBjWNgI+8y5xp5jYFV/sQkeqz1ZS3/3KsYFfUeXsy3gPjsASnV6WSk2EstWF4LZopjwqeTssF7nfpOUEf+KW1nCZrnvEt7Mc+Rat+TtTYXFjea5OXednBhAZf0woiRSMw7rlxp9KuxTZDgsbNvs/FoFpJMi7Rmw5+yVrshxxu1lO7hzdWw/8LzRvi6wWWF9mLzbxq3wPKOq/NHIjQrnp8M0o0ESgibQ/pyAU25mcjqNFgCyRLwPjV4s2Q4D/eESn3Vi6A4cvs/Oy4yHWDijm8QilqyrUR67M8NOip92X9FZT/5/BOfEoM=
