@@ -15,15 +15,12 @@ class Video(db.Model):
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
+  created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
     db.Index('ix_videos_context', context, postgresql_using='gin'),
   )
 
-  def __init__(self, doc_id, url, context, hash_value):
-    self.doc_id = doc_id
+  def __init__(self, **kwargs):
     self.filepath = str(uuid.uuid4())
     self.folder = self.filepath.split("-")[1]
-    self.url = url
-    self.context = context
-    self.hash_value = hash_value
-
+    super().__init__(**kwargs)

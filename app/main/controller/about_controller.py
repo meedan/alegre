@@ -27,6 +27,7 @@ class AboutResource(Resource):
             'audio/transcription': ['aws'],
             'audio/similarity': ['hash'],
             'video/similarity': ['tmk'],
+            'graph/cluster': [],
         }
 
     @staticmethod

@@ -62,7 +62,7 @@ class ArticleModel(db.Model):
         article.doc = document_cleaner.clean(article.doc)
         top_node = article.extractor.calculate_best_node(article.doc)
         links = []
-        if top_node:
+        if top_node is not None:
             links = [e.attrib.get("href") for e in article.extractor.parser.getElementsByTag(top_node, "a") if e.attrib.get("href")]
         full_links = []
         for link in links:

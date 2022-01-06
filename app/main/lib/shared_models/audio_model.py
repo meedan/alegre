@@ -16,6 +16,8 @@ import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.helpers import context_matches
+from app.main.lib.similarity_helpers import get_context_query
 from app.main import db
 from app.main.model.audio import Audio
 
@@ -109,7 +111,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = self.get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, hash_value, context FROM audios
@@ -123,22 +125,16 @@ class AudioModel(SharedModel):
             keys = ('id', 'doc_id', 'url', 'hash_value', 'context')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
-                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+                row["context"] = [c for c in row["context"] if context_matches(context, c)]
             return rows
         except Exception as e:
             db.session.rollback()
             raise e
 
-    def context_matches(self, context, search_context):
-        for k,v in context.items():
-            if search_context.get(k) != v:
-                return False
-        return True
-
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
-            context_query, context_hash = self.get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT audio_similarity_functions();
@@ -213,23 +209,4 @@ class AudioModel(SharedModel):
             return {"result": matches}
         else:
             return {"error": "Audio not found for provided task", "task": task}
-
-    def get_context_query(self, context):
-        context_query = []
-        context_hash = {}
-        for key, value in context.items():
-            if key != "project_media_id":
-                if isinstance(value, list):
-                    context_clause = "("
-                    for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
-                        if len(value)-1 != i:
-                            context_clause += " OR "
-                        context_hash[f"context_{key}_{i}"] = v
-                    context_clause += ")"
-                    context_query.append(context_clause)
-                else:
-                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
-                    context_hash[f"context_{key}"] = value
-        return str.join(" AND ",  context_query), context_hash
     
