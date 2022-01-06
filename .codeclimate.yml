@@ -35,9 +35,6 @@ plugins:
     enabled: true
 
 exclude_patterns:
-- "config/"
-- "db/"
-- "dist/"
-- "script/"
+- "migrations/"
 - "**/test/"
-- "**/vendor/"
+- "log/"
