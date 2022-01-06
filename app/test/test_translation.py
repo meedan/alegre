@@ -53,7 +53,7 @@ class TestTranslationBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual('estou testando isso', result['text'])
+            self.assertEqual('estou testando isso', result['text'].lower())
 
 if __name__ == '__main__':
     unittest.main()
