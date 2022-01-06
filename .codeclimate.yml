@@ -33,6 +33,11 @@ checks:
 plugins:
   pylint:
     enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
 
 exclude_patterns:
 - "migrations/"
