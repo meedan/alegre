@@ -39,6 +39,6 @@ class ImageSimilarityResource(Resource):
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make an image similarity query')
-  @api.expect(image_similarity_request, validate=False)
+  @api.doc(params={'url': 'image URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'})
   def get(self):
     return similarity.get_similar_items(self.request_package(request), "image")

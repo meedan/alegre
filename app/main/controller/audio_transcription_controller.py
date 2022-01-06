@@ -56,7 +56,7 @@ class AudioTranscriptionResource(Resource):
 
     @api.response(200, 'OK')
     @api.doc('Get transcription result')
-    @api.expect(transcription_get, validate=False)
+    @api.doc(params={'job_name': 'unique transcription job identifier'})
     def get(self):
         jobName = ''
 

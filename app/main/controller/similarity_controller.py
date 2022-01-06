@@ -58,6 +58,6 @@ class SimilarityResource(Resource):
 
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query')
-    @api.expect(similarity_request, validate=True)
+    @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def get(self):
-      return similarity.get_similar_items(request.json, "text")
+      return similarity.get_similar_items(request.args or request.json, "text")
