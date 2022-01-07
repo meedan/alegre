@@ -20,7 +20,7 @@ cffi==1.11.5
 chardet==3.0.4
 charset-normalizer==2.0.4
 Click==7.0
-coverage==5.1
+coverage==6.2
 cssselect==1.1.0
 cymem==2.0.2
 cytoolz==0.9.0.1

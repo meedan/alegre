@@ -47,7 +47,7 @@ class TestTranslationBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/translation/',
                 data=json.dumps({
-                  'text': 'I am testing this',
+                  'text': 'i am testing this',
                   'to': 'pt'
                 }),
                 content_type='application/json'
