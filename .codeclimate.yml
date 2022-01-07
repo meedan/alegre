@@ -1,4 +1,10 @@
-version: "2"         # required to adjust maintainability checks
+version: "2"  
+
+languages:
+  Ruby: false
+  Javascript: false
+  PHP: false
+  Python: true
 
 checks:
   argument-count:
