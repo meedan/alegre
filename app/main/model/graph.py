@@ -39,7 +39,7 @@ class Graph(db.Model):
     
   def enqueue(self):
     redis_server = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    queue = Queue(connection=redis_server)
+    queue = Queue(connection=redis_server, default_timeout=60*60*24)
     job = queue.enqueue(Graph.enrich, self.id)
     return job
     

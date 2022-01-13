@@ -32,16 +32,20 @@ def video_model():
   return SharedModel.get_client(app.config['VIDEO_MODEL'])
 
 def get_iterable_objects(graph, data_type):
-  _ = graph.context.pop('project_media_id', None)
-  context_query, _ = get_context_query(graph.context, False, False)
-  if data_type == "image":
-    return ImageModel.query.filter(text(context_query)).order_by(ImageModel.id.asc())
-  elif data_type == "video":
-    return Video.query.filter(text(context_query)).order_by(Video.id.asc())
-  elif data_type == "audio":
-    return Audio.query.filter(text(context_query)).order_by(Audio.id.asc())
-  elif data_type == "text":
-    return get_all_documents_matching_context(graph.context)
+  try:
+    _ = graph.context.pop('project_media_id', None)
+    context_query, _ = get_context_query(graph.context, False, False)
+    if data_type == "image":
+      return ImageModel.query.filter(text(context_query)).order_by(ImageModel.id.asc())
+    elif data_type == "video":
+      return Video.query.filter(text(context_query)).order_by(Video.id.asc())
+    elif data_type == "audio":
+      return Audio.query.filter(text(context_query)).order_by(Audio.id.asc())
+    elif data_type == "text":
+      return get_all_documents_matching_context(graph.context)
+  except Exception as err:
+    app.extensions['pybrake'].notify(err)
+  return []
 
 def package_item_for_query(item, graph, data_type):
   if data_type == "image":
@@ -63,22 +67,22 @@ def package_item_for_query(item, graph, data_type):
     }
 
 def get_matches_for_item(graph, item, data_type):
-  response = similarity.get_similar_items(package_item_for_query(item, graph, data_type), data_type) 
-  # image:
-  #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
-  # audio/video:
-  #[{'id': 1234, 'doc_id': 'boop', 'chromaprint_fingerprint': [1,2,3], 'url': 'https://assets.checkmedia.org/uploads/blah.mp4', 'context': [{'team_id': 1, 'content_type': 'video', 'has_custom_id': True, 'project_media_id': 123456}], 'score': 1.0}]
-  if data_type == "text":
-    project_media_id = item.get("_source", {}).get("context", {}).get("project_media_id", 0) #ugly hack to grab only cases where they arrived earlier, we have no datestamps or implicit timing otherwise... this will need a refactor for all the items across alegre in order to address.
-    response = restrict_text_result_to_predecessors(response, project_media_id)
-  if response:
-    results = response.get("result", [])
-    if results:
-      return [results[0]]
-    else:
-      return []
-  else:
-    return []
+  try:
+    response = similarity.get_similar_items(package_item_for_query(item, graph, data_type), data_type) 
+    # image:
+    #[{'id': 1, 'sha256': '1235', 'phash': 2938172487634, 'url': 'https://assets.checkmedia.org/uploads/blah.jpeg', 'context': [{'team_id': 1, 'project_media_id': 123}], 'score': 0}]
+    # audio/video:
+    #[{'id': 1234, 'doc_id': 'boop', 'chromaprint_fingerprint': [1,2,3], 'url': 'https://assets.checkmedia.org/uploads/blah.mp4', 'context': [{'team_id': 1, 'content_type': 'video', 'has_custom_id': True, 'project_media_id': 123456}], 'score': 1.0}]
+    if data_type == "text":
+      project_media_id = item.get("_source", {}).get("context", {}).get("project_media_id", 0) #ugly hack to grab only cases where they arrived earlier, we have no datestamps or implicit timing otherwise... this will need a refactor for all the items across alegre in order to address.
+      response = restrict_text_result_to_predecessors(response, project_media_id)
+    if response:
+      results = response.get("result", [])
+      if results:
+        return [results[0]]
+  except Exception as err:
+    app.extensions['pybrake'].notify(err)
+  return []
 
 def restrict_text_result_to_predecessors(text_result, project_media_id):
   return {"result": [e for e in text_result.get("result", []) if e.get("_source", {}).get("context", {}).get("project_media_id", project_media_id) < project_media_id]} #[{'_index': 'alegre_similarity', '_type': '_doc', '_id': '1232413rfaefa43ghgqfq', '_score': 82.726, '_source': {'content': 'Some content', 'context': {'team_id': 1, 'field': 'original_title', 'project_media_id': 1, 'has_custom_id': True}}}]
