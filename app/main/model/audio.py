@@ -29,16 +29,10 @@ class Audio(db.Model):
   hash_value = db.Column(BIT(length=128), nullable=True, index=True)
   chromaprint_fingerprint = db.Column(ARRAY(db.Integer), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
+  created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )
-
-  def __init__(self, chromaprint_fingerprint, doc_id, url, context):
-    self.doc_id = doc_id
-    self.chromaprint_fingerprint = chromaprint_fingerprint
-    self.url = url
-    self.context = context
-
 
   @staticmethod
   def from_url(url, doc_id, context={}):
@@ -51,4 +45,4 @@ class Audio(db.Model):
     temp_file = tempfile.NamedTemporaryFile()
     with open(temp_file.name, 'wb') as out_file:
       out_file.write(remote_response.read())
-    return Audio(audio_hasher(temp_file.name), doc_id, url, context)
+    return Audio(chromaprint_fingerprint=audio_hasher(temp_file.name), doc_id=doc_id, url=url, context=context)

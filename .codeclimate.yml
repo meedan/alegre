@@ -1,0 +1,51 @@
+version: "2"  
+
+languages:
+  Ruby: false
+  Javascript: false
+  PHP: false
+  Python: true
+
+checks:
+  argument-count:
+    enabled: true
+    config:
+      threshold: 5
+  complex-logic:
+    enabled: true
+    config:
+      threshold: 4
+  file-lines:
+    enabled:  false
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 11
+  method-count:
+    enabled: true
+    config:
+      threshold: 50
+  method-lines:
+    enabled: false
+  nested-control-flow:
+    enabled: true
+    config:
+      threshold: 4
+  return-statements:
+    enabled: true
+    config:
+      threshold: 4
+
+plugins:
+  pylint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
+
+exclude_patterns:
+- "migrations/"
+- "**/test/"
+- "log/"

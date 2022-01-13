@@ -1,7 +1,10 @@
 before_install:
 - openssl aes-256-cbc -K $encrypted_126f44c7828e_key -iv $encrypted_126f44c7828e_iv -in google_credentials.json.enc -out google_credentials.json -d
 - sudo apt-get -y install redis-tools
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
 before_script:
+- ./cc-test-reporter before-build
 - cp .env_file.test .env_file
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - docker-compose build --pull
@@ -21,7 +24,8 @@ jobs:
       name: contract-testing
       script: docker-compose exec alegre make contract_testing
 after_script:
-- docker-compose exec alegre coverage report
+- docker-compose exec alegre coverage xml
+- if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT; fi
 notifications:
   slack:
     secure: PIYgKOnKjbWv7inSq4Gu0BZS24Ipte3DVZid71dD1iTSHiRtwWUV8jmhva7kVfhoyNst7Hck5v3rp6nY//W0a/frT0mdn1f4j41NA8VaAeKa7MOWQFyvaXBNTnjJJ+FMkpHhbQWGAE7tTKBMWeJDWCisgtvPNQvCd3GtnMMyeTeuQTZarJojTyGxJ00ubLCpKQICkCVEwapnZpONJLJV9h9XuScVo+69h7vpc3jL79/zSWHgH5YPmUEYqLoXArZUtZtsIxunp3ftBqRKoxRHJuUuVDfJ8skNradWoXLEA5Qf/sxxekh13FcYEXMIY37VOQgPJpF8cL0MWwANGrphTdrH2J4vsnoiJK0lZ8NMOIbnBXKhaMtF+PoBjWNgI+8y5xp5jYFV/sQkeqz1ZS3/3KsYFfUeXsy3gPjsASnV6WSk2EstWF4LZopjwqeTssF7nfpOUEf+KW1nCZrnvEt7Mc+Rat+TtTYXFjea5OXednBhAZf0woiRSMw7rlxp9KuxTZDgsbNvs/FoFpJMi7Rmw5+yVrshxxu1lO7hzdWw/8LzRvi6wWWF9mLzbxq3wPKOq/NHIjQrnp8M0o0ESgibQ/pyAU25mcjqNFgCyRLwPjV4s2Q4D/eESn3Vi6A4cvs/Oy4yHWDijm8QilqyrUR67M8NOip92X9FZT/5/BOfEoM=
@@ -29,3 +33,4 @@ env:
   global:
   - secure: RXJQ6+ke7GYXOCF8REbUOElUTY6ZsNqxuyfSCkFXNw5RE/XqTHp4QfOBzLWM7CdpXtfHY0LN+1DemufxdY3O71dMDWraIxIMssd5LXnZ+jF0HLq2lwFxAOCjDYh4xAkoA6l2VnlKVDSLhB78M/fjrLOcbTf8uEWMiQN/ZzB7v/GukS65Bp/Xn53/V77JPAKIrez9BulKDogoMi9NYnDDPzKxK0oOW8UV74vIfe2UcVajfMIxUDloaMcdjffVwYkbd/gPE2+Kkuj8LLclJvDiuMCBby2vWpOzZp+I+D7WSd088rJq80yhbBAaKAiOKF6g70nh7VgmSERTvsBn0AOW6oV9hD0Jrnq0sKsKIohmjcKYtJ39IDYIe0tWnWw8mOG6JVFflUQ1rNXRMSxFolrYNCWjUQxBVEap5gln35JTP/oSJ/OxkBwnc5AdFRAlqzayY5tjHh5nPAHME9NHZZoCD1yVuHLw44uFI3Azse+UMH1mauzNde/PVw3jQxObSXtrlnahqBel7Fq0/MHlyMPUjScyULuhntLlYKiTNxBZ7mlUTGbT8Ch7TFQL7LEy832TyFr3b4CjPCBEb0LyJ0HlSfNo50Jv9tmVHGxAC6NbRTnBzop8q0WJPg6mm4iUAxBsBWLbAfJmC5GALoL1S5W3z0Wxu3i+10F7I/3kewB4/4s=
   - secure: rRike8e8nlVup6LtIqaKJLMtoyv2lRbY+x5nN5qoGWEND1kmnioNtkLmWonLqXw9PrBviCZN1fedjCXHRjkvlAYakkw1Hb7fYvp57L/2kJ7jZj5xyMHxhL2kwL7BzYi22KFLBvjJEFPMSJbbeJ5NPo31SOqmCSTjGvp3xkMQ71Wl+XB3RUsMCbkrHde2FW6plR0yL2AWnhrChXRbsAbOg/riVGyWonkFwBl/47L0C8mIxWnGn9UySvxGbJbsJXMia+1MRMewWWMoWhbtTZLsAt+ETH872H8zZy7Hj4/2V66ETdp1tzLAxmkXA0JLHpCKmoyU5htEBMLN3LXZegpXinYI4+pmPkbbg0x/1xUBEi8yh8u7fChkgeVRi9mEJvwCHBQ731LWuFxfGVnAhECMWFkzhuU76cjobea+c2eya1XBtPojwJbZGzUqJKHgzCVpGsoUEQvgbVhKvhlm2TI6NJhXMEpyzODXYauIEDSg+Ka6kXFhsovCoRBPfGSXXs3mox6FyqyJxIlsOTUwxqNE40/DfKgT2eFbG3kzTS0PFipojRreeK5MHE62BPkx1qup0d5+Wb3ZNgw4LnZcf2GlavRvB/0BKbdJzhDHZC14snL7I4K3FWZ6qPzfdiqSHiNY3smnWQHsyQTb4lHBOyvsaJVRpLAaF5ULB2peLDVbOxQ=
+  - secure: ewhEY3ZdW21Q4sAAUO91O7lVyR/okwFhS8ZpxnleTJBDLEviKayCfiBiqSjPDxjq0e+kqPtzqi/wYh7KC1oe4PW0PijlXvJ8lZyXfqe+WvnFvG4q03+kwCVlKT+tb3zsiaOhl5xbQZ62bHDMJhofiKfpWC4GVx07mlo2eCuyDcm5yZM1k6Wr6k9P315pqRxOhRIQzQrCpal3gA8chw5dE+mMUpbxRvYgRcSitgJ1JJLGXhyVt88itF+L7nvVIk4ds4LqZJfYyyioCdnA1APIMRZAqqFy/DsfROuRQAyB/arotmWkmxaM++f5c+zNoDtfvuvAmL4UyBvnoD/MWETNtFvlUfXRtqx/OAoFJjgvPJebIk2EIlybNNQOhF3SVkD3SK4du7zRNisu2v+IFHeJs+kQskr9OOC9aJ6Q+xid50P2vR9oVTXxXRo6aBmblmyOlecGhhqlDifu8MOFLeHYuj7UnATADMHt0R1MLXZgGuUW3nwSRJ0K6LGtSV3Ai2aZ3X6iR6WyC8wny7jbkHAt1pAhUTaUGe7VZofuuc20c7pQ5P5JFQzBtya93LtuhvBrKjcaamXBVzB/p67vlByjVM0DYbGI7dY1hVVysDJBHQn3kzb1Tqxo+2YPhEAIyaFnzMj7R0theDR2DoXc+W55vktozw4ou+raxpM5HwoGaKA=

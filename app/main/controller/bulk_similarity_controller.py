@@ -2,7 +2,6 @@ from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
-import elasticsearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
