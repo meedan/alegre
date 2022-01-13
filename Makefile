@@ -7,8 +7,11 @@ run: wait
 	python manage.py db upgrade
 	python manage.py run
 
-# The model and worker entry points run repeatedly.
-# This is to ensure that if an exception kills the
+# The model and worker entry points run repeatedly to
+# avoid sending excessive Essential Task Exited events
+# in CloudWatch monitoring.
+#
+# This also ensures that if an exception kills the
 # process, it is restarted to continue work, if possible.
 #
 run_model:
