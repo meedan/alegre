@@ -9,6 +9,8 @@ def add_text(body, doc_id):
   return store_document(body, doc_id)
 
 def search_text(search_params):
+  if not search_params.get("text"):
+    return {"result": []}
   model_key = 'elasticsearch'
   if 'model' in search_params:
       model_key = search_params['model']

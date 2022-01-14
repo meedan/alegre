@@ -51,7 +51,10 @@ def generate_matches(context):
     return matches, clause_count
 
 def truncate_query(query, clause_count):
-    return str.join(" ", query.split(" ")[:(app.config['MAX_CLAUSE_COUNT']-clause_count)])
+    if query:
+        return str.join(" ", query.split(" ")[:(app.config['MAX_CLAUSE_COUNT']-clause_count)])
+    else:
+        return None
 
 def store_document(body, doc_id):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
