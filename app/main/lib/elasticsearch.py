@@ -51,7 +51,7 @@ def generate_matches(context):
     return matches, clause_count
 
 def truncate_query(query, clause_count):
-    if query:
+    if query and query is not None:
         return str.join(" ", query.split(" ")[:(app.config['MAX_CLAUSE_COUNT']-clause_count)])
     else:
         return None
