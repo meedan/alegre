@@ -73,7 +73,7 @@ msgpack-numpy==0.4.3.2
 murmurhash==1.0.1
 newspaper3k==0.2.8
 nltk==3.6.2
-numpy==1.16.3
+numpy==1.21.0
 oauthlib==3.1.0
 opt-einsum==3.2.0
 packaging==21.0
