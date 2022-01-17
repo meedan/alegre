@@ -103,10 +103,10 @@ def get_node_context_from_item_or_match(item_or_match):
 
 def generate_edges_for_type(graph, data_type, item_iterator=get_iterable_objects, match_resolver=get_matches_for_item):
   for item in item_iterator(graph, data_type):
+    item_node_data = get_node_context_from_item_or_match(item)
+    item_node = get_or_init_node(get_item_or_match_id(item), data_type, get_node_context_from_item_or_match(item))
     for match in match_resolver(graph, item, data_type):
-      item_node_data = get_node_context_from_item_or_match(item)
       match_node_data = get_node_context_from_item_or_match(match)
-      item_node = get_or_init_node(get_item_or_match_id(item), data_type, get_node_context_from_item_or_match(item))
       match_node = get_or_init_node(get_item_or_match_id(match), data_type, get_node_context_from_item_or_match(match))
       nodes = [item_node, match_node]
       nodes.sort(key=lambda x:x.id)
