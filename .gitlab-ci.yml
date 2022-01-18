@@ -25,7 +25,6 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
-    - meedan-1110-clusters
 
 deploy_qa:
   image: python:3-alpine
@@ -65,7 +64,6 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - meedan-1110-clusters
 
 build_live:
   image: docker:latest
