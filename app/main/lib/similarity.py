@@ -10,7 +10,7 @@ def video_model():
   return SharedModel.get_client(app.config['VIDEO_MODEL'])
 
 def model_response_package(item, command):
-  return {
+  response_package = {
     "url": item.get("url"),
     "doc_id": item.get("doc_id"),
     "context": item.get("context", {}),
@@ -19,35 +19,46 @@ def model_response_package(item, command):
     "threshold": item.get("threshold", 0.0),
     "match_across_content_types": item.get("match_across_current_type", False)
   }
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Command {command}] Response package looks like {response_package}")
+  return response_package
 
 def add_item(item, similarity_type):
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Adding item")
   if similarity_type == "audio":
-    return audio_model().get_shared_model_response(model_response_package(item, "add"))
+    response = audio_model().get_shared_model_response(model_response_package(item, "add"))
   elif similarity_type == "video":
-    return video_model().get_shared_model_response(model_response_package(item, "add"))
+    response = video_model().get_shared_model_response(model_response_package(item, "add"))
   elif similarity_type == "image":
-    return add_image(item)
+    response = add_image(item)
   elif similarity_type == "text":
     doc_id = item.pop("doc_id", None)
-    return add_text(item, doc_id)
+    response = add_text(item, doc_id)
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
+  return response
 
 def delete_item(item, similarity_type):
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
   if similarity_type == "audio":
-    return audio_model().get_shared_model_response(model_response_package(item, "delete"))
+    response = audio_model().get_shared_model_response(model_response_package(item, "delete"))
   elif similarity_type == "video":
-    return video_model().get_shared_model_response(model_response_package(item, "delete"))
+    response = video_model().get_shared_model_response(model_response_package(item, "delete"))
   elif similarity_type == "image":
-    return save_image(item)
+    response = save_image(item)
   elif similarity_type == "text":
-    return delete_text(item.get("doc_id"), item.get("quiet", False))
+    response = delete_text(item.get("doc_id"), item.get("quiet", False))
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
+  return response
 
 def get_similar_items(item, similarity_type):
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
-    return audio_model().get_shared_model_response(model_response_package(item, "search"))
+    response = audio_model().get_shared_model_response(model_response_package(item, "search"))
   elif similarity_type == "video":
-    return video_model().get_shared_model_response(model_response_package(item, "search"))
+    response = video_model().get_shared_model_response(model_response_package(item, "search"))
   elif similarity_type == "image":
-    return search_image(item)
+    response = search_image(item)
   elif similarity_type == "text":
-    return search_text(item)
+    response = search_text(item)
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+  return response
 
