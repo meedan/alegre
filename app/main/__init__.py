@@ -34,5 +34,6 @@ def create_app(config_name):
       app.logger.addHandler(
         pybrake.LoggingHandler(notifier=app.extensions['pybrake'], level=logging.ERROR)
       )
+    logging.basicConfig(level=logging.INFO)
 
   return app
