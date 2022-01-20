@@ -1,7 +1,10 @@
+import logging
 from flask import request, current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.image_similarity import add_image, delete_image, search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
+
+logging.basicConfig(level=logging.INFO)
 
 def audio_model():
   return SharedModel.get_client(app.config['AUDIO_MODEL'])
