@@ -10,11 +10,14 @@ import shutil
 from flask import current_app as app
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
+import sqlalchemy
 import tenacity
 import numpy as np
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.helpers import context_matches
+from app.main.lib.similarity_helpers import get_context_query
 from app.main import db
 from app.main.model.audio import Audio
 
@@ -54,6 +57,7 @@ class AudioModel(SharedModel):
         except Exception as e:
             db.session.rollback()
             raise e
+        return saved_audio
 
     def get_tempfile(self):
         return tempfile.NamedTemporaryFile()
@@ -75,6 +79,7 @@ class AudioModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        audio = None
         if 'doc_id' in task:
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios:
@@ -83,21 +88,30 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios:
                 audio = audios[0]
-        deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-        return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        if audio:
+          deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
+          return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+        else:
+          return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
     def add(self, task):
         try:
             audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
-            audio = self.save(audio)
-            return {"requested": task, "result": {"url": audio.url}, "success": True}
+            try:
+              audio = self.save(audio)
+            except sqlalchemy.exc.IntegrityError:
+              audio = None
+            if audio:
+              return {"requested": task, "result": {"url": audio.url}, "success": True}
+            else:
+              return {"requested": task, "result": {"url": task.get("url")}, "success": False}
         except urllib.error.HTTPError:
             return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = self.get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, hash_value, context FROM audios
@@ -111,22 +125,16 @@ class AudioModel(SharedModel):
             keys = ('id', 'doc_id', 'url', 'hash_value', 'context')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
-                row["context"] = [c for c in row["context"] if self.context_matches(context, c)]
+                row["context"] = [c for c in row["context"] if context_matches(context, c)]
             return rows
         except Exception as e:
             db.session.rollback()
             raise e
 
-    def context_matches(self, context, search_context):
-        for k,v in context.items():
-            if search_context.get(k) != v:
-                return False
-        return True
-
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
-            context_query, context_hash = self.get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT audio_similarity_functions();
@@ -164,14 +172,8 @@ class AudioModel(SharedModel):
             db.session.rollback()
             raise e
 
-    def search(self, task):
-        context = {}
+    def get_by_doc_id_or_url(self, task):
         audio = None
-        temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
         if task.get('doc_id'):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
@@ -180,6 +182,17 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
+        return audio
+
+    def search(self, task):
+        context = {}
+        audio = None
+        temporary = False
+        if task.get('context'):
+            context = task.get('context')
+        if task.get("match_across_content_types"):
+            context.pop("content_type", None)
+        audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
             if not task.get("doc_id"):
@@ -196,23 +209,4 @@ class AudioModel(SharedModel):
             return {"result": matches}
         else:
             return {"error": "Audio not found for provided task", "task": task}
-
-    def get_context_query(self, context):
-        context_query = []
-        context_hash = {}
-        for key, value in context.items():
-            if key != "project_media_id":
-                if isinstance(value, list):
-                    context_clause = "("
-                    for i,v in enumerate(value):
-                        context_clause += "context @> '[{\""+key+"\": "+json.dumps(value)+"}]'"
-                        if len(value)-1 != i:
-                            context_clause += " OR "
-                        context_hash[f"context_{key}_{i}"] = v
-                    context_clause += ")"
-                    context_query.append(context_clause)
-                else:
-                    context_query.append("context @>'[{\""+key+"\": "+json.dumps(value)+"}]'")
-                    context_hash[f"context_{key}"] = value
-        return str.join(" AND ",  context_query), context_hash
     

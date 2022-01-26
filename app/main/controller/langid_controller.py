@@ -45,7 +45,8 @@ class LangidResource(Resource):
         
     @api.response(200, 'langid successfully queried.')
     @api.doc('Identify the language of a text document')
-    @api.expect(langid_request, validate=False)
+    @api.doc(params={'text': 'text to identify', 'provider': 'langid provider to use'})
+    # @api.expect(langid_request, validate=False)
     def get(self):
         return self.respond()
 

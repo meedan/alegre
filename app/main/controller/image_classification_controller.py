@@ -18,7 +18,8 @@ def _after_log(retry_state):
 class ImageClassificationResource(Resource):
     @api.response(200, 'image classification successfully queried.')
     @api.doc('Classify and label an image')
-    @api.expect(image_classification_request, validate=False)
+    # @api.expect(image_classification_request, validate=False)
+    @api.doc(params={'uri': 'image URL to be queried for classification'})
     def get(self):
         if(request.args.get('uri')):
             uri=request.args.get('uri')
