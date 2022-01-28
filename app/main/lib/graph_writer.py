@@ -138,6 +138,7 @@ def generate_edge(source, target, match, graph, data_type):
     )
     db.session.add(edge)
     db.session.flush()
+    db.session.commit()
   return edge
 
 def get_or_init_node(node_data_type_id, node_data_type, node_context):
@@ -153,6 +154,7 @@ def get_or_init_node(node_data_type_id, node_data_type, node_context):
     )
     db.session.add(node)
     db.session.flush()
+    db.session.commit()
   return node
 
 def get_edge_score(match):
