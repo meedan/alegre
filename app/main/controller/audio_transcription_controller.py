@@ -31,26 +31,32 @@ class AudioTranscriptionResource(Resource):
         audioUri = request.get_json().get('url', '')
         result = None
 
-        # try:
-        response = transcribe.start_transcription_job(
-            TranscriptionJobName=jobName,
-            IdentifyLanguage=True,
-            Media={
-                'MediaFileUri': audioUri
-            }
-        )
+        try:
+            response = transcribe.start_transcription_job(
+                TranscriptionJobName=jobName,
+                IdentifyLanguage=True,
+                Media={
+                    'MediaFileUri': audioUri
+                }
+            )
 
-        if response['TranscriptionJob']:
+            if response['TranscriptionJob']:
+                result = {
+                    'job_name': response['TranscriptionJob']['TranscriptionJobName'],
+                    'job_status': response['TranscriptionJob']['TranscriptionJobStatus'],
+                }
+
+        except botocore.exceptions.ClientError as error:
             result = {
-                'job_name': response['TranscriptionJob']['TranscriptionJobName'],
-                'job_status': response['TranscriptionJob']['TranscriptionJobStatus'],
+                'error': error.response['Error']['Code'],
+                'message': error.response['Error']['Message'],
             }
 
-        # except Exception as e:
-        # 	print("Oops!", e.__class__, "occurred.")
-        # 	result = {
-        # 		'error': e.__class__,
-        # 	}
+        except Exception as e:
+        	print("Oops!", e.__class__, "occurred.")
+        	result = {
+        		'error': e.__class__,
+        	}
 
         return result
 
