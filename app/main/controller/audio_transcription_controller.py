@@ -6,6 +6,22 @@ import requests
 import json
 import os
 
+def safely_handle_transcription_job(callback):
+    result = None
+    try:
+        result = callback()
+    except botocore.exceptions.ClientError as error:
+        result = {
+            'error': error.response['Error']['Code'],
+            'message': error.response['Error']['Message'],
+        }
+    except Exception as e:
+        print("Oops!", repr(e), "occurred.")
+        result = {
+            'error': repr(e),
+        }
+    return result
+
 api = Namespace('audio_transcription', description='audio transcription operations')
 transcription_post = api.model('transcription_post', {
     'url': fields.String(required=True, description='url of audio to transcribe'),
@@ -29,9 +45,8 @@ class AudioTranscriptionResource(Resource):
     def post(self):
         jobName = request.get_json().get('job_name', '')
         audioUri = request.get_json().get('url', '')
-        result = None
-
-        try:
+        def start_transcription():
+            result = None
             response = transcribe.start_transcription_job(
                 TranscriptionJobName=jobName,
                 IdentifyLanguage=True,
@@ -39,70 +54,39 @@ class AudioTranscriptionResource(Resource):
                     'MediaFileUri': audioUri
                 }
             )
-
             if response['TranscriptionJob']:
                 result = {
                     'job_name': response['TranscriptionJob']['TranscriptionJobName'],
                     'job_status': response['TranscriptionJob']['TranscriptionJobStatus'],
                 }
-
-        except botocore.exceptions.ClientError as error:
-            result = {
-                'error': error.response['Error']['Code'],
-                'message': error.response['Error']['Message'],
-            }
-
-        except Exception as e:
-            print("Oops!", repr(e), "occurred.")
-            result = {
-                'error': repr(e),
-            }
-
-        return result
+            return result
+        return safely_handle_transcription_job(start_transcription)
 
     @api.response(200, 'OK')
     @api.doc('Get transcription result')
     @api.doc(params={'job_name': 'unique transcription job identifier'})
     def get(self):
         jobName = ''
-
         if (request.args.get('job_name')):
             jobName = request.args.get('job_name')
         else:
             jobName = request.json['job_name']
-
-        result = None
-
-        try:
+        def get_transcription():
+            result = None
             response = transcribe.get_transcription_job(TranscriptionJobName=jobName)
-
             if response['TranscriptionJob']:
                 job_name = response['TranscriptionJob']['TranscriptionJobName']
                 job_status = response['TranscriptionJob']['TranscriptionJobStatus']
                 language_code = response['TranscriptionJob']['LanguageCode']
-
                 result = {
                     'job_name': job_name,
                     'job_status': job_status,
                     'language_code': language_code
                 }
-
                 if job_status == 'COMPLETED':
                     transcriptionUri = response['TranscriptionJob']['Transcript']['TranscriptFileUri']
                     transcriptionResponse = requests.get(transcriptionUri)
                     transcriptionResponseDict = json.loads(transcriptionResponse.text)
                     result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
-
-        except botocore.exceptions.ClientError as error:
-            result = {
-                'error': error.response['Error']['Code'],
-                'message': error.response['Error']['Message'],
-            }
-
-        except Exception as e:
-            print("Oops!", repr(e), "occurred.")
-            result = {
-                'error': repr(e),
-            }
-
-        return result
+            return result
+        return safely_handle_transcription_job(get_transcription)
