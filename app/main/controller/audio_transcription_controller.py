@@ -53,10 +53,10 @@ class AudioTranscriptionResource(Resource):
             }
 
         except Exception as e:
-        	print("Oops!", e.__class__, "occurred.")
-        	result = {
-        		'error': e.__class__,
-        	}
+            print("Oops!", repr(e), "occurred.")
+            result = {
+                'error': repr(e),
+            }
 
         return result
 
@@ -100,9 +100,9 @@ class AudioTranscriptionResource(Resource):
             }
 
         except Exception as e:
-            print("Oops!", e.__class__, "occurred.")
+            print("Oops!", repr(e), "occurred.")
             result = {
-                'error': e.__class__,
+                'error': repr(e),
             }
 
         return result
