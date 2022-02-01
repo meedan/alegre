@@ -39,6 +39,18 @@ transcribe = boto3.client(
 
 @api.route('/')
 class AudioTranscriptionResource(Resource):
+    def aws_start_transcription(self, jobName, audioUri):
+        return transcribe.start_transcription_job(
+            TranscriptionJobName=jobName,
+            IdentifyLanguage=True,
+            Media={
+                'MediaFileUri': audioUri
+            }
+        )
+
+    def aws_get_transcription(self, jobName):
+        return transcribe.get_transcription_job(TranscriptionJobName=jobName)
+
     @api.response(200, 'Transcription job successfully started.')
     @api.doc('Start transcription job')
     @api.expect(transcription_post, validate=False)
@@ -47,13 +59,7 @@ class AudioTranscriptionResource(Resource):
         audioUri = request.get_json().get('url', '')
         def start_transcription():
             result = None
-            response = transcribe.start_transcription_job(
-                TranscriptionJobName=jobName,
-                IdentifyLanguage=True,
-                Media={
-                    'MediaFileUri': audioUri
-                }
-            )
+            response = self.aws_start_transcription(jobName, audioUri)
             if response['TranscriptionJob']:
                 result = {
                     'job_name': response['TranscriptionJob']['TranscriptionJobName'],
@@ -73,7 +79,7 @@ class AudioTranscriptionResource(Resource):
             jobName = request.json['job_name']
         def get_transcription():
             result = None
-            response = transcribe.get_transcription_job(TranscriptionJobName=jobName)
+            response = self.aws_get_transcription(jobName)
             if response['TranscriptionJob']:
                 job_name = response['TranscriptionJob']['TranscriptionJobName']
                 job_status = response['TranscriptionJob']['TranscriptionJobStatus']
