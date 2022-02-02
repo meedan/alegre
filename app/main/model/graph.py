@@ -52,7 +52,8 @@ class Graph(db.Model):
         generate_edges_for_type(graph, data_type, item_iterator, match_resolver)
       graph.set_status("enriched")
       return graph
-    except:
+    except Exception as err:
+      app.extensions['pybrake'].notify(err)
       graph.set_status("errored")
       return graph
 
