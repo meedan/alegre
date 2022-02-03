@@ -1,7 +1,6 @@
 # 3rd party image classification providers
 from google.cloud import vision
 from protobuf_to_dict import protobuf_to_dict
-from flask import request, current_app as app
 
 from app.main.lib.google_client import get_credentialed_google_client
 
