@@ -210,10 +210,9 @@ class TestSimilarityBlueprint(BaseTestCase):
         with self.client:
             delete_response = self.client.delete(
                 '/text/similarity/',
-                data=json.dumps({"doc_id": "abcdef"}),
+                data=json.dumps({"doc_id": "abcdef", "text": "string"}),
                 content_type='application/json'
             )
-            result = json.loads(delete_response.data.decode())
             self.assertEqual(404, delete_response.status_code)
 
     def test_elasticsearch_delete_200(self):

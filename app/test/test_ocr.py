@@ -21,6 +21,16 @@ class TestOcrBlueprint(BaseTestCase):
             self.assertIn('Translate this sentence', result['text'])
             self.assertIn('عندي وقت في الساعة العاشرة', result['text'])
 
+    def test_ocr_api_successful_get_with_query_request(self):
+        with self.client:
+            response = self.client.get(
+                '/image/ocr/?url=https://i.imgur.com/ewGClFQ.png',
+            )
+            result = json.loads(response.data.decode())
+
+            self.assertIn('Translate this sentence', result['text'])
+            self.assertIn('عندي وقت في الساعة العاشرة', result['text'])
+
     def test_ocr_api_image_without_text(self):
         with self.client:
             response = self.client.get(
