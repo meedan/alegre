@@ -30,7 +30,6 @@ class TestHealthcheckBlueprintWithBadConfig(BaseTestCase):
 
   def test_healthcheck_api_with_bad_config(self):
     response = self.client.get('/healthcheck/')
-    result = json.loads(response.data.decode())
     self.assertEqual('application/json', response.content_type)
     self.assertEqual(500, response.status_code)
 

@@ -5,6 +5,7 @@ import redis
 
 from flask import current_app as app
 from unittest.mock import patch
+from unittest import mock
 from google.cloud import vision
 from newspaper import Article
 
@@ -19,7 +20,7 @@ class TestArticleBlueprint(BaseTestCase):
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 
-    def test_article_api(self):
+    def test_article_api_post_endpoint(self):
         with patch('app.main.controller.article_controller.ArticleResource.get_article', ) as mock_get_article:
             article = Article("blah.com")
             article.set_html(open('./app/test/data/article.html').read())
@@ -37,7 +38,7 @@ class TestArticleBlueprint(BaseTestCase):
             self.assertEqual(200, response.status_code)
             self.assertEqual(sorted(result.keys()), ['authors', 'keywords', 'links', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
 
-    def test_article_api(self):
+    def test_article_api_get_endpoint(self):
         with patch('app.main.controller.article_controller.ArticleResource.get_article', ) as mock_get_article:
             article = Article("blah.com")
             article.set_html(open('./app/test/data/article.html').read())
@@ -55,6 +56,38 @@ class TestArticleBlueprint(BaseTestCase):
             self.assertEqual('application/json', response.content_type)
             self.assertEqual(200, response.status_code)
             self.assertEqual(sorted(result.keys()), ['authors', 'keywords', 'links', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
+
+    def test_article_api_get_query_request(self):
+        with patch('app.main.controller.article_controller.ArticleResource.get_article', ) as mock_get_article:
+            article = Article("blah.com")
+            article.set_html(open('./app/test/data/article.html').read())
+            article.parse()
+            article.nlp()
+            mock_get_article.return_value = article
+            response = self.client.get(
+                '/article/?url=http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/',
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('application/json', response.content_type)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(sorted(result.keys()), ['authors', 'keywords', 'links', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
+
+    def test_article_api_error_response(self):
+        with patch('app.main.controller.article_controller.ArticleResource.respond', ) as mock_get_error_response:
+            article = Article("blah.com")
+            article.set_html(open('./app/test/data/article.html').read())
+            article.parse()
+            article.nlp()
+            mock_get_error_response.return_value = {"error": "response error"}
+            response = self.client.get(
+                '/article/',
+                data=json.dumps(dict(
+                    url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
+                )),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(400, response.status_code)
 
 if __name__ == '__main__':
     unittest.main()

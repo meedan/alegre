@@ -82,6 +82,29 @@ class TestLangidBlueprint(BaseTestCase):
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
 
+    def test_langid_api_get_with_query_request(self):
+        response = self.client.get(
+            '/text/langid/?text=Hello',
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('en', result['result']['language'])
+        self.assertEqual(app.config['PROVIDER_LANGID'], result['provider'])
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(200, response.status_code)
+
+    def test_langid_api_get_without_text(self):
+        response = self.client.get(
+            '/text/langid/',
+            data=json.dumps(dict(
+                text=''
+            )),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('und', result['result']['language'])
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(200, response.status_code)
+
     def test_langid_api_post(self):
         response = self.client.post(
             '/text/langid/',
