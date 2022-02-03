@@ -55,5 +55,11 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('estou testando isso', result['text'].lower())
 
+            response = self.client.get(
+              '/text/translation/?text=borracha na oficina&from=pt&to=en',
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('rubber in the workshop', result['text'])
+
 if __name__ == '__main__':
     unittest.main()

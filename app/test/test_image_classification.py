@@ -18,39 +18,57 @@ class TestImageClassificationBlueprint(BaseTestCase):
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 
-    # @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
-    # def test_image_classification_google(self):
-    #     result = GoogleImageClassificationProvider.classify('https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png')
-    #     self.assertDictEqual({
-    #         'adult': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'medical': vision.enums.Likelihood.UNLIKELY,
-    #         'violence': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'racy': vision.enums.Likelihood.POSSIBLE,
-    #         'spam': vision.enums.Likelihood.UNKNOWN
-    #     }, result['result']['flags'])
-    #
-    # def test_image_classification_api(self):
-    #     response = self.client.get(
-    #         '/image/classification/',
-    #         data=json.dumps(dict(
-    #             uri='https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png'
-    #         )),
-    #         content_type='application/json'
-    #     )
-    #     result = json.loads(response.data.decode())
-    #     self.assertEqual('application/json', response.content_type)
-    #     self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
-    #     self.assertEqual(200, response.status_code)
-    #     self.assertDictEqual({
-    #         'adult': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'medical': vision.enums.Likelihood.UNLIKELY,
-    #         'violence': vision.enums.Likelihood.VERY_UNLIKELY,
-    #         'racy': vision.enums.Likelihood.POSSIBLE,
-    #         'spam': vision.enums.Likelihood.UNKNOWN
-    #     }, result['result']['flags'])
-    #
+    @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
+    def test_image_classification_google(self):
+        result = GoogleImageClassificationProvider.classify('https://i.imgur.com/ewGClFQ.png')
+        self.assertDictEqual({
+            'adult': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
+            'medical': vision.enums.Likelihood.UNLIKELY,
+            'violence': vision.enums.Likelihood.VERY_UNLIKELY,
+            'racy': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spam': vision.enums.Likelihood.UNKNOWN
+        }, result['result']['flags'])
+
+
+    def test_image_classification_api(self):
+        response = self.client.get(
+            '/image/classification/',
+            data=json.dumps(dict(
+                uri='https://i.imgur.com/ewGClFQ.png'
+            )),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
+        self.assertEqual(200, response.status_code)
+        self.assertDictEqual({
+            'adult': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
+            'medical': vision.enums.Likelihood.UNLIKELY,
+            'violence': vision.enums.Likelihood.VERY_UNLIKELY,
+            'racy': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spam': vision.enums.Likelihood.UNKNOWN
+        }, result['result']['flags'])
+
+    def test_image_classification_api_with_query_request(self):
+        response = self.client.get(
+            '/image/classification/?uri=https://i.imgur.com/ewGClFQ.png',
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
+        self.assertEqual(200, response.status_code)
+        self.assertDictEqual({
+            'adult': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
+            'medical': vision.enums.Likelihood.UNLIKELY,
+            'violence': vision.enums.Likelihood.VERY_UNLIKELY,
+            'racy': vision.enums.Likelihood.VERY_UNLIKELY,
+            'spam': vision.enums.Likelihood.UNKNOWN
+        }, result['result']['flags'])
+
     def test_image_classification_error(self):
         response = self.client.get(
             '/image/classification/',
@@ -71,25 +89,30 @@ class TestImageClassificationBlueprint(BaseTestCase):
                     'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
                     'medical': vision.enums.Likelihood.UNLIKELY,
                     'violence': vision.enums.Likelihood.VERY_UNLIKELY,
-                    'racy': vision.enums.Likelihood.POSSIBLE,
+                    'racy': vision.enums.Likelihood.VERY_UNLIKELY,
                     'spam': vision.enums.Likelihood.UNKNOWN
                 }}
             }
             response = self.client.get(
                 '/image/classification/',
                 data=json.dumps(dict(
-                    uri='https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png'
+                    uri='https://i.imgur.com/ewGClFQ.png'
                 )),
                 content_type='application/json'
             )
             response = self.client.get(
                 '/image/classification/',
                 data=json.dumps(dict(
-                    uri='https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png'
+                    uri='https://i.imgur.com/ewGClFQ.png'
                 )),
                 content_type='application/json'
             )
             self.assertEqual(mock_image_classification.call_count, 1)
+
+    def test_image_classification_google_raise_error(self):
+        with patch('app.main.lib.image_classification.CLIENT', None) as mock_image_classification:
+            with self.assertRaises(Exception):
+                GoogleImageClassificationProvider.classify('https://i.imgur.com/ewGClFQ.png')
 
 if __name__ == '__main__':
     unittest.main()
