@@ -26,13 +26,17 @@ def get_all_documents_matching_context(context):
           }
       }
   }
-  docs = scan(es,
-    size=10000,
-    query=body,
-    index=app.config['ELASTICSEARCH_SIMILARITY'],
-  )
-  for hit in docs:
-    yield hit
+  try:
+    docs = scan(es,
+      size=10000,
+      query=body,
+      index=app.config['ELASTICSEARCH_SIMILARITY'],
+    )
+    for hit in docs:
+      yield hit
+  except elasticsearch.exceptions.NotFoundError as err:
+    app.extensions['pybrake'].notify(err)
+    return []
 
 def generate_matches(context):
     matches = []
