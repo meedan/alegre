@@ -110,7 +110,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
             self.assertEqual(mock_image_classification.call_count, 1)
 
     def test_image_classification_google_raise_error(self):
-        with patch('app.main.lib.image_classification.CLIENT', None) as mock_image_classification:
+        with patch('app.main.lib.image_classification.CLIENT', None):
             with self.assertRaises(Exception):
                 GoogleImageClassificationProvider.classify('https://i.imgur.com/ewGClFQ.png')
 
