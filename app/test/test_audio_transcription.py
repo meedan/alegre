@@ -90,6 +90,19 @@ class TestTranscriptionBlueprint(BaseTestCase):
                 self.assertEqual(200, response.status_code)
                 self.assertEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code', 'transcription'])
 
+    def test_get_transcription_job_error(self):
+        with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_get_transcription', ) as mock_get_transcription:
+            mock_get_transcription.return_value = {}
+            response = self.client.get('/audio/transcription/',
+                data=json.dumps({
+                  'job_name': 'Aloha',
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('application/json', response.content_type)
+            self.assertNotEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
+            self.assertTrue('KeyError' in result['error'])
 
 if __name__ == '__main__':
     unittest.main()
