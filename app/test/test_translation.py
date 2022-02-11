@@ -64,13 +64,5 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('rubber in the workshop', result['text'])
 
-    def test_translation_error_if_not_credentials(self):
-      with patch('os.path.exists') as mock:
-        mock.return_value = {}
-        client = get_credentialed_google_client(translate.Client)
-        self.assertEqual(None, client)
-        with self.assertRaises(Exception):
-          result = client.detect_language(['Me llamo', 'I am'])
-
 if __name__ == '__main__':
     unittest.main()
