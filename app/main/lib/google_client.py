@@ -4,9 +4,10 @@ from google.oauth2 import service_account
 
 def get_credentialed_google_client(client):
     default_values = {}
-    if os.path.exists('./google_credentials.json'):
-        with open('./google_credentials.json') as f:
-          default_values = json.load(f)
+    if not os.path.exists('./google_credentials.json'):
+      raise "Credentials file not found."
+    with open('./google_credentials.json') as f:
+      default_values = json.load(f)
     credentials_dict = {
       "type": os.getenv("google_credentials_type", default_values.get("type")),
       "project_id": os.getenv("google_credentials_project_id", default_values.get("project_id")),

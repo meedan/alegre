@@ -74,12 +74,21 @@ class TestArticleBlueprint(BaseTestCase):
 
     def test_article_api_error_response(self):
         with patch('app.main.controller.article_controller.ArticleResource.respond', ) as mock_get_error_response:
-            article = Article("blah.com")
-            article.set_html(open('./app/test/data/article.html').read())
-            article.parse()
-            article.nlp()
             mock_get_error_response.return_value = {"error": "response error"}
             response = self.client.get(
+                '/article/',
+                data=json.dumps(dict(
+                    url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
+                )),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(400, response.status_code)
+
+    def test_article_api_post_error_response(self):
+        with patch('app.main.controller.article_controller.ArticleResource.respond', ) as mock_get_error_response:
+            mock_get_error_response.return_value = {"error": "response error"}
+            response = self.client.post(
                 '/article/',
                 data=json.dumps(dict(
                     url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'

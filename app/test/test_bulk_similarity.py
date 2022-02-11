@@ -41,5 +41,14 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
             self.assertTrue(result)
             self.assertTrue(result[0]['_id'], "123456")
 
+
+    def test_bulk_similarity_with_diferent_model(self):
+      with self.client:
+        term = { 'text': 'how to slice a banana', 'model': 'xlm-r-bert-base-nli-stsb-mean-tokens', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+        response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertTrue(result)
+        self.assertTrue(result[0]['_id'], "123456")
+
 if __name__ == '__main__':
     unittest.main()
