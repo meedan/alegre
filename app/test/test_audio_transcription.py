@@ -7,6 +7,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from unittest import mock
 from collections import namedtuple
+import boto3
 
 class TestTranscriptionBlueprint(BaseTestCase):
     def test_post_transcription_job(self):
@@ -103,6 +104,20 @@ class TestTranscriptionBlueprint(BaseTestCase):
             self.assertEqual('application/json', response.content_type)
             self.assertNotEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
             self.assertTrue('KeyError' in result['error'])
+
+    def test_handle_bot3_exception(self):
+        with patch('boto3.client') as mock_get_transcription:
+            mock_get_transcription.add_client_error('duplicate_file')
+            response = self.client.get('/audio/transcription/',
+                data=json.dumps({
+                  'job_name': 'Aloha',
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('application/json', response.content_type)
+            self.assertNotEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
+            self.assertEqual(sorted(result.keys()), ['error', 'message'])
 
 if __name__ == '__main__':
     unittest.main()
