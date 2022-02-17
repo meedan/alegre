@@ -117,7 +117,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('application/json', response.content_type)
             self.assertNotEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
-            self.assertEqual(sorted(result.keys()), ['error', 'message'])
+            self.assertIn('error', result)
 
 if __name__ == '__main__':
     unittest.main()

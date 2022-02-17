@@ -18,19 +18,6 @@ class TestImageClassificationBlueprint(BaseTestCase):
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 
-    @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
-    def test_image_classification_google(self):
-        result = GoogleImageClassificationProvider.classify('https://i.imgur.com/ewGClFQ.png')
-        self.assertDictEqual({
-            'adult': vision.enums.Likelihood.VERY_UNLIKELY,
-            'spoof': vision.enums.Likelihood.VERY_UNLIKELY,
-            'medical': vision.enums.Likelihood.UNLIKELY,
-            'violence': vision.enums.Likelihood.VERY_UNLIKELY,
-            'racy': vision.enums.Likelihood.VERY_UNLIKELY,
-            'spam': vision.enums.Likelihood.UNKNOWN
-        }, result['result']['flags'])
-
-
     def test_image_classification_api(self):
         response = self.client.get(
             '/image/classification/',
