@@ -67,6 +67,7 @@ class TestTranslationBlueprint(BaseTestCase):
     def test_translation_error_if_not_credentials(self):
       with patch('os.path.exists') as mock:
         mock.return_value = {}
+        with self.assertRaises(Exception):
         client = get_credentialed_google_client(translate.Client)
         self.assertEqual(None, client)
         with self.assertRaises(Exception):
