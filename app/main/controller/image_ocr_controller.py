@@ -12,7 +12,7 @@ ocr_request = api.model('ocr_request', {
 })
 
 
-def _after_log(retry_state):
+def _after_log():
     app.logger.debug("Retrying text extraction...")
 
 CLIENT = get_credentialed_google_client(vision.ImageAnnotatorClient)

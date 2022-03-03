@@ -11,7 +11,7 @@ image_classification_request = api.model('image_classification_request', {
     'uri': fields.String(required=True, description='image URL to be queried for classification')
 })
 
-def _after_log(retry_state):
+def _after_log():
     app.logger.debug("Retrying image classification...")
 
 @api.route('/')
