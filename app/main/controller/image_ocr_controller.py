@@ -2,6 +2,7 @@ from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
+import time
 
 from app.main.lib.google_client import get_credentialed_google_client
 
@@ -18,7 +19,7 @@ class ImageOcrResource(Resource):
     @api.doc('Perform text extraction from an image')
     @api.doc(params={'url': 'url of image to extract text from'})
 
-    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=5), stop=tenacity.stop_after_attempt(20), after=_after_log, reraise=True)
+    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=0, max=5), stop=tenacity.stop_after_delay(10), after=_after_log, reraise=True)
     def get(self):
         client = get_credentialed_google_client(vision.ImageAnnotatorClient)
 
@@ -31,6 +32,7 @@ class ImageOcrResource(Resource):
         response = client.document_text_detection(image=image)
 
         if response.error:
+            time.sleep(2)
             raise Exception("we can not access the URL currently. Please download the content and pass it in")
 
         texts = response.text_annotations
