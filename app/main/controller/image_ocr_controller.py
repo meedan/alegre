@@ -1,6 +1,8 @@
 from flask import request, current_app as app
+from urllib3 import Retry
 from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
+import tenacity
 
 from app.main.lib.google_client import get_credentialed_google_client
 
@@ -9,21 +11,30 @@ ocr_request = api.model('ocr_request', {
     'url': fields.String(required=True, description='url of image to extract text from'),
 })
 
+
+def _after_log():
+    app.logger.debug("Retrying text extraction...")
+
+CLIENT = get_credentialed_google_client(vision.ImageAnnotatorClient)
 @api.route('/')
 class ImageOcrResource(Resource):
     @api.response(200, 'text successfully extracted.')
     @api.doc('Perform text extraction from an image')
     @api.doc(params={'url': 'url of image to extract text from'})
-    def get(self):
-        client = get_credentialed_google_client(vision.ImageAnnotatorClient)
 
+    @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=2, max=5), stop=(tenacity.stop_after_attempt(3) | tenacity.stop_after_delay(10)), after=_after_log, reraise=True)
+    def get(self):
         image = vision.types.Image()
         if(request.args.get('url')):
             image.source.image_uri=request.args.get('url')
         else:
             image.source.image_uri = request.json['url']
 
-        response = client.document_text_detection(image=image)
+        response = CLIENT.document_text_detection(image=image)
+
+        if response.error.message:
+            raise Exception(response.error.message)
+
         texts = response.text_annotations
 
         if not texts:
