@@ -11,7 +11,7 @@
     "class": "MdebertaFilipino",
     "key": "mdeberta-v3-filipino",
     "options": {
-      "model_name": "meedan/mdeberta-v3-filipinos"
+      "model_name": "meedan/mdeberta-v3-filipino"
     }
   },
   "indiansbert": {
