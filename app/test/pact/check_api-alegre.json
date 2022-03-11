@@ -12,7 +12,7 @@
       "request": {
         "method": "get",
         "path": "/image/similarity/",
-        "query": "url=https%3A%2F%2Fi.imgur.com%2FewGClFQ.png&threshold=0.89"
+        "query": "url=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg&threshold=0.89"
       },
       "response": {
         "status": 200,
@@ -23,9 +23,9 @@
           "result": [
             {
               "id": 1,
-              "sha256": "9bb1b8da9eec7caaea50099ba0488a1bdd221305a327097057fb8f626b6ba39b",
-              "phash": 26558343354958209,
-              "url": "https://i.imgur.com/ewGClFQ.png",
+              "sha256": "ebf6b1968d01298a193eb6a8d0f81590dd70e950d1481ad9c4c5b3f43d3f5258",
+              "phash": 25131435933209733,
+              "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg",
               "context": {
               },
               "score": 0
@@ -74,7 +74,7 @@
       "request": {
         "method": "get",
         "path": "/image/ocr/",
-        "query": "url=https%3A%2F%2Fi.imgur.com%2FewGClFQ.png"
+        "query": "url=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg"
       },
       "response": {
         "status": 200,
@@ -82,7 +82,7 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "text": "X X\n3\nTranslate this sentence\nو عندي وقت في الساعة العاشرة.\n»\n"
+          "text": "7 BOOKS\nTHAT WILL\nCHANGE\nHOW YOU\nSEE THE\nWORLD\nBY MARK MANSON\n18 minute read\n"
         }
       }
     },
@@ -92,7 +92,7 @@
       "request": {
         "method": "get",
         "path": "/image/classification/",
-        "query": "uri=https%3A%2F%2Fi.imgur.com%2FewGClFQ.png"
+        "query": "uri=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg"
       },
       "response": {
         "status": 200,
@@ -103,9 +103,9 @@
           "result": {
             "flags": {
               "adult": 1,
-              "spoof": 1,
-              "medical": 2,
-              "violence": 1,
+              "spoof": 2,
+              "medical": 3,
+              "violence": 2,
               "racy": 1,
               "spam": 0
             }
