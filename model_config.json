@@ -7,6 +7,13 @@
       "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"
     }
   },
+  "mdebertav3filipino": {
+    "class": "MdebertaFilipino",
+    "key": "mdeberta-v3-filipino",
+    "options": {
+      "model_name": "meedan/mdeberta-v3-filipinos"
+    }
+  },
   "indiansbert": {
     "class": "IndianSbert",
     "key": "indian-sbert",
