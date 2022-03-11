@@ -11,8 +11,7 @@ ocr_request = api.model('ocr_request', {
     'url': fields.String(required=True, description='url of image to extract text from'),
 })
 
-
-def _after_log():
+def _after_log(retry_state):
     app.logger.debug("Retrying text extraction...")
 
 CLIENT = get_credentialed_google_client(vision.ImageAnnotatorClient)
