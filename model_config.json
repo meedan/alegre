@@ -11,6 +11,7 @@
     "class": "MdebertaFilipino",
     "key": "mdeberta-v3-filipino",
     "options": {
+      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/meedan_indian-xlm-r_TO_microsoft_mdeberta-v3-base_1_epoch.zip",
       "model_name": "meedan/mdeberta-v3-filipino"
     }
   },
