@@ -11,6 +11,7 @@
     "class": "MdebertaFilipino",
     "key": "mdeberta-v3-filipino",
     "options": {
+      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/mdebertav3filipino-repack.zip",
       "model_name": "meedan/mdeberta-v3-filipino"
     }
   },
