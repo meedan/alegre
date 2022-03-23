@@ -73,7 +73,7 @@ msgpack-numpy==0.4.3.2
 murmurhash==1.0.1
 newspaper3k==0.2.8
 nltk==3.6.2
-numpy==1.16.3
+numpy
 oauthlib==3.1.0
 opt-einsum==3.2.0
 packaging==21.0
@@ -111,7 +111,7 @@ s3transfer==0.5.0
 sacremoses==0.0.45
 scikit-learn==0.24.2
 scipy==1.2.1
-sentence-transformers==0.4.0
+sentence-transformers==2.2.0
 sentencepiece==0.1.96
 sgmllib3k==1.0.0
 six==1.12.0
@@ -136,11 +136,11 @@ timeout-decorator==0.5.0
 tinysegmenter==0.3
 tldextract==3.1.0
 tmkpy==0.1.1
-tokenizers==0.9.4
+tokenizers
 toolz==0.9.0
 torch==1.9.0
 tqdm==4.27.0
-transformers==4.2.2
+transformers==4.6.0
 twitter-text-parser==1.0.0
 typing-extensions==3.10.0.0
 ujson==1.35
