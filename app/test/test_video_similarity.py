@@ -67,8 +67,18 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                         'has_custom_id': True
                     }
                 }), content_type='application/json')
+                response2 = self.client.get('/video/similarity/', data=json.dumps({
+                    'url': url,
+                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
+                    'context': {
+                        'team_id': [1,0],
+                        'has_custom_id': True
+                    }
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
+        result2 = json.loads(response2.data.decode())
+        self.assertEqual(result2, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
 
     def test_basic_http_responses(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
