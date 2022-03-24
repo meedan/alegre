@@ -129,7 +129,6 @@ class VideoModel(SharedModel):
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = db.session.execute(text(cmd), context_hash).fetchall()
-            # matches = db.session.execute(text(cmd)).fetchall()
             keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
