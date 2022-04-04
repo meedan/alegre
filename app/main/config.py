@@ -51,7 +51,7 @@ class TestingConfig(Config):
   TESTING = True
   PRESERVE_CONTEXT_ON_EXCEPTION = False
   ELASTICSEARCH_SIMILARITY = 'alegre_similarity_test'
-  REDIS_DATABASE = 1
+  REDIS_DATABASE = 0
   SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://%(user)s:%(password)s@%(host)s/%(dbname)s?client_encoding=utf8' % {
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
