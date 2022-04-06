@@ -10,7 +10,7 @@
     "class": "MdebertaFilipino",
     "key": "mdeberta-v3-filipino",
     "options": {
-      "model_name": "meedan/mdeberta-v3-filipino"
+      "model_name": "meedan/paraphrase-filipino-mpnet-base-v2"
     }
   },
   "indiansbert": {
