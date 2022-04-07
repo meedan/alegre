@@ -7,7 +7,7 @@ from app.main.lib.similarity_measures import angular_similarity
 
 class MdebertaFilipino(SharedModel):
     def load(self):
-        model_name = self.options.get('model_name', 'meedan/mdeberta-v3-filipino')
+        model_name = self.options.get('model_name', 'meedan/paraphrase-filipino-mpnet-base-v2')
         if self.options.get("model_url"):
             try:
                 self.model = SentenceTransformer(self.options.get("model_url"))

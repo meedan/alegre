@@ -16,10 +16,10 @@ class TestTranslationBlueprint(BaseTestCase):
         self.assertEqual('es', result[0]['language'])
         self.assertEqual('en', result[1]['language'])
         result = client.translate('koszula')
-        self.assertEqual('shirt', result['translatedText'])
+        self.assertTrue('shirt' in result['translatedText'].lower())
         self.assertEqual('pl', result['detectedSourceLanguage'])
         result = client.translate('camisa', source_language='es')
-        self.assertEqual('shirt', result['translatedText'])
+        self.assertTrue('shirt' in result['translatedText'].lower())
 
     def test_translation_api(self):
         with self.client:
