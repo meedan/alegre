@@ -8,7 +8,7 @@
   },
   "mdebertav3filipino": {
     "class": "MdebertaFilipino",
-    "key": "mdeberta-v3-filipino",
+    "key": "paraphrase-filipino-mpnet-base-v2",
     "options": {
       "model_name": "meedan/paraphrase-filipino-mpnet-base-v2"
     }
