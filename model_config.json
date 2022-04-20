@@ -3,15 +3,20 @@
     "class": "XlmRBertBaseNliStsbMeanTokens",
     "key": "xlm-r-bert-base-nli-stsb-mean-tokens",
     "options": {
-      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/xlm-r-bert-base-nli-stsb-mean-tokens.zip",
       "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"
+    }
+  },
+  "mdebertav3filipino": {
+    "class": "MdebertaFilipino",
+    "key": "paraphrase-filipino-mpnet-base-v2",
+    "options": {
+      "model_name": "meedan/paraphrase-filipino-mpnet-base-v2"
     }
   },
   "indiansbert": {
     "class": "IndianSbert",
     "key": "indian-sbert",
     "options": {
-      "model_url": "https://meedan-models-live.s3-eu-west-1.amazonaws.com/indiansbert-repack.zip",
       "model_name": "meedan/indian-sbert"
     }
   },

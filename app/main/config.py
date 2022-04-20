@@ -41,7 +41,7 @@ class Config:
   except:
     VIDEO_MODEL_L1_SCORE = 0.7
   AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
-  
+
 
 class DevelopmentConfig(Config):
   DEBUG = True
@@ -51,7 +51,7 @@ class TestingConfig(Config):
   TESTING = True
   PRESERVE_CONTEXT_ON_EXCEPTION = False
   ELASTICSEARCH_SIMILARITY = 'alegre_similarity_test'
-  REDIS_DATABASE = 1
+  REDIS_DATABASE =  os.getenv('REDIS_DATABASE', 1)
   SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://%(user)s:%(password)s@%(host)s/%(dbname)s?client_encoding=utf8' % {
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),

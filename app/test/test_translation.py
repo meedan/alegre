@@ -1,6 +1,9 @@
 import unittest
 import json
+import os
+from unittest.mock import patch
 from google.cloud import translate_v2 as translate
+from google.oauth2 import service_account
 
 from app.main import db
 from app.main.lib.google_client import get_credentialed_google_client
@@ -13,10 +16,10 @@ class TestTranslationBlueprint(BaseTestCase):
         self.assertEqual('es', result[0]['language'])
         self.assertEqual('en', result[1]['language'])
         result = client.translate('koszula')
-        self.assertEqual('shirt', result['translatedText'])
+        self.assertTrue('shirt' in result['translatedText'].lower())
         self.assertEqual('pl', result['detectedSourceLanguage'])
         result = client.translate('camisa', source_language='es')
-        self.assertEqual('shirt', result['translatedText'])
+        self.assertTrue('shirt' in result['translatedText'].lower())
 
     def test_translation_api(self):
         with self.client:
@@ -60,6 +63,14 @@ class TestTranslationBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual('rubber in the workshop', result['text'])
+
+    def test_translation_error_if_not_credentials(self):
+      with patch('os.path.exists') as mock:
+        mock.return_value = {}
+        client = get_credentialed_google_client(translate.Client)
+        self.assertEqual(None, client)
+        with self.assertRaises(Exception):
+          result = client.detect_language(['Me llamo', 'I am'])
 
 if __name__ == '__main__':
     unittest.main()
