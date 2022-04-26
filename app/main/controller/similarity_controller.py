@@ -12,10 +12,10 @@ api = Namespace('similarity', description='text similarity operations')
 similarity_request = api.model('similarity_request', {
     'text': fields.String(required=False, description='text to be stored or queried for similarity'),
     'doc_id': fields.String(required=False, description='text ID to constrain uniqueness'),
-    'model': fields.String(required=False, description='similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'),
+    'models': fields.List(required=False, description='similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model', cls_or_instance=fields.String),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
-    'context': JsonObject(required=False, description='context'),
+    'contexts': fields.List(required=False, description='contexts', cls_or_instance=JsonObject),
     'fuzzy': fields.Boolean(required=False, description='whether or not to use fuzzy search on GET queries (only used when model is set to \'elasticsearch\')'),
 })
 @api.route('/')
