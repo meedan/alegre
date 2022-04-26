@@ -148,13 +148,13 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_update_text_listed_context(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }
+            term = [{ 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }]
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] }, 'doc_id': doc["_id"]}
+            term2 = [{ 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] }, 'doc_id': doc["_id"]}]
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -163,11 +163,11 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_performs_correct_fuzzy_search(self):
         with self.client:
-            term = { 'text': 'what even is a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = [{ 'text': 'what even is a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }]
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            lookup = { 'text': 'what even is a bananna', 'models': ['elasticsearch'], 'context': { 'dbid': 54 } }
             post_response = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
             post_response_fuzzy = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
@@ -178,13 +178,13 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_update_text(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = [{ 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }]
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': doc["_id"]}
+            term2 = [{ 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': doc["_id"]}]
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -193,13 +193,13 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_update_text_with_doc_id(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+            term = [{ 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }]
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456"}
+            term2 = [{ 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456"}]
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -227,7 +227,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_delete_text(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = [{ 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }]
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -250,7 +250,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               { 'text': 'नमस्ते मेरा नाम करीम है' },
               { 'text': 'हॅलो माझे नाव करीम आहे' }
             ]:
-              response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+              response = self.client.post('/text/similarity/', data=json.dumps([term]), content_type='application/json')
               result = json.loads(response.data.decode())
               self.assertEqual(True, result['success'])
 
@@ -280,7 +280,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_model_similarity(self):
         with self.client:
-            term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
+            term = [{ 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }]
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -291,7 +291,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to delete an invoice',
-              'model': TestSimilarityBlueprint.use_model_key,
+              'models': [TestSimilarityBlueprint.use_model_key],
               'context': {
                 'dbid': 54
               }
@@ -307,7 +307,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': TestSimilarityBlueprint.use_model_key,
+              'models': [TestSimilarityBlueprint.use_model_key],
               'threshold': 0.7,
               'context': {
                 'dbid': 54
@@ -324,7 +324,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'purge an invoice',
-              'model': TestSimilarityBlueprint.use_model_key,
+              'models': [TestSimilarityBlueprint.use_model_key],
               'threshold': 0.7
             }),
             content_type='application/json'
@@ -336,7 +336,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_wrong_model_key(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
+            term = [{ 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}]
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
@@ -348,7 +348,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             '/text/similarity/',
             data=json.dumps({
               'text': 'how to slice a banana',
-              'model': TestSimilarityBlueprint.test_model_key,
+              'models': [TestSimilarityBlueprint.test_model_key],
               'context': {
                 'dbid': 54
               }
@@ -360,7 +360,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_model_similarity_without_text(self):
       with self.client:
-        term = { 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }}
+        term = [{ 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }}]
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
@@ -368,7 +368,7 @@ class TestSimilarityBlueprint(BaseTestCase):
       response = self.client.get(
         '/text/similarity/',
         data=json.dumps({
-          'model': TestSimilarityBlueprint.use_model_key,
+          'models': [TestSimilarityBlueprint.use_model_key],
           'threshold': 0.7,
           'context': {
             'dbid': 54
@@ -383,7 +383,7 @@ class TestSimilarityBlueprint(BaseTestCase):
       with app.app_context():
         app.config['MAX_CLAUSE_COUNT'] = 0
         with self.client:
-          term = { 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }, 'vector': ['bla']}
+          term = [{ 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }, 'vector': ['bla']}]
           response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
           result = json.loads(response.data.decode())
           self.assertEqual(True, result['success'])
@@ -404,7 +404,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_model_similarity_with_vector(self):
       with self.client:
-        term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
+        term = [{ 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}]
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
@@ -419,7 +419,7 @@ class TestSimilarityBlueprint(BaseTestCase):
           '/text/similarity/',
           data=json.dumps({
             'text': 'how to delete an invoice',
-            'model': TestSimilarityBlueprint.use_model_key,
+            'models': [TestSimilarityBlueprint.use_model_key],
             'vector': vector
           }),
           content_type='application/json'

@@ -34,8 +34,7 @@ def add_item(item, similarity_type):
   elif similarity_type == "image":
     response = add_image(item)
   elif similarity_type == "text":
-    doc_id = item.pop("doc_id", None)
-    response = add_text(item, doc_id)
+    response = add_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
   return response
 

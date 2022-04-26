@@ -5,12 +5,34 @@ from app.main.lib.shared_models.shared_model import SharedModel
 def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
-def add_text(body, doc_id):
-  return store_document(body, doc_id)
+def add_text(items):
+  results = []
+  for item in items:
+    if not search_params.get("models"):
+      search_params["models"] = ["elasticsearch"]
+    doc_id = item.pop("doc_id", None)
+    results.append(store_document(item, doc_id))
+  return results
 
 def search_text(search_params):
+  if not search_params.get("models"):
+    search_params["models"] = ["elasticsearch"]
+  elif not isinstance(search_params.get("models"), list):
+    search_params["models"] = [search_params["models"]]
+  if not search_params.get("texts"):
+    search_params["texts"] = []
+  elif not isinstance(search_params.get("texts"), list):
+    search_params["texts"] = [search_params["text"]]
+  results = []
+  for model in search_params.get("models"):
+    for text in search_params.get("texts"):
+      for result in search_text_by_model(dict(**search_params, **{"model": model, "text": text})):
+        results.append(result)
+  return {"result": results}
+    
+def search_text_by_model(search_params):
   if not search_params.get("text"):
-    return {"result": []}
+    return []
   model_key = 'elasticsearch'
   if 'model' in search_params:
       model_key = search_params['model']
@@ -108,8 +130,6 @@ def search_text(search_params):
       body=body,
       index=app.config['ELASTICSEARCH_SIMILARITY']
   )
-  return {
-      'result': result['hits']['hits']
-  }
+  return result['hits']['hits']
 
   
