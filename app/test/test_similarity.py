@@ -57,7 +57,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual(4, len(result['result']))
+            self.assertEqual(2, len(result['result']))
 
             response = self.client.get(
                 '/text/similarity/',
