@@ -23,7 +23,7 @@ class SimilarityResource(Resource):
     def get_body_for_request(self):
         body = { 'content': request.json['text'], "created_at": request.json.get("created_at", datetime.now())}
         if 'models' in request.json:
-            model_key = request.json['models']
+            body["models"] = request.json['models']
         if 'contexts' in request.json:
             body['contexts'] = request.json['contexts']
         return body
