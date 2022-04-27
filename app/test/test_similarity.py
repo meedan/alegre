@@ -42,6 +42,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
+                print(result)
                 self.assertEqual(True, result[0]['success'])
 
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
