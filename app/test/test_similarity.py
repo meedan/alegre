@@ -37,7 +37,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
-                term["contexts"] = [{"app": "check"}]
+                term["contexts"] = [term["context"]]
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
@@ -403,7 +403,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               content_type='application/json'
           )
           result = json.loads(response.data.decode())
-          self.assertTrue('Too many clauses specified' in result['error'])
+          self.assertTrue('Too many clauses specified' in result['error'][0]["error"])
 
     def test_model_similarity_with_vector(self):
       with self.client:

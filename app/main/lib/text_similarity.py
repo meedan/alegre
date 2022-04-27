@@ -20,11 +20,20 @@ def add_text(item):
 
 def search_text(search_params):
   results = []
+  errors = []
   for context in search_params.pop("contexts", [{}]):
     for model in search_params.pop("models", ["elasticsearch"]):
       for result in search_text_by_model(dict(**search_params, **{"model": model, "context": context})):
-        results.append(result)
-  return {"result": results}
+        if "error" in result:
+          errors.append(result)
+        else:
+          results.append(result)
+  if not results and errors:
+    return {"error": errors}, 500
+  elif results and errors:
+    return {"result": results, "error": errors}
+  else:
+    return {"result": results}
     
 def search_text_by_model(search_params):
   if not search_params.get("text"):
@@ -42,7 +51,7 @@ def search_text_by_model(search_params):
   if 'threshold' in search_params:
       threshold = search_params['threshold']
   if clause_count >= app.config['MAX_CLAUSE_COUNT']:
-      return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}, 500
+      return [{'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}]
   if model_key.lower() == 'elasticsearch':
       conditions = [
           {
