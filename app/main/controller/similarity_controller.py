@@ -21,19 +21,11 @@ similarity_request = api.model('similarity_request', {
 @api.route('/')
 class SimilarityResource(Resource):
     def get_body_for_request(self):
-        model_key = 'elasticsearch'
-        if 'model' in request.json:
-            model_key = request.json['model']
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        body = { 'content': request.json['text'] }
-        if model_key.lower() != 'elasticsearch':
-            model = SharedModel.get_client(model_key)
-            vector = model.get_shared_model_response(request.json['text'])
-            body['vector_'+str(len(vector))] = vector
-            body['model'] = model_key
-            body['created_at'] = request.json.get("created_at", datetime.now())
-        if 'context' in request.json:
-            body['context'] = request.json['context']
+        body = { 'content': request.json['text'], "created_at": request.json.get("created_at", datetime.now())}
+        if 'models' in request.json:
+            model_key = request.json['models']
+        if 'contexts' in request.json:
+            body['contexts'] = request.json['contexts']
         return body
 
     @api.response(200, 'text successfully deleted in the similarity database.')

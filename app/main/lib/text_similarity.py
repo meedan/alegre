@@ -6,33 +6,22 @@ def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
 def add_text(item):
-  if not item.get("models"):
-    item["models"] = ["elasticsearch"]
-  elif not isinstance(item.get("models"), list):
-    item["models"] = [item["models"]]
-  if not item.get("contexts"):
-    item["contexts"] = []
-  elif not isinstance(item.get("contexts"), list):
-    item["contexts"] = [item["contexts"]]
   results = []
-  for model in item.get("models"):
-    for context in item.get("contexts"):
+  for context in item.pop("contexts", [{}]):
+    for model in item.pop("models", ["elasticsearch"]):
+      temp_item = dict(**item, **{"model": model, "context": context})
+      if model.lower() != 'elasticsearch':
+          model = SharedModel.get_client(model)
+          vector = model.get_shared_model_response(item['content'])
+          temp_item['vector_'+str(len(vector))] = vector
       doc_id = item.pop("doc_id", None)
-      results.append(store_document(dict(**item, **{"model": model, "context": context}), doc_id))
+      results.append(store_document(temp_item, doc_id))
   return results
 
 def search_text(search_params):
-  if not search_params.get("models"):
-    search_params["models"] = ["elasticsearch"]
-  elif not isinstance(search_params.get("models"), list):
-    search_params["models"] = [search_params["models"]]
-  if not search_params.get("contexts"):
-    search_params["contexts"] = []
-  elif not isinstance(search_params.get("contexts"), list):
-    search_params["contexts"] = [search_params["contexts"]]
   results = []
-  for model in search_params.get("models"):
-    for context in search_params.get("contexts"):
+  for context in search_params.pop("contexts", [{}]):
+    for model in search_params.pop("models", ["elasticsearch"]):
       for result in search_text_by_model(dict(**search_params, **{"model": model, "context": context})):
         results.append(result)
   return {"result": results}

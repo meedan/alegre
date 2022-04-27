@@ -37,10 +37,11 @@ class TestSimilarityBlueprint(BaseTestCase):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
+                term["contexts"] = [{"app": "check"}]
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
-                self.assertEqual(True, result['success'])
+                self.assertEqual(True, result[0]['success'])
 
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -48,7 +49,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/similarity/',
                 data=json.dumps({
-                  'text': 'this is a test'
+                  'text': 'this is a test',
+                  'contexts': [{"app": "check"}]
                 }),
                 content_type='application/json'
             )
@@ -58,7 +60,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             response = self.client.get(
                 '/text/similarity/',
                 data=json.dumps({
-                  'text': 'something different'
+                  'text': 'something different',
+                  'contexts': [{"app": "check"}]
                 }),
                 content_type='application/json'
             )
@@ -227,12 +230,12 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_elasticsearch_delete_text(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'models': ['elasticsearch'], 'contexts': [{ 'dbid': 54 }] }
+            term = { 'text': 'how to slice a bananaz', 'models': ['elasticsearch'], 'contexts': [{ 'dbid': 54 }] }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             result = json.loads(post_response.data.decode())
-            self.assertEqual(True, result['success'])
+            self.assertEqual(True, result[0]['success'])
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
@@ -250,9 +253,9 @@ class TestSimilarityBlueprint(BaseTestCase):
               { 'text': 'नमस्ते मेरा नाम करीम है' },
               { 'text': 'हॅलो माझे नाव करीम आहे' }
             ]:
-              response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+              response = self.client.post('/text/similarity/', data=json.dumps(dict(**term, **{"contexts": [{"app": "check"}]})), content_type='application/json')
               result = json.loads(response.data.decode())
-              self.assertEqual(True, result['success'])
+              self.assertEqual(True, result[0]['success'])
 
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -260,7 +263,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 '/text/similarity/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
-                  'language': 'en'
+                  'language': 'en',
                 }),
                 content_type='application/json'
             )
@@ -283,7 +286,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             term = { 'text': 'how to delete an invoice', 'models': [TestSimilarityBlueprint.use_model_key], 'contexts': [{ 'dbid': 54 }] }
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
-            self.assertEqual(True, result['success'])
+            self.assertEqual(True, result[0]['success'])
 
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -339,7 +342,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             term = { 'text': 'how to slice a banana', 'models': [TestSimilarityBlueprint.use_model_key], 'contexts': [{ 'dbid': 54 }]}
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
-            self.assertEqual(True, result['success'])
+            self.assertEqual(True, result[0]['success'])
 
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -363,7 +366,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         term = { 'text': 'how to delete an invoice', 'models': ['indian-sbert'], 'contexts': [{ 'dbid': 54 }]}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(True, result['success'])
+        self.assertEqual(True, result[0]['success'])
 
       response = self.client.get(
         '/text/similarity/',
@@ -386,7 +389,7 @@ class TestSimilarityBlueprint(BaseTestCase):
           term = { 'text': 'how to delete an invoice', 'models': ['indian-sbert'], 'contexts': [{ 'dbid': 54 }], 'vector': ['bla']}
           response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
           result = json.loads(response.data.decode())
-          self.assertEqual(True, result['success'])
+          self.assertEqual(True, result[0]['success'])
 
           es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
           es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
@@ -407,7 +410,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         term = { 'text': 'how to delete an invoice', 'models': [TestSimilarityBlueprint.use_model_key], 'contexts': [{ 'dbid': 54 }]}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(True, result['success'])
+        self.assertEqual(True, result[0]['success'])
 
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
       es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])

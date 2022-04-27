@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from elasticsearch import Elasticsearch
@@ -28,18 +29,11 @@ class BulkSimilarityResource(Resource):
         bodies = []
         doc_ids = []
         for document in request.json.get("documents", []):
-            model_key = 'elasticsearch'
-            if 'model' in document:
-                model_key = document['model']
-            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-            body = { 'content': document['text'] }
-            if model_key.lower() != 'elasticsearch':
-                model = SharedModel.get_client(model_key)
-                vector = model.get_shared_model_response(document['text'])
-                body['vector_'+str(len(vector))] = vector
-                body['model'] = model_key
-            if 'context' in document:
-                body['context'] = document['context']
+            body = { 'content': document['text'], "created_at": document.get("created_at", datetime.now())}
+            if 'models' in document:
+                model_key = document['models']
+            if 'contexts' in document:
+                body['contexts'] = document['contexts']
             doc_ids.append(document.get("doc_id"))
             bodies.append(body)
         return doc_ids, bodies
