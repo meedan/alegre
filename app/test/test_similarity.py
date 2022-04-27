@@ -37,7 +37,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
-                term["contexts"] = [term["context"]]
+                if term.get("context"):
+                    term["contexts"] = [["context"]]
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
@@ -302,6 +303,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             content_type='application/json'
         )
         result = json.loads(response.data.decode())
+        print(result)
         self.assertEqual(1, len(result['result']))
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
@@ -410,6 +412,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         term = { 'text': 'how to delete an invoice', 'models': [TestSimilarityBlueprint.use_model_key], 'contexts': [{ 'dbid': 54 }]}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
+        print(result)
         self.assertEqual(True, result[0]['success'])
 
       es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
