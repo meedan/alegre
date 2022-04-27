@@ -38,7 +38,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
                 if term.get("context"):
-                    term["contexts"] = [["context"]]
+                    term["contexts"] = [term["context"]]
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
