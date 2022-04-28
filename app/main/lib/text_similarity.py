@@ -6,9 +6,26 @@ def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
 def add_text(body, doc_id):
-  return store_document(body, doc_id)
+  documents = []
+  for model_key in body.pop("models", []):
+    model = SharedModel.get_client(model_key)
+    documents.append(store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): model.get_shared_model_response(request.json['text'])}), doc_id))
+  if len(documents) == 1:
+    return documents[0]
+  else:
+    return documents
 
 def search_text(search_params):
+  results = []
+  for model_key in body.pop("models", []):
+    model = SharedModel.get_client(model_key)
+    for result in search_text_by_model(dict(**search_params, **{'model': model_key}):
+      if 'error' in result:
+        return result, 500
+      results.append(result)
+  return results
+
+def search_text_by_model(search_params):
   if not search_params.get("text"):
     return {"result": []}
   model_key = 'elasticsearch'
@@ -24,7 +41,7 @@ def search_text(search_params):
   if 'threshold' in search_params:
       threshold = search_params['threshold']
   if clause_count >= app.config['MAX_CLAUSE_COUNT']:
-      return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}, 500
+      return [{'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}]
   if model_key.lower() == 'elasticsearch':
       conditions = [
           {
