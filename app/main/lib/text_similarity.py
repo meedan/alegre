@@ -19,7 +19,7 @@ def search_text(search_params):
   results = []
   for model_key in body.pop("models", []):
     model = SharedModel.get_client(model_key)
-    for result in search_text_by_model(dict(**search_params, **{'model': model_key}):
+    for result in search_text_by_model(dict(**search_params, **{'model': model_key})):
       if 'error' in result:
         return result, 500
       results.append(result)
