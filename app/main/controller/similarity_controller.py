@@ -22,7 +22,7 @@ similarity_request = api.model('similarity_request', {
 @api.route('/')
 class SimilarityResource(Resource):
     def get_body_for_request(self):
-        models = set('elasticsearch')
+        models = set(['elasticsearch'])
         if 'model' in request.json:
             models.add(request.json['model'])
         if 'models' in request.json:
