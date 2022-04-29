@@ -8,8 +8,11 @@ def delete_text(doc_id, quiet):
 def add_text(body, doc_id):
   documents = []
   for model_key in body.pop("models", []):
-    model = SharedModel.get_client(model_key)
-    documents.append(store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): model.get_shared_model_response(request.json['text'])}), doc_id))
+    if model_key != 'elasticsearch':
+      model = SharedModel.get_client(model_key)
+      documents.append(store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): model.get_shared_model_response(request.json['text'])}), doc_id))
+    else:
+      documents.append(store_document(dict(**body, **{'model': model_key}), doc_id))
   if len(documents) == 1:
     return documents[0]
   else:
