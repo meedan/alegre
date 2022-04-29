@@ -8,16 +8,22 @@ def delete_text(doc_id, quiet):
 def add_text(body, doc_id):
   documents = []
   for model_key in body.pop("models", []):
+    document = {}
     if model_key != 'elasticsearch':
       model = SharedModel.get_client(model_key)
+      import code;code.interact(local=dict(globals(), **locals())) 
       vector = model.get_shared_model_response(body['content'])
-      documents.append(store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): vector}), doc_id))
+      document = store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): vector}), doc_id)
+      documents.append(document)
     else:
-      documents.append(store_document(dict(**body, **{'model': model_key}), doc_id))
+      document = store_document(dict(**body, **{'model': model_key}), doc_id)
+      documents.append(document)
+    if 'error' in document:
+      return document, 500
   if len(documents) == 1:
     return documents[0]
   else:
-    return documents
+    return dict(**documents[0], **{"count": len(documents)})
 
 def search_text(search_params):
   results = {"result": []}
