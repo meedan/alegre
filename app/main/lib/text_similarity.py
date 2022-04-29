@@ -20,7 +20,7 @@ def add_text(body, doc_id):
 
 def search_text(search_params):
   results = []
-  for model_key in body.pop("models", []):
+  for model_key in search_params.pop("models", []):
     model = SharedModel.get_client(model_key)
     for result in search_text_by_model(dict(**search_params, **{'model': model_key})):
       if 'error' in result:
