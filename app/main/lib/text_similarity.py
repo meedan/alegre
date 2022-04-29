@@ -21,7 +21,6 @@ def add_text(body, doc_id):
 def search_text(search_params):
   results = []
   for model_key in search_params.pop("models", []):
-    model = SharedModel.get_client(model_key)
     for result in search_text_by_model(dict(**search_params, **{'model': model_key})):
       if 'error' in result:
         return result, 500
@@ -29,7 +28,7 @@ def search_text(search_params):
   return results
 
 def search_text_by_model(search_params):
-  if not search_params.get("text"):
+  if not search_params.get("content"):
     return {"result": []}
   model_key = 'elasticsearch'
   if 'model' in search_params:
@@ -50,7 +49,7 @@ def search_text_by_model(search_params):
           {
               'match': {
                 'content': {
-                    'query': truncate_query(search_params['text'], clause_count),
+                    'query': truncate_query(search_params['content'], clause_count),
                     'minimum_should_match': str(int(round(threshold * 100))) + '%'
                 }
               }
@@ -70,7 +69,7 @@ def search_text_by_model(search_params):
         vector = search_params["vector"]
       else:
         model = SharedModel.get_client(model_key)
-        vector = model.get_shared_model_response(search_params['text'])
+        vector = model.get_shared_model_response(search_params['content'])
       conditions = {
           'query': {
               'script_score': {

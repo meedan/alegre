@@ -52,6 +52,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 }),
                 content_type='application/json'
             )
+            import code;code.interact(local=dict(globals(), **locals())) 
             result = json.loads(response.data.decode())
             self.assertEqual(4, len(result['result']))
 
