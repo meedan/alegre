@@ -22,10 +22,10 @@ def add_text(body, doc_id):
 def search_text(search_params):
   results = []
   for model_key in search_params.pop("models", []):
-    for result in search_text_by_model(dict(**search_params, **{'model': model_key})):
-      if 'error' in result:
-        return result, 500
-      results.append(result)
+    result = search_text_by_model(dict(**search_params, **{'model': model_key}))
+    if 'error' in result:
+      return result, 500
+    results.append(result)
   return results
 
 def search_text_by_model(search_params):
