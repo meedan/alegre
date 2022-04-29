@@ -11,7 +11,6 @@ def add_text(body, doc_id):
     document = {}
     if model_key != 'elasticsearch':
       model = SharedModel.get_client(model_key)
-      import code;code.interact(local=dict(globals(), **locals())) 
       vector = model.get_shared_model_response(body['content'])
       document = store_document(dict(**body, **{'model': model_key, 'vector_'+str(len(vector)): vector}), doc_id)
       documents.append(document)
