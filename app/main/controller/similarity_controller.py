@@ -28,8 +28,9 @@ class SimilarityResource(Resource):
         if 'models' in params:
             models = models|set(params['models'])
         body = { 'content': params['text'], 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
-        if 'context' in params:
-            body['context'] = params['context']
+        for key in ['context', 'threshold', 'fuzzy']:
+            if key in params:
+                body[key] = params['context']
         return body
 
     @api.response(200, 'text successfully deleted in the similarity database.')
