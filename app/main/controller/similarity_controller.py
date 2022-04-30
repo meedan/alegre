@@ -30,7 +30,7 @@ class SimilarityResource(Resource):
         body = { 'content': params['text'], 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
         for key in ['context', 'threshold', 'fuzzy']:
             if key in params:
-                body[key] = params['context']
+                body[key] = params[key]
         return body
 
     @api.response(200, 'text successfully deleted in the similarity database.')
