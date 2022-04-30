@@ -22,11 +22,13 @@ similarity_request = api.model('similarity_request', {
 @api.route('/')
 class SimilarityResource(Resource):
     def get_body_for_request(self, params):
-        models = set(['elasticsearch'])
+        models = set()
         if 'model' in params:
             models.add(params['model'])
         if 'models' in params:
             models = models|set(params['models'])
+        if not models:
+            models = ['elasticsearch']
         body = { 'content': params['text'], 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
         for key in ['context', 'threshold', 'fuzzy']:
             if key in params:
