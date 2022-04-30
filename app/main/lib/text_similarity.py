@@ -50,7 +50,7 @@ def search_text_by_model(search_params):
   if 'threshold' in search_params:
       threshold = search_params['threshold']
   if clause_count >= app.config['MAX_CLAUSE_COUNT']:
-      return [{'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}]
+      return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
   if model_key.lower() == 'elasticsearch':
       conditions = [
           {

@@ -380,8 +380,6 @@ class TestSimilarityBlueprint(BaseTestCase):
         content_type='application/json'
       )
       result = json.loads(response.data.decode())
-      print("wowow")
-      print(result)
       self.assertEqual(0, len(result['result']))
 
     def test_too_many_clauses_api_error(self):
@@ -399,14 +397,12 @@ class TestSimilarityBlueprint(BaseTestCase):
           response = self.client.get(
               '/text/similarity/',
               data=json.dumps({
-                'text': 'how to delete an invoice',
+                'text': 'how to delete an invoicez',
                 'context': { 'dbid': 54 } 
               }),
               content_type='application/json'
           )
           result = json.loads(response.data.decode())
-          print("wowow")
-          print(result)
           self.assertTrue('Too many clauses specified' in result['error'])
 
     def test_model_similarity_with_vector(self):
