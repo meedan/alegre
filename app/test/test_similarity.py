@@ -260,11 +260,14 @@ class TestSimilarityBlueprint(BaseTestCase):
                 '/text/similarity/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
-                  'language': 'en'
+                  'language': 'en',
+                  'threshold': 0.0
                 }),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
+            print("wowow")
+            print(result)
             self.assertEqual(2, len(result['result']))
 
             response = self.client.get(
@@ -377,6 +380,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         content_type='application/json'
       )
       result = json.loads(response.data.decode())
+      print("wowow")
+      print(result)
       self.assertEqual(0, len(result['result']))
 
     def test_too_many_clauses_api_error(self):
@@ -400,6 +405,8 @@ class TestSimilarityBlueprint(BaseTestCase):
               content_type='application/json'
           )
           result = json.loads(response.data.decode())
+          print("wowow")
+          print(result)
           self.assertTrue('Too many clauses specified' in result['error'])
 
     def test_model_similarity_with_vector(self):
