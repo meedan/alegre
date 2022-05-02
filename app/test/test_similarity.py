@@ -146,6 +146,128 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
+    def test_elasticsearch_similarity_english_models_specified(self):
+        with self.client:
+            for term in json.load(open('./app/test/data/similarity.json')):
+                term['text'] = term['content']
+                term["models"] = ["elasticsearch"]
+                del term['content']
+                response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+                result = json.loads(response.data.decode())
+                self.assertEqual(True, result['success'])
+
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(4, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'something different',
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': 12,
+                    'app': 'check'
+                  },
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [12, 13],
+                    'app': 'check'
+                  },
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [13],
+                    'app': 'check'
+                  },
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(0, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': [15],
+                    'app': 'check'
+                  },
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'context': {
+                    'dbid': 15,
+                    'app': 'check'
+                  },
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(1, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'Magnitude 4.5 quake strikes near Fort St. John',
+                  'threshold': 0.7,
+                  'models': ["elasticsearch"],
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(2, len(result['result']))
+
     def test_elasticsearch_update_text_listed_context(self):
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }
@@ -363,7 +485,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_model_similarity_without_text(self):
       with self.client:
-        term = { 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }}
+        term = { 'text': 'how to delete an invoice', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
