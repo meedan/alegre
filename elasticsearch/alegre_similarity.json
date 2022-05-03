@@ -8,6 +8,18 @@
       "type": "dense_vector",
       "dims": 768
     },
+    "vector_xlm-r-bert-base-nli-stsb-mean-tokens": {
+      "type": "dense_vector",
+      "dims": 768
+    },
+    "vector_paraphrase-filipino-mpnet-base-v2": {
+      "type": "dense_vector",
+      "dims": 768
+    },
+    "vector_indian-sbert": {
+      "type": "dense_vector",
+      "dims": 768
+    },
     "content": {
       "type": "text"
     },

@@ -22,6 +22,7 @@ class BulkUpdateSimilarityResource(Resource):
             model = SharedModel.get_client(document['model'])
             vector = model.get_shared_model_response(document['text'])
             body['vector_'+str(len(vector))] = vector
+            body['vector_'+model_key] = vector
             if 'context' in document:
                 body['context'] = document['context']
             doc_ids.append(document.get("doc_id"))
