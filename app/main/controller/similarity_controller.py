@@ -13,6 +13,7 @@ similarity_request = api.model('similarity_request', {
     'text': fields.String(required=False, description='text to be stored or queried for similarity'),
     'doc_id': fields.String(required=False, description='text ID to constrain uniqueness'),
     'model': fields.String(required=False, description='similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'),
+    'models': fields.List(required=False, description='similarity models to use: ["elasticsearch"] (pure Elasticsearch, default) or the key name of an active model', cls_or_instance=fields.String),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=False, description='context'),
@@ -20,20 +21,18 @@ similarity_request = api.model('similarity_request', {
 })
 @api.route('/')
 class SimilarityResource(Resource):
-    def get_body_for_request(self):
-        model_key = 'elasticsearch'
-        if 'model' in request.json:
-            model_key = request.json['model']
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-        body = { 'content': request.json['text'] }
-        if model_key.lower() != 'elasticsearch':
-            model = SharedModel.get_client(model_key)
-            vector = model.get_shared_model_response(request.json['text'])
-            body['vector_'+str(len(vector))] = vector
-            body['model'] = model_key
-            body['created_at'] = request.json.get("created_at", datetime.now())
-        if 'context' in request.json:
-            body['context'] = request.json['context']
+    def get_body_for_request(self, params):
+        models = set()
+        if 'model' in params:
+            models.add(params['model'])
+        if 'models' in params:
+            models = models|set(params['models'])
+        if not models:
+            models = ['elasticsearch']
+        body = { 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
+        for key in ['context', 'threshold', 'fuzzy']:
+            if key in params:
+                body[key] = params[key]
         return body
 
     @api.response(200, 'text successfully deleted in the similarity database.')
@@ -52,7 +51,7 @@ class SimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         doc_id = request.json.get("doc_id")
-        item = self.get_body_for_request()
+        item = self.get_body_for_request(request.json)
         item["doc_id"] = doc_id
         return similarity.add_item(item, "text")
 
@@ -60,4 +59,4 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def get(self):
-      return similarity.get_similar_items(request.args or request.json, "text")
+      return similarity.get_similar_items(self.get_body_for_request(request.args or request.json), "text")
