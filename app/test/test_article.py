@@ -120,5 +120,22 @@ class TestArticleBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(400, response.status_code)
 
+    def test_article_responds_with_top_node_extracted_links(self):
+        with patch('app.main.controller.article_controller.ArticleResource.get_article', ) as mock_get_article:
+            article = Article("blah.com")
+            article.set_html(open('./app/test/data/article_with_top_node_links.html').read())
+            article.parse()
+            article.nlp()
+            mock_get_article.return_value = article
+            response = self.client.post('/article/',
+                data=json.dumps(dict(
+                    url='https://g1.globo.com/mundo/noticia/2022/05/06/hotel-em-havana-explosao.ghtml'
+                )),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertGreater(len(result["links"]), 0)
+
+
 if __name__ == '__main__':
     unittest.main()
