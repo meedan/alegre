@@ -58,18 +58,6 @@ class MicrosoftLangidProvider:
       'raw': response
     }
 
-  @staticmethod
-  def languages():
-    # FIXME https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support
-    return []
-
-  @staticmethod
-  def test():
-    # FIXME Find a better way to test proper config
-    MicrosoftLangidProvider.langid('hello, world')
-    return True
-
-
 class Cld3LangidProvider:
 # https://github.com/bsolomon1124/pycld3
   @staticmethod
@@ -82,12 +70,3 @@ class Cld3LangidProvider:
       },
       'raw': prediction
     }
-
-  @staticmethod
-  def languages():
-    # FIXME
-    return []
-
-  @staticmethod
-  def test():
-    return True

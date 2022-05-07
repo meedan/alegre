@@ -388,8 +388,6 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            print("wowow")
-            print(result)
             self.assertEqual(2, len(result['result']))
 
             response = self.client.get(
@@ -520,7 +518,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               '/text/similarity/',
               data=json.dumps({
                 'text': 'how to delete an invoicez',
-                'context': { 'dbid': 54 } 
+                'context': { 'dbid': 54 }
               }),
               content_type='application/json'
           )
