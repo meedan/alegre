@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFilter, ImageOps
+from PIL import Image
 import imagehash
 import struct
 import json
@@ -19,7 +19,7 @@ def compute_ahash(im):
     :param im: Numpy.ndarray
     :returns: Imagehash.ImageHash
   """
-  return imagehash.average_hash(ensure_pil(im_pil))
+  return imagehash.average_hash(ensure_pil(im))
 
 def compute_phash(im):
   """Compute perceptual hash using ImageHash library
@@ -57,36 +57,6 @@ def compute_whash(im):
     :returns: Imagehash.ImageHash
   """
   return imagehash.whash(ensure_pil(im))
-
-def compute_whash_b64(im):
-  """Compute wavelest hash base64 using ImageHash library
-    :param im: Numpy.ndarray
-    :returns: Imagehash.ImageHash
-  """
-  return lambda im: imagehash.whash(ensure_pil(im), mode='db4')
-
-def search_by_phash(session, phash, threshold=6, limit=1, offset=0, filter={}):
-  cmd = """
-    SELECT * FROM (
-      SELECT images.*, BIT_COUNT(phash # :phash)
-      AS hamming_distance FROM images
-    ) f
-    WHERE hamming_distance < :threshold
-    AND context @> (:filter)::jsonb
-    ORDER BY hamming_distance ASC
-    LIMIT :limit
-    OFFSET :offset
-  """
-  matches = session.execute(text(cmd), {
-    'phash': phash,
-    'threshold': threshold,
-    'limit': limit,
-    'offset': offset,
-    'filter': json.dumps(filter)
-  }).fetchall()
-  keys = ('id', 'sha256', 'phash', 'ext', 'url', 'context', 'score')
-  results = [ dict(zip(keys, values)) for values in matches ]
-  return results
 
 def sha256_stream(stream, block_size=65536):
   """Generates SHA256 hash for a file stream (from Flask)
