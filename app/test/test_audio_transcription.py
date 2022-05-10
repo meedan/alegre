@@ -7,7 +7,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from unittest import mock
 from collections import namedtuple
-import boto3
+from botocore.exceptions import ClientError
 
 class TestTranscriptionBlueprint(BaseTestCase):
     def test_post_transcription_job(self):
@@ -106,8 +106,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
             self.assertTrue('KeyError' in result['error'])
 
     def test_handle_bot3_exception(self):
-        with patch('boto3.client') as mock_get_transcription:
-            mock_get_transcription.add_client_error('duplicate_file')
+        with patch('botocore.client.BaseClient._make_api_call', side_effect= ClientError({'Error': {'Message': 'Duplicated file', 'Code': 'TypeAlreadyExistsFault'}}, 'test-op')):
             response = self.client.get('/audio/transcription/',
                 data=json.dumps({
                   'job_name': 'Aloha',
@@ -118,6 +117,22 @@ class TestTranscriptionBlueprint(BaseTestCase):
             self.assertEqual('application/json', response.content_type)
             self.assertNotEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
             self.assertIn('error', result)
+
+    def test_post_transcription_job_with_boto_client(self):
+        with patch('botocore.client.BaseClient._make_api_call'):
+            response = self.client.post('/audio/transcription/',
+                data=json.dumps({
+                  'url': 's3://hello-audio-transcription/en-01.wav',
+                  'job_name': 'Aloha',
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual('application/json', response.content_type)
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(sorted(result.keys()), ['job_name', 'job_status'])
+            self.assertEqual(None, result['job_name'])
+            self.assertEqual(None, result['job_status'])
 
 if __name__ == '__main__':
     unittest.main()

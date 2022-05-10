@@ -82,7 +82,12 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "text": "7 BOOKS\nTHAT WILL\nCHANGE\nHOW YOU\nSEE THE\nWORLD\nBY MARK MANSON\n18 minute read"
+          "text": "7 BOOKS"
+        },
+        "matchingRules": {
+          "$.body.text": {
+            "match": "type"
+          }
         }
       }
     },

@@ -11,20 +11,8 @@ api = Namespace('bulk_update_similarity', description='bulk text similarity oper
 similarity_request = api.model('bulk_update_similarity_request', {
     'documents': fields.List(required=True, description='List of individual parameters typically sent to the similarity controller', cls_or_instance=JsonObject)
 })
-def each_slice(list, size):
-    batch = 0
-    while batch * size < len(list):
-        yield list[batch * size:(batch + 1) * size]
-        batch += 1
-
 @api.route('/')
 class BulkUpdateSimilarityResource(Resource):
-    def get_bulk_write_object(self, doc_id, body):
-        return dict(
-            **{'_op_type': 'update', '_index': app.config['ELASTICSEARCH_SIMILARITY'], '_type': '_doc', '_id': doc_id},
-            **body
-        )
-
     def get_bodies_for_request(self):
         bodies = []
         doc_ids = []
@@ -34,6 +22,7 @@ class BulkUpdateSimilarityResource(Resource):
             model = SharedModel.get_client(document['model'])
             vector = model.get_shared_model_response(document['text'])
             body['vector_'+str(len(vector))] = vector
+            body['vector_'+document['model']] = vector
             if 'context' in document:
                 body['context'] = document['context']
             doc_ids.append(document.get("doc_id"))

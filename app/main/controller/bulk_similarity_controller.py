@@ -37,6 +37,7 @@ class BulkSimilarityResource(Resource):
                 model = SharedModel.get_client(model_key)
                 vector = model.get_shared_model_response(document['text'])
                 body['vector_'+str(len(vector))] = vector
+                body['vector_'+model_key] = vector
                 body['model'] = model_key
             if 'context' in document:
                 body['context'] = document['context']

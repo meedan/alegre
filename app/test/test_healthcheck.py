@@ -25,7 +25,7 @@ class TestHealthcheckBlueprint(BaseTestCase):
 
   def test_healthcheck_api_with_pybrake_key(self):
     with app.app_context():
-      app.config['PYBRAKE']['project_key']= 'pybrake_key'
+      app.config['PYBRAKE'] = {'project_key':'pybrake_key'}
       response = self.client.get('/healthcheck/')
       result = json.loads(response.data.decode())
       self.assertEqual('application/json', response.content_type)
