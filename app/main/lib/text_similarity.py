@@ -18,9 +18,7 @@ def get_document_body(body):
   return body
 
 def add_text(body, doc_id):
-  document = {}
   document = store_document(get_document_body(body), doc_id)
-  documents.append(document)
   if 'error' in document:
     return document, 500
   return document
