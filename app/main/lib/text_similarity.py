@@ -21,7 +21,7 @@ def add_text(body, doc_id):
   documents = []
   for model_key in body.pop("models", []):
     document = {}
-    document = store_document(get_document_body(body, model_key), doc_id)
+    document = store_document(get_document_body(body), doc_id)
     documents.append(document)
     if 'error' in document:
       return document, 500
