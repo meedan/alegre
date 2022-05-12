@@ -14,7 +14,7 @@ def get_body_for_text_document(params):
         models = models|set(params['models'])
     if not models:
         models = ['elasticsearch']
-    body = { 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
+    body = {'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
     for key in ['context', 'threshold', 'fuzzy']:
         if key in params:
             body[key] = params[key]
