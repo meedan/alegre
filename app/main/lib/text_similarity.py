@@ -18,17 +18,12 @@ def get_document_body(body):
   return body
 
 def add_text(body, doc_id):
-  documents = []
-  for model_key in body.pop("models", []):
-    document = {}
-    document = store_document(get_document_body(body), doc_id)
-    documents.append(document)
-    if 'error' in document:
-      return document, 500
-  if len(documents) == 1:
-    return documents[0]
-  else:
-    return dict(**documents[0], **{"count": len(documents)})
+  document = {}
+  document = store_document(get_document_body(body), doc_id)
+  documents.append(document)
+  if 'error' in document:
+    return document, 500
+  return document
 
 def search_text(search_params):
   results = {"result": []}
