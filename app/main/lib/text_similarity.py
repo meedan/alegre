@@ -15,7 +15,7 @@ def get_document_body(body):
       body['vector_'+str(len(vector))] = vector
       body['vector_'+model_key] = vector
       body['model'] = model_key
-   return body
+  return body
 
 def add_text(body, doc_id):
   documents = []
