@@ -5,6 +5,7 @@ from elasticsearch import helpers
 from app.main.lib.fields import JsonObject
 from app.main.lib.elasticsearch import language_to_analyzer
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.text_similarity import get_document_body
 
 api = Namespace('bulk_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_similarity_request', {
@@ -28,21 +29,8 @@ class BulkSimilarityResource(Resource):
         bodies = []
         doc_ids = []
         for document in request.json.get("documents", []):
-            model_key = 'elasticsearch'
-            if 'model' in document:
-                model_key = document['model']
-            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-            body = { 'content': document['text'] }
-            if model_key.lower() != 'elasticsearch':
-                model = SharedModel.get_client(model_key)
-                vector = model.get_shared_model_response(document['text'])
-                body['vector_'+str(len(vector))] = vector
-                body['vector_'+model_key] = vector
-                body['model'] = model_key
-            if 'context' in document:
-                body['context'] = document['context']
             doc_ids.append(document.get("doc_id"))
-            bodies.append(body)
+            bodies.append(get_document_body(similarity.get_body_for_text_document(document)))
         return doc_ids, bodies
         
     def submit_bulk_request(self, doc_ids, bodies):

@@ -5,6 +5,19 @@ from app.main.lib.image_similarity import add_image, delete_image, search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
 
 logging.basicConfig(level=logging.INFO)
+def get_body_for_text_document(params):
+    models = set()
+    if 'model' in params:
+        models.add(params['model'])
+    if 'models' in params:
+        models = models|set(params['models'])
+    if not models:
+        models = ['elasticsearch']
+    body = { 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
+    for key in ['context', 'threshold', 'fuzzy']:
+        if key in params:
+            body[key] = params[key]
+    return body
 
 def audio_model():
   return SharedModel.get_client(app.config['AUDIO_MODEL'])
