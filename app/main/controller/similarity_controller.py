@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import request, current_app as app
 from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
@@ -21,20 +20,6 @@ similarity_request = api.model('similarity_request', {
 })
 @api.route('/')
 class SimilarityResource(Resource):
-    def get_body_for_request(self, params):
-        models = set()
-        if 'model' in params:
-            models.add(params['model'])
-        if 'models' in params:
-            models = models|set(params['models'])
-        if not models:
-            models = ['elasticsearch']
-        body = { 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'models': list(models)}
-        for key in ['context', 'threshold', 'fuzzy']:
-            if key in params:
-                body[key] = params[key]
-        return body
-
     @api.response(200, 'text successfully deleted in the similarity database.')
     @api.doc('Delete a text in the similarity database')
     @api.expect(similarity_request, validate=True)
@@ -51,7 +36,7 @@ class SimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         doc_id = request.json.get("doc_id")
-        item = self.get_body_for_request(request.json)
+        item = similarity.get_body_for_text_document(request.json)
         item["doc_id"] = doc_id
         return similarity.add_item(item, "text")
 
@@ -59,4 +44,4 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query')
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def get(self):
-      return similarity.get_similar_items(self.get_body_for_request(request.args or request.json), "text")
+      return similarity.get_similar_items(similarity.get_body_for_text_document(request.args or request.json), "text")
