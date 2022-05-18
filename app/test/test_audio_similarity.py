@@ -11,6 +11,8 @@ from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.model.audio import Audio, audio_hasher
+import urllib.error
+import urllib.request
 
 class SharedModelStub(SharedModel):
   model_key = 'audio'
@@ -126,11 +128,15 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
         self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
-        result = self.model.delete({"url": url, "project_media_id": 1})
+        result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
+        self.assertEqual(sorted(result['requested'].keys()), ['doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['deleted', 'url'])
+        #try to delete a item already deleted
+        result = self.model.delete({'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
+        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+        self.assertEqual(False, result['result']['deleted'])
 
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
@@ -140,6 +146,8 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['url'])
+
+
 
     def test_search_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
@@ -251,8 +259,36 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results[0]['score'], 1.0)
         self.assertEqual(results[0]['context'], [{"blah": 1}])
     
+    def test_search_by_context(self):
+        self.model.load()
+        results = self.model.search_by_context({"blah": 1})
+        self.assertEqual(results[0]['doc_id'], 'blah')
+        self.assertEqual(results[0]['url'], "http://blah.com")
+        self.assertEqual(results[0]['context'], [{"blah": 1}])
+        self.assertEqual(results[0]['context'], [{"blah": 1}])
+        results = self.model.search_by_context({"blah": 2})
+        self.assertEqual(results, [])
+
     def test_video_with_no_audio_channel(self):
         self.assertEqual(audio_hasher('/app/app/test/data/no-audio-video.mp4'), [])
+
+    def test_handle_save_error(self):
+        with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
+            mock.return_value = False
+            url = 'file:///app/app/test/data/test_audio_1.mp3'
+            self.model.load()
+            result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(False, result['success'])
+
+    def test_handle_http_error(self):
+        with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
+            url = 'file:///app/app/test/data/test_audio_1.mp3'
+            mock.side_effect = urllib.error.HTTPError(url, 420, "HTTP ERROR HAPPENED", None, None)
+            self.model.load()
+            result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(False, result['success'])
 
 if __name__ == '__main__':
   unittest.main()

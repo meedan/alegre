@@ -10,6 +10,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.image_hash import compute_phash_int, phash2int, compute_dhash, compute_ahash, compute_whash
 from app.main.model.image import ImageModel
+from app.main.lib.similarity_helpers import get_context_query
 
 class TestImageSimilarityBlueprint(BaseTestCase):
   def test_image_phash(self):
@@ -309,10 +310,10 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       }
     }), content_type='application/json')
     self.assertEqual(200, response.status_code)
-    result = json.loads(response.data.decode())
 
   def test_search_using_url(self):
     url = 'file:///app/app/test/data/lenna-512.png'
+    context = { 'team_id': 2}
     response = self.client.post('/image/similarity/', data=json.dumps({
       'url': url,
       'context': {
@@ -325,8 +326,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'url': url
     }), content_type='application/json')
-    self.assertEqual(200, response.status_code)
-    result = json.loads(response.data.decode())
+    result = get_context_query(context, False, True)
+    self.assertIn({'context_team_id': 2}, result)
 
 if __name__ == '__main__':
   unittest.main()
