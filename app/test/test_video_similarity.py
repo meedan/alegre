@@ -154,10 +154,10 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
         self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
-        result = self.model.delete({"url": url, "project_media_id": 1})
+        result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
+        self.assertEqual(sorted(result['requested'].keys()), ['doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
 
     def test_add_by_doc_id(self):
@@ -225,6 +225,9 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
         self.assertEqual(sorted(result['requested'].keys()), ['command', 'project_media_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
+        # self.model.add({"url": url, "id": 1, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
+        # result = self.model.respond({"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "project_media_id": 1, "command": "delete"})
+        # self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
 
     def test_respond_add(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -265,6 +268,16 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     mock_exists.return_value = True
                     result = self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}])
         self.assertEqual(result, ['/app/persistent_disk/blah/foo.tmk'])
+
+    def test_search_by_context(self):
+        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
+        self.model.load()
+        self.model.add({"url": url, "context": {"blah": 1 }})
+        results = self.model.search_by_context({"blah": 1})
+        self.assertEqual(results[0]['url'], url)
+        self.assertEqual(results[0]['context'], [{"blah": 1}])
+        results = self.model.search_by_context({"blah": 2})
+        self.assertEqual(results, [])
 
 if __name__ == '__main__':
   unittest.main()

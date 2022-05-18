@@ -17,7 +17,7 @@ from app.main.model.node import Node
 from app.main.model.video import Video
 from app.main.model.image import ImageModel
 from app.main.model.audio import Audio
-from app.main.lib.graph_writer import get_iterable_objects, generate_edges_for_type
+from app.main.lib.graph_writer import get_iterable_objects, get_matches_for_item, generate_edges_for_type
 g = igraph.Graph.GRG(100, 0.07)
 mapped = {}
 for edge in g.es:
@@ -28,7 +28,7 @@ for edge in g.es:
 def tmp_get_iterable_objects(graph, data_type):
   return [{"id": n.index, "context": {"blah": 1, "project_media_id": n.index}} for n in g.vs]
 
-def get_matches_for_item(graph, item, data_type):
+def tmp_get_matches_for_item(graph, item, data_type):
   return [{"id": e, "context": {"blah": 1, "project_media_id": e}, "score": np.random.random()*0.2 + 0.8} for e in mapped.get(item["id"], [])]
 
 Job = namedtuple('Job', ('id'))
@@ -54,7 +54,7 @@ class TestGraph(BaseTestCase):
       mock_enqueue.return_value = Job(str(uuid.uuid1()))
       graph_id, job_id = Graph.store({"threshold": 0.8, "data_types": ["image"], "context": {"blah": 1}})
       self.assertIsInstance(graph_id, int)
-      graph = Graph.enrich(graph_id, tmp_get_iterable_objects, get_matches_for_item)
+      graph = Graph.enrich(graph_id, tmp_get_iterable_objects, tmp_get_matches_for_item)
       self.assertIsInstance(graph, Graph)
       graph_response = Graph.fetch({"graph_id": graph_id})
       self.assertIsInstance(graph_response, dict)
@@ -76,7 +76,8 @@ class TestGraph(BaseTestCase):
       response = self.client.post('/graph/cluster/', data=json.dumps({
         "threshold": 0.8,
         "data_types": ["image"],
-        "context": {"blah": 1}
+        "context": {"blah": 1},
+        "url": "https://blah.com/"
       }), content_type='application/json')
       result = json.loads(response.data.decode())
       self.assertIsInstance(result, dict)
@@ -89,7 +90,8 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(result["clusters"], list)
       self.assertIsInstance(result["graph"], dict)
       self.assertEqual(result["graph"]["status"], "created")
-      graph = Graph.enrich(result["graph"]["id"], tmp_get_iterable_objects, get_matches_for_item)
+      graph = Graph.enrich(result["graph"]["id"], tmp_get_iterable_objects, tmp_get_matches_for_item)
+      item = {"url": "https://blah.com/", "context": graph.context, "threshold": graph.threshold}
       response = self.client.get('/graph/cluster/', data=json.dumps({
           'graph_id': result["graph"]["id"],
       }), content_type='application/json')
@@ -100,6 +102,31 @@ class TestGraph(BaseTestCase):
       self.assertIsInstance(result["clusters"][0][0], dict)
       self.assertIsInstance(result["graph"], dict)
       self.assertEqual(result["graph"]["status"], "enriched")
+
+  def test_graph_text_type(self):
+    response = self.client.post('/graph/cluster/', data=json.dumps({
+      "threshold": 0.8,
+      "data_types": ["text"],
+      "context": {"blah": 1},
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    response = self.client.get('/graph/cluster/', data=json.dumps({
+        'graph_id': result["graph_id"],
+    }), content_type='application/json')
+    result = json.loads(response.data.decode())
+    self.assertIsInstance(result, dict)
+    self.assertIsInstance(result["clusters"], list)
+    self.assertIsInstance(result["graph"], dict)
+    self.assertEqual(result["graph"]["status"], "created")
+    graph = Graph.enrich(result["graph"]["id"], get_iterable_objects, tmp_get_matches_for_item)
+    response = self.client.get('/graph/cluster/', data=json.dumps({
+        'graph_id': 2,
+    }), content_type='application/json')
+    item = {}
+    result = json.loads(response.data.decode())
+    self.assertIn('error', result)
+    self.assertEqual(result["error"], "Graph with id of 2 not found!")
+
 
 if __name__ == '__main__':
     unittest.main()
