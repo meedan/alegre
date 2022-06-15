@@ -113,7 +113,7 @@ def insert_model_into_response(hits, model_key):
     for hit in hits:
         if "_source" in hit:
             hit["_source"]["model"] = model_key
-    return hit
+    return hits
 
 def search_text_by_model(search_params):
     if not search_params.get("content"):
