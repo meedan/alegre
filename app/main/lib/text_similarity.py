@@ -109,6 +109,12 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
       }
   }
 
+def insert_model_into_response(hits, model_key):
+    for hit in hits:
+        if "_source" in hit:
+            hit["_source"]["model"] = model_key
+    return hits
+
 def search_text_by_model(search_params):
     if not search_params.get("content"):
         return {"result": []}
@@ -146,6 +152,7 @@ def search_text_by_model(search_params):
         body=get_body_from_conditions(conditions),
         index=app.config['ELASTICSEARCH_SIMILARITY']
     )
+    result = insert_model_into_response(result['hits']['hits'], model_key)
     return {
-        'result': result['hits']['hits']
+        'result': result
     }
