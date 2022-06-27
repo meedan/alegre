@@ -39,7 +39,7 @@ class LangidResource(Resource):
         # Otherwise, call the service and cache the result.
         if result == None:
             result = self.langid(LangidResource.cleanup_input(text), provider)
-            r.setex(key, json.dumps(result), 60*60*24)
+            r.setex(key, 60*60*24, json.dumps(result))
 
         return result
         

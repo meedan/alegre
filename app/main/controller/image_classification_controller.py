@@ -35,7 +35,7 @@ class ImageClassificationResource(Resource):
         # Otherwise, call the service and cache the result.
         if result == None:
             result = self.classify(uri)
-            r.setex(key, json.dumps(result), 60*60*24)
+            r.setex(key, 60*60*24, json.dumps(result))
 
         return result
 
