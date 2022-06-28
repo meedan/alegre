@@ -21,7 +21,7 @@ class Config:
   PROVIDER_LANGID = os.getenv('PROVIDER_LANGID', 'google')
   PROVIDER_IMAGE_CLASSIFICATION = os.getenv('PROVIDER_IMAGE_CLASSIFICATION', 'google')
   MS_TEXT_ANALYTICS_KEY = os.getenv('MS_TEXT_ANALYTICS_KEY')
-  MS_TEXT_ANALYTICS_URL = os.getenv('MS_TEXT_ANALYTICS_URL', 'https://westcentralus.api.cognitive.microsoft.com/text/analytics/v2.1/')
+  # MS_TEXT_ANALYTICS_URL = os.getenv('MS_TEXT_ANALYTICS_URL', 'https://westcentralus.api.cognitive.microsoft.com/text/analytics/v2.1/')
   SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://%(user)s:%(password)s@%(host)s/%(dbname)s?client_encoding=utf8' % {
     'user': os.getenv('DATABASE_USER', 'postgres'),
     'password': os.getenv('DATABASE_PASS', 'postgres'),
