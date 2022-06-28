@@ -35,29 +35,29 @@ class GoogleLangidProvider:
     return True
 
 
-class MicrosoftLangidProvider:
-# https://docs.microsoft.com/en-us/azure/cognitive-services/Text-Analytics/quickstarts/python
-  @staticmethod
-  def langid(text):
-    response = requests.post(
-      app.config['MS_TEXT_ANALYTICS_URL'] + '/languages',
-      headers={
-        'Ocp-Apim-Subscription-Key': app.config['MS_TEXT_ANALYTICS_KEY']
-      },
-      json={
-        'documents': [{ 'id': '1', 'text': text }]
-      }
-    ).json()
-    if 'error' in response:
-      raise Exception(response['error'])
-    return {
-      'result': {
-        'language': 'und' if response['documents'][0]['detectedLanguages'][0]['iso6391Name'] == '(Unknown)' else response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
-        'confidence': response['documents'][0]['detectedLanguages'][0]['score']
-      },
-      'raw': response
-    }
-
+# class MicrosoftLangidProvider:
+# # https://docs.microsoft.com/en-us/azure/cognitive-services/Text-Analytics/quickstarts/python
+#   @staticmethod
+#   def langid(text):
+#     response = requests.post(
+#       app.config['MS_TEXT_ANALYTICS_URL'] + '/languages',
+#       headers={
+#         'Ocp-Apim-Subscription-Key': app.config['MS_TEXT_ANALYTICS_KEY']
+#       },
+#       json={
+#         'documents': [{ 'id': '1', 'text': text }]
+#       }
+#     ).json()
+#     if 'error' in response:
+#       raise Exception(response['error'])
+#     return {
+#       'result': {
+#         'language': 'und' if response['documents'][0]['detectedLanguages'][0]['iso6391Name'] == '(Unknown)' else response['documents'][0]['detectedLanguages'][0]['iso6391Name'],
+#         'confidence': response['documents'][0]['detectedLanguages'][0]['score']
+#       },
+#       'raw': response
+#     }
+#
 class Cld3LangidProvider:
 # https://github.com/bsolomon1124/pycld3
   @staticmethod

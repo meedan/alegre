@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.langid import GoogleLangidProvider, MicrosoftLangidProvider, Cld3LangidProvider
+from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
 from app.main.controller.langid_controller import LangidResource
 
 class TestLangidBlueprint(BaseTestCase):
