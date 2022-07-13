@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.langid import GoogleLangidProvider, MicrosoftLangidProvider, Cld3LangidProvider
+from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
 from app.main.controller.langid_controller import LangidResource
 
 class TestLangidBlueprint(BaseTestCase):
@@ -57,18 +57,18 @@ class TestLangidBlueprint(BaseTestCase):
             result = GoogleLangidProvider.langid(test['text'])
             self.assertEqual(test['google'], result['result']['language'], test['text'])
 
-    @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
-    def test_langid_microsoft(self):
-        for test in TestLangidBlueprint.TESTS:
-            result = MicrosoftLangidProvider.langid(test['text'])
-            self.assertEqual(test['microsoft'], result['result']['language'], test['text'])
-
-    def test_langid_microsoft_with_wrong_key(self):
-        with app.app_context():
-            app.config['MS_TEXT_ANALYTICS_KEY']='wrong_key'
-            with self.assertRaises(Exception):
-                MicrosoftLangidProvider.langid('hello')
-
+    # @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
+    # def test_langid_microsoft(self):
+    #     for test in TestLangidBlueprint.TESTS:
+    #         result = MicrosoftLangidProvider.langid(test['text'])
+    #         self.assertEqual(test['microsoft'], result['result']['language'], test['text'])
+    #
+    # def test_langid_microsoft_with_wrong_key(self):
+    #     with app.app_context():
+    #         app.config['MS_TEXT_ANALYTICS_KEY']='wrong_key'
+    #         with self.assertRaises(Exception):
+    #             MicrosoftLangidProvider.langid('hello')
+    #
     def test_langid_cld3(self):
         for test in TestLangidBlueprint.TESTS:
             result = Cld3LangidProvider.langid(test['text'])
