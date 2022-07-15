@@ -281,8 +281,8 @@ def init():
       'before_create',
       DDL("""
         CREATE OR REPLACE FUNCTION bit_count_image(value bigint)
-        RETURNS integer
-        AS $$ SELECT length(replace(value::bit(64)::text,'0','')); $$
+        RETURNS double precision
+        AS $$ SELECT 1.0-length(replace(value::bit(64)::text,'0',''))::float/length(value::bit(64)::text); $$
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )
@@ -292,8 +292,8 @@ def init():
       'before_create',
       DDL("""
         CREATE OR REPLACE FUNCTION bit_count_audio(value bit(128))
-        RETURNS integer
-        AS $$ SELECT length(replace(value::text,'0','')); $$
+        RETURNS double precision
+        AS $$ SELECT 1.0-length(replace(value::text,'0',''))::float/length(value::text); $$
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )

@@ -65,7 +65,7 @@ def search_image(params):
     threshold = 0.9
   if url:
     image = ImageModel.from_url(url, None)
-    result = search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), context)
+    result = search_by_phash(image.phash, threshold, context)
   else:
     result = search_by_context(context)
   return {
@@ -105,7 +105,7 @@ def search_by_phash(phash, threshold, context):
             SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
-          WHERE score <= :threshold
+          WHERE score >= :threshold
           AND 
           """+context_query+"""
           ORDER BY score ASC
@@ -116,7 +116,7 @@ def search_by_phash(phash, threshold, context):
             SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
-          WHERE score <= :threshold
+          WHERE score >= :threshold
           ORDER BY score ASC
         """
     matches = db.session.execute(text(cmd), dict(**{
