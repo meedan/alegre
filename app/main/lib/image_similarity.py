@@ -65,7 +65,7 @@ def search_image(params):
     threshold = 0.9
   if url:
     image = ImageModel.from_url(url, None)
-    result = search_by_phash(image.phash, int(round((1.0 - float(threshold)) * 64.0)), context)
+    result = search_by_phash(image.phash, threshold, context)
   else:
     result = search_by_context(context)
   return {
