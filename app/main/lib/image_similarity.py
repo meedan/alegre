@@ -105,7 +105,7 @@ def search_by_phash(phash, threshold, context):
             SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
-          WHERE score <= :threshold
+          WHERE score >= :threshold
           AND 
           """+context_query+"""
           ORDER BY score ASC
@@ -116,7 +116,7 @@ def search_by_phash(phash, threshold, context):
             SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
-          WHERE score <= :threshold
+          WHERE score >= :threshold
           ORDER BY score ASC
         """
     matches = db.session.execute(text(cmd), dict(**{
