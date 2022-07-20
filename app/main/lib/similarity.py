@@ -28,7 +28,7 @@ def video_model():
 
 def model_response_package(item, command):
   response_package = {
-    "limit": item.get("limit", similarity.DEFAULT_SEARCH_LIMIT) or similarity.DEFAULT_SEARCH_LIMIT,
+    "limit": item.get("limit", DEFAULT_SEARCH_LIMIT) or DEFAULT_SEARCH_LIMIT,
     "url": item.get("url"),
     "doc_id": item.get("doc_id"),
     "context": item.get("context", {}),
