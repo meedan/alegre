@@ -288,7 +288,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(True, result['success'])
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
-        'team_id': 'aa'
+        'team_id': 1
       }
     }), content_type='application/json')
     self.assertEqual(500, response.status_code)
