@@ -2,7 +2,7 @@ from flask import current_app as app
 from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
-
+ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
@@ -147,8 +147,9 @@ def search_text_by_model(search_params):
             conditions.append(context)
         else:
             conditions['query']['script_score']['query']['bool']['must'].append(context)
+    limit = search_params.get("limit")
     result = es.search(
-        size=10000,
+        size=limit or ELASTICSEARCH_DEFAULT_LIMIT,
         body=get_body_from_conditions(conditions),
         index=app.config['ELASTICSEARCH_SIMILARITY']
     )

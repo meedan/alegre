@@ -204,9 +204,13 @@ class AudioModel(SharedModel):
         if audio:
             threshold = task.get('threshold', 1.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
+            limit = task.get("limit")
             if temporary:
                 self.delete(task)
-            return {"result": matches}
+            if limit:
+                return {"result": matches[:limit]}
+            else:
+                return {"result": matches}
         else:
             return {"error": "Audio not found for provided task", "task": task}
     

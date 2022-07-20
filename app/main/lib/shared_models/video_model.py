@@ -188,7 +188,11 @@ class VideoModel(SharedModel):
                     })
             if temporary:
                 self.delete(task)
-            return {"result": results}
+            limit = task.get("limit")
+            if limit:
+                return {"result": matches[:limit]}
+            else:
+                return {"result": matches}
         else:
             return {"error": "Video not found for provided task", "task": task}
 
