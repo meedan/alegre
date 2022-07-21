@@ -184,14 +184,7 @@ class AudioModel(SharedModel):
                 audio = audios[0]
         return audio
 
-    def search(self, task):
-        context = {}
-        audio = None
-        temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
+    def get_audio(self, task):
         audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
@@ -201,6 +194,20 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
+        return audio
+        
+    def get_context_for_search(self, task):
+        context = {}
+        if task.get('context'):
+            context = task.get('context')
+        if task.get("match_across_content_types"):
+            context.pop("content_type", None)
+        return context
+
+    def search(self, task):
+        temporary = False
+        audio = self.get_audio(task)
+        context = self.get_context_for_search(task)
         if audio:
             threshold = task.get('threshold', 1.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
