@@ -222,7 +222,7 @@ def init_perl_functions():
 @manager.command
 def run():
   """Runs the API server."""
-  port = os.getenv('ALEGRE_PORT', 5000)
+  port = os.getenv('ALEGRE_PORT', 3100)
   if json_logging._current_framework is None:
     json_logging.init_flask(enable_json=True)
     json_logging.init_request_instrument(app)
