@@ -8,7 +8,7 @@ A media analysis service. Part of the [Check platform](https://meedan.com/check)
 - Update your [virtual memory settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html), e.g. by setting `vm.max_map_count=262144` in `/etc/sysctl.conf`
 - `docker-compose build`
 - `docker-compose up --abort-on-container-exit`
-- Open http://localhost:5000 for the Alegre API
+- Open http://localhost:3100 for the Alegre API
 
 The Alegre API Swagger UI unfortunately [does not support sending body payloads to GET methods](https://github.com/swagger-api/swagger-ui/issues/2136). To test those API methods, you can still fill in your arguments, and click "Execute" - Swagger will fail, but show you a `curl` command that you can use in your console.
 
