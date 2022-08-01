@@ -17,7 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.helpers import context_matches
-from app.main.lib.similarity_helpers import get_context_query
+from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main import db
 from app.main.model.audio import Audio
 
@@ -79,6 +79,7 @@ class AudioModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        deleted = False
         audio = None
         if 'doc_id' in task:
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
@@ -89,7 +90,10 @@ class AudioModel(SharedModel):
             if audios:
                 audio = audios[0]
         if audio:
-          deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
+            if task.get("context", {}) in audio.context and len(audio.context) > 1:
+                deleted = drop_context_from_record(audio, task.get("context", {}))
+            else:
+                deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
           return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
         else:
           return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}

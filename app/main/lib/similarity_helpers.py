@@ -1,4 +1,19 @@
 import json
+
+from app.main import db
+
+def drop_context_from_record(record, context):
+    deleted = False
+    record.context = [e for e in record.context if context != e]
+    db.session.add(record)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
+    deleted = True
+    return deleted
+
 def get_context_query(context, value_as_json=False, vars_as_hash=True):
     context_query = []
     context_hash = {}

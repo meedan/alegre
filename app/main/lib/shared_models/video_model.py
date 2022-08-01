@@ -17,7 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
-from app.main.lib.similarity_helpers import get_context_query
+from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
 from app.main import db
 from app.main.model.video import Video
@@ -80,6 +80,8 @@ class VideoModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        deleted = False
+        filepath = None
         if 'doc_id' in task:
             videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
             if videos:
@@ -88,10 +90,14 @@ class VideoModel(SharedModel):
             videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
             if videos:
                 video = videos[0]
-        filepath = self.tmk_file_path(video.folder, video.filepath)
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        deleted = db.session.query(Video).filter(Video.id==video.id).delete()
+        if video:
+            filepath = self.tmk_file_path(video.folder, video.filepath)
+            if task.get("context", {}) in video.context and len(video.context) > 1:
+                deleted = drop_context_from_record(video, task.get("context", {}))
+            else:
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                deleted = db.session.query(Video).filter(Video.id==video.id).delete()
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
     def overload_context_to_denote_content_type(self, task):
