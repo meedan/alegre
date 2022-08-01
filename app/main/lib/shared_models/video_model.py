@@ -82,7 +82,7 @@ class VideoModel(SharedModel):
     def delete_video(self, video, task):
         deleted = False
         filepath = self.tmk_file_path(video.folder, video.filepath)
-        if task.get("context", {}) in video.context and len(video.context) > 1:
+        if isinstance(video.context, dict) and task.get("context", {}) in video.context and len(video.context) > 1:
             deleted = drop_context_from_record(video, task.get("context", {}))
         else:
             if os.path.exists(filepath):
