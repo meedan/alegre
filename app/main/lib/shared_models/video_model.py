@@ -79,6 +79,17 @@ class VideoModel(SharedModel):
         elif task["command"] == "search":
             return self.search(task)
 
+    def delete_video(self, video, task):
+        deleted = False
+        filepath = self.tmk_file_path(video.folder, video.filepath)
+        if task.get("context", {}) in video.context and len(video.context) > 1:
+            deleted = drop_context_from_record(video, task.get("context", {}))
+        else:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            deleted = db.session.query(Video).filter(Video.id==video.id).delete()
+        return filepath, deleted
+
     def delete(self, task):
         deleted = False
         filepath = None
@@ -91,13 +102,7 @@ class VideoModel(SharedModel):
             if videos:
                 video = videos[0]
         if video:
-            filepath = self.tmk_file_path(video.folder, video.filepath)
-            if task.get("context", {}) in video.context and len(video.context) > 1:
-                deleted = drop_context_from_record(video, task.get("context", {}))
-            else:
-                if os.path.exists(filepath):
-                    os.remove(filepath)
-                deleted = db.session.query(Video).filter(Video.id==video.id).delete()
+            filepath, deleted = self.delete_video(video, task)
         return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
 
     def overload_context_to_denote_content_type(self, task):

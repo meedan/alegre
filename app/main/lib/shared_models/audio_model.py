@@ -94,9 +94,9 @@ class AudioModel(SharedModel):
                 deleted = drop_context_from_record(audio, task.get("context", {}))
             else:
                 deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-          return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+            return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
         else:
-          return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
+            return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
     def add(self, task):
         try:

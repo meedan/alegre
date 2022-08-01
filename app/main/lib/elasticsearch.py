@@ -92,7 +92,7 @@ def store_document(body, doc_id):
         'success': success
     }
 
-def delete_document(doc_id, quiet, context):
+def delete_document(doc_id, quiet):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     try:
         return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)

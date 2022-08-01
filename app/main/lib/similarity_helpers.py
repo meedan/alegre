@@ -4,13 +4,13 @@ from app.main import db
 
 def drop_context_from_record(record, context):
     deleted = False
-    record.context = [e for e in record.context if context != e]
+    record.context = [row for row in record.context if context != row]
     db.session.add(record)
     try:
         db.session.commit()
-    except Exception as e:
+    except Exception as exception:
         db.session.rollback()
-        raise e
+        raise exception
     deleted = True
     return deleted
 
