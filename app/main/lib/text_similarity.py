@@ -3,8 +3,7 @@ from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
-def delete_text(doc_id, quiet, context):
-  context = None #noop until we shift in next ticket to lists of context
+def delete_text(doc_id, quiet):
   return delete_document(doc_id, quiet)
 
 def get_document_body(body):

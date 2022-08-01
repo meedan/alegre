@@ -63,7 +63,7 @@ def delete_item(item, similarity_type):
   elif similarity_type == "image":
     response = delete_image(item)
   elif similarity_type == "text":
-    response = delete_text(item.get("doc_id"), item.get("quiet", False), item.get("context", {}))
+    response = delete_text(item.get("doc_id"), item.get("quiet", False))
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
   return response
 
