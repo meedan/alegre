@@ -186,8 +186,8 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"url": url, "project_media_id": 1})
-        result = self.model.delete({"url": url, "project_media_id": 1})
+        self.model.add({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
+        result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
         self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
@@ -219,8 +219,8 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_respond_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"url": url, "id": 1})
-        result = self.model.respond({"url": url, "project_media_id": 1, "command": "delete"})
+        self.model.add({"url": url, "id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
+        result = self.model.respond({"url": url, "project_media_id": 1, "command": "delete", "context": {'blah': 1, 'project_media_id': 12342}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
         self.assertEqual(sorted(result['requested'].keys()), ['command', 'project_media_id', 'url'])
