@@ -19,7 +19,7 @@ def delete_image(params):
       if params.get("context", {}) in image.context and len(image.context) > 1:
         deleted = drop_context_from_record(image, params.get("context", {}))
       else:
-        deleted = image.delete()
+        deleted = db.session.query(ImageModel).filter(ImageModel.id==image.id).delete()
   if deleted:
     return {'deleted': True}
   else:
