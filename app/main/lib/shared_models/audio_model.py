@@ -90,8 +90,6 @@ class AudioModel(SharedModel):
             if audios:
                 audio = audios[0]
         if audio:
-            print("AUDIO CONTEXT")
-            print(audio.context)
             if task.get("context", {}) in audio.context and len(audio.context) > 1:
                 deleted = drop_context_from_record(audio, task.get("context", {}))
             else:

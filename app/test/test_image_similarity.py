@@ -202,9 +202,6 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     image = ImageModel.query.filter_by(url=url).all()[0]
-    print("TEST UPDATE IMAGE")
-    print(result)
-    print(image.context)
     self.assertEqual(2, image.context[0]['team_id'])
 
   def test_delete_image(self):
@@ -230,8 +227,6 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       }
     }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
-    print("TEST DELETE IMAGE")
-    print(result)
     self.assertEqual(True, result['deleted'])
     self.assertEqual(0, len(ImageModel.query.filter_by(url=url).all()))
 
