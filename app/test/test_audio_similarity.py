@@ -173,7 +173,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 1}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
+        self.assertEqual(sorted(result['requested'].keys()), ['context', 'project_media_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['deleted', 'url'])
 
     def test_add(self):
