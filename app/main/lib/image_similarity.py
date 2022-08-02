@@ -2,7 +2,7 @@ from flask import current_app as app
 from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches
-from app.main.lib.similarity_helpers import get_context_query
+from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
@@ -12,9 +12,14 @@ def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
 def delete_image(params):
-  deleted= False
+  deleted = False
   if params.get('doc_id'):
-    deleted = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).delete()
+    image = db.session.query(ImageModel).filter(ImageModel.doc_id==params['doc_id']).one_or_none()
+    if image:
+      if params.get("context", {}) in image.context and len(image.context) > 1:
+        deleted = drop_context_from_record(image, params.get("context", {}))
+      else:
+        deleted = db.session.query(ImageModel).filter(ImageModel.id==image.id).delete()
   if deleted:
     return {'deleted': True}
   else:
