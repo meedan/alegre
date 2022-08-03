@@ -102,6 +102,7 @@ def store_document(body, doc_id):
 
 def delete_context_from_found_doc(context, found_doc, doc_id):
     found_doc["contexts"] = [row for row in found_doc.get("contexts", []) if context != row]
+    es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     result = es.update(
         id=doc_id,
         body={"doc": found_doc},
