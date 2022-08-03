@@ -3,12 +3,15 @@ from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
-def delete_text(doc_id, quiet):
-  return delete_document(doc_id, quiet)
+def delete_text(doc_id, context, quiet):
+  return delete_document(doc_id, context, quiet)
 
 def get_document_body(body):
   for model_key in body.pop("models", []):
     body['model_'+model_key] = 1
+    context = body.get("context", {})
+    if context:
+      body["contexts"] = [context]
     if model_key != 'elasticsearch':
       model = SharedModel.get_client(model_key)
       vector = model.get_shared_model_response(body['content'])

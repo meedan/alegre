@@ -2,6 +2,18 @@ import json
 
 from app.main import db
 
+def drop_context_from_text_record(record, context):
+    deleted = False
+    record["contexts"] = [row for row in record.get("contexts", []) if context != row]
+    db.session.add(record)
+    try:
+        db.session.commit()
+    except Exception as exception:
+        db.session.rollback()
+        raise exception
+    deleted = True
+    return deleted
+
 def drop_context_from_record(record, context):
     deleted = False
     record.context = [row for row in record.context if context != row]
