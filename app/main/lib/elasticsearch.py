@@ -116,11 +116,10 @@ def delete_document(doc_id, context, quiet):
     except elasticsearch.exceptions.NotFoundError:
         found_doc = None
     try:
-        if found_doc:
-            if context in found_doc.get("contexts", []) and len(found_doc.get("contexts", [])) > 1:
-                return delete_context_from_found_doc(context, found_doc, doc_id)
-            else:
-                return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        if found_doc and context in found_doc.get("contexts", []) and len(found_doc.get("contexts", [])) > 1:
+            return delete_context_from_found_doc(context, found_doc, doc_id)
+        else:
+            return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
     except:
         if quiet:
             return {
