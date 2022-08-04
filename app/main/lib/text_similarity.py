@@ -117,15 +117,14 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
-def restrict_results(results, search_params):
+def restrict_results(results, search_params, model_key):
     out_results = []
-    if search_params.get("min_es_score"):
+    if search_params.get("min_es_score") and model_key == "elasticsearch":
         for result in results:
             if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
                 out_results.append(result)
         return out_results
-    else:
-        return results
+    return results
 
 def search_text_by_model(search_params):
     if not search_params.get("content"):
@@ -167,7 +166,8 @@ def search_text_by_model(search_params):
     )
     response = restrict_results(
         insert_model_into_response(result['hits']['hits'], model_key),
-        search_params
+        search_params,
+        model_key
     )
     return {
         'result': response
