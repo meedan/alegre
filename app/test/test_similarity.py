@@ -165,6 +165,18 @@ class TestSimilarityBlueprint(BaseTestCase):
                 data=json.dumps({
                   'text': 'this is a test',
                   'models': ["elasticsearch"],
+                  'min_es_score': 0.1,
+                }),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(4, len(result['result']))
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps({
+                  'text': 'this is a test',
+                  'models': ["elasticsearch"],
                 }),
                 content_type='application/json'
             )
@@ -433,6 +445,21 @@ class TestSimilarityBlueprint(BaseTestCase):
               'text': 'purge an invoice',
               'model': TestSimilarityBlueprint.use_model_key,
               'threshold': 0.7,
+              'context': {
+                'dbid': 54
+              }
+            }),
+            content_type='application/json'
+        )
+        result = json.loads(response.data.decode())
+        self.assertEqual(1, len(result['result']))
+        response = self.client.get(
+            '/text/similarity/',
+            data=json.dumps({
+              'text': 'purge an invoice',
+              'model': TestSimilarityBlueprint.use_model_key,
+              'threshold': 0.7,
+              'per_model_threshold': {TestSimilarityBlueprint.use_model_key: 0.7},
               'context': {
                 'dbid': 54
               }
