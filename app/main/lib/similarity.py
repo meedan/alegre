@@ -35,6 +35,7 @@ def model_response_package(item, command):
     "created_at": item.get("created_at"),
     "command": command,
     "threshold": item.get("threshold", 0.0),
+    "per_model_threshold": item.get("per_model_threshold", {}),
     "match_across_content_types": item.get("match_across_current_type", False)
   }
   app.logger.info(f"[Alegre Similarity] [Item {item}, Command {command}] Response package looks like {response_package}")
