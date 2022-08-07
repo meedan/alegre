@@ -57,12 +57,13 @@ def package_item_for_query(item, graph, data_type):
   elif data_type == "text":
     vector_keys = [k for k in item["_source"].keys() if "vector" in k]
     vector_key = ""
+    model = graph.context.get("model") or "elasticsearch"
     if vector_keys:
       vector_key = vector_keys[0]
     return {
-      "model": graph.context.get("model") or "elasticsearch",
+      "models": [model],
       "threshold": graph.threshold,
-      "text": item.get("_source").get("content"),
+      "content": item.get("_source").get("content"),
       "vector": item.get("_source").get(vector_key),
     }
 
