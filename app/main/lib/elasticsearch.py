@@ -60,6 +60,14 @@ def truncate_query(query, clause_count):
     else:
         return None
 
+def merge_contexts(body, found_doc):
+    if not body.get("contexts"):
+        body["contexts"] = [body["context"]]
+    for context in found_doc["_source"].get("contexts", []):
+        if context not in body["contexts"]:
+            body["contexts"].append(context)
+    return body
+
 def store_document(body, doc_id):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     if doc_id:
@@ -70,7 +78,7 @@ def store_document(body, doc_id):
         if found_doc:
             result = es.update(
                 id=doc_id,
-                body={"doc": body},
+                body={"doc": merge_contexts(body, found_doc)},
                 index=app.config['ELASTICSEARCH_SIMILARITY']
             )
         else:
@@ -92,10 +100,27 @@ def store_document(body, doc_id):
         'success': success
     }
 
-def delete_document(doc_id, quiet):
+def delete_context_from_found_doc(context, found_doc, doc_id):
+    found_doc["contexts"] = [row for row in found_doc.get("contexts", []) if context != row]
+    es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+    result = es.update(
+        id=doc_id,
+        body={"doc": found_doc},
+        index=app.config['ELASTICSEARCH_SIMILARITY']
+    )
+    return result
+
+def delete_document(doc_id, context, quiet):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     try:
-        return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+    except elasticsearch.exceptions.NotFoundError:
+        found_doc = None
+    try:
+        if found_doc and context in found_doc.get("contexts", []) and len(found_doc.get("contexts", [])) > 1:
+            return delete_context_from_found_doc(context, found_doc, doc_id)
+        else:
+            return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
     except:
         if quiet:
             return {
