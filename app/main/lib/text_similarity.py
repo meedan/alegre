@@ -2,13 +2,16 @@ from flask import current_app as app
 from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
-
-def delete_text(doc_id, quiet):
-  return delete_document(doc_id, quiet)
+ELASTICSEARCH_DEFAULT_LIMIT = 10000
+def delete_text(doc_id, context, quiet):
+  return delete_document(doc_id, context, quiet)
 
 def get_document_body(body):
   for model_key in body.pop("models", []):
     body['model_'+model_key] = 1
+    context = body.get("context", {})
+    if context:
+      body["contexts"] = [context]
     if model_key != 'elasticsearch':
       model = SharedModel.get_client(model_key)
       vector = model.get_shared_model_response(body['content'])
@@ -40,6 +43,8 @@ def get_model_and_threshold(search_params):
       model_key = search_params['model']
   if 'threshold' in search_params:
       threshold = search_params['threshold']
+  if 'per_model_threshold' in search_params and search_params['per_model_threshold'].get(model_key):
+      threshold = search_params['per_model_threshold'].get(model_key)
   return model_key, threshold
 
 def get_body_from_conditions(conditions):
@@ -115,6 +120,15 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
+def restrict_results(results, search_params, model_key):
+    out_results = []
+    if search_params.get("min_es_score") and model_key == "elasticsearch":
+        for result in results:
+            if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
+                out_results.append(result)
+        return out_results
+    return results
+
 def search_text_by_model(search_params):
     if not search_params.get("content"):
         return {"result": []}
@@ -147,12 +161,17 @@ def search_text_by_model(search_params):
             conditions.append(context)
         else:
             conditions['query']['script_score']['query']['bool']['must'].append(context)
+    limit = search_params.get("limit")
     result = es.search(
-        size=10000,
+        size=limit or ELASTICSEARCH_DEFAULT_LIMIT,
         body=get_body_from_conditions(conditions),
         index=app.config['ELASTICSEARCH_SIMILARITY']
     )
-    result = insert_model_into_response(result['hits']['hits'], model_key)
+    response = restrict_results(
+        insert_model_into_response(result['hits']['hits'], model_key),
+        search_params,
+        model_key
+    )
     return {
-        'result': result
+        'result': response
     }

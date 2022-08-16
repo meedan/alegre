@@ -17,7 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.helpers import context_matches
-from app.main.lib.similarity_helpers import get_context_query
+from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main import db
 from app.main.model.audio import Audio
 
@@ -79,6 +79,7 @@ class AudioModel(SharedModel):
             return self.search(task)
 
     def delete(self, task):
+        deleted = False
         audio = None
         if 'doc_id' in task:
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
@@ -89,10 +90,13 @@ class AudioModel(SharedModel):
             if audios:
                 audio = audios[0]
         if audio:
-          deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-          return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
+            if task.get("context", {}) in audio.context and len(audio.context) > 1:
+                deleted = drop_context_from_record(audio, task.get("context", {}))
+            else:
+                deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
+            return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
         else:
-          return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
+            return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
     def add(self, task):
         try:
@@ -184,14 +188,8 @@ class AudioModel(SharedModel):
                 audio = audios[0]
         return audio
 
-    def search(self, task):
-        context = {}
-        audio = None
+    def get_audio(self, task):
         temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
         audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
@@ -201,12 +199,29 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
+        return audio, temporary
+
+    def get_context_for_search(self, task):
+        context = {}
+        if task.get('context'):
+            context = task.get('context')
+        if task.get("match_across_content_types"):
+            context.pop("content_type", None)
+        return context
+
+    def search(self, task):
+        audio, temporary = self.get_audio(task)
+        context = self.get_context_for_search(task)
         if audio:
             threshold = task.get('threshold', 1.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
+            limit = task.get("limit")
             if temporary:
                 self.delete(task)
-            return {"result": matches}
+            if limit:
+                return {"result": matches[:limit]}
+            else:
+                return {"result": matches}
         else:
             return {"error": "Audio not found for provided task", "task": task}
     

@@ -34,7 +34,8 @@ class ImageSimilarityResource(Resource):
     return {
       "url": self.get_from_args_or_json(request, 'url'),
       "context": self.get_from_args_or_json(request, 'context'),
-      "threshold": self.get_from_args_or_json(request, 'threshold') 
+      "threshold": self.get_from_args_or_json(request, 'threshold'),
+      "limit": (self.get_from_args_or_json(request, 'limit') or similarity.DEFAULT_SEARCH_LIMIT),
     }
 
   @api.response(200, 'image similarity successfully queried.')
