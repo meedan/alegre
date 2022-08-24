@@ -31,7 +31,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      return result, 500
+      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
