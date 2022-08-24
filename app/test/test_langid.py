@@ -14,7 +14,7 @@ from app.main.controller.langid_controller import LangidResource
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
         { 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
-        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': 'hi', 'text': 'namaste mera naam Karim hai' },
+        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': 'hi-Latn', 'text': 'namaste mera naam Karim hai' },
         { 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
         { 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
         { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': 'bn', 'text': 'hyalo amara nama Karim' },
