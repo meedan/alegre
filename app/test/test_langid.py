@@ -24,7 +24,7 @@ class TestLangidBlueprint(BaseTestCase):
         { 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
         { 'cld3': 'id', 'microsoft': 'fr', 'google': ['ta', 'ta-Latn'], 'text': 'vanakkam en peyar Karim' },
         { 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
-        { 'cld3': 'fil', 'microsoft': 'tl', 'google': ['tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
+        { 'cld3': 'fil', 'microsoft': 'tl', 'google': ['fil', 'tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
         { 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
     ]
 
@@ -58,7 +58,6 @@ class TestLangidBlueprint(BaseTestCase):
             if type(test['google']) == str:
                 self.assertEqual(test['google'], result['result']['language'], test['text'])
             else:
-                print("HELLO " + str(result['result']['language']) + " " + str(test['google']))
                 self.assertTrue(result['result']['language'] in test['google'])
 
     # @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
