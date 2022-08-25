@@ -58,6 +58,7 @@ class TestLangidBlueprint(BaseTestCase):
             if type(test['google']) == str:
                 self.assertEqual(test['google'], result['result']['language'], test['text'])
             else:
+                print("HELLO " + str(result['result']['language']) + " " + str(test['google']))
                 self.assertTrue(result['result']['language'] in test['google'])
 
     # @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
