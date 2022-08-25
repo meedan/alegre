@@ -14,17 +14,17 @@ from app.main.controller.langid_controller import LangidResource
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
         { 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
-        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': 'hi', 'text': 'namaste mera naam Karim hai' },
+        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': ['hi', 'hi-Latn'], 'text': 'namaste mera naam Karim hai' },
         { 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
         { 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
-        { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': 'bn', 'text': 'hyalo amara nama Karim' },
+        { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': ['bn', 'bn-Latn'], 'text': 'hyalo amara nama Karim' },
         { 'cld3': 'gu', 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
-        { 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': 'gu', 'text': 'helo, marum nama Karim che' },
+        { 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': ['gu', 'gu-Latn'], 'text': 'helo, marum nama Karim che' },
         { 'cld3': 'ml', 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
         { 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
-        { 'cld3': 'id', 'microsoft': 'fr', 'google': 'ta', 'text': 'vanakkam en peyar Karim' },
+        { 'cld3': 'id', 'microsoft': 'fr', 'google': ['ta', 'ta-Latn'], 'text': 'vanakkam en peyar Karim' },
         { 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
-        { 'cld3': 'fil', 'microsoft': 'tl', 'google': 'tl', 'text': 'kamusta ang aking pangalan ay Karim' },
+        { 'cld3': 'fil', 'microsoft': 'tl', 'google': ['fil', 'tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
         { 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
     ]
 
@@ -55,7 +55,10 @@ class TestLangidBlueprint(BaseTestCase):
     def test_langid_google(self):
         for test in TestLangidBlueprint.TESTS:
             result = GoogleLangidProvider.langid(test['text'])
-            self.assertEqual(test['google'], result['result']['language'], test['text'])
+            if type(test['google']) == str:
+                self.assertEqual(test['google'], result['result']['language'], test['text'])
+            else:
+                self.assertTrue(result['result']['language'] in test['google'])
 
     # @unittest.skipIf(not app.config['MS_TEXT_ANALYTICS_KEY'], "Cognitive Services API key is missing")
     # def test_langid_microsoft(self):

@@ -549,29 +549,6 @@ class TestSimilarityBlueprint(BaseTestCase):
       result = json.loads(response.data.decode())
       self.assertEqual(0, len(result['result']))
 
-    def test_too_many_clauses_api_error(self):
-      with app.app_context():
-        app.config['MAX_CLAUSE_COUNT'] = 0
-        with self.client:
-          term = { 'text': 'how to delete an invoice', 'model': 'indian-sbert', 'context': { 'dbid': 54 }, 'vector': ['bla']}
-          response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-          result = json.loads(response.data.decode())
-          self.assertEqual(True, result['success'])
-
-          es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-          es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-
-          response = self.client.get(
-              '/text/similarity/',
-              data=json.dumps({
-                'text': 'how to delete an invoicez',
-                'context': { 'dbid': 54 }
-              }),
-              content_type='application/json'
-          )
-          result = json.loads(response.data.decode())
-          self.assertTrue('Too many clauses specified' in result['error'])
-
     def test_model_similarity_with_vector(self):
       with self.client:
         term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
