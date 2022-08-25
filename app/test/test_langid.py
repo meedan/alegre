@@ -19,12 +19,12 @@ class TestLangidBlueprint(BaseTestCase):
         { 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
         { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': ['bn', 'bn-Latn'], 'text': 'hyalo amara nama Karim' },
         { 'cld3': 'gu', 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
-        { 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': 'gu', 'text': 'helo, marum nama Karim che' },
+        { 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': ['gu', 'gu-Latn'], 'text': 'helo, marum nama Karim che' },
         { 'cld3': 'ml', 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
         { 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
-        { 'cld3': 'id', 'microsoft': 'fr', 'google': 'ta', 'text': 'vanakkam en peyar Karim' },
+        { 'cld3': 'id', 'microsoft': 'fr', 'google': ['ta', 'ta-Latn'], 'text': 'vanakkam en peyar Karim' },
         { 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
-        { 'cld3': 'fil', 'microsoft': 'tl', 'google': 'tl', 'text': 'kamusta ang aking pangalan ay Karim' },
+        { 'cld3': 'fil', 'microsoft': 'tl', 'google': ['tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
         { 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
     ]
 
