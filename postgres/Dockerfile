@@ -1,13 +1,10 @@
 FROM postgres:11.4
 
-MAINTAINER Alexey Kovrizhkin <lekovr+dopos@gmail.com>
-
-ENV DOCKERFILE_VERSION  190701
 
 RUN apt-get update && apt-get install -y \
     gawk \
-    postgresql-plperl-$PG_MAJOR \
-    && localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8 \
+    postgresql-plperl \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME /docker-entrypoint-initdb.d
