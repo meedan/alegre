@@ -45,6 +45,8 @@ def get_model_and_threshold(search_params):
       threshold = search_params['threshold']
   if 'per_model_threshold' in search_params and search_params['per_model_threshold'].get(model_key):
       threshold = search_params['per_model_threshold'].get(model_key)
+  if threshold is None:
+      threshold = 0.9
   return model_key, threshold
 
 def get_body_from_conditions(conditions):
