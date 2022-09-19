@@ -18,14 +18,14 @@ class VideoSimilarityResource(Resource):
     def delete(self):
         return similarity.delete_item(request.args or request.json, "video")
 
-    @api.response(200, 'text successfully stored in the similarity database.')
-    @api.doc('Store a text in the similarity database')
+    @api.response(200, 'video successfully stored in the similarity database.')
+    @api.doc('Store a video in the similarity database')
     @api.expect(video_similarity_request, validate=True)
     def post(self):
         return similarity.add_item(request.args or request.json, "video")
 
-    @api.response(200, 'text similarity successfully queried.')
-    @api.doc('Make a text similarity query')
+    @api.response(200, 'video similarity successfully queried.')
+    @api.doc('Make a video similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"url":"http://some.link/video.mp4", "threshold": 0.5}\' "http://[ALEGRE_HOST]/video/similarity"')
     @api.doc(params={'url': 'video URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'} )
     def get(self):
         return similarity.get_similar_items(request.args or request.json, "video")
