@@ -1,6 +1,6 @@
 from flask import current_app as app
 from elasticsearch import Elasticsearch
-from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
