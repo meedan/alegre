@@ -16,7 +16,7 @@ from app import blueprint
 from app.main import create_app, db
 from app.main.model import image
 from app.main.lib.shared_models.shared_model import SharedModel
-
+from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
 
@@ -267,7 +267,7 @@ def init():
     # include_type_name=True,
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
-
+  init_indices()
   # Create database.
   with app.app_context():
     if not database_exists(db.engine.url):
