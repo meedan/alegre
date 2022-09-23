@@ -71,6 +71,7 @@ def merge_contexts(body, found_doc):
     return body
 
 def update_or_create_document(body, doc_id, index):
+  es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
   result = None
   if doc_id:
       try:
@@ -97,7 +98,6 @@ def update_or_create_document(body, doc_id, index):
   return result
 
 def store_document(body, doc_id, language=None):
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
     if language and language in SUPPORTED_LANGUAGES:
       indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
