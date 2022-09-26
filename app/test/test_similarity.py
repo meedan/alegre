@@ -417,7 +417,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     content_type='application/json'
                 )
                 result = json.loads(response.data.decode())
-                self.assertGreater(0, len(result['result']))
+                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
 
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
