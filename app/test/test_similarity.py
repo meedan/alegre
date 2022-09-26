@@ -398,6 +398,27 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual('deleted', result['result'])
 
+    def test_all_analyzers(self):
+        examples = [{ 'text': 'केले को कैसे काटें', 'language': 'hi'}, {'text': 'how to slice a banana', 'language': 'en'}, {'text': 'como rebanar un plátano', 'language': 'es'}, {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn'}]
+        with self.client:
+            for example in examples:
+                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
+                result = json.loads(response.data.decode())
+                self.assertEqual(True, result['success'])
+                es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+                es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
+                response = self.client.get(
+                    '/text/similarity/',
+                    data=json.dumps({
+                      'text': example['text'],
+                      'language': example['language'],
+                      'threshold': 0.0
+                    }),
+                    content_type='application/json'
+                )
+                result = json.loads(response.data.decode())
+                self.assertGreater(0, len(result['result']))
+
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
             for term in [
