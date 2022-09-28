@@ -1,7 +1,8 @@
 from flask import current_app as app
 from elasticsearch import Elasticsearch
-from app.main.lib.elasticsearch import language_to_analyzer, generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
+from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
@@ -20,8 +21,8 @@ def get_document_body(body):
       body['model'] = model_key
   return body
 
-def add_text(body, doc_id):
-  document = store_document(get_document_body(body), doc_id)
+def add_text(body, doc_id, language=None):
+  document = store_document(get_document_body(body), doc_id, language)
   if 'error' in document:
     return document, 500
   return document
@@ -77,10 +78,6 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
     if 'fuzzy' in search_params:
         if str(search_params['fuzzy']).lower() == 'true':
             conditions[0]['match']['content']['fuzziness'] = 'AUTO'
-    # FIXME: `analyzer` and `minimum_should_match` don't play well together.
-    if 'language' in search_params:
-        conditions[0]['match']['content']['analyzer'] = language_to_analyzer(search_params['language'])
-        del conditions[0]['match']['content']['minimum_should_match']
     return conditions
 
 def get_vector_model_base_conditions(search_params, model_key, threshold):
@@ -132,6 +129,7 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params):
+    language = None
     if not search_params.get("content"):
         return {"result": []}
     model_key, threshold = get_model_and_threshold(search_params)
@@ -139,12 +137,16 @@ def search_text_by_model(search_params):
     conditions = []
     matches = []
     clause_count = 0
+    search_indices = [app.config['ELASTICSEARCH_SIMILARITY']]
     if 'context' in search_params:
         matches, clause_count = generate_matches(search_params['context'])
     if clause_count >= app.config['MAX_CLAUSE_COUNT']:
         return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
     if model_key.lower() == 'elasticsearch':
         conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
+        language = search_params.get("language")
+        if language in SUPPORTED_LANGUAGES:
+            search_indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
     else:
         conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
     if 'context' in search_params:
@@ -167,7 +169,7 @@ def search_text_by_model(search_params):
     result = es.search(
         size=limit or ELASTICSEARCH_DEFAULT_LIMIT,
         body=get_body_from_conditions(conditions),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=search_indices
     )
     response = restrict_results(
         insert_model_into_response(result['hits']['hits'], model_key),

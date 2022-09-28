@@ -14,7 +14,7 @@ def get_body_for_text_document(params):
         models = models|set(params['models'])
     if not models:
         models = ['elasticsearch']
-    body = {'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'limit': params.get("limit", DEFAULT_SEARCH_LIMIT), 'models': list(models)}
+    body = {'language': params.get('language'), 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'limit': params.get("limit", DEFAULT_SEARCH_LIMIT), 'models': list(models)}
     for key in ['context', 'threshold', 'fuzzy']:
         if key in params:
             body[key] = params[key]
@@ -51,7 +51,8 @@ def add_item(item, similarity_type):
     response = add_image(item)
   elif similarity_type == "text":
     doc_id = item.pop("doc_id", None)
-    response = add_text(item, doc_id)
+    language = item.pop("language", None)
+    response = add_text(item, doc_id, language)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
   return response
 
