@@ -21,23 +21,26 @@ def get_all_documents():
     app.extensions['pybrake'].notify(err)
     return []
 
-def get_docs_to_transform(team_id):
+def get_docs_to_transform(team_id, language=None):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     docs_to_transform = {}
     for doc in get_all_documents_matching_context({"team_id": team_id}):
-        prediction = cld3.get_language(doc["_source"]["content"])
-        if prediction and prediction.is_reliable and prediction.language in SUPPORTED_LANGUAGES:
-            docs_to_transform[doc["_id"]] = prediction.language
+        if not language:
+            prediction = cld3.get_language(doc["_source"]["content"])
+            if prediction and prediction.is_reliable and prediction.language in SUPPORTED_LANGUAGES:
+                docs_to_transform[doc["_id"]] = prediction.language
+        else:
+            docs_to_transform[doc["_id"]] = language
     f = open("docs_to_transform.json", "w")
     f.write(json.dumps(docs_to_transform))
     f.close()
     return docs_to_transform
 
-def get_cached_docs_to_transform(team_id):
+def get_cached_docs_to_transform(team_id, language=None):
     try:
         return json.loads(open("docs_to_transform.json").read())
     except:
-        return get_docs_to_transform(team_id)
+        return get_docs_to_transform(team_id, language)
 
 def store_updated_docs(docs_to_transform):
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
@@ -53,6 +56,6 @@ def store_updated_docs(docs_to_transform):
                     source.pop(k, None)
                 update_or_create_document(source, doc_id, app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
 
-def run(team_id):
-    docs_to_transform = get_cached_docs_to_transform(team_id)
+def run(team_id, language=None):
+    docs_to_transform = get_cached_docs_to_transform(team_id, language)
     store_updated_docs(docs_to_transform)
