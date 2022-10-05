@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "content": {
+      "type": "text"
+    },
+    "context": {
+      "type": "nested"
+    }
+  }
+}
