@@ -67,6 +67,35 @@ SETTINGS_BY_LANGUAGE = {
       }
     }
   },
+  "pt-BR": {
+    "analysis": {
+      "filter": {
+        "brazilian_stop": {
+          "type":       "stop",
+          "stopwords":  "_brazilian_" 
+        },
+        "brazilian_keywords": {
+          "type":       "keyword_marker",
+          "keywords":   ["exemplo"] 
+        },
+        "brazilian_stemmer": {
+          "type":       "stemmer",
+          "language":   "brazilian"
+        }
+      },
+      "analyzer": {
+        "rebuilt_brazilian": {
+          "tokenizer":  "standard",
+          "filter": [
+            "lowercase",
+            "brazilian_stop",
+            "brazilian_keywords",
+            "brazilian_stemmer"
+          ]
+        }
+      }
+    }
+  },
   "pt": {
     "analysis": {
       "filter": {
@@ -176,7 +205,7 @@ def init_indices():
       index=index_name
     )
     es.indices.put_settings(
-      body=SETTINGS_BY_LANGUAGE['pt'],
+      body=SETTINGS_BY_LANGUAGE[lang],
       # include_type_name=True,
       index=index_name
     )
