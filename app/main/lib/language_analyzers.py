@@ -28,12 +28,12 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_english": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "english_possessive_stemmer",
             "lowercase",
             "english_stop",
             "english_keywords",
-            "english_stemmer"
+            "english_stemmer",
+            "asciifolding",
           ]
         }
       }
@@ -59,11 +59,11 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_spanish": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "lowercase",
             "spanish_stop",
             "spanish_keywords",
-            "spanish_stemmer"
+            "spanish_stemmer",
+            "asciifolding",
           ]
         }
       }
@@ -89,11 +89,11 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_brazilian": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "lowercase",
             "brazilian_stop",
             "brazilian_keywords",
-            "brazilian_stemmer"
+            "brazilian_stemmer",
+            "asciifolding",
           ]
         }
       }
@@ -119,11 +119,11 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_portuguese": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "lowercase",
             "portuguese_stop",
             "portuguese_keywords",
-            "portuguese_stemmer"
+            "portuguese_stemmer",
+            "asciifolding",
           ]
         }
       }
@@ -149,14 +149,14 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_hindi": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "lowercase",
             "decimal_digit",
             "hindi_keywords",
             "indic_normalization",
             "hindi_normalization",
             "hindi_stop",
-            "hindi_stemmer"
+            "hindi_stemmer",
+            "asciifolding",
           ]
         }
       }
@@ -182,14 +182,15 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_bengali": {
           "tokenizer":  "standard",
           "filter": [
-            "asciifolding",
             "lowercase",
             "decimal_digit",
             "bengali_keywords",
             "indic_normalization",
             "bengali_normalization",
             "bengali_stop",
-            "bengali_stemmer"          ]
+            "bengali_stemmer",
+            "asciifolding",
+          ]
         }
       }
     }
@@ -198,9 +199,11 @@ SETTINGS_BY_LANGUAGE = {
 
 def init_indices():
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-  indices = es.cat.indices(h='index', s='index').split()
+  indices = []
+  # indices = es.cat.indices(h='index', s='index').split()
   for lang in SUPPORTED_LANGUAGES:
     index_name = app.config['ELASTICSEARCH_SIMILARITY']+"_"+lang
+    es.indices.delete(index=index_name)
     if index_name not in indices:
       es.indices.create(index=index_name)
     es.indices.close(index=index_name)
