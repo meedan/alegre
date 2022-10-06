@@ -31,14 +31,14 @@ def get_docs_to_transform(team_id, language=None):
                 docs_to_transform[doc["_id"]] = prediction.language
         else:
             docs_to_transform[doc["_id"]] = language
-    f = open("docs_to_transform.json", "w")
+    f = open(f"docs_to_transform_{team_id}.json", "w")
     f.write(json.dumps(docs_to_transform))
     f.close()
     return docs_to_transform
 
 def get_cached_docs_to_transform(team_id, language=None):
     try:
-        return json.loads(open("docs_to_transform.json").read())
+        return json.loads(open(f"docs_to_transform_{team_id}.json").read())
     except:
         return get_docs_to_transform(team_id, language)
 
