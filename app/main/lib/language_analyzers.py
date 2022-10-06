@@ -1,7 +1,7 @@
 import json
 from elasticsearch import Elasticsearch
 from flask import request, current_app as app
-SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn"]
+SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn", "pt-br"]
 #via https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#bengali-analyzer
 SETTINGS_BY_LANGUAGE = {
   "en": {
@@ -28,6 +28,7 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_english": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "english_possessive_stemmer",
             "lowercase",
             "english_stop",
@@ -58,6 +59,7 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_spanish": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "lowercase",
             "spanish_stop",
             "spanish_keywords",
@@ -67,7 +69,7 @@ SETTINGS_BY_LANGUAGE = {
       }
     }
   },
-  "pt-BR": {
+  "pt-br": {
     "analysis": {
       "filter": {
         "brazilian_stop": {
@@ -87,6 +89,7 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_brazilian": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "lowercase",
             "brazilian_stop",
             "brazilian_keywords",
@@ -116,6 +119,7 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_portuguese": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "lowercase",
             "portuguese_stop",
             "portuguese_keywords",
@@ -145,6 +149,7 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_hindi": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "lowercase",
             "decimal_digit",
             "hindi_keywords",
@@ -177,14 +182,14 @@ SETTINGS_BY_LANGUAGE = {
         "rebuilt_bengali": {
           "tokenizer":  "standard",
           "filter": [
+            "asciifolding",
             "lowercase",
             "decimal_digit",
             "bengali_keywords",
             "indic_normalization",
             "bengali_normalization",
             "bengali_stop",
-            "bengali_stemmer"
-          ]
+            "bengali_stemmer"          ]
         }
       }
     }
