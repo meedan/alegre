@@ -11,10 +11,6 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_english_" 
         },
-        "english_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["example"] 
-        },
         "english_stemmer": {
           "type":       "stemmer",
           "language":   "english"
@@ -25,13 +21,12 @@ SETTINGS_BY_LANGUAGE = {
         }
       },
       "analyzer": {
-        "rebuilt_english": {
+        "rebuilt_en": {
           "tokenizer":  "standard",
           "filter": [
             "english_possessive_stemmer",
             "lowercase",
             "english_stop",
-            "english_keywords",
             "english_stemmer",
             "asciifolding",
           ]
@@ -46,22 +41,17 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_spanish_" 
         },
-        "spanish_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["ejemplo"] 
-        },
         "spanish_stemmer": {
           "type":       "stemmer",
           "language":   "light_spanish"
         }
       },
       "analyzer": {
-        "rebuilt_spanish": {
+        "rebuilt_es": {
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
             "spanish_stop",
-            "spanish_keywords",
             "spanish_stemmer",
             "asciifolding",
           ]
@@ -76,22 +66,17 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_brazilian_" 
         },
-        "brazilian_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["exemplo"] 
-        },
         "brazilian_stemmer": {
           "type":       "stemmer",
           "language":   "brazilian"
         }
       },
       "analyzer": {
-        "rebuilt_brazilian": {
+        "rebuilt_pt-br": {
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
             "brazilian_stop",
-            "brazilian_keywords",
             "brazilian_stemmer",
             "asciifolding",
           ]
@@ -106,22 +91,17 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_portuguese_" 
         },
-        "portuguese_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["exemplo"] 
-        },
         "portuguese_stemmer": {
           "type":       "stemmer",
           "language":   "light_portuguese"
         }
       },
       "analyzer": {
-        "rebuilt_portuguese": {
+        "rebuilt_pt": {
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
             "portuguese_stop",
-            "portuguese_keywords",
             "portuguese_stemmer",
             "asciifolding",
           ]
@@ -136,22 +116,17 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_hindi_" 
         },
-        "hindi_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["उदाहरण"] 
-        },
         "hindi_stemmer": {
           "type":       "stemmer",
           "language":   "hindi"
         }
       },
       "analyzer": {
-        "rebuilt_hindi": {
+        "rebuilt_hi": {
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
             "decimal_digit",
-            "hindi_keywords",
             "indic_normalization",
             "hindi_normalization",
             "hindi_stop",
@@ -169,22 +144,17 @@ SETTINGS_BY_LANGUAGE = {
           "type":       "stop",
           "stopwords":  "_bengali_" 
         },
-        "bengali_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["উদাহরণ"] 
-        },
         "bengali_stemmer": {
           "type":       "stemmer",
           "language":   "bengali"
         }
       },
       "analyzer": {
-        "rebuilt_bengali": {
+        "rebuilt_bn": {
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
             "decimal_digit",
-            "bengali_keywords",
             "indic_normalization",
             "bengali_normalization",
             "bengali_stop",
@@ -204,14 +174,19 @@ def init_indices():
     index_name = app.config['ELASTICSEARCH_SIMILARITY']+"_"+lang
     if index_name not in indices:
       es.indices.create(index=index_name)
+    else:
+      es.indices.delete(index=index_name)
+      es.indices.create(index=index_name)
     es.indices.close(index=index_name)
-    es.indices.put_mapping(
-      body=json.load(open('./elasticsearch/alegre_similarity_base.json')),
+    mapping = json.load(open('./elasticsearch/alegre_similarity_base.json'))
+    mapping["properties"]["content"]["analyzer"] = "rebuilt_"+lang
+    es.indices.put_settings(
+      body=SETTINGS_BY_LANGUAGE[lang],
       # include_type_name=True,
       index=index_name
     )
-    es.indices.put_settings(
-      body=SETTINGS_BY_LANGUAGE[lang],
+    es.indices.put_mapping(
+      body=mapping,
       # include_type_name=True,
       index=index_name
     )
