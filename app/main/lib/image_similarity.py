@@ -98,6 +98,7 @@ def search_by_context(context, limit=None):
     rows = [dict(zip(keys, values)) for values in matches]
     for row in rows:
       row["context"] = [c for c in row["context"] if context_matches(context, c)]
+      row["model"] = "image"
     return rows
   except Exception as e:
     db.session.rollback()
@@ -135,7 +136,12 @@ def search_by_phash(phash, threshold, context, limit=None):
       'limit': limit,
     }, **context_hash)).fetchall()
     keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
-    return [dict(zip(keys, values)) for values in matches]
+    rows = []
+    for values in matches:
+      row = dict(zip(keys, values))
+      row["model"] = "image"
+      rows.append(row)
+    return rows
   except Exception as e:
     db.session.rollback()
     raise e

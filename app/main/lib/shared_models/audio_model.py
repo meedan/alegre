@@ -130,6 +130,7 @@ class AudioModel(SharedModel):
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
                 row["context"] = [c for c in row["context"] if context_matches(context, c)]
+                row["model"] = "audio"
             return rows
         except Exception as e:
             db.session.rollback()
@@ -170,6 +171,7 @@ class AudioModel(SharedModel):
             for values in matches:
                 row = dict(zip(keys, values))
                 # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
+                row["model"] = "audio"
                 rows.append(row)
             return rows
         except Exception as e:

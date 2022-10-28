@@ -195,7 +195,8 @@ class VideoModel(SharedModel):
                     results.append({
                         "context": qualified_matches[i].get("context", {}),
                         "filename": files[i],
-                        "score": score
+                        "score": score,
+                        "model": "video"
                     })
             if temporary:
                 self.delete(task)

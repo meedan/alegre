@@ -70,3 +70,8 @@ class Cld3LangidProvider:
       },
       'raw': prediction
     }
+
+  @staticmethod
+  def test():
+    cld3.get_language("Some text to check")
+    return True
