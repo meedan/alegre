@@ -124,6 +124,9 @@ def restrict_results(results, search_params, model_key):
     if search_params.get("min_es_score") and model_key == "elasticsearch":
         for result in results:
             if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
+                vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
+                for key in vector_keys:
+                    result.pop(key, None)
                 out_results.append(result)
         return out_results
     return results
