@@ -119,14 +119,18 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
+def strip_vectors(results):
+    for result in results:
+        vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
+        for key in vector_keys:
+            result.pop(key, None)
+    return results
+
 def restrict_results(results, search_params, model_key):
     out_results = []
     if search_params.get("min_es_score") and model_key == "elasticsearch":
         for result in results:
             if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
-                vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
-                for key in vector_keys:
-                    result.pop(key, None)
                 out_results.append(result)
         return out_results
     return results
@@ -174,10 +178,12 @@ def search_text_by_model(search_params):
         body=get_body_from_conditions(conditions),
         index=search_indices
     )
-    response = restrict_results(
-        insert_model_into_response(result['hits']['hits'], model_key),
-        search_params,
-        model_key
+    response = strip_vectors(
+        restrict_results(
+            insert_model_into_response(result['hits']['hits'], model_key),
+            search_params,
+            model_key
+        )
     )
     return {
         'result': response
