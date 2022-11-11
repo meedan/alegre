@@ -123,7 +123,7 @@ def strip_vectors(results):
     for result in results:
         vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
         for key in vector_keys:
-            result.pop(key, None)
+            result["_source"].pop(key, None)
     return results
 
 def restrict_results(results, search_params, model_key):
