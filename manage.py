@@ -207,12 +207,15 @@ def init_perl_functions():
         AS $$
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
-            my $span=20;
-            my $compare = $_SHARED{compare};
-            my @corr = &$compare(\@first, \@second, $span);
-            my $maxindex = $_SHARED{maxindex};
-            my $max_corr_index = &$maxindex(\@corr);
-            return 1-@corr[$max_corr_index]
+            if (scalar(@first)*0.8 <= scalar(@second) && scalar(@first)*1.2 >= scalar(@second)) {
+                my $span=20;
+                my $compare = $_SHARED{compare};
+                my @corr = &$compare(\@first, \@second, $span);
+                my $maxindex = $_SHARED{maxindex};
+                my $max_corr_index = &$maxindex(\@corr);
+                return 1-@corr[$max_corr_index]
+            }
+            return 0.0
         $$
         LANGUAGE plperl;
       """)
