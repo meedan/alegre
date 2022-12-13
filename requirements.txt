@@ -123,7 +123,7 @@ srsly==1.0.5
 starlette==0.14.2
 tdigest==0.5.2.2
 tenacity==6.1.0
-tensorboard==2.3.0
+tensorboard==2.9.0
 tensorboard-plugin-wit==1.8.0
 tensorflow==2.9.3
 tensorflow-estimator==2.9.0
