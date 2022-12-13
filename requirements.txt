@@ -126,9 +126,9 @@ tenacity==6.1.0
 tensorboard==2.3.0
 tensorboard-plugin-wit==1.8.0
 tensorflow==2.9.3
-tensorflow-estimator==2.3.0
+tensorflow-estimator==2.9.0
 tensorflow-hub==0.8.0
-tensorflow-text==2.3.0
+tensorflow-text==2.9.0
 termcolor==1.1.0
 thinc==7.3.1
 threadpoolctl==2.2.0
