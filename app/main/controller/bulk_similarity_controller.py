@@ -18,8 +18,8 @@ def each_slice(list, size):
         batch += 1
 
 def json_parse_timestamp(body):
-  body["created_at"] = body["created_at"].isoformat()
-  return body
+    body["created_at"] = body["created_at"].isoformat()
+    return body
 
 @api.route('/')
 class BulkSimilarityResource(Resource):
