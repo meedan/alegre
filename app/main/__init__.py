@@ -1,7 +1,7 @@
 from flask import Flask, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_restplus import Api
+from flask_restx import Api
 from flask_migrate import Migrate
 from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask

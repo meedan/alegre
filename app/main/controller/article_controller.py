@@ -1,6 +1,6 @@
 import sys
 from flask import abort, request, current_app as app
-from flask_restplus import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields
 from newspaper import Article
 from app.main import db
 from app.main.model.article import ArticleModel
