@@ -17,6 +17,10 @@ def each_slice(list, size):
         yield list[batch * size:(batch + 1) * size]
         batch += 1
 
+def json_parse_timestamp(body):
+  body["created_at"] = body["created_at"].isoformat()
+  return body
+
 @api.route('/')
 class BulkSimilarityResource(Resource):
     def get_bulk_write_object(self, doc_id, body):
@@ -30,7 +34,7 @@ class BulkSimilarityResource(Resource):
         doc_ids = []
         for document in request.json.get("documents", []):
             doc_ids.append(document.get("doc_id"))
-            bodies.append(get_document_body(similarity.get_body_for_text_document(document)))
+            bodies.append(json_parse_timestamp(get_document_body(similarity.get_body_for_text_document(document))))
         return doc_ids, bodies
         
     def submit_bulk_request(self, doc_ids, bodies):
