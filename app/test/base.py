@@ -1,10 +1,11 @@
 # from flask_testing import TestCase
-from unittest import TestCase
+# from unittest import TestCase
+from flask_unittest import ClientTestCase
 from app.main import db
 from manage import app
 
 
-class BaseTestCase(TestCase):
+class BaseTestCase(ClientTestCase):
     """ Base Tests """
 
     def create_app(self):
