@@ -31,7 +31,7 @@ fastapi==0.68.0
 feedfinder2==0.0.4
 feedparser==6.0.8
 filelock==3.0.12
-Flask==1.0.2
+Flask==1.1.0
 Flask-Bcrypt==0.7.1
 Flask-Migrate==2.2.1
 flask-restx==1.0.3
