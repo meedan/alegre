@@ -1,4 +1,5 @@
-from flask_testing import TestCase
+# from flask_testing import TestCase
+from unittest import TestCase
 from app.main import db
 from manage import app
 
