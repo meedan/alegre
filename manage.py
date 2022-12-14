@@ -207,7 +207,7 @@ def init_perl_functions():
         AS $$
             my @first=@{ $_[0]; };
             my @second=@{ $_[1]; };
-            if (scalar(@first) > 0 && scalar(@second) > 0 scalar(@first)*0.8 <= scalar(@second) && scalar(@first)*1.2 >= scalar(@second)) {
+            if (scalar(@first) > 0 && scalar(@second) > 0 && scalar(@first)*0.8 <= scalar(@second) && scalar(@first)*1.2 >= scalar(@second)) {
                 my $span=20;
                 my $compare = $_SHARED{compare};
                 my @corr = &$compare(\@first, \@second, $span);
