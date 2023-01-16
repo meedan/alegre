@@ -199,7 +199,7 @@ SETTINGS_BY_LANGUAGE = {
       "filter": {
         "french_elision": {
           "type":         "elision",
-          "articles_case": true,
+          "articles_case": True,
           "articles": [
               "l", "m", "t", "qu", "n", "s",
               "j", "d", "c", "jusqu", "quoiqu",
