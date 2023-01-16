@@ -166,99 +166,96 @@ SETTINGS_BY_LANGUAGE = {
     }
   },
   "ar": {
-      "filter": {
-        "arabic_stop": {
-          "type":       "stop",
-          "stopwords":  "_arabic_" 
-        },
-        "arabic_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["مثال"] 
-        },
-        "arabic_stemmer": {
-          "type":       "stemmer",
-          "language":   "arabic"
-        }
+    "filter": {
+      "arabic_stop": {
+        "type":       "stop",
+        "stopwords":  "_arabic_" 
       },
-      "analyzer": {
-        "rebuilt_arabic": {
-          "tokenizer":  "standard",
-          "filter": [
-            "lowercase",
-            "decimal_digit",
-            "arabic_stop",
-            "arabic_normalization",
-            "arabic_keywords",
-            "arabic_stemmer"
-          ]
-        }
+      "arabic_keywords": {
+        "type":       "keyword_marker",
+        "keywords":   ["مثال"] 
+      },
+      "arabic_stemmer": {
+        "type":       "stemmer",
+        "language":   "arabic"
+      }
+    },
+    "analyzer": {
+      "rebuilt_arabic": {
+        "tokenizer":  "standard",
+        "filter": [
+          "lowercase",
+          "decimal_digit",
+          "arabic_stop",
+          "arabic_normalization",
+          "arabic_keywords",
+          "arabic_stemmer"
+        ]
       }
     }
   },
   "fr": {
-      "filter": {
-        "french_elision": {
-          "type":         "elision",
-          "articles_case": True,
-          "articles": [
-              "l", "m", "t", "qu", "n", "s",
-              "j", "d", "c", "jusqu", "quoiqu",
-              "lorsqu", "puisqu"
-            ]
-        },
-        "french_stop": {
-          "type":       "stop",
-          "stopwords":  "_french_" 
-        },
-        "french_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["Example"] 
-        },
-        "french_stemmer": {
-          "type":       "stemmer",
-          "language":   "light_french"
-        }
-      },
-      "analyzer": {
-        "rebuilt_french": {
-          "tokenizer":  "standard",
-          "filter": [
-            "french_elision",
-            "lowercase",
-            "french_stop",
-            "french_keywords",
-            "french_stemmer"
+    "filter": {
+      "french_elision": {
+        "type":         "elision",
+        "articles_case": True,
+        "articles": [
+            "l", "m", "t", "qu", "n", "s",
+            "j", "d", "c", "jusqu", "quoiqu",
+            "lorsqu", "puisqu"
           ]
-        }
+      },
+      "french_stop": {
+        "type":       "stop",
+        "stopwords":  "_french_" 
+      },
+      "french_keywords": {
+        "type":       "keyword_marker",
+        "keywords":   ["Example"] 
+      },
+      "french_stemmer": {
+        "type":       "stemmer",
+        "language":   "light_french"
+      }
+    },
+    "analyzer": {
+      "rebuilt_french": {
+        "tokenizer":  "standard",
+        "filter": [
+          "french_elision",
+          "lowercase",
+          "french_stop",
+          "french_keywords",
+          "french_stemmer"
+        ]
       }
     }
   },
   "de": {
-      "filter": {
-        "german_stop": {
-          "type":       "stop",
-          "stopwords":  "_german_" 
-        },
-        "german_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["Beispiel"] 
-        },
-        "german_stemmer": {
-          "type":       "stemmer",
-          "language":   "light_german"
-        }
+    "filter": {
+      "german_stop": {
+        "type":       "stop",
+        "stopwords":  "_german_" 
       },
-      "analyzer": {
-        "rebuilt_german": {
-          "tokenizer":  "standard",
-          "filter": [
-            "lowercase",
-            "german_stop",
-            "german_keywords",
-            "german_normalization",
-            "german_stemmer"
-          ]
-        }
+      "german_keywords": {
+        "type":       "keyword_marker",
+        "keywords":   ["Beispiel"] 
+      },
+      "german_stemmer": {
+        "type":       "stemmer",
+        "language":   "light_german"
+      }
+    },
+    "analyzer": {
+      "rebuilt_german": {
+        "tokenizer":  "standard",
+        "filter": [
+          "lowercase",
+          "german_stop",
+          "german_keywords",
+          "german_normalization",
+          "german_stemmer"
+        ]
       }
     }
   },
@@ -290,30 +287,29 @@ SETTINGS_BY_LANGUAGE = {
     }
   },
   "id": {
-      "filter": {
-        "indonesian_stop": {
-          "type":       "stop",
-          "stopwords":  "_indonesian_" 
-        },
-        "indonesian_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["contoh"] 
-        },
-        "indonesian_stemmer": {
-          "type":       "stemmer",
-          "language":   "indonesian"
-        }
+    "filter": {
+      "indonesian_stop": {
+        "type":       "stop",
+        "stopwords":  "_indonesian_" 
       },
-      "analyzer": {
-        "rebuilt_indonesian": {
-          "tokenizer":  "standard",
-          "filter": [
-            "lowercase",
-            "indonesian_stop",
-            "indonesian_keywords",
-            "indonesian_stemmer"
-          ]
-        }
+      "indonesian_keywords": {
+        "type":       "keyword_marker",
+        "keywords":   ["contoh"] 
+      },
+      "indonesian_stemmer": {
+        "type":       "stemmer",
+        "language":   "indonesian"
+      }
+    },
+    "analyzer": {
+      "rebuilt_indonesian": {
+        "tokenizer":  "standard",
+        "filter": [
+          "lowercase",
+          "indonesian_stop",
+          "indonesian_keywords",
+          "indonesian_stemmer"
+        ]
       }
     }
   }
