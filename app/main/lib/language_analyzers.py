@@ -1,7 +1,7 @@
 import json
 from elasticsearch import Elasticsearch
 from flask import request, current_app as app
-SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn", "pt-br"]
+SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn", "pt-br", "ar", "fr", "de", "cjk", "id"]
 #via https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#bengali-analyzer
 SETTINGS_BY_LANGUAGE = {
   "en": {
@@ -160,6 +160,158 @@ SETTINGS_BY_LANGUAGE = {
             "bengali_stop",
             "bengali_stemmer",
             "asciifolding",
+          ]
+        }
+      }
+    }
+  },
+  "ar": {
+      "filter": {
+        "arabic_stop": {
+          "type":       "stop",
+          "stopwords":  "_arabic_" 
+        },
+        "arabic_keywords": {
+          "type":       "keyword_marker",
+          "keywords":   ["مثال"] 
+        },
+        "arabic_stemmer": {
+          "type":       "stemmer",
+          "language":   "arabic"
+        }
+      },
+      "analyzer": {
+        "rebuilt_arabic": {
+          "tokenizer":  "standard",
+          "filter": [
+            "lowercase",
+            "decimal_digit",
+            "arabic_stop",
+            "arabic_normalization",
+            "arabic_keywords",
+            "arabic_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "fr": {
+      "filter": {
+        "french_elision": {
+          "type":         "elision",
+          "articles_case": true,
+          "articles": [
+              "l", "m", "t", "qu", "n", "s",
+              "j", "d", "c", "jusqu", "quoiqu",
+              "lorsqu", "puisqu"
+            ]
+        },
+        "french_stop": {
+          "type":       "stop",
+          "stopwords":  "_french_" 
+        },
+        "french_keywords": {
+          "type":       "keyword_marker",
+          "keywords":   ["Example"] 
+        },
+        "french_stemmer": {
+          "type":       "stemmer",
+          "language":   "light_french"
+        }
+      },
+      "analyzer": {
+        "rebuilt_french": {
+          "tokenizer":  "standard",
+          "filter": [
+            "french_elision",
+            "lowercase",
+            "french_stop",
+            "french_keywords",
+            "french_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "de": {
+      "filter": {
+        "german_stop": {
+          "type":       "stop",
+          "stopwords":  "_german_" 
+        },
+        "german_keywords": {
+          "type":       "keyword_marker",
+          "keywords":   ["Beispiel"] 
+        },
+        "german_stemmer": {
+          "type":       "stemmer",
+          "language":   "light_german"
+        }
+      },
+      "analyzer": {
+        "rebuilt_german": {
+          "tokenizer":  "standard",
+          "filter": [
+            "lowercase",
+            "german_stop",
+            "german_keywords",
+            "german_normalization",
+            "german_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "cjk": {
+    "analysis": {
+      "filter": {
+        "english_stop": {
+          "type":       "stop",
+          "stopwords":  [ 
+            "a", "and", "are", "as", "at", "be", "but", "by", "for",
+            "if", "in", "into", "is", "it", "no", "not", "of", "on",
+            "or", "s", "such", "t", "that", "the", "their", "then",
+            "there", "these", "they", "this", "to", "was", "will",
+            "with", "www"
+          ]
+        }
+      },
+      "analyzer": {
+        "rebuilt_cjk": {
+          "tokenizer":  "standard",
+          "filter": [
+            "cjk_width",
+            "lowercase",
+            "cjk_bigram",
+            "english_stop"
+          ]
+        }
+      }
+    }
+  },
+  "id": {
+      "filter": {
+        "indonesian_stop": {
+          "type":       "stop",
+          "stopwords":  "_indonesian_" 
+        },
+        "indonesian_keywords": {
+          "type":       "keyword_marker",
+          "keywords":   ["contoh"] 
+        },
+        "indonesian_stemmer": {
+          "type":       "stemmer",
+          "language":   "indonesian"
+        }
+      },
+      "analyzer": {
+        "rebuilt_indonesian": {
+          "tokenizer":  "standard",
+          "filter": [
+            "lowercase",
+            "indonesian_stop",
+            "indonesian_keywords",
+            "indonesian_stemmer"
           ]
         }
       }
