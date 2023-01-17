@@ -255,7 +255,7 @@ SETTINGS_BY_LANGUAGE = {
       "filter": {
         "english_stop": {
           "type":       "stop",
-          "stopwords":  [ 
+          "stopwords":  [
             "a", "and", "are", "as", "at", "be", "but", "by", "for",
             "if", "in", "into", "is", "it", "no", "not", "of", "on",
             "or", "s", "such", "t", "that", "the", "their", "then",
