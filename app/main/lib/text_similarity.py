@@ -155,7 +155,7 @@ def search_text_by_model(search_params):
     if model_key.lower() == 'elasticsearch':
         conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
-        if language in SUPPORTED_LANGUAGES:
+        if language and language in SUPPORTED_LANGUAGES:
             search_indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
         else:
             error_text = f"[Alegre Similarity] [Similarity type: text] Language parameter value of {language} for text similarity search asserted, but not in SUPPORTED_LANGUAGES"
