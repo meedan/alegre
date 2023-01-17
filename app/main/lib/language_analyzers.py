@@ -171,17 +171,13 @@ SETTINGS_BY_LANGUAGE = {
         "type":       "stop",
         "stopwords":  "_arabic_" 
       },
-      "arabic_keywords": {
-        "type":       "keyword_marker",
-        "keywords":   ["مثال"] 
-      },
       "arabic_stemmer": {
         "type":       "stemmer",
         "language":   "arabic"
       }
     },
     "analyzer": {
-      "rebuilt_arabic": {
+      "rebuilt_ar": {
         "tokenizer":  "standard",
         "filter": [
           "lowercase",
@@ -209,17 +205,13 @@ SETTINGS_BY_LANGUAGE = {
         "type":       "stop",
         "stopwords":  "_french_" 
       },
-      "french_keywords": {
-        "type":       "keyword_marker",
-        "keywords":   ["Example"] 
-      },
       "french_stemmer": {
         "type":       "stemmer",
         "language":   "light_french"
       }
     },
     "analyzer": {
-      "rebuilt_french": {
+      "rebuilt_fr": {
         "tokenizer":  "standard",
         "filter": [
           "french_elision",
@@ -237,17 +229,13 @@ SETTINGS_BY_LANGUAGE = {
         "type":       "stop",
         "stopwords":  "_german_" 
       },
-      "german_keywords": {
-        "type":       "keyword_marker",
-        "keywords":   ["Beispiel"] 
-      },
       "german_stemmer": {
         "type":       "stemmer",
         "language":   "light_german"
       }
     },
     "analyzer": {
-      "rebuilt_german": {
+      "rebuilt_de": {
         "tokenizer":  "standard",
         "filter": [
           "lowercase",
@@ -292,17 +280,13 @@ SETTINGS_BY_LANGUAGE = {
         "type":       "stop",
         "stopwords":  "_indonesian_" 
       },
-      "indonesian_keywords": {
-        "type":       "keyword_marker",
-        "keywords":   ["contoh"] 
-      },
       "indonesian_stemmer": {
         "type":       "stemmer",
         "language":   "indonesian"
       }
     },
     "analyzer": {
-      "rebuilt_indonesian": {
+      "rebuilt_id": {
         "tokenizer":  "standard",
         "filter": [
           "lowercase",
