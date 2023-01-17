@@ -185,7 +185,6 @@ SETTINGS_BY_LANGUAGE = {
             "decimal_digit",
             "arabic_stop",
             "arabic_normalization",
-            "arabic_keywords",
             "arabic_stemmer"
           ]
         }
@@ -220,7 +219,6 @@ SETTINGS_BY_LANGUAGE = {
             "french_elision",
             "lowercase",
             "french_stop",
-            "french_keywords",
             "french_stemmer"
           ]
         }
@@ -245,7 +243,6 @@ SETTINGS_BY_LANGUAGE = {
           "filter": [
             "lowercase",
             "german_stop",
-            "german_keywords",
             "german_normalization",
             "german_stemmer"
           ]
@@ -298,7 +295,6 @@ SETTINGS_BY_LANGUAGE = {
           "filter": [
             "lowercase",
             "indonesian_stop",
-            "indonesian_keywords",
             "indonesian_stemmer"
           ]
         }
