@@ -80,7 +80,7 @@ class ArticleModel(db.Model):
             keywords=article.keywords,
             summary=article.summary,
             source_url=article.source_url,
-            tags=article.tags,
+            tags=list(article.tags),
             links=full_links
         )
         db.session.add(article_obj)

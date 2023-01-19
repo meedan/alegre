@@ -15,7 +15,7 @@ boto3==1.18.51
 botocore==1.21.51
 bz2file==0.98
 cachetools==2.1.0
-certifi==2018.10.15
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 charset-normalizer==2.0.4
@@ -59,13 +59,13 @@ itsdangerous==0.24
 jieba3k==0.35.1
 Jinja2==2.11.3
 jmespath==0.9.3
-joblib==1.0.1
+joblib==1.2.0
 json-logging==1.2.0
 jsonschema==2.6.0
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.1
 # lxml==4.6.3
-Mako==1.0.7
+Mako==1.2.2
 Markdown==3.2.1
 MarkupSafe==1.1.1
 msgpack==0.5.6
@@ -81,7 +81,7 @@ pact-python==1.4.5
 # Pillow==8.1.1
 plac==0.9.6
 preshed==2.0.1
-protobuf==3.9.2
+protobuf==3.18.3
 protobuf3-to-dict==0.1.5
 psutil==5.8.0
 psycopg2==2.8.4
@@ -92,7 +92,7 @@ pycld3==0.22
 pycparser==2.19
 pydantic==1.8.2
 pydub==0.25.1
-PyJWT==1.6.4
+PyJWT==2.4.0
 pyparsing==2.4.7
 python-dateutil==2.7.3
 python-editor==1.0.3
@@ -143,7 +143,7 @@ tqdm==4.27.0
 transformers==4.6.0
 twitter-text-parser==1.0.0
 typing-extensions==3.10.0.0
-ujson==1.35
+ujson==5.4.0
 urllib3==1.26.7
 uvicorn==0.15.0
 wasabi==0.8.2
