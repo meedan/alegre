@@ -54,7 +54,14 @@ def store_updated_docs(docs_to_transform):
                 keys_to_pop = [e for e in source.keys() if 'vector' in e or 'model_' in e]
                 for k in keys_to_pop:
                     source.pop(k, None)
-                update_or_create_document(source, doc_id, app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+                fail_count = 0
+                finished = False
+                while not finished and fail_count < 5:
+                    try:
+                        update_or_create_document(source, doc_id, app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+                        finished = True
+                    except elasticsearch.exceptions.ConnectionError:
+                        fail_count += 1
 
 def run(team_id, language=None):
     docs_to_transform = get_cached_docs_to_transform(team_id, language)
