@@ -64,5 +64,7 @@ def store_updated_docs(docs_to_transform):
                         fail_count += 1
 
 def run(team_id, language=None):
+    if language!=None and language not in SUPPORTED_LANGUAGES:
+         raise Exception(f"Unsupported language: {language} is not a supported language.")
     docs_to_transform = get_cached_docs_to_transform(team_id, language)
     store_updated_docs(docs_to_transform)
