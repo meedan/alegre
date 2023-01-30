@@ -18,6 +18,8 @@ services:
     image: docker.elastic.co/kibana/kibana:7.9.2
     ports:
       - "5601:5601"
+    depends_on:
+      - elasticsearch
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
   redis:
@@ -28,6 +30,7 @@ services:
       - "redis:/data"
   postgres:
     build: ./postgres
+    platform: linux/x86_64
     ports:
       - "5432:5432"
     volumes:
@@ -47,64 +50,69 @@ services:
       REPMGR_NODE_NAME: pg-0
       REPMGR_NODE_NETWORK_NAME: pg-0
       REPMGR_PORT_NUMBER: 5432
-  # Uncomment to run models locally
-  # xlm_r_bert_base_nli_stsb_mean_tokens:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: meantokens
-  # indian_sbert:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: indiansbert
-  # mdeberta_v3_filipino:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: mdebertav3filipino
-  # video:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: video
-  # audio:
-  #   build: .
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: audio
+  xlm_r_bert_base_nli_stsb_mean_tokens:
+    build: .
+    platform: linux/x86_64
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_NAME: meantokens
+  indian_sbert:
+    build: .
+    platform: linux/x86_64
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_NAME: indiansbert
+  mdeberta_v3_filipino:
+    build: .
+    platform: linux/x86_64
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_NAME: mdebertav3filipino
+  video:
+    build: .
+    platform: linux/x86_64
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_NAME: video
+  audio:
+    build: .
+    platform: linux/x86_64
+    command: ["make", "run_model"]
+    volumes:
+      - ".:/app"
+    depends_on:
+      - redis
+    env_file:
+      - .env_file
+    environment:
+      MODEL_NAME: audio
   queue_worker:
     build: .
+    platform: linux/x86_64
     command: ["make", "run_rq_worker"]
     volumes:
       - ".:/app"
@@ -114,6 +122,7 @@ services:
       - .env_file
   alegre:
     build: .
+    platform: linux/x86_64
     ports:
       - "3100:3100"
     volumes:
@@ -122,8 +131,8 @@ services:
       - postgres
       - kibana
       - redis
-      # - video
-      # - xlm_r_bert_base_nli_stsb_mean_tokens
-      # - indian_sbert
+      - video
+      - xlm_r_bert_base_nli_stsb_mean_tokens
+      - indian_sbert
     env_file:
       - .env_file
