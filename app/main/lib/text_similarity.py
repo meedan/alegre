@@ -30,6 +30,7 @@ def add_text(body, doc_id, language=None):
   return document
 
 def search_text(search_params):
+  # TODO: document schema for search params and validate schema?
   results = {"result": []}
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
@@ -106,7 +107,7 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, 'vector_"+str(len(vector))+"') + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, 'vector_"+str(model_key)+"') + 1.0", 
                   'params': {
                       'query_vector': vector
                   }

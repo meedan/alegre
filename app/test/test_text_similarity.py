@@ -19,9 +19,9 @@ class TestTextSimilarity(BaseTestCase):
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
 
-      def test_get_vector_model_base_conditions(self):
+    def test_get_vector_model_base_conditions(self):
         # check that vector number not included in query about to be run
-        query = get_vector_model_base_conditions({'content':'bananna'}, test_model_key, 0.5)
+        query = get_vector_model_base_conditions({'content':'bananna'}, self.test_model_key, 0.5)
         assert query is not None
         # looking for nested query object
         # {'query': {'script_score': {'min_score': 1.5, 'query': {'bool': 
@@ -31,7 +31,8 @@ class TestTextSimilarity(BaseTestCase):
         assert source_str is not None
         # the 768 part of the key should no longer be there
         assert 'vector_768' not in source_str
+        # the appropriate model key vector should be there
+        assert 'vector_'+self.test_model_key in source_str
         
-
 if __name__ == '__main__':
     unittest.main()
