@@ -4,7 +4,7 @@ from elasticsearch import  Elasticsearch
 from flask import current_app as app
 
 from app.test.base import BaseTestCase
-from app.main.lib.text_similarity import get_vector_model_base_conditions
+from app.main.lib.text_similarity import get_vector_model_base_conditions, get_document_body
 
 class TestTextSimilarity(BaseTestCase):
     test_model_key = 'indian-sbert'
@@ -33,6 +33,25 @@ class TestTextSimilarity(BaseTestCase):
         assert 'vector_768' not in source_str
         # the appropriate model key vector should be there
         assert 'vector_'+self.test_model_key in source_str
+
+    def test_get_document_body(self):
+        test_content = {
+                  'text': 'this is a test',
+                  'models': [self.test_model_key],  # e.g. indian-sbert, not elasticsearch
+                  'min_es_score': 0.1,
+                  'content': 'let there be content',
+                }
+        body = get_document_body(body=test_content)
+        # this should list the appropriate model
+        assert body.get('model') is self.test_model_key
+        assert body.get('model_'+self.test_model_key) is not None
+        # this should include the appropriate model vector
+        assert body.get('vector_'+self.test_model_key) is not None
+        # this should NOT have the old vector_768 included
+        assert body.get('vector_768') is None
+
+
+
         
 if __name__ == '__main__':
     unittest.main()
