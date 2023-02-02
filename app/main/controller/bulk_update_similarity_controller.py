@@ -5,6 +5,7 @@ from app.main.lib.fields import JsonObject
 from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
 from app.main.controller.bulk_similarity_controller import json_parse_timestamp
 from app.main.lib.text_similarity import get_document_body
+from app.main.lib import similarity
 
 api = Namespace('bulk_update_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_update_similarity_request', {
