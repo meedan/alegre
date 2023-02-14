@@ -419,6 +419,38 @@ class TestSimilarityBlueprint(BaseTestCase):
                 result = json.loads(response.data.decode())
                 self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
 
+    def test_auto_language_id(self):
+        # language examples as input to language classifier
+        examples = [{'text': 'केले को कैसे काटें', 'language': 'auto'}, # hi
+                    {'text': 'how to slice a banana', 'language': 'auto'}, # en
+                    {'text': 'como rebanar un plátano', 'language': 'auto'}, # es
+                    {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'auto'}] # bn
+        # expected language id classification for examples above
+        expected_lang_ids = ['hi','en','es','bn']
+        with self.client:
+            for n in range(len(examples)):
+                example = examples[n]
+                expected_lang = expected_lang_ids[n]
+                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
+                result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
+                self.assertEqual(True, result['success'])
+                es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+                es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
+                response = self.client.get(
+                    '/text/similarity/',
+                    data=json.dumps({
+                      'text': example['text'],
+                      #'language': example['language'], 
+                      'threshold': 0.0
+                    }),
+                    content_type='application/json'
+                )
+                result = json.loads(response.data.decode())
+                # indirectly checking classification by confirming which index was included in result
+                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang in [e['_index'] for e in result['result']])
+        
+      
+
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
             for term in [
