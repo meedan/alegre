@@ -147,7 +147,7 @@ ujson==5.4.0
 urllib3==1.26.7
 uvicorn==0.15.0
 wasabi==0.8.2
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 wrapt==1.11.1
 zipp==3.5.0
 pyacoustid==1.2.2
