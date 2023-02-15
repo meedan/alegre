@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 from elasticsearch.helpers import scan
 
-from flask import request, current_app as app
+from flask import current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 from app.main.lib.langid import GoogleLangidProvider
@@ -103,22 +103,23 @@ def store_document(body, doc_id, language=None):
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
     # 'auto' indicates we should try to guess the appropriate language
     if language == 'auto':
-        # TODO: what if google not configured?
         text = body['content']
-        try: 
-            language = GoogleLangidProvider.langid(text)
-        except google.auth.exceptions.RefreshError as e:
-            # credentials are probably missing but we do not want to crash
+        language = GoogleLangidProvider.langid(text)
+        if language not in SUPPORTED_LANGUAGES:
+            app.logger.warning('Detected language {} is not supported'.format(language))
             language = None
-            app.logger.warning('Error loading Google language parsing {}'.format(e))
-        
+
     if language is not None and language in SUPPORTED_LANGUAGES:
+      # also cache in the language-specific index
       indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+    
     results = []
     for index in indices:
       results.append(update_or_create_document(body, doc_id, index))
     result = results[0]
     success = False
+    # Note: when we modify more than one index we are only checking the first result
+    # should we report failure if any of them fail?
     if result['result'] == 'created' or result['result'] == 'updated':
         success = True
     return {
