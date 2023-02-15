@@ -440,7 +440,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     '/text/similarity/',
                     data=json.dumps({
                       'text': example['text'],
-                      #'language': example['language'], 
+                      'language': expected_lang, # <- note correct lang id must be here
                       'threshold': 0.0
                     }),
                     content_type='application/json'
