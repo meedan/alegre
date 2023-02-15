@@ -7,6 +7,8 @@ from elasticsearch.helpers import scan
 from flask import request, current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
+from app.main.lib.langid import GoogleLangidProvider
+
 def get_all_documents_matching_context(context):
   matches, clause_count = generate_matches(context)
   es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
@@ -99,7 +101,18 @@ def update_or_create_document(body, doc_id, index):
 
 def store_document(body, doc_id, language=None):
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
-    if language and language in SUPPORTED_LANGUAGES:
+    # 'auto' indicates we should try to guess the appropriate language
+    if language == 'auto':
+        # TODO: what if google not configured?
+        text = body['content']
+        try: 
+            language = GoogleLangidProvider.langid(text)
+        except: google.auth.exceptions.RefreshError
+            language = None
+            # TODO: log warning
+        
+        
+    if language is not None and language in SUPPORTED_LANGUAGES:
       indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
     results = []
     for index in indices:
