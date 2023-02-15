@@ -107,10 +107,10 @@ def store_document(body, doc_id, language=None):
         text = body['content']
         try: 
             language = GoogleLangidProvider.langid(text)
-        except: google.auth.exceptions.RefreshError
+        except google.auth.exceptions.RefreshError as e:
+            # credentials are probably missing but we do not want to crash
             language = None
-            # TODO: log warning
-        
+            app.logger.warning('Error loading Google language parsing {}'.format(e))
         
     if language is not None and language in SUPPORTED_LANGUAGES:
       indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
