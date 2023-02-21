@@ -1,11 +1,9 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
+from elasticsearch import Elasticsearch
 from app.main.lib.fields import JsonObject
-
+from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
-from app.main.controller.bulk_similarity_controller import json_parse_timestamp
-from app.main.lib.text_similarity import get_document_body
-from app.main.lib import similarity
 
 api = Namespace('bulk_update_similarity', description='bulk text similarity operations')
 similarity_request = api.model('bulk_update_similarity_request', {
@@ -13,12 +11,21 @@ similarity_request = api.model('bulk_update_similarity_request', {
 })
 @api.route('/')
 class BulkUpdateSimilarityResource(Resource):
+    # NOTE: this function doesn't update documents the same way as SimilarityController
+    # determine if still needed: https://meedan.atlassian.net/browse/CV2-2785
     def get_bodies_for_request(self):
         bodies = []
         doc_ids = []
         for document in request.json.get("documents", []):
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            body = {'model': document['model']}
+            model = SharedModel.get_client(document['model'])
+            vector = model.get_shared_model_response(document['text'])
+            body['vector_'+document['model']] = vector
+            if 'context' in document:
+                body['context'] = document['context']
             doc_ids.append(document.get("doc_id"))
-            bodies.append(json_parse_timestamp(get_document_body(similarity.get_body_for_text_document(document))))
+            bodies.append(body)
         return doc_ids, bodies
         
     @api.response(200, 'text successfully stored in the similarity database.')
