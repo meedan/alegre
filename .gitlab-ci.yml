@@ -4,7 +4,7 @@ stages:
   - build_live
   - deploy_live
 
-build_api_qa:
+build_qa:
   image: docker:latest
   services:
     - docker:dind
@@ -25,6 +25,7 @@ build_api_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
+    - opensearch-compat
 
 deploy_qa:
   image: python:3-alpine
@@ -67,6 +68,7 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
+    - opensearch-compat
 
 build_live:
   image: docker:latest
