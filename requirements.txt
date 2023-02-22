@@ -26,7 +26,7 @@ cymem==2.0.2
 cytoolz==0.9.0.1
 dill==0.2.8.2
 docutils==0.14
-elasticsearch==7.14.0
+elasticsearch==7.13.4
 fastapi==0.68.0
 feedfinder2==0.0.4
 feedparser==6.0.8
