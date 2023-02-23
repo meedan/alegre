@@ -599,8 +599,8 @@ class TestSimilarityBlueprint(BaseTestCase):
     def test_min_es_search(self):
         with self.client:
             data={
-                'text':'min_es_search',
-                'models':'elasticsearch',
+                'text':'min_es_score',
+                'models':['elasticsearch'],
             }
             response = self.client.post('/text/similarity/', data=json.dumps(data), content_type='application/json')
             result = json.loads(response.data.decode())
@@ -608,27 +608,20 @@ class TestSimilarityBlueprint(BaseTestCase):
 
             es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-
+            
             response = self.client.get(
                 '/text/similarity/',
-                data=json.dumps({
-                  'text': 'this is a test of min_es_score',
-                  'models': ["elasticsearch"],
-                  'min_es_score': 0,
-                }),
+                data=json.dumps(data),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
+            
             self.assertEqual(1, len(result['result']))
-            score=result['result'][0]['_score'] #Was 0.28 in testing
+            data['min_es_score']=10+result['result'][0]['_score']
 
             response = self.client.get(
                 '/text/similarity/',
-                data=json.dumps({
-                  'text': 'this is a test of min_es_score',
-                  'models': ["elasticsearch"],
-                  'min_es_score':10+score,
-                }),
+                data=json.dumps(data),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
