@@ -602,7 +602,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 'text':'min_es_search',
                 'models':'elasticsearch',
             }
-            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            response = self.client.post('/text/similarity/', data=json.dumps(data), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
