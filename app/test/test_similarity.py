@@ -595,5 +595,37 @@ class TestSimilarityBlueprint(BaseTestCase):
       result = json.loads(response.data.decode())
       self.assertEqual(1, len(result['result']))
 
+
+    def test_min_es_search(self):
+        with self.client:
+            data={
+                'text':'min_es_score',
+                'models':['elasticsearch'],
+            }
+            response = self.client.post('/text/similarity/', data=json.dumps(data), content_type='application/json')
+            result = json.loads(response.data.decode())
+            self.assertEqual(True, result['success'])
+
+            es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            
+            self.assertEqual(1, len(result['result']))
+            data['min_es_score']=10+result['result'][0]['_score']
+
+            response = self.client.get(
+                '/text/similarity/',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertEqual(0, len(result['result']))
+
 if __name__ == '__main__':
     unittest.main()
