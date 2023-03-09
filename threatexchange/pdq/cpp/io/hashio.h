@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+// Copyright (c) Meta Platforms, Inc. and affiliates.
 // ================================================================
 
 #ifndef HASHIO_H
@@ -93,16 +93,13 @@ void loadHashesFromFilesOrDie(
     std::vector<facebook::pdq::hashing::Hash256>& hashes);
 
 void loadHashesFromFileOrDie(
-    char* filename,
-    std::vector<facebook::pdq::hashing::Hash256>& hashes);
+    char* filename, std::vector<facebook::pdq::hashing::Hash256>& hashes);
 
 bool loadHashesFromFile(
-    char* filename,
-    std::vector<facebook::pdq::hashing::Hash256>& hashes);
+    char* filename, std::vector<facebook::pdq::hashing::Hash256>& hashes);
 
 void loadHashesFromStream(
-    FILE* fp,
-    std::vector<facebook::pdq::hashing::Hash256>& hashes);
+    FILE* fp, std::vector<facebook::pdq::hashing::Hash256>& hashes);
 
 } // namespace io
 } // namespace pdq

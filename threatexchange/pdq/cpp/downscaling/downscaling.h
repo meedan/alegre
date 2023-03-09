@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+// Copyright (c) Meta Platforms, Inc. and affiliates.
 // ================================================================
 
 #ifndef SCALING_H
@@ -121,17 +121,9 @@ void jaroszFilterFloat(
 
 // matrices as num_rows x num_cols in row-major order
 void boxAlongRowsFloat(
-    const float* in,
-    float* out,
-    int numRows,
-    int numCols,
-    int windowSize);
+    const float* in, float* out, int numRows, int numCols, int windowSize);
 void boxAlongColsFloat(
-    const float* in,
-    float* out,
-    int numRows,
-    int numCols,
-    int windowSize);
+    const float* in, float* out, int numRows, int numCols, int windowSize);
 
 void box1DFloat(
     const float* invec,

@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+// Copyright (c) Meta Platforms, Inc. and affiliates.
 // ================================================================
 
 #ifndef PDQHASHING_H
@@ -7,7 +7,7 @@
 
 // ================================================================
 // PDQ algorithm description:
-// https://github.com/facebookexternal/ThreatExchange-PDQ/blob/master/pdqhash-2017-10-09.pdf
+// https://github.com/facebookexternal/ThreatExchange-PDQ/blob/main/pdqhash-2017-10-09.pdf
 // ================================================================
 
 #include <pdq/cpp/common/pdqhashtypes.h>
