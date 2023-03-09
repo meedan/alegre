@@ -71,6 +71,7 @@ def search_image(params):
     threshold = 0.9
   if url:
     image = ImageModel.from_url(url, None)
+
     result = search_by_pdq(image.pdq, threshold, context, limit)
   else:
     result = search_by_context(context, limit)
@@ -154,7 +155,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_image(pdq # :pdq)
+            SELECT id, sha256, pdq, url, context, bit_count_image_new(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -165,7 +166,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_image(pdq # :pdq)
+            SELECT id, sha256, pdq, url, context, bit_count_image_new(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold

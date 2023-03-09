@@ -39,6 +39,6 @@ class ImageModel(db.Model):
     # phash = compute_phash_int(im)
     phash = None
     pdq = compute_pdq(im)
-
+    pdq = str.join("", [str(int(e)) for e in pdq])
     sha256 = sha256_stream(io.BytesIO(raw))
     return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at)
