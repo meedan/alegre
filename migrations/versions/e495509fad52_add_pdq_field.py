@@ -23,6 +23,8 @@ def upgrade():
                existing_type=sa.BIGINT(),
                nullable=True)
     op.create_index(op.f('ix_images_pdq'), 'images', ['pdq'], unique=False)
+    op.alter_column('images', 'phash', nullable=True)
+
     # ### end Alembic commands ###
 
 
@@ -33,4 +35,6 @@ def downgrade():
                existing_type=sa.BIGINT(),
                nullable=False)
     op.drop_column('images', 'pdq')
+    op.alter_column('images', 'phash', nullable=False)
+
     # ### end Alembic commands ###
