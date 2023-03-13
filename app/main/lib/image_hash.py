@@ -4,13 +4,11 @@ import struct
 import json
 import hashlib
 import numpy as np
-import os
 import io
-cmd = 'ln -s ThreatExchange/pdq/python/pdqhashing pdqhashing'
-os.system(cmd)
 
 from sqlalchemy import text
 from pdqhashing.hasher.pdq_hasher import PDQHasher
+#import pdqhash
 
 def ensure_pil(im):
   """Ensure image is Pillow format"""
@@ -38,22 +36,17 @@ def compute_pdq(im):
     :param im: Numpy.ndarray
     :returns: Imagehash.ImageHash
   """
+  #hash_vector, quality = pdqhash.compute(ensure_pil(im))
+  #print(type(hash_vector))
+  #print(hash_vector)
+  #return hash_vector.ravel().tolist()
   with io.BytesIO() as output:
-    ensure_pil(im).save(output, format="GIF")
+    ensure_pil(im).save(output, format="TIF")
     pdq_hasher = PDQHasher()
     hash_and_qual = pdq_hasher.fromBufferedImage(output)
-    print("hash_and_qual")
     hash_array =  imagehash.hex_to_hash(hash_and_qual.getHash().toHexString())
-    # print(type( imagehash.hex_to_hash(hash_and_qual.getHash().toHexString())))
-    print(type(hash_array))
-    print(hash_array.hash.ravel())
-    print("len(hash_array.hash.ravel())")
-
-    print(len(hash_array.hash.ravel()))
-  # return imagehash.hex_to_hash(hash_and_qual.getHash().toHexString())
-  return  hash_array.hash.ravel().tolist()
-  # return imagehash.phash(ensure_pil(im))
-
+    return  hash_array.hash.ravel().tolist()
+  
 # def pdq(filename):
 #     try:
 #         hash_and_qual=pdq_hasher.fromFile(filename)
