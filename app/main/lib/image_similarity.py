@@ -71,8 +71,13 @@ def search_image(params):
     threshold = 0.9
   if url:
     image = ImageModel.from_url(url, None)
-
-    result = search_by_pdq(image.pdq, threshold, context, limit)
+    model=app.config['IMAGE_MODEL']
+    if model and model.lower()=="pdq":
+      app.logger.info(f"Searching with PDQ.")
+      result = search_by_pdq(image.pdq, threshold, context, limit)
+    else:
+      app.logger.info(f"Searching with phash.")
+      result = search_by_phash(image.phash, threshold, context, limit)
   else:
     result = search_by_context(context, limit)
   return {

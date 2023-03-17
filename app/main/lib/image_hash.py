@@ -8,7 +8,6 @@ import io
 
 from sqlalchemy import text
 from pdqhashing.hasher.pdq_hasher import PDQHasher
-#import pdqhash
 
 def ensure_pil(im):
   """Ensure image is Pillow format"""
@@ -31,7 +30,7 @@ def compute_phash(im):
   """
   return imagehash.phash(ensure_pil(im))
 
-def compute_pdq(im):
+def compute_pdq(iobytes):
   """Compute perceptual hash using ImageHash library
     :param im: Numpy.ndarray
     :returns: Imagehash.ImageHash
@@ -40,12 +39,11 @@ def compute_pdq(im):
   #print(type(hash_vector))
   #print(hash_vector)
   #return hash_vector.ravel().tolist()
-  with io.BytesIO() as output:
-    ensure_pil(im).save(output, format="TIF")
-    pdq_hasher = PDQHasher()
-    hash_and_qual = pdq_hasher.fromBufferedImage(output)
-    hash_array =  imagehash.hex_to_hash(hash_and_qual.getHash().toHexString())
-    return  hash_array.hash.ravel().tolist()
+  pdq_hasher = PDQHasher()
+  hash_and_qual = pdq_hasher.fromBufferedImage(iobytes)
+  #hash_array =  imagehash.hex_to_hash(hash_and_qual.getHash().toHexString())
+  #return  hash_array.hash.ravel().tolist()
+  return hash_and_qual.getHash().dumpBitsFlat() #This is a string of 0's and 1's
   
 # def pdq(filename):
 #     try:
