@@ -25,10 +25,11 @@ def get_all_images():
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
-      row["model"] = "image"
-      row["context"] = ""
+      if values['pdq'] is not None:
+        row["model"] = "image"
+        row["context"] = ""
 
-      rows.append(row)
+        rows.append(row)
     return rows
   except Exception as e:
     db.session.rollback()
