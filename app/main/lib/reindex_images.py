@@ -27,8 +27,6 @@ def get_all_images():
       row = dict(zip(keys, values))
       if values['pdq'] is not None:
         row["model"] = "image"
-        row["context"] = ""
-
         rows.append(row)
     return rows
   except Exception as e:
