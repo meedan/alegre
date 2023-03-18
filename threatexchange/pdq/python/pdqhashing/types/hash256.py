@@ -165,6 +165,21 @@ class Hash256:
             i -= 1
         return "\n".join(str)
 
+    def dumpBitsFlat(self):
+        i = self.HASH256_NUM_SLOTS - 1
+        bits = []
+        while i >= 0:
+            word = self.w[i] & 0xFFFF
+            j = 15
+            while j >= 0:
+                if (word & (1 << j)) != 0:
+                    bits.append("1")
+                else:
+                    bits.append("0")
+                j -= 1
+            i -= 1
+        return "".join(bits)
+
     def dumpBitsAcross(self):
         i = self.HASH256_NUM_SLOTS - 1
         str = []
