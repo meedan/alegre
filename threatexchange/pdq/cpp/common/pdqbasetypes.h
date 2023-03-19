@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #ifndef PDQTYPES_H

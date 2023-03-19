@@ -1,11 +1,10 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
+#include <pdq/cpp/io/pdqio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pdq/cpp/io/pdqio.h>
-
 #include <stdexcept>
 
 // ================================================================
@@ -50,33 +49,6 @@ static void usage(char* argv0, int rc) {
       "1 afterward.\n");
   fprintf(fp, "--info: show information about the image-decoder library.\n");
   exit(rc);
-}
-
-extern "C" {
-// The below method will be exposed when generating WASM binary from c++ code
-// and will be used for generating the image hashes in browser.
-char* getHash(char* fileName) {
-  // printf("filename = %s",fileName);
-  /*EM_ASM({
-        console.log('fileName = ' + Module.UTF8ToString($0));
-     },fileName);*/
-  Hash256 pdqhash;
-  int quality;
-  int imageHeightTimesWidthUnused = 0;
-  float readSecondsUnused = 0.0;
-  float hashSecondsUnused = 0.0;
-  facebook::pdq::hashing::pdqHash256FromFile(
-      fileName,
-      pdqhash,
-      quality,
-      imageHeightTimesWidthUnused,
-      readSecondsUnused,
-      hashSecondsUnused);
-  std::string imageHash = pdqhash.format();
-  char* hash = new char[imageHash.length() + 1];
-  strcpy(hash, imageHash.c_str());
-  return hash;
-}
 }
 
 // ----------------------------------------------------------------
@@ -237,12 +209,13 @@ void process_file(
   if (do_pdqhash) {
     try {
       facebook::pdq::hashing::pdqHash256FromFile(
-          filename,
-          pdqhash,
-          quality,
-          imageHeightTimesWidthUnused,
-          readSecondsUnused,
-          hashSecondsUnused);
+        filename,
+        pdqhash,
+        quality,
+        imageHeightTimesWidthUnused,
+        readSecondsUnused,
+        hashSecondsUnused
+      );
     } catch (std::runtime_error& e) {
       fprintf(stderr, "%s: could not decode \"%s\".\n", argv0, filename);
       if (keep_going_after_errors) {

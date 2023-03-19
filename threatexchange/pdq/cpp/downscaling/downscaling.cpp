@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #include "downscaling.h"
@@ -7,7 +7,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <chrono>
 
 namespace facebook {
@@ -87,8 +86,7 @@ void fillFloatLumaFromRGB(
     int numCols,
     int rowStride,
     int colStride,
-    float* luma // matrix as num_rows x num_cols in
-                // row-major order
+    float* luma // matrix as num_rows x num_cols in row-major order
 ) {
   const uint8_t* pRrow = pRbase;
   const uint8_t* pGrow = pGbase;
@@ -118,8 +116,7 @@ void fillFloatLumaFromGrey(
     int numCols,
     int rowStride,
     int colStride,
-    float* luma // matrix as num_rows x num_cols in
-                // row-major order
+    float* luma // matrix as num_rows x num_cols in row-major order
 ) {
   const uint8_t* prow = pbase;
   for (int i = 0; i < numRows; i++) {
@@ -134,12 +131,10 @@ void fillFloatLumaFromGrey(
 
 // ----------------------------------------------------------------
 void decimateFloat(
-    const float* in, // matrix as in_num_rows x in_num_cols in
-                     // row-major order
+    const float* in, // matrix as in_num_rows x in_num_cols in row-major order
     int inNumRows,
     int inNumCols,
-    float* out, // matrix as out_num_rows x out_num_cols in
-                // row-major order
+    float* out, // matrix as out_num_rows x out_num_cols in row-major order
     int outNumRows,
     int outNumCols) {
   // target centers not corners:
@@ -268,10 +263,8 @@ int computeJaroszFilterWindowSize(int oldDimension, int newDimension) {
 
 // ----------------------------------------------------------------
 void jaroszFilterFloat(
-    float* buffer1, // matrix as num_rows x num_cols in
-                    // row-major order
-    float* buffer2, // matrix as num_rows x num_cols in
-                    // row-major order
+    float* buffer1, // matrix as num_rows x num_cols in row-major order
+    float* buffer2, // matrix as num_rows x num_cols in row-major order
     int numRows,
     int numCols,
     int windowSizeAlongRows,
@@ -449,10 +442,8 @@ void box1DFloat(
 
 // ----------------------------------------------------------------
 void boxAlongRowsFloat(
-    const float* in, // matrix as num_rows x num_cols in
-                     // row-major order
-    float* out, // matrix as num_rows x num_cols in row-major
-                // order
+    const float* in, // matrix as num_rows x num_cols in row-major order
+    float* out, // matrix as num_rows x num_cols in row-major order
     int numRows,
     int numCols,
     int window_size) {
@@ -463,10 +454,8 @@ void boxAlongRowsFloat(
 
 // ----------------------------------------------------------------
 void boxAlongColsFloat(
-    const float* in, // matrix as num_rows x num_cols in
-                     // row-major order
-    float* out, // matrix as num_rows x num_cols in row-major
-                // order
+    const float* in, // matrix as num_rows x num_cols in row-major order
+    float* out, // matrix as num_rows x num_cols in row-major order
     int numRows,
     int numCols,
     int window_size) {

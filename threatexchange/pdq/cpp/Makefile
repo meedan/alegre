@@ -1,19 +1,9 @@
 # ================================================================
-ifneq ($(findstring wasm, $(MAKECMDGOALS)), wasm)
-CXX=g++ # please customize according to your system --- Note: Apple clang on M1 is not currently supported 
-CC=$(CXX) -g -std=c++11
-WFLAGS=-Wall -Wno-char-subscripts -Wno-stringop-truncation -Wno-class-memaccess -Wno-misleading-indentation -Wno-unknown-warning-option -Werror
-LFLAGS=-lm -lpthread
-else
-CC=emcc -g -std=c++11 -D BUILD_WASM -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_RUNTIME_METHODS=['ccall','UTF8ToString ']  -s  EXPORTED_FUNCTIONS=['_getHash'] -s FORCE_FILESYSTEM=1 -s LLD_REPORT_UNDEFINED -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1
+CC=g++ -g -std=c++11
+IFLAGS=-I../.. -I.
+# -Wno-char-subscripts is because of CImg.h
 WFLAGS=-Wall -Wno-char-subscripts -Werror
 LFLAGS=-lm
-endif
-
-IFLAGS=-I../.. -I.
-# -Wno-char-subscripts -Wno-stringop-truncation -Wno-class-memaccess -Wno-misleading-indentation is because of CImg.h
-WFLAGS=-Wall -Wno-char-subscripts -Wno-stringop-truncation -Wno-class-memaccess -Wno-misleading-indentation -Wno-unknown-warning-option -Werror
-LFLAGS=-lm -lpthread
 
 CCOPT=$(CC) $(CFLAGS) $(IFLAGS) $(WFLAGS) -O3
 CCDBG=$(CC) -g $(CFLAGS) $(IFLAGS) $(WFLAGS)
@@ -56,17 +46,11 @@ MAINS=\
  hamming-tabulate \
  test-hamming
 
-WASMMAINS=pdq-photo-hasher
-
 TESTS=\
  run-test-bits run-test-hamming run-reg-test
 
 # ================================================================
 top: $(MAINS) $(TESTS)
-
-wasm: 
-	$(CCOPT) bin/pdq-photo-hasher.cpp $(LIBSRCS) -o pdq-photo-hasher.js $(LFLAGS)
-	@echo "All completed"
 
 run-test-bits: test-bits
 	./test-bits
@@ -133,11 +117,6 @@ mih-query: bin/mih-query.cpp $(LIBSRCS) $(LIBHDRS)
 # Note: works on Linux; not on OSX.
 test-mih-prof: bin/test-mih.cpp $(LIBSRCS) $(LIBHDRS)
 	$(CCDBG) -pg bin/test-mih.cpp $(LIBSRCS) -o test-mih-prof $(LFLAGS) -lpthread
-
-format:
-	find . -iname '*.h' -o -iname '*.cpp' | xargs clang-format -i
-check-format:
-	find . -iname '*.h' -o -iname '*.cpp' | xargs clang-format -n --Werror
 
 # ================================================================
 tags: .always

@@ -1,19 +1,19 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
+#include <pdq/cpp/io/hashio.h>
+#include <pdq/cpp/index/mih.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pdq/cpp/index/mih.h>
-#include <pdq/cpp/io/hashio.h>
-
-#include <chrono>
 #include <set>
+#include <chrono>
 
 // ================================================================
 // For regression-test usage. See also mih-query.cpp.
@@ -33,9 +33,9 @@ int main(int argc, char** argv) {
   if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
     usage(argv[0], 0);
   } else if (!strcmp(argv[1], "test1")) {
-    do_test_1(argv[0], argc - 2, argv + 2);
+    do_test_1(argv[0], argc-2, argv+2);
   } else if (!strcmp(argv[1], "test2")) {
-    do_test_2(argv[0], argc - 2, argv + 2);
+    do_test_2(argv[0], argc-2, argv+2);
 
   } else {
     usage(argv[0], 1);
@@ -48,10 +48,8 @@ static void usage(char* argv0, int rc) {
   FILE* fp = (rc == 0) ? stdout : stderr;
   fprintf(fp, "Usage: %s {test1} [zero or more hashes]\n", argv0);
   fprintf(fp, "Hashes should be in hexadecimal format without leading 0x.\n");
-  fprintf(
-      fp,
-      "If zero hashes are given on the command line, they are "
-      "read from stdin.\n");
+  fprintf(fp, "If zero hashes are given on the command line, they are "
+    "read from stdin.\n");
   exit(rc);
 }
 
@@ -64,7 +62,7 @@ static void do_test_1(char* argv0, int argc, char** argv) {
   int idx = 0;
   facebook::pdq::hashing::Hash256 h, n;
   facebook::pdq::index::MIH256<int> mih;
-  std::vector<std::pair<facebook::pdq::hashing::Hash256, int>> matches;
+  std::vector<std::pair<facebook::pdq::hashing::Hash256,int>> matches;
 
   h.clear();
   h.setBit(0);
@@ -102,18 +100,16 @@ static void do_test_1(char* argv0, int argc, char** argv) {
 
 // ----------------------------------------------------------------
 static void test_2_usage(char* argv0) {
-  fprintf(
-      stderr,
-      "Usage: %s test2 [-v] [--no-timings] {d} {needles} {haystack}\n",
-      argv0);
+  fprintf(stderr, "Usage: %s test2 [-v] [--no-timings] {d} {needles} {haystack}\n",
+    argv0);
   exit(1);
 }
 
 static void do_test_2(char* argv0, int argc, char** argv) {
   int maxDistance = 32;
   facebook::pdq::hashing::Hash256 needle;
-  std::vector<std::pair<facebook::pdq::hashing::Hash256, std::string>> needles;
-  std::vector<std::pair<facebook::pdq::hashing::Hash256, std::string>> haystack;
+  std::vector<std::pair<facebook::pdq::hashing::Hash256,std::string>> needles;
+  std::vector<std::pair<facebook::pdq::hashing::Hash256,std::string>> haystack;
   bool verbose = false;
   bool do_timings = true; // Omit for regtest so we can use exact diff
 
@@ -140,12 +136,10 @@ static void do_test_2(char* argv0, int argc, char** argv) {
 
   //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // Load input data
-  if (!facebook::pdq::io::loadHashesAndMetadataFromFile(
-          needles_filename, needles)) {
+  if (! facebook::pdq::io::loadHashesAndMetadataFromFile(needles_filename, needles)) {
     exit(1); // error message already printed out
   }
-  if (!facebook::pdq::io::loadHashesAndMetadataFromFile(
-          haystack_filename, haystack)) {
+  if (! facebook::pdq::io::loadHashesAndMetadataFromFile(haystack_filename, haystack)) {
     exit(1); // error message already printed out
   }
 
@@ -169,7 +163,7 @@ static void do_test_2(char* argv0, int argc, char** argv) {
 
   //  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // Build the MIH
-  std::vector<std::pair<facebook::pdq::hashing::Hash256, std::string>> matches;
+  std::vector<std::pair<facebook::pdq::hashing::Hash256,std::string>> matches;
   int num_matches = 0;
 
   std::chrono::time_point<std::chrono::system_clock> t1, t2;

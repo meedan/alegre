@@ -1,17 +1,17 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
+#include <pdq/cpp/io/hashio.h>
+#include <pdq/cpp/index/mih.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pdq/cpp/index/mih.h>
-#include <pdq/cpp/io/hashio.h>
-
 #include <set>
 
 // ================================================================

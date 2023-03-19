@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #ifndef PDQHAMMING_H
@@ -25,10 +25,10 @@ inline int hammingNorm16(Hash16 h) {
   return __builtin_popcount((unsigned)h);
 }
 inline int hammingDistance8(Hash8 a, Hash8 b) {
-  return __builtin_popcount((unsigned)(a ^ b));
+  return __builtin_popcount((unsigned)(a^b));
 }
 inline int hammingDistance16(Hash16 a, Hash16 b) {
-  return __builtin_popcount((unsigned)(a ^ b));
+  return __builtin_popcount((unsigned)(a^b));
 }
 #else
 // Implemented in pdqhamming.cpp with lookup tables.

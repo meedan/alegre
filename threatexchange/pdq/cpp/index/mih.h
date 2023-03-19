@@ -1,15 +1,14 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #ifndef MIH_H
 #define MIH_H
 
+#include <pdq/cpp/common/pdqhashtypes.h>
 #include <map>
 #include <set>
-#include <stdexcept>
 #include <vector>
-#include <pdq/cpp/common/pdqhashtypes.h>
 
 namespace facebook {
 namespace pdq {
@@ -73,9 +72,11 @@ class MIH256 {
 
  public:
   // ----------------------------------------------------------------
-  int size() { return _allHashes.size(); }
+  int size() {
+    return _allHashes.size();
+  }
 
-  std::vector<std::pair<facebook::pdq::hashing::Hash256, Metadata>> get() {
+  std::vector<std::pair<facebook::pdq::hashing::Hash256,Metadata>> get() {
     return _allHashes;
   }
 

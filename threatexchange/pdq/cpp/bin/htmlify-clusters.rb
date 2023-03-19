@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 
 # See README.md for context.
 

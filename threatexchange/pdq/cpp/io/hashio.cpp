@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #include <pdq/cpp/io/hashio.h>
@@ -121,7 +121,8 @@ void loadHashesFromFilesOrDie(
 
 // ----------------------------------------------------------------
 void loadHashesFromFileOrDie(
-    char* filename, std::vector<facebook::pdq::hashing::Hash256>& hashes) {
+    char* filename,
+    std::vector<facebook::pdq::hashing::Hash256>& hashes) {
   if (!loadHashesFromFile(filename, hashes)) {
     // Error message already printed out
     exit(1);
@@ -130,7 +131,8 @@ void loadHashesFromFileOrDie(
 
 // ----------------------------------------------------------------
 bool loadHashesFromFile(
-    char* filename, std::vector<facebook::pdq::hashing::Hash256>& hashes) {
+    char* filename,
+    std::vector<facebook::pdq::hashing::Hash256>& hashes) {
   FILE* fp = fopen(filename, "r");
   if (fp == nullptr) {
     perror("fopen");
@@ -144,7 +146,8 @@ bool loadHashesFromFile(
 
 // ----------------------------------------------------------------
 void loadHashesFromStream(
-    FILE* fp, std::vector<facebook::pdq::hashing::Hash256>& hashes) {
+    FILE* fp,
+    std::vector<facebook::pdq::hashing::Hash256>& hashes) {
   char* line = nullptr;
   size_t linelen = 0;
   while ((ssize_t)(linelen = getline(&line, &linelen, fp)) != -1) {

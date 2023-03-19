@@ -1,19 +1,15 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
-#include <pdq/cpp/downscaling/downscaling.h>
 #include <pdq/cpp/hashing/pdqhashing.h>
 #include <pdq/cpp/hashing/torben.h>
+#include <pdq/cpp/downscaling/downscaling.h>
 
 // ================================================================
 // PDQ algorithm description:
-// https://github.com/facebookexternal/ThreatExchange-PDQ/blob/main/pdqhash-2017-10-09.pdf
+// https://github.com/facebookexternal/ThreatExchange-PDQ/blob/master/pdqhash-2017-10-09.pdf
 // ================================================================
-
-#if defined(_WIN32)
-#define _USE_MATH_DEFINES
-#endif
 
 #include <cassert>
 #include <chrono>

@@ -1,5 +1,5 @@
 // ================================================================
-// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 // ================================================================
 
 #include <pdq/cpp/common/pdqhashtypes.h>
@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdexcept>
 #include <string>
+#include <stdexcept>
 
 namespace facebook {
 namespace pdq {
@@ -195,12 +195,6 @@ Hash256 Hash256::fuzz(int numErrorBits) {
   return rv;
 }
 
-int hammingDistance(const Hash256& hash1, const Hash256& hash2) {
-  return hash1.hammingDistance(hash2);
-}
-std::string hashToString(const Hash256& hash) {
-  return hash.format();
-}
 } // namespace hashing
 } // namespace pdq
 } // namespace facebook
