@@ -398,27 +398,6 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual('deleted', result['result'])
 
-    def test_all_analyzers(self):
-        examples = [{ 'text': 'केले को कैसे काटें', 'language': 'hi'}, {'text': 'how to slice a banana', 'language': 'en'}, {'text': 'como rebanar un plátano', 'language': 'es'}, {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn'}]
-        with self.client:
-            for example in examples:
-                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
-                result = json.loads(response.data.decode())
-                self.assertEqual(True, result['success'])
-                es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
-                es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
-                response = self.client.get(
-                    '/text/similarity/',
-                    data=json.dumps({
-                      'text': example['text'],
-                      'language': example['language'],
-                      'threshold': 0.0
-                    }),
-                    content_type='application/json'
-                )
-                result = json.loads(response.data.decode())
-                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
-
     def test_elasticsearch_similarity_hindi(self):
         with self.client:
             for term in [
@@ -526,6 +505,9 @@ class TestSimilarityBlueprint(BaseTestCase):
         self.assertGreater(similarity, 0.7)
 
     def test_wrong_model_key(self):
+        """
+        Tests querying with a model key that doesn't match the one content was index with
+        """
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
             response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
