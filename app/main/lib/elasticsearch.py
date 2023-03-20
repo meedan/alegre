@@ -7,7 +7,8 @@ from elasticsearch.helpers import scan
 from flask import current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-from app.main.lib.langid import GoogleLangidProvider
+#from app.main.lib.langid import Cld3LangidProvider as LangidProvider
+from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 
 def get_all_documents_matching_context(context):
   matches, clause_count = generate_matches(context)
@@ -104,18 +105,21 @@ def store_document(body, doc_id, language=None):
     # 'auto' indicates we should try to guess the appropriate language
     if language == 'auto':
         text = body['content']
-        language = GoogleLangidProvider.langid(text)
+        language = LangidProvider.langid(text)['result']['language']
         if language not in SUPPORTED_LANGUAGES:
             app.logger.warning('Detected language {} is not supported'.format(language))
             language = None
 
-    if language is not None and language in SUPPORTED_LANGUAGES:
+    if (language is not None) and (language in SUPPORTED_LANGUAGES):
       # also cache in the language-specific index
       indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
     
     results = []
     for index in indices:
-      results.append(update_or_create_document(body, doc_id, index))
+      index_result = update_or_create_document(body, doc_id, index)
+      results.append(index_result)
+      if index_result['result'] not in ['created', 'updated']:
+          app.logger.warning('Problem adding document to ES index for language {0}: {1}'.format(language, index_result))
     result = results[0]
     success = False
     # Note: when we modify more than one index we are only checking the first result

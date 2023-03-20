@@ -3,7 +3,8 @@ from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-from app.main.lib.langid import GoogleLangidProvider
+#from app.main.lib.langid import Cld3LangidProvider as LangidProvider
+from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
@@ -156,7 +157,7 @@ def search_text_by_model(search_params):
         # 'auto' indicates we should try to guess the appropriate language
         if language == 'auto':
             text = search_params.get("content")
-            language = GoogleLangidProvider.langid(text)
+            language = LangidProvider.langid(text)['result']['language']
             if language not in SUPPORTED_LANGUAGES:
                 app.logger.warning('Detected language in query text {} is not explicitly supported for indexing, defaulting to "none"'.format(language))
                 language = None
