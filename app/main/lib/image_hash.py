@@ -4,8 +4,6 @@ import struct
 import json
 import hashlib
 import numpy as np
-import io
-
 from sqlalchemy import text
 from pdqhashing.hasher.pdq_hasher import PDQHasher
 
