@@ -15,17 +15,17 @@ app.app_context()
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
-def get_all_images(min_id):
+def get_all_images(min_id,limit = 1000):
   try:
     cmd = """
       SELECT id, sha256, url, context,created_at,pdq  FROM images 
       WHERE pdq IS NULL AND id > :min_id 
       ORDER BY id 
-      LIMIT 2 
+      LIMIT :limit 
     """
     matches = db.session.execute(text(cmd), dict(**{
       'min_id': min_id,
-      # 'limit': limit,
+      'limit': limit,
     })).fetchall()
     keys = ('id', 'sha256', 'url', 'context','created_at','pdq')
     rows = []
@@ -39,13 +39,20 @@ def get_all_images(min_id):
     raise e
 
 def calculate_pdq_for_all_images():
+  from datetime import datetime
+
   rows = get_all_images(-1)
   while len(rows) > 0:
     print("starting a batch ")  # todo add time
+    time_before = datetime.now()
     for item in rows:
       # print(item)
       add_image_pdq(item)
-    print("ended a batch")
+    time_after = datetime.now()
+
+
+    delta = time_after - time_before
+    print("ended a batch in:", delta.total_seconds())
     rows = get_all_images(rows[-1]['id'])
 
   return 1
@@ -71,5 +78,7 @@ def add_image_pdq(save_params):
       'success': True
     }
   except Exception as e:
+    print("error while processing image: ",save_params['url'])
+    print(e)
     db.session.rollback()
     # raise e
