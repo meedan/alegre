@@ -5,7 +5,7 @@ from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
-from app.main.lib.image_similarity import add_image_pdq
+# from app.main.lib.image_similarity import add_image_pdq
 
 from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
@@ -15,32 +15,61 @@ app.app_context()
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 
-def get_all_images():
+def get_all_images(min_id):
   try:
     cmd = """
-      SELECT id, sha256, url, context,created_at,pdq  FROM images
+      SELECT id, sha256, url, context,created_at,pdq  FROM images 
+      WHERE pdq IS NULL AND id > :min_id 
+      ORDER BY id 
+      LIMIT 2 
     """
-    matches = db.session.execute(text(cmd)).fetchall()
+    matches = db.session.execute(text(cmd), dict(**{
+      'min_id': min_id,
+      # 'limit': limit,
+    })).fetchall()
     keys = ('id', 'sha256', 'url', 'context','created_at','pdq')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
-      if values['pdq'] is not None:
-        row["model"] = "image"
-        rows.append(row)
+      row["model"] = "image"
+      rows.append(row)
     return rows
   except Exception as e:
     db.session.rollback()
     raise e
 
 def calculate_pdq_for_all_images():
-  rows = get_all_images()
-  print(rows)
-  for item in rows:
-    add_image_pdq(item)
+  rows = get_all_images(-1)
+  while len(rows) > 0:
+    print("starting a batch ")  # todo add time
+    for item in rows:
+      # print(item)
+      add_image_pdq(item)
+    print("ended a batch")
+    rows = get_all_images(rows[-1]['id'])
 
-    return 1
+  return 1
 
+# @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
+def alter_pdq(image):
+  try:
+    # First locate existing image and append new context
+    existing = db.session.query(ImageModel).filter(ImageModel.id==image.id).one()
+    existing.pdq = image.pdq
+    flag_modified(existing, 'pdq')
+    db.session.commit()
+  except Exception as e:
+    db.session.rollback()
+    raise e
 
-# print("edy")
-# print(calculate_pdq_for_all_images())
+def add_image_pdq(save_params):
+  try:
+    image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"))
+    image.id = save_params['id']
+    alter_pdq(image)
+    return {
+      'success': True
+    }
+  except Exception as e:
+    db.session.rollback()
+    # raise e

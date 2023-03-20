@@ -50,22 +50,22 @@ def save(image):
     raise e
 
 
-@tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-def alter_pdq(image):
-  try:
-    # First locate existing image and append new context
-    existing = db.session.query(ImageModel).filter(ImageModel.url==image.url).one()
-    existing.pdq = image.pdq
-    flag_modified(existing, 'pdq')
-    db.session.commit()
-  except NoResultFound as e:
-    # Otherwise, add new image, but with context as an array
-    if image.context:
-      image.context = [image.context]
-    db.session.add(image)
-  except Exception as e:
-    db.session.rollback()
-    raise e
+# @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
+# def alter_pdq(image):
+#   try:
+#     # First locate existing image and append new context
+#     existing = db.session.query(ImageModel).filter(ImageModel.url==image.url).one()
+#     existing.pdq = image.pdq
+#     flag_modified(existing, 'pdq')
+#     db.session.commit()
+#   except NoResultFound as e:
+#     # Otherwise, add new image, but with context as an array
+#     if image.context:
+#       image.context = [image.context]
+#     db.session.add(image)
+#   except Exception as e:
+#     db.session.rollback()
+#     raise e
 
 def add_image(save_params):
   try:
@@ -81,22 +81,22 @@ def add_image(save_params):
     db.session.rollback()
     raise e
 
-def add_image_pdq(save_params):
-  try:
-    if save_params.get("doc_id"):
-      print("ha")
-      delete_image(save_params)
-    image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"))
-    print("image")
-
-    print(image.pdq)
-    alter_pdq(image)
-    return {
-      'success': True
-    }
-  except Exception as e:
-    db.session.rollback()
-    raise e
+# def add_image_pdq(save_params):
+#   try:
+#     if save_params.get("doc_id"):
+#       print("ha")
+#       delete_image(save_params)
+#     image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"))
+#     print("image")
+#
+#     print(image.pdq)
+#     alter_pdq(image)
+#     return {
+#       'success': True
+#     }
+#   except Exception as e:
+#     db.session.rollback()
+#     raise e
 
 def search_image(params):
   url = params.get("url")
