@@ -289,7 +289,16 @@ def init():
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
     )
-
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+         CREATE OR REPLACE FUNCTION bit_count_pdq(value bit(256))
+         RETURNS double precision
+         AS $$ SELECT 1.0-length(replace(value::text,'0',''))::float/length(value::text); $$
+         LANGUAGE SQL IMMUTABLE STRICT;
+       """)
+    )
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',

@@ -4,3 +4,4 @@ google_credentials.json
 .coverage
 .idea
 persistent_disk
+.DS_Store
