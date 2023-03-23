@@ -53,7 +53,7 @@ def add_item(item, similarity_type):
     doc_id = item.pop("doc_id", None)
     language = item.pop("language", None)
     response = add_text(item, doc_id, language)
-  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for delete was {response}")
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for add was {response}")
   return response
 
 def delete_item(item, similarity_type):

@@ -4,7 +4,7 @@ stages:
   - build_live
   - deploy_live
 
-build_api_qa:
+build_qa:
   image: docker:latest
   services:
     - docker:dind
