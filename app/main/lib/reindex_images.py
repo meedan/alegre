@@ -11,10 +11,6 @@ from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
 
-app.app_context()
-def _after_log(retry_state):
-  app.logger.debug("Retrying image similarity...")
-
 def get_all_images(min_id,limit = 1000):
   try:
     cmd = """

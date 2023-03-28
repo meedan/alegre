@@ -36,4 +36,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN cd threatexchange/pdq/python && pip install .
 RUN python3 -c 'import nltk; nltk.download("punkt")'
 
-CMD ["make", "run"]
+CMD ["python", "manage.py", "run_pdq_migration"]

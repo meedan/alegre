@@ -18,6 +18,7 @@ from app.main.model import image
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
+from app.main.lib.reindex_images import calculate_pdq_for_all_images
 from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
@@ -332,6 +333,12 @@ def run_rq_worker():
       qs = ['default']
       w = Worker(qs)
       w.work()
-  
+
+@manager.command
+def run_pdq_migration():
+  print("\n\n!!! Running PDQ migration !!!\n\n")
+  calculate_pdq_for_all_images()
+  quit()
+ 
 if __name__ == '__main__':
   manager.run()
