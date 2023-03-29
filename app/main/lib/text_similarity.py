@@ -29,7 +29,6 @@ def add_text(body, doc_id, language=None):
   return document
 
 def search_text(search_params):
-  # TODO: document schema for search params and validate schema?
   results = {"result": []}
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
