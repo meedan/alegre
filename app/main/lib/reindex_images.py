@@ -66,6 +66,8 @@ def alter_pdq(image):
     raise e
 
 def add_image_pdq(save_params):
+  if "https://assets.meedan.com/" in save_params['url']:
+    save_params['url']=save_params['url'].replace("https://assets.meedan.com/","https://assets.checkmedia.org/")
   try:
     image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"))
     image.id = save_params['id']
