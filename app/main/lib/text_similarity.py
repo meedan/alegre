@@ -105,7 +105,7 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(len(vector))+"']) + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0", 
                   'params': {
                       'query_vector': vector
                   }
