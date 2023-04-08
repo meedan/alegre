@@ -104,7 +104,7 @@ def search_by_context(context, limit=None):
     rows = [dict(zip(keys, values)) for values in matches]
     for row in rows:
       row["context"] = [c for c in row["context"] if context_matches(context, c)]
-      row["model"] = "image"
+      row["model"] = "image/context"
     return rows
   except Exception as e:
     db.session.rollback()
@@ -145,7 +145,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
-      row["model"] = "image"
+      row["model"] = "image/phash"
       rows.append(row)
     return rows
   except Exception as e:
@@ -188,7 +188,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
-      row["model"] = "image"
+      row["model"] = "image/pdq"
       rows.append(row)
     return rows
   except Exception as e:
