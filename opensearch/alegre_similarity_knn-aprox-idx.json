@@ -1,19 +1,6 @@
 { 
   "mappings": {
     "properties": {
-      "vector_512": {
-        "type": "knn_vector",
-        "dimension": 512,
-        "method": {
-          "name": "hnsw",
-          "space_type": "cosinesimil",
-          "engine": "nmslib",
-          "parameters": {
-            "ef_construction": 512,
-            "m": 24
-          }
-        }
-      },
       "vector_768": {
         "type": "knn_vector",
         "dimension": 768,
