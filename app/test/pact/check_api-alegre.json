@@ -109,10 +109,9 @@
             "flags": {
               "adult": 1,
               "spoof": 2,
-              "medical": 3,
+              "medical": 2,
               "violence": 2,
-              "racy": 1,
-              "spam": 0
+              "racy": 1
             }
           }
         }
