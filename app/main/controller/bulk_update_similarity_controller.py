@@ -51,4 +51,6 @@ class BulkUpdateSimilarityResource(Resource):
     @api.expect(similarity_request, validate=True)
     def post(self):
         doc_ids, bodies = self.get_bodies_for_request()
-        return BulkSimilarityResource().submit_bulk_request(doc_ids, bodies)
+        response = BulkSimilarityResource().submit_bulk_request(doc_ids, bodies)
+        print(response)
+        return response
