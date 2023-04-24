@@ -5,7 +5,7 @@ MAINTAINER Alexey Kovrizhkin <lekovr+dopos@gmail.com>
 ENV DOCKERFILE_VERSION 190701
 
 RUN rm -rf /etc/apt/sources.list.d/* && \
-    echo 'deb http://deb.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
+    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
     echo 'deb http://security.debian.org/ stretch/updates main contrib non-free' >> /etc/apt/sources.list && \
     apt-get update && apt-get install apt-transport-https libcurl3-gnutls -y && \
     echo 'deb https://apt-archive.postgresql.org/pub/repos/apt stretch-pgdg main' >> /etc/apt/sources.list && \
