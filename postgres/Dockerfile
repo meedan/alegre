@@ -2,16 +2,11 @@ FROM postgres:11.4
 
 MAINTAINER Alexey Kovrizhkin <lekovr+dopos@gmail.com>
 
-ENV DOCKERFILE_VERSION 190701
+ENV DOCKERFILE_VERSION  190701
 
-RUN rm -rf /etc/apt/sources.list.d/* && \
-    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
-    echo 'deb http://security.debian.org/ stretch/updates main contrib non-free' >> /etc/apt/sources.list && \
-    apt-get update && apt-get install apt-transport-https libcurl3-gnutls -y && \
-    echo 'deb https://apt-archive.postgresql.org/pub/repos/apt stretch-pgdg main' >> /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     gawk \
-    postgresql-plperl-$PG_MAJOR \
+    postgresql-plperl-11 \
     && localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
