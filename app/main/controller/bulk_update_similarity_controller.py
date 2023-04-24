@@ -52,5 +52,4 @@ class BulkUpdateSimilarityResource(Resource):
     def post(self):
         doc_ids, bodies = self.get_bodies_for_request()
         response = BulkSimilarityResource().submit_bulk_request(doc_ids, bodies)
-        print(response)
-        return response
+        return [e.pop("created_at", None) for e in response]
