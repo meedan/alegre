@@ -8,7 +8,7 @@ from app.main.controller.bulk_similarity_controller import BulkSimilarityResourc
 from app.main.lib import similarity
 from app.main.lib.text_similarity import get_document_body
 from app.main.lib.elasticsearch import merge_contexts
-def get_documents_by_ids(index, ids):
+def get_documents_by_ids(index, ids, es):
     query = {
         "query": {
             "ids": {
@@ -30,7 +30,7 @@ class BulkUpdateSimilarityResource(Resource):
     def get_bodies_for_request(self):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         bodies_by_doc_id = {}
-        existing_docs = get_documents_by_ids(app.config['ELASTICSEARCH_SIMILARITY'], [e.get("doc_id") for e in request.json.get("documents", [])])
+        existing_docs = get_documents_by_ids(app.config['ELASTICSEARCH_SIMILARITY'], [e.get("doc_id") for e in request.json.get("documents", [])], es)
         for document in request.json.get("documents", []):
             cleaned_document = similarity.get_body_for_text_document(document)
             for model_name in cleaned_document.get("models"):
