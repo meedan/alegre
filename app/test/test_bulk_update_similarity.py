@@ -51,6 +51,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
                 term = { 'text': 'how to slice a banana', 'model': 'multi-sbert', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
                 response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
                 result = json.loads(response.data.decode())
+                print(result)
                 self.assertTrue(result)
                 self.assertTrue(result[0]['_id'], "123456")
 
