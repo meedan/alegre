@@ -80,6 +80,6 @@ class BulkUpdateSimilarityResource(Resource):
         all_written = []
         for response_data in response:
             for row in response_data:
-                e.pop("created_at", None)
-                all_written.append(e)
+                row.pop("created_at", None)
+                all_written.append(row)
         return all_written
