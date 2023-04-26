@@ -26,7 +26,7 @@ def merge_key_list(existing, new_values):
     for v in new_values:
         if v not in existing:
             existing.append(v)
-    return merged
+    return existing
 
 def get_merged_contexts(tmp_doc, existing_doc):
     return copy.deepcopy(merge_contexts(get_document_body(tmp_doc), {"_source": existing_doc})["contexts"])
