@@ -27,13 +27,16 @@ def merge_key_list(existing, new_values):
         if v not in existing:
             existing.append(v)
     return merged
-    
+
+def get_merged_contexts(tmp_doc, existing_doc):
+    return copy.deepcopy(merge_contexts(get_document_body(tmp_doc), {"_source": existing_doc})["contexts"])
+
 def update_existing_doc_values(document, existing_doc):
     cleaned_document = similarity.get_body_for_text_document(document)
     for model_name in cleaned_document.get("models"):
         tmp_doc = copy.deepcopy(cleaned_document)
         tmp_doc["models"] = [model_name]
-        tmp_doc["contexts"] = copy.deepcopy(merge_contexts(get_document_body(tmp_doc), {"_source": existing_doc})["contexts"])
+        tmp_doc["contexts"] = get_merged_contexts(tmp_doc, existing_doc)
         for key, value in get_document_body(tmp_doc).items():
             if key in ["models", "contexts"]:
                 existing_doc[key] = merge_key_list(existing_doc.get(key, []), value)
