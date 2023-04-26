@@ -23,27 +23,35 @@ def json_parse_timestamp(body):
 
 @api.route('/')
 class BulkSimilarityResource(Resource):
-    def get_bulk_write_object(self, doc_id, body):
-        return dict(
-            **{'_index': app.config['ELASTICSEARCH_SIMILARITY'], '_type': '_doc', '_id': doc_id},
-            **body
-        )
+    def get_bulk_write_object(self, doc_id, body, op_type="index"):
+        return {
+            "_op_type": op_type,
+            '_index': app.config['ELASTICSEARCH_SIMILARITY'],
+            '_id': doc_id,
+            'doc': body
+        }
 
     def get_bodies_for_request(self):
         bodies = []
         doc_ids = []
         for document in request.json.get("documents", []):
             doc_ids.append(document.get("doc_id"))
-            bodies.append(json_parse_timestamp(get_document_body(similarity.get_body_for_text_document(document))))
+            bodies.append(
+                json_parse_timestamp(
+                    get_document_body(
+                        similarity.get_body_for_text_document(document)
+                    )
+                )
+            )
         return doc_ids, bodies
-        
-    def submit_bulk_request(self, doc_ids, bodies):
+
+    def submit_bulk_request(self, doc_ids, bodies, op_type="index"):
         es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
         writables = []
         for doc_body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
             to_write = []
             for doc_id, body in doc_body_set:
-                to_write.append(self.get_bulk_write_object(doc_id, body))
+                to_write.append(self.get_bulk_write_object(doc_id, body, op_type))
                 writables.append(to_write[-1])
             helpers.bulk(es, to_write)
         return writables
