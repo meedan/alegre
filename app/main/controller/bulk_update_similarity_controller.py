@@ -82,4 +82,5 @@ class BulkUpdateSimilarityResource(Resource):
             for row in response_data:
                 row.pop("created_at", None)
                 all_written.append(row)
+        print(all_written)
         return all_written
