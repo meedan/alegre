@@ -20,6 +20,14 @@ def get_documents_by_ids(index, ids, es):
     documents = {hit['_id']: hit for hit in response['hits']['hits']}
     return documents
 
+def merge_key_list(existing, new_values):
+    if not existing:
+        existing = []
+    for v in new_values:
+        if v not in existing:
+            existing.append(v)
+    return merged
+    
 def update_existing_doc_values(document, existing_doc):
     cleaned_document = similarity.get_body_for_text_document(document)
     for model_name in cleaned_document.get("models"):
@@ -28,11 +36,7 @@ def update_existing_doc_values(document, existing_doc):
         tmp_doc["contexts"] = copy.deepcopy(merge_contexts(get_document_body(tmp_doc), {"_source": existing_doc})["contexts"])
         for key, value in get_document_body(tmp_doc).items():
             if key in ["models", "contexts"]:
-                if not existing_doc.get(key):
-                    existing_doc[key] = []
-                for v in value:
-                    if v not in existing_doc[key]:
-                        existing_doc[key].append(v)
+                existing_doc[key] = merge_key_list(existing_doc.get(key, []), value)
             else:
                 existing_doc[key] = value
     return existing_doc
@@ -42,14 +46,17 @@ def sorted_values(cases):
     values = [cases.get(doc_id) for doc_id in doc_ids]
     return doc_ids, values
 
+def can_add_to_bodies(existing_doc, updateable):
+    return (updateable and existing_doc) or (not updateable and not existing_doc)
+
 def get_cases(params, existing_docs, updateable=True):
     bodies_by_doc_id = {}
     for document in params.get("documents", []):
         doc_id = document.get("doc_id")
-        existing_doc = existing_docs.get(doc_id)
-        if (updateable and existing_doc) or (not updateable and not existing_doc):
+        existing_doc = existing_docs.get(doc_id, {})
+        if can_add_to_bodies(existing_doc, updateable):
             if not bodies_by_doc_id.get(doc_id):
-                bodies_by_doc_id[doc_id] = existing_doc["_source"] if existing_doc else {}
+                bodies_by_doc_id[doc_id] = existing_doc.get("_source", {})
             bodies_by_doc_id[doc_id] = update_existing_doc_values(document, bodies_by_doc_id[doc_id])
     return sorted_values(bodies_by_doc_id)
 
@@ -82,5 +89,4 @@ class BulkUpdateSimilarityResource(Resource):
             for row in response_data:
                 row["doc"].pop("created_at", None)
                 all_written.append(row)
-        print(all_written)
         return all_written
