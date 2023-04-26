@@ -36,7 +36,13 @@ class BulkSimilarityResource(Resource):
         doc_ids = []
         for document in request.json.get("documents", []):
             doc_ids.append(document.get("doc_id"))
-            bodies.append(json_parse_timestamp(get_document_body(similarity.get_body_for_text_document(document))))
+            bodies.append(
+                json_parse_timestamp(
+                    get_document_body(
+                        similarity.get_body_for_text_document(document)
+                    )
+                )
+            )
         return doc_ids, bodies
 
     def submit_bulk_request(self, doc_ids, bodies, op_type="index"):
