@@ -1,0 +1,70 @@
+{ 
+  "mappings": {
+    "properties": {
+      "vector_768": {
+        "type": "knn_vector",
+        "dimension": 768,
+          "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 768,
+            "m": 24
+          }
+        }
+      },
+      "vector_xlm-r-bert-base-nli-stsb-mean-tokens": {
+        "type": "knn_vector",
+        "dimension": 768,
+        "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 768,
+            "m": 24
+          }
+        }
+      },
+      "vector_paraphrase-filipino-mpnet-base-v2": {
+        "type": "knn_vector",
+        "dimension": 768,
+        "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 768,
+            "m": 24
+          }
+        }
+      },
+      "vector_indian-sbert": {
+        "type": "knn_vector",
+        "dimension": 768,
+        "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 768,
+            "m": 24
+          }
+        }
+      },
+      "content": {
+        "type": "text"
+      },
+      "context": {
+        "type": "nested"
+      },
+      "vector": {
+        "type": "double"
+      },
+      "model": {
+        "type": "keyword"
+      }
+    }
+  }
+}

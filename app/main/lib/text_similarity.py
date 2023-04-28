@@ -18,7 +18,6 @@ def get_document_body(body):
     if model_key != 'elasticsearch':
       model = SharedModel.get_client(model_key)
       vector = model.get_shared_model_response(body['content'])
-      body['vector_'+str(len(vector))] = vector
       body['vector_'+model_key] = vector
       body['model'] = model_key
   return body
@@ -106,7 +105,7 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, 'vector_"+str(len(vector))+"') + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0", 
                   'params': {
                       'query_vector': vector
                   }
