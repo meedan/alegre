@@ -1,4 +1,4 @@
-from flask_restplus import fields
+from flask_restx import fields
 
 class JsonObject(fields.Raw):
     __schema_type__ = ["object"]
