@@ -8,6 +8,7 @@ from dateutil import parser
 from app.main.model.node import Node
 from app.main import db
 from app.main.lib.graph_writer import generate_edges_for_type, get_iterable_objects, get_matches_for_item
+from app.main.lib.error_log import ErrorLog
 
 class Graph(db.Model):
   """ Model for storing graphs """
@@ -53,7 +54,7 @@ class Graph(db.Model):
       graph.set_status("enriched")
       return graph
     except Exception as err:
-      app.extensions['pybrake'].notify(err)
+      ErrorLog.notify(err)
       graph.set_status("errored")
       return graph
 

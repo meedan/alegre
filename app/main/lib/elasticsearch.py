@@ -7,6 +7,7 @@ from elasticsearch.helpers import scan
 from flask import current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
+from app.main.lib.error_log import ErrorLog
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 
@@ -40,7 +41,7 @@ def get_all_documents_matching_context(context):
     for hit in docs:
       yield hit
   except elasticsearch.exceptions.NotFoundError as err:
-    app.extensions['pybrake'].notify(err)
+    ErrorLog.notify(err)
     return []
 
 def generate_matches(context):
