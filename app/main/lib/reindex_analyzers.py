@@ -2,6 +2,7 @@ import json
 import elasticsearch
 from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import get_all_documents_matching_context, update_or_create_document
+from app.main.lib.error_log import ErrorLog
 from elasticsearch.helpers import scan
 
 from flask import request, current_app as app
@@ -18,7 +19,7 @@ def get_all_documents():
     for hit in docs:
       yield hit
   except elasticsearch.exceptions.NotFoundError as err:
-    app.extensions['pybrake'].notify(err)
+    ErrorLog.notify(err)
     return []
 
 def get_docs_to_transform(team_id, language=None):

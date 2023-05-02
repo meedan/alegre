@@ -7,6 +7,7 @@ from sqlalchemy import text
 from app.main import db
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query
+from app.main.lib.error_log import ErrorLog
 from app.main.model.video import Video
 from app.main.model.image import ImageModel
 from app.main.model.audio import Audio
@@ -44,7 +45,7 @@ def get_iterable_objects(graph, data_type):
     elif data_type == "text":
       return get_all_documents_matching_context(graph.context)
   except Exception as err:
-    app.extensions['pybrake'].notify(err)
+    ErrorLog.notify(err)
   return []
 
 def package_item_for_query(item, graph, data_type):
@@ -82,7 +83,7 @@ def get_matches_for_item(graph, item, data_type):
       if results:
         return [results[0]]
   except Exception as err:
-    app.extensions['pybrake'].notify(err)
+    ErrorLog.notify(err)
   return []
 
 def restrict_text_result_to_predecessors(text_result, project_media_id):

@@ -1,8 +1,11 @@
+import os
 from flask import Flask, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_restplus import Api
 from flask_migrate import Migrate
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.contrib.fixers import ProxyFix
 import pybrake.flask
 import logging
@@ -13,6 +16,12 @@ flask_bcrypt = Bcrypt()
 migrate = Migrate()
 
 def create_app(config_name):
+  sentry_sdk.init(
+    dsn=os.getenv('sentry_sdk_dsn'),
+    integrations=[FlaskIntegration()],
+    environment=config_name,
+    traces_sample_rate=1.0,
+  )
   app = Flask(__name__)
   app.config.from_object(config_by_name[config_name])
   app.wsgi_app = ProxyFix(app.wsgi_app)
