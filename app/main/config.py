@@ -42,7 +42,7 @@ class Config:
     VIDEO_MODEL_L1_SCORE = 0.7
   AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   IMAGE_MODEL = os.getenv('IMAGE_MODEL', default='phash')
-
+  OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
 
 class DevelopmentConfig(Config):
   DEBUG = True

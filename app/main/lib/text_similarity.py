@@ -3,9 +3,9 @@ from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-from app.main.lib.error_log import ErrorLog
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
+import openai.embeddings_utils
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
@@ -17,8 +17,12 @@ def get_document_body(body):
     if context:
       body["contexts"] = [context]
     if model_key != 'elasticsearch':
-      model = SharedModel.get_client(model_key)
-      vector = model.get_shared_model_response(body['content'])
+      prefix_openai = "openai-"
+      if model_key[:len(prefix_openai)] == prefix_openai:
+          vector = retrieve_openai_embeddings(body['content'], model_key)
+      else:
+          model = SharedModel.get_client(model_key)
+          vector = model.get_shared_model_response(body['content'])
       body['vector_'+model_key] = vector
       body['model'] = model_key
   return body
@@ -34,7 +38,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      ErrorLog.notify(Exception('Model search failed when using '+model_key))
+      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
@@ -72,7 +76,7 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
             'match': {
               'content': {
                   'query': truncate_query(search_params['content'], clause_count),
-                  'minimum_should_match': str(int(round(threshold * 100))) + '%'
+                  'minimum_should_match': str(int(round(float(threshold) * 100))) + '%'
               }
             }
         },
@@ -85,13 +89,16 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
 def get_vector_model_base_conditions(search_params, model_key, threshold):
   if "vector" in search_params:
     vector = search_params["vector"]
+  elif model_key == 'openai-text-embedding-ada-002':
+    print("openai-text-embedding-ada-002")
+    vector = retrieve_openai_embeddings(search_params['content'],model_key)
   else:
     model = SharedModel.get_client(model_key)
     vector = model.get_shared_model_response(search_params['content'])
   return {
       'query': {
           'script_score': {
-              'min_score': threshold+1,
+              'min_score': float(threshold)+1,
               'query': {
                   'bool': {
                       'must': [
@@ -106,7 +113,7 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0",
                   'params': {
                       'query_vector': vector
                   }
@@ -201,3 +208,8 @@ def search_text_by_model(search_params):
     return {
         'result': response
     }
+
+def retrieve_openai_embeddings(text, model_key):
+    openai.api_key = app.config['OPENAI_API_KEY']
+    model_key_without_openai_prefix = model_key[len("openai-"):]
+    return openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
