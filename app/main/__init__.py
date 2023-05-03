@@ -19,7 +19,7 @@ def create_app(config_name):
   sentry_sdk.init(
     dsn=os.getenv('sentry_sdk_dsn'),
     integrations=[FlaskIntegration()],
-    environment=config_name,
+    environment=os.getenv("DEPLOY_ENV", "local"),
     traces_sample_rate=1.0,
   )
   app = Flask(__name__)
