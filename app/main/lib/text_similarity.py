@@ -3,7 +3,6 @@ from elasticsearch import Elasticsearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-from app.main.lib.error_log import ErrorLog
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
@@ -34,7 +33,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      ErrorLog.notify(Exception('Model search failed when using '+model_key))
+      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
@@ -97,8 +96,8 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                       'must': [
                           {
                               'match': {
-                                  'model': {
-                                    'query': model_key,
+                                  'model_'+str(model_key): {
+                                    'query': "1",
                                   }
                               }
                           }
@@ -106,8 +105,9 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0", 
                   'params': {
+                      'field': "vector_"+str(model_key),
                       'query_vector': vector
                   }
               }
@@ -168,8 +168,8 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
-        return {'result': []}
-        # conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
+        # return {'result': []}
+        conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
     if 'context' in search_params:
         context = {
             'nested': {
