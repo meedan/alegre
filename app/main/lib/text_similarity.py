@@ -168,7 +168,8 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
-        conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
+        return {'result': []}
+        # conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
     if 'context' in search_params:
         context = {
             'nested': {
