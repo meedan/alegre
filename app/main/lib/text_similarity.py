@@ -7,6 +7,7 @@ from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 import openai.embeddings_utils
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
+
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
@@ -104,8 +105,8 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                       'must': [
                           {
                               'match': {
-                                  'model': {
-                                    'query': model_key,
+                                  'model_'+str(model_key): {
+                                    'query': "1",
                                   }
                               }
                           }
@@ -113,8 +114,9 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0",
+                  'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
                   'params': {
+                      'field': "vector_"+str(model_key),
                       'query_vector': vector
                   }
               }
@@ -175,6 +177,7 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
+        # return {'result': []}
         conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
     if 'context' in search_params:
         context = {
@@ -208,7 +211,6 @@ def search_text_by_model(search_params):
     return {
         'result': response
     }
-
 def retrieve_openai_embeddings(text, model_key):
     openai.api_key = app.config['OPENAI_API_KEY']
     model_key_without_openai_prefix = model_key[len("openai-"):]
