@@ -96,8 +96,8 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                       'must': [
                           {
                               'match': {
-                                  'model': {
-                                    'query': model_key,
+                                  'model_'+str(model_key): {
+                                    'query': "1",
                                   }
                               }
                           }
@@ -105,8 +105,9 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                   }
               },
               'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc['vector_"+str(model_key)+"']) + 1.0", 
+                  'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0", 
                   'params': {
+                      'field': "vector_"+str(model_key),
                       'query_vector': vector
                   }
               }
@@ -167,8 +168,8 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
-        return {'result': []}
-        # conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
+        # return {'result': []}
+        conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
     if 'context' in search_params:
         context = {
             'nested': {
