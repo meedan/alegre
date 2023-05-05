@@ -30,9 +30,12 @@ class TestTextSimilarity(BaseTestCase):
         source_str = query['query']['script_score']['script']['source']
         assert source_str is not None
         # the 768 part of the key should no longer be there
-        assert 'vector_768' not in source_str
+        model_key = query['query']['script_score']['script']['params']['field']
+        old_key_doesnt_match = 'vector_768' == model_key
+        assert old_key_doesnt_match is False
         # the appropriate model key vector should be there
-        assert 'vector_'+self.test_model_key in source_str
+        key_matches = 'vector_'+self.test_model_key == model_key
+        assert key_matches is True
 
     def test_get_document_body(self):
         test_content = {
