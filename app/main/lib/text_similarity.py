@@ -7,7 +7,7 @@ from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 import openai.embeddings_utils
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
-
+PREFIX_OPENAI = "openai-"
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
@@ -18,8 +18,8 @@ def get_document_body(body):
     if context:
       body["contexts"] = [context]
     if model_key != 'elasticsearch':
-      prefix_openai = "openai-"
-      if model_key[:len(prefix_openai)] == prefix_openai:
+
+      if model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
           vector = retrieve_openai_embeddings(body['content'], model_key)
       else:
           model = SharedModel.get_client(model_key)
@@ -90,8 +90,7 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
 def get_vector_model_base_conditions(search_params, model_key, threshold):
   if "vector" in search_params:
     vector = search_params["vector"]
-  elif model_key == 'openai-text-embedding-ada-002':
-    print("openai-text-embedding-ada-002")
+  elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
     vector = retrieve_openai_embeddings(search_params['content'], model_key)
   else:
     model = SharedModel.get_client(model_key)
@@ -214,5 +213,5 @@ def search_text_by_model(search_params):
 def retrieve_openai_embeddings(text, model_key):
     openai.api_key = app.config['OPENAI_API_KEY']
     app.logger.info(f"Calling OpenAI API")
-    model_key_without_openai_prefix = model_key[len("openai-"):]
+    model_key_without_openai_prefix = model_key[len(PREFIX_OPENAI):]
     return openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
