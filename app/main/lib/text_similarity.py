@@ -213,5 +213,6 @@ def search_text_by_model(search_params):
     }
 def retrieve_openai_embeddings(text, model_key):
     openai.api_key = app.config['OPENAI_API_KEY']
+    app.logger.info(f"Calling OpenAI API")
     model_key_without_openai_prefix = model_key[len("openai-"):]
     return openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
