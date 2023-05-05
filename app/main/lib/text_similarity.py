@@ -92,7 +92,7 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
     vector = search_params["vector"]
   elif model_key == 'openai-text-embedding-ada-002':
     print("openai-text-embedding-ada-002")
-    vector = retrieve_openai_embeddings(search_params['content'],model_key)
+    vector = retrieve_openai_embeddings(search_params['content'], model_key)
   else:
     model = SharedModel.get_client(model_key)
     vector = model.get_shared_model_response(search_params['content'])
