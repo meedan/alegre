@@ -25,7 +25,8 @@ def get_document_body(body):
           vector = model.get_shared_model_response(body['content'])
       body['model_'+model_key] = 1
       body['vector_'+model_key] = vector
-      body['model'] = model_key
+    # Model key must be outside of the if statement
+    body['model'] = model_key
   return body
 
 def add_text(body, doc_id, language=None):
