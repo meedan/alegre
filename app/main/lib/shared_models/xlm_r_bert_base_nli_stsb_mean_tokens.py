@@ -7,7 +7,7 @@ from app.main.lib.similarity_measures import angular_similarity
 
 class XlmRBertBaseNliStsbMeanTokens(SharedModel):
     def load(self):
-        model_name = self.options.get('model_name', 'xlm-r-bert-base-nli-stsb-mean-tokens')
+        model_name = self.options.get('model_name', 'meedan/xlm-r-bert-base-nli-stsb-mean-tokens')
         if self.options.get("model_url"):
             try:
                 self.model = SentenceTransformer(self.options.get("model_url"))

@@ -3,7 +3,7 @@
     "class": "XlmRBertBaseNliStsbMeanTokens",
     "key": "xlm-r-bert-base-nli-stsb-mean-tokens",
     "options": {
-      "model_name": "xlm-r-bert-base-nli-stsb-mean-tokens"
+      "model_name": "meedan/xlm-r-bert-base-nli-stsb-mean-tokens"
     }
   },
   "mdebertav3filipino": {
