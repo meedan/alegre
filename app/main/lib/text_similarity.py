@@ -23,10 +23,10 @@ def get_document_body(body):
       else:
           model = SharedModel.get_client(model_key)
           vector = model.get_shared_model_response(body['content'])
-      body['model_'+model_key] = 1
+      body['model'] = model_key
       body['vector_'+model_key] = vector
     # Model key must be outside of the if statement
-    body['model'] = model_key
+    body['model_'+model_key] = 1
   return body
 
 def add_text(body, doc_id, language=None):
