@@ -5,27 +5,28 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
-import openai.embeddings_utils
+from app.main.lib.openai import retrieve_openai_embeddings,PREFIX_OPENAI
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
-PREFIX_OPENAI = "openai-"
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
 def get_document_body(body):
   for model_key in body.pop("models", []):
-    body['model_'+model_key] = 1
     context = body.get("context", {})
     if context:
       body["contexts"] = [context]
     if model_key != 'elasticsearch':
-
       if model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
           vector = retrieve_openai_embeddings(body['content'], model_key)
+          if vector==None:
+             continue
       else:
           model = SharedModel.get_client(model_key)
           vector = model.get_shared_model_response(body['content'])
-      body['vector_'+model_key] = vector
       body['model'] = model_key
+      body['vector_'+model_key] = vector
+    # Model key must be outside of the if statement
+    body['model_'+model_key] = 1
   return body
 
 def add_text(body, doc_id, language=None):
@@ -92,6 +93,8 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
     vector = search_params["vector"]
   elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
     vector = retrieve_openai_embeddings(search_params['content'], model_key)
+    if vector==None:
+       return None
   else:
     model = SharedModel.get_client(model_key)
     vector = model.get_shared_model_response(search_params['content'])
@@ -176,8 +179,9 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
-        # return {'result': []}
         conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
+        if conditions==None:
+           return {'result': []}
     if 'context' in search_params:
         context = {
             'nested': {
@@ -210,8 +214,3 @@ def search_text_by_model(search_params):
     return {
         'result': response
     }
-def retrieve_openai_embeddings(text, model_key):
-    openai.api_key = app.config['OPENAI_API_KEY']
-    app.logger.info(f"Calling OpenAI API")
-    model_key_without_openai_prefix = model_key[len(PREFIX_OPENAI):]
-    return openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
