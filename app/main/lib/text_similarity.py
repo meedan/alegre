@@ -11,7 +11,6 @@ def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
 def get_document_body(body):
-  successful_model_keys = []
   for model_key in body.pop("models", []):
     context = body.get("context", {})
     if context:
@@ -28,8 +27,6 @@ def get_document_body(body):
       body['vector_'+model_key] = vector
     # Model key must be outside of the if statement
     body['model'] = model_key
-    successful_model_keys.append(model_key)
-  body['models'] = successful_model_keys
   return body
 
 def add_text(body, doc_id, language=None):
