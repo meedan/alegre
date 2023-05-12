@@ -123,7 +123,7 @@ def search_by_phash(phash, threshold, context, limit=None):
           WHERE score >= :threshold
           AND 
           """+context_query+"""
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     else:
         cmd = """
@@ -132,7 +132,7 @@ def search_by_phash(phash, threshold, context, limit=None):
             AS score FROM images
           ) f
           WHERE score >= :threshold
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
@@ -166,7 +166,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
           WHERE score >= :threshold
           AND 
           """+context_query+"""
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     else:
         cmd = """
@@ -175,7 +175,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
             AS score FROM images
           ) f
           WHERE score >= :threshold
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
