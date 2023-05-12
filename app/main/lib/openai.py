@@ -20,9 +20,9 @@ def retrieve_openai_embeddings(text, model_key):
     model_key_without_openai_prefix = model_key[len(PREFIX_OPENAI):]
     try:
         embeddings = openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
-        r_cache.set(key,pickle.dumps(embeddings))
-        r_cache.expire(key,EMBEDDING_CACHE_DEFAULT)
+        r_cache.set(key, pickle.dumps(embeddings))
+        r_cache.expire(key, EMBEDDING_CACHE_DEFAULT)
     except Exception as e:
         app.logger.error(f"Unable to retreieve OpenAI embeddings. Error was {e}")
-        embeddings=None    
+        embeddings = None
     return embeddings
