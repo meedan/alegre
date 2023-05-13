@@ -1,8 +1,8 @@
+import pickle
 from flask import current_app as app
 import openai.embeddings_utils
 import redis
 import hashlib
-import pickle
 
 PREFIX_OPENAI = "openai-"
 EMBEDDING_CACHE_DEFAULT = 60*60*24*7 #7 days (value is in seconds)
