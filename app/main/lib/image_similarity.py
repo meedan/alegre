@@ -123,7 +123,7 @@ def search_by_phash(phash, threshold, context, limit=None):
           WHERE score >= :threshold
           AND 
           """+context_query+"""
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     else:
         cmd = """
@@ -132,7 +132,7 @@ def search_by_phash(phash, threshold, context, limit=None):
             AS score FROM images
           ) f
           WHERE score >= :threshold
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
@@ -155,6 +155,8 @@ def search_by_phash(phash, threshold, context, limit=None):
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_pdq(pdq, threshold, context, limit=None):
+  #bit_count_pdq is defined in mangage.py. It returns a normalized hamming distance between 0 and 1
+  #1 represents the strongest similarity possibile.
   try:
     context_query, context_hash = get_context_query(context)
     if context_query:
@@ -166,7 +168,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
           WHERE score >= :threshold
           AND 
           """+context_query+"""
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     else:
         cmd = """
@@ -175,7 +177,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
             AS score FROM images
           ) f
           WHERE score >= :threshold
-          ORDER BY score ASC
+          ORDER BY score DESC
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
