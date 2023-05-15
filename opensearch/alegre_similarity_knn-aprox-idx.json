@@ -27,6 +27,19 @@
           }
         }
       },
+      "vector_openai-text-embedding-ada-002": {
+        "type": "knn_vector",
+        "dimension": 1536,
+        "method": {
+          "name": "hnsw",
+          "space_type": "cosinesimil",
+          "engine": "nmslib",
+          "parameters": {
+            "ef_construction": 768,
+            "m": 24
+          }
+        }
+      },
       "vector_paraphrase-filipino-mpnet-base-v2": {
         "type": "knn_vector",
         "dimension": 768,
