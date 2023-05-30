@@ -86,7 +86,8 @@ def update_or_create_document(body, doc_id, index):
           result = es.update(
               id=doc_id,
               body={"doc": merge_contexts(body, found_doc)},
-              index=index
+              index=index,
+              retry_on_conflict=3
           )
       else:
           result = es.index(
