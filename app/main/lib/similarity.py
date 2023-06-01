@@ -7,6 +7,8 @@ from app.main.lib.text_similarity import add_text, delete_text, search_text
 DEFAULT_SEARCH_LIMIT = 20
 logging.basicConfig(level=logging.INFO)
 def get_body_for_text_document(params):
+    app.logger.info(
+    f"[Alegre Similarity] get_body_for_text_document:params {params}")
     models = set()
     if 'model' in params:
         models.add(params['model'])
@@ -15,9 +17,11 @@ def get_body_for_text_document(params):
     if not models:
         models = ['elasticsearch']
     body = {'language': params.get('language'), 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'limit': params.get("limit", DEFAULT_SEARCH_LIMIT), 'models': list(models)}
-    for key in ['context', 'threshold', 'fuzzy', 'min_es_score']:
+    for key in ['context', 'threshold', 'fuzzy', 'min_es_score','per_model_threshold']:
         if key in params:
             body[key] = params[key]
+    app.logger.info(
+      f"[Alegre Similarity] get_body_for_text_document:body {body}")
     return body
 
 def audio_model():
