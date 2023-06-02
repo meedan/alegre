@@ -149,10 +149,14 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params):
+    app.logger.info(
+        f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
     if not search_params.get("content"):
         return {"result": []}
     model_key, threshold = get_model_and_threshold(search_params)
+    app.logger.info(
+        f"[Alegre Similarity] search_text_by_model:model_key {model_key}, threshold:{threshold}")
     es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
