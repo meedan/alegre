@@ -143,7 +143,7 @@ tokenizers
 toolz==0.9.0
 torch==1.9.0
 tqdm==4.27.0
-transformers==4.6.0
+transformers==4.30.0
 twitter-text-parser==1.0.0
 typing-extensions==3.10.0.0
 ujson==5.4.0
