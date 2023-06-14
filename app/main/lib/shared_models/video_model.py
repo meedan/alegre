@@ -19,6 +19,7 @@ from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
+from app.main.lib.error_log import ErrorLog
 from app.main import db
 from app.main.model.video import Video
 
@@ -186,8 +187,8 @@ class VideoModel(SharedModel):
             files = self.get_fullpath_files(qualified_matches, False)
             try:
             	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
-            except RuntimeError as e:
-            	print(e)
+            except Exception as err:
+              ErrorLog.notify(err)
             threshold = task.get("threshold", 0.0) or 0.0
             results = []
             for i,score in enumerate(scores):
