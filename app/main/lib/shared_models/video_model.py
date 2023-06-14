@@ -189,7 +189,7 @@ class VideoModel(SharedModel):
             	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
             except Exception as err:
               ErrorLog.notify(err)
-              raise
+              raise err
             threshold = task.get("threshold", 0.0) or 0.0
             results = []
             for i,score in enumerate(scores):
