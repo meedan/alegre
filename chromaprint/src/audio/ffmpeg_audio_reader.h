@@ -23,22 +23,6 @@ extern "C" {
 
 #include "audio/ffmpeg_audio_processor.h"
 
-#ifndef HAVE_AV_PACKET_UNREF
-#define av_packet_unref av_free_packet
-#endif
-
-#ifndef HAVE_AV_FRAME_ALLOC
-#define av_frame_alloc avcodec_alloc_frame
-#endif
-
-#ifndef HAVE_AV_FRAME_FREE
-#define av_frame_free avcodec_free_frame
-#endif
-
-#ifndef AV_ERROR_MAX_STRING_SIZE
-#define AV_ERROR_MAX_STRING_SIZE 128
-#endif
-
 namespace chromaprint {
 
 class FFmpegAudioReader {
@@ -114,7 +98,6 @@ private:
 
 inline FFmpegAudioReader::FFmpegAudioReader() {
 	av_log_set_level(AV_LOG_QUIET);
-	av_register_all();
 
 	av_init_packet(&m_packet);
 	m_packet.data = nullptr;
@@ -131,8 +114,8 @@ inline FFmpegAudioReader::~FFmpegAudioReader() {
 }
 
 inline bool FFmpegAudioReader::SetInputFormat(const char *name) {
-	m_input_fmt = av_find_input_format(name);
-	return m_input_fmt;
+	const AVInputFormat* m_input_fmt = av_find_input_format(name);
+	return m_input_fmt != nullptr;
 }
 
 inline bool FFmpegAudioReader::SetInputSampleRate(int sample_rate) {
@@ -170,7 +153,7 @@ inline bool FFmpegAudioReader::Open(const std::string &file_name) {
 		return false;
 	}
 
-	AVCodec *codec;
+	const AVCodec *codec;
 	ret = av_find_best_stream(m_format_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, &codec, 0);
 	if (ret < 0) {
 		SetError("Could not find any audio stream in the file", ret);
@@ -178,7 +161,10 @@ inline bool FFmpegAudioReader::Open(const std::string &file_name) {
 	}
 	m_stream_index = ret;
 
-	m_codec_ctx = m_format_ctx->streams[m_stream_index]->codec;
+	AVCodecParameters *codecpar = m_format_ctx->streams[m_stream_index]->codecpar;
+    m_codec_ctx = avcodec_alloc_context3(codec);
+    avcodec_parameters_to_context(m_codec_ctx, codecpar);
+
 	m_codec_ctx->request_sample_fmt = AV_SAMPLE_FMT_S16;
 
 	ret = avcodec_open2(m_codec_ctx, codec, nullptr);
@@ -332,7 +318,6 @@ inline bool FFmpegAudioReader::Read(const int16_t **data, size_t *size) {
 
     return true;
 }
-
 
 inline void FFmpegAudioReader::SetError(const char *message, int errnum) {
 	m_error = message;
