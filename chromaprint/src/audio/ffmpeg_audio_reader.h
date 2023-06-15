@@ -265,96 +265,74 @@ inline int FFmpegAudioReader::GetDuration() const {
 }
 
 inline bool FFmpegAudioReader::Read(const int16_t **data, size_t *size) {
-	if (!IsOpen() || IsFinished()) {
-		return false;
-	}
+    if (!IsOpen() || IsFinished()) {
+        return false;
+    }
 
-	int ret;
-	while (true) {
-		while (m_packet.size <= 0) {
-			av_packet_unref(&m_packet0);
-			av_init_packet(&m_packet);
-			m_packet.data = nullptr;
-			m_packet.size = 0;
-			ret = av_read_frame(m_format_ctx, &m_packet);
-			if (ret < 0) {
-				if (ret == AVERROR_EOF) {
-					m_finished = true;
-					break;
-				} else {
-					SetError("Error reading from the audio source", ret);
-					return false;
-				}
-			}
-			m_packet0 = m_packet;
-			if (m_packet.stream_index != m_stream_index) {
-				m_packet.data = nullptr;
-				m_packet.size = 0;
-			} else {
-				m_nb_packets++;
-			}
-		}
+    int ret;
+    while (true) {
+        // Read packets until one from the desired stream is found
+        do {
+            if (m_packet.data != nullptr) {
+                av_packet_unref(&m_packet);
+            }
+            if (av_read_frame(m_format_ctx, &m_packet) < 0) {
+                m_finished = true;
+                break;
+            }
+        } while (m_packet.stream_index != m_stream_index);
 
-		ret = avcodec_decode_audio4(m_codec_ctx, m_frame, &m_got_frame, &m_packet);
-		if (ret < 0) {
-			if (m_decode_error) {
-				SetError("Error decoding audio frame", m_decode_error);
-				return false;
-			}
-			m_decode_error = ret;
-			m_packet.data = nullptr;
-			m_packet.size = 0;
-			continue;
-		}
+        if (m_finished) {
+            break;
+        }
 
-		break;
-	}
+        if ((ret = avcodec_send_packet(m_codec_ctx, &m_packet)) < 0) {
+            SetError("Error sending packet for decoding", ret);
+            return false;
+        }
 
-	m_decode_error = 0;
+        ret = avcodec_receive_frame(m_codec_ctx, m_frame);
+        if (ret < 0) {
+            if (ret != AVERROR(EAGAIN) && ret != AVERROR_EOF) {
+                SetError("Error during decoding", ret);
+                return false;
+            }
+            continue;
+        }
 
-	const int decoded = std::min(ret, m_packet.size);
-	m_packet.data += decoded;
-	m_packet.size -= decoded;
+        break;
+    }
 
-	if (m_got_frame) {
-		if (m_converter) {
-			if (m_frame->nb_samples > m_convert_buffer_nb_samples) {
-				int linsize;
-				av_freep(&m_convert_buffer[0]);
-				m_convert_buffer_nb_samples = std::max(1024 * 8, m_frame->nb_samples);
-				ret = av_samples_alloc(m_convert_buffer, &linsize, m_codec_ctx->channels, m_convert_buffer_nb_samples, AV_SAMPLE_FMT_S16, 1);
-				if (ret < 0) {
-					SetError("Couldn't allocate audio converter buffer", ret);
-					return false;
-				}
-			}
-			auto nb_samples = m_converter->Convert(m_convert_buffer, m_convert_buffer_nb_samples, (const uint8_t **) m_frame->data, m_frame->nb_samples);
-			if (nb_samples < 0) {
-				SetError("Couldn't convert audio", ret);
-				return false;
-			}
-			*data = (const int16_t *) m_convert_buffer[0];
-			*size = nb_samples;
-		} else {
-			*data = (const int16_t *) m_frame->data[0];
-			*size = m_frame->nb_samples;
-		}
-	} else {
-		if (m_finished && m_converter) {
-			auto nb_samples = m_converter->Flush(m_convert_buffer, m_convert_buffer_nb_samples);
-			if (nb_samples < 0) {
-				SetError("Couldn't convert audio", ret);
-				return false;
-			} else if (nb_samples > 0) {
-				m_got_frame = 1;
-				*data = (const int16_t *) m_convert_buffer[0];
-				*size = nb_samples;
-			}
-		}
-	}
+    if (m_finished) {
+        return false;
+    }
 
-	return true;
+    if (m_converter) {
+        if (m_frame->nb_samples > m_convert_buffer_nb_samples) {
+            int linsize;
+            av_freep(&m_convert_buffer[0]);
+            m_convert_buffer_nb_samples = std::max(1024 * 8, m_frame->nb_samples);
+            ret = av_samples_alloc(m_convert_buffer, &linsize, m_codec_ctx->channels, m_convert_buffer_nb_samples, AV_SAMPLE_FMT_S16, 1);
+            if (ret < 0) {
+                SetError("Couldn't allocate audio converter buffer", ret);
+                return false;
+            }
+        }
+        auto nb_samples = m_converter->Convert(m_convert_buffer, m_convert_buffer_nb_samples, (const uint8_t **) m_frame->data, m_frame->nb_samples);
+        if (nb_samples < 0) {
+            SetError("Couldn't convert audio", ret);
+            return false;
+        }
+        *data = (const int16_t *) m_convert_buffer[0];
+        *size = nb_samples;
+    } else {
+        *data = (const int16_t *) m_frame->data[0];
+        *size = m_frame->nb_samples;
+    }
+
+    return true;
 }
+
 
 inline void FFmpegAudioReader::SetError(const char *message, int errnum) {
 	m_error = message;
