@@ -12,10 +12,6 @@
 
 namespace chromaprint {
 
-#ifdef DEBUG
-#undef DEBUG
-#endif
-
 #ifdef NDEBUG
 #define DEBUG(x)
 #else
