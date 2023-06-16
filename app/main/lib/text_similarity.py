@@ -204,7 +204,7 @@ def search_text_by_model(search_params):
             conditions['query']['script_score']['query']['bool']['must'].append(context)
     limit = search_params.get("limit")
     result = es.search(
-        size=limit or ELASTICSEARCH_DEFAULT_LIMIT,
+        size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit of 1000 is given in similarity.py
         body=get_body_from_conditions(conditions),
         index=search_indices
     )
