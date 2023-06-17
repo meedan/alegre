@@ -31,6 +31,10 @@ def get_body_for_text_document(params):
       params['created_at']=datetime.now()
     if 'limit' not in params:
       params['limit']=DEFAULT_SEARCH_LIMIT
+    if 'language' not in params:
+      params['language']=None
+    if 'content' not in params:
+      params['content']=None
 
     app.logger.info(
       f"[Alegre Similarity] get_body_for_text_document:params (end) {params}")
