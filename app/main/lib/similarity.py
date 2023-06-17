@@ -14,19 +14,21 @@ def get_body_for_text_document(params):
     models = set()
     if 'model' in params:
         models.add(params['model'])
+        del params['model']
     if 'models' in params:
         models = models|set(params['models'])
     if not models:
         models = ['elasticsearch']
-    params["models"]=list(models)
+    params['models']=list(models)
 
-    # Rename "text" to "content"
-    params["content"]=params.get('text')
-    del params["text"]
+    # Rename "text" to "content" if present
+    if 'text' in params:
+      params['content']=params.get('text')
+      del params["text"]
 
     # Set defaults
     if 'created_at' not in params:
-      params["created_at"]=datetime.now()
+      params['created_at']=datetime.now()
     if 'limit' not in params:
       params['limit']=DEFAULT_SEARCH_LIMIT
 
