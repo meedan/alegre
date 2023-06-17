@@ -19,22 +19,22 @@ def get_body_for_text_document(params):
         models = models|set(params['models'])
     if not models:
         models = ['elasticsearch']
-    params['models']=list(models)
+    params['models'] = list(models)
 
     # Rename "text" to "content" if present
     if 'text' in params:
-      params['content']=params.get('text')
+      params['content'] = params.get('text')
       del params["text"]
 
     # Set defaults
     if 'created_at' not in params:
-      params['created_at']=datetime.now()
+      params['created_at'] = datetime.now()
     if 'limit' not in params:
-      params['limit']=DEFAULT_SEARCH_LIMIT
+      params['limit'] = DEFAULT_SEARCH_LIMIT
     if 'language' not in params:
-      params['language']=None
+      params['language'] = None
     if 'content' not in params:
-      params['content']=None
+      params['content'] = None
 
     app.logger.info(
       f"[Alegre Similarity] get_body_for_text_document:params (end) {params}")
