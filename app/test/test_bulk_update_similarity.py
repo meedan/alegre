@@ -98,7 +98,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
                     self.assertEqual(result['contexts'], [{'a': 1}])
                     self.assertEqual(result['language'], None)
                     self.assertEqual(result['content'], None)
-                    self.assertEqual(result['limit'], 20)
+                    self.assertEqual(result['limit'], 1000)
                     self.assertEqual(result['context'], {'a': 1})
                     self.assertEqual(result['model_model_1'], 1)
                     self.assertEqual(result['vector_model_1'], [0.0])
@@ -127,7 +127,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(response[1][0]['contexts'], [{'a': 1}])
         self.assertEqual(response[1][0]['language'], None)
         self.assertEqual(response[1][0]['content'], None)
-        self.assertEqual(response[1][0]['limit'], 20)
+        self.assertEqual(response[1][0]['limit'], 1000)
         self.assertEqual(response[1][0]['context'], {'a': 1})
         self.assertEqual(response[1][0]['model_elasticsearch'], 1)
 
@@ -185,7 +185,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(response[1][0]['contexts'], [{'a': 1}])
         self.assertEqual(response[1][0]['language'], None)
         self.assertEqual(response[1][0]['content'], None)
-        self.assertEqual(response[1][0]['limit'], 20)
+        self.assertEqual(response[1][0]['limit'], 1000)
         self.assertEqual(response[1][0]['context'], {'a': 1})
         self.assertEqual(response[1][0]['model_elasticsearch'], 1)
 
