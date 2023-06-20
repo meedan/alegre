@@ -1,6 +1,6 @@
 import unittest
 import json
-from elasticsearch import helpers, Elasticsearch, TransportError
+from opensearchpy import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
 
@@ -17,7 +17,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_mapping(
@@ -36,7 +36,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
-                es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+                es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
                 response = self.client.get(
                     '/text/similarity/',
@@ -67,7 +67,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
                 self.assertEqual(True, result['success'])
-                es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+                es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 if expected_lang is None:
                     es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
                 else:
@@ -105,7 +105,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
               result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
               self.assertEqual(True, result['success'])
-              es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+              es = OpenSearch(app.config['ELASTICSEARCH_URL'])
               if expected_lang is None:
                   es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
               else:

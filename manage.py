@@ -4,7 +4,7 @@ import json
 
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
-from elasticsearch import Elasticsearch, TransportError
+from opensearchpy import Opensearch, TransportError
 import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
@@ -254,7 +254,7 @@ def run_video_matcher():
 def init():
   """Initializes the service."""
   # Create ES indexes.
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+  es = OpenSearch(app.config['ELASTICSEARCH_URL'])
   try:
     if config_name == 'test':
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])

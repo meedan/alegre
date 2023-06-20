@@ -1,6 +1,6 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace
-from elasticsearch import Elasticsearch
+from opensearchpy import Opensearch
 import redis
 import os
 import importlib
@@ -24,7 +24,7 @@ class HealthcheckResource(Resource):
 
     # Elasticsearch
     try:
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=10, max_retries=3, retry_on_timeout=True)
+      es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=10, max_retries=3, retry_on_timeout=True)
 
     except Exception as e:
       result['ELASTICSEARCH'] = str(e)

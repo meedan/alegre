@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import json
 from unittest.mock import patch
 from collections import namedtuple
-from elasticsearch import helpers, Elasticsearch, TransportError
+from opensearchpy import helpers, Elasticsearch, TransportError
 from flask import current_app as app
 import numpy as np
 import redis
@@ -20,7 +20,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_mapping(
@@ -33,7 +33,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
       r.srem('SharedModel', SharedModelStub.model_key)
 
     def test_similarity_mapping(self):
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
       mapping = es.indices.get_mapping(
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )

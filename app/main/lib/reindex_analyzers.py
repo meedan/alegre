@@ -1,16 +1,16 @@
 import json
-import elasticsearch
-from elasticsearch import Elasticsearch
+import opensearchpy
+from opensearchpy import Opensearch
 from app.main.lib.elasticsearch import get_all_documents_matching_context, update_or_create_document
 from app.main.lib.error_log import ErrorLog
-from elasticsearch.helpers import scan
+from opensearchpy.helpers import scan
 
 from flask import request, current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 import cld3
 def get_all_documents():
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
   try:
     docs = scan(es,
       size=10000,
@@ -18,12 +18,12 @@ def get_all_documents():
     )
     for hit in docs:
       yield hit
-  except elasticsearch.exceptions.NotFoundError as err:
+  except opensearchpy.exceptions.NotFoundError as err:
     ErrorLog.notify(err)
     return []
 
 def get_docs_to_transform(team_id, language=None):
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     docs_to_transform = {}
     for doc in get_all_documents_matching_context({"team_id": team_id}):
         if not language:
@@ -44,11 +44,11 @@ def get_cached_docs_to_transform(team_id, language=None):
         return get_docs_to_transform(team_id, language)
 
 def store_updated_docs(docs_to_transform):
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     for doc_id, language in docs_to_transform.items():
         try:
             already_done = es.get(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+language, id=doc_id)
-        except elasticsearch.exceptions.NotFoundError:
+        except opensearchpy.exceptions.NotFoundError:
             found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
             if found_doc:
                 source = found_doc["_source"]
@@ -61,7 +61,7 @@ def store_updated_docs(docs_to_transform):
                     try:
                         update_or_create_document(source, doc_id, app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
                         finished = True
-                    except elasticsearch.exceptions.ConnectionError:
+                    except opensearchpy.exceptions.ConnectionError:
                         fail_count += 1
 
 def run(team_id, language=None):

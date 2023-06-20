@@ -1,6 +1,6 @@
 import unittest
 import json
-from elasticsearch import  Elasticsearch
+from opensearchpy import  Elasticsearch
 from flask import current_app as app
 
 from app.test.base import BaseTestCase
@@ -11,7 +11,7 @@ class TestTextSimilarity(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
       es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
       es.indices.put_mapping(
