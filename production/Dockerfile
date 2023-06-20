@@ -1,6 +1,6 @@
 # alegre
 
-FROM python:3.7
+FROM python:3.7-bullseye
 MAINTAINER sysops@meedan.com
 
 #
