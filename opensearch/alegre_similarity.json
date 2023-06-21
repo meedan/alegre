@@ -9,6 +9,10 @@
         "type": "knn_vector",
         "dimension": 768
       },
+      "vector_openai-text-embedding-ada-002": {
+      "type": "dense_vector",
+      "dims": 1536
+    },
       "vector_paraphrase-filipino-mpnet-base-v2": {
         "type": "knn_vector",
         "dimension": 768
