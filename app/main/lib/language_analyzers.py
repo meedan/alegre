@@ -1,5 +1,5 @@
 import json
-from opensearchpy import Opensearch
+from opensearchpy import OpenSearch
 from flask import request, current_app as app
 SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn", "pt-br", "ar", "fr", "de", "cjk", "id"]
 #via https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#bengali-analyzer

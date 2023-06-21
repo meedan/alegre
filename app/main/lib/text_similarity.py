@@ -1,5 +1,5 @@
 from flask import current_app as app
-from opensearchpy import Opensearch
+from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES

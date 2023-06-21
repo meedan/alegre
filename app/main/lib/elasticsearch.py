@@ -1,6 +1,6 @@
 # Elasticsearch helpers
 import opensearchpy
-from opensearchpy import Opensearch
+from opensearchpy import OpenSearch
 
 from opensearchpy.helpers import scan
 

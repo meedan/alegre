@@ -1,6 +1,6 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace
-from opensearchpy import Opensearch
+from opensearchpy import OpenSearch
 import redis
 import os
 import importlib

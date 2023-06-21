@@ -4,7 +4,7 @@ import json
 
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
-from opensearchpy import Opensearch, TransportError
+from opensearchpy import OpenSearch, TransportError
 import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database

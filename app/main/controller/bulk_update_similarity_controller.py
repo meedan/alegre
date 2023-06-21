@@ -1,7 +1,7 @@
 import copy
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from opensearchpy import Opensearch
+from opensearchpy import OpenSearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
