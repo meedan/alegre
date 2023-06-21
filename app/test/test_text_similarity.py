@@ -1,6 +1,6 @@
 import unittest
 import json
-from opensearchpy import  Elasticsearch
+from opensearchpy import  OpenSearch
 from flask import current_app as app
 
 from app.test.base import BaseTestCase

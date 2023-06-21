@@ -1,6 +1,6 @@
 import unittest
 import json
-from opensearchpy import helpers, Elasticsearch, TransportError
+from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
 
 from app.main import db

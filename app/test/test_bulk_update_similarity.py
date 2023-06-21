@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import json
 from unittest.mock import patch
 from collections import namedtuple
-from opensearchpy import helpers, Elasticsearch, TransportError
+from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
 import numpy as np
 import redis
