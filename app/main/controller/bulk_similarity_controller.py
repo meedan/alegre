@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from elasticsearch import Elasticsearch
-from elasticsearch import helpers
+from opensearchpy import OpenSearch
+from opensearchpy import helpers
 from app.main.lib.fields import JsonObject
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.text_similarity import get_document_body
@@ -46,7 +46,7 @@ class BulkSimilarityResource(Resource):
         return doc_ids, bodies
 
     def submit_bulk_request(self, doc_ids, bodies, op_type="index"):
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+        es = OpenSearch(app.config['ELASTICSEARCH_URL'])
         writables = []
         for doc_body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
             to_write = []

@@ -1,8 +1,8 @@
 # Elasticsearch helpers
-import elasticsearch
-from elasticsearch import Elasticsearch
+import opensearchpy
+from opensearchpy import OpenSearch
 
-from elasticsearch.helpers import scan
+from opensearchpy.helpers import scan
 
 from flask import current_app as app
 
@@ -13,7 +13,7 @@ from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 
 def get_all_documents_matching_context(context):
   matches, clause_count = generate_matches(context)
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
   conditions = [{
       'nested': {
           'score_mode': 'none',
@@ -40,7 +40,7 @@ def get_all_documents_matching_context(context):
     )
     for hit in docs:
       yield hit
-  except elasticsearch.exceptions.NotFoundError as err:
+  except opensearchpy.exceptions.NotFoundError as err:
     ErrorLog.notify(err)
     return []
 
@@ -75,12 +75,12 @@ def merge_contexts(body, found_doc):
     return body
 
 def update_or_create_document(body, doc_id, index):
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
   result = None
   if doc_id:
       try:
           found_doc = es.get(index=index, id=doc_id)
-      except elasticsearch.exceptions.NotFoundError:
+      except opensearchpy.exceptions.NotFoundError:
           found_doc = None
       if found_doc:
           result = es.update(
@@ -134,7 +134,7 @@ def store_document(body, doc_id, language=None):
 
 def delete_context_from_found_doc(context, found_doc, doc_id):
     found_doc["contexts"] = [row for row in found_doc.get("contexts", []) if context != row]
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
     result = es.update(
         id=doc_id,
         body={"doc": found_doc},
@@ -143,10 +143,10 @@ def delete_context_from_found_doc(context, found_doc, doc_id):
     return result
 
 def delete_document(doc_id, context, quiet):
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
     try:
         found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
-    except elasticsearch.exceptions.NotFoundError:
+    except opensearchpy.exceptions.NotFoundError:
         found_doc = None
     try:
         if found_doc and context in found_doc.get("contexts", []) and len(found_doc.get("contexts", [])) > 1:

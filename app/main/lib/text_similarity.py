@@ -1,5 +1,5 @@
 from flask import current_app as app
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
@@ -157,7 +157,7 @@ def search_text_by_model(search_params):
     model_key, threshold = get_model_and_threshold(search_params)
     app.logger.info(
         f"[Alegre Similarity] search_text_by_model:model_key {model_key}, threshold:{threshold}")
-    es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
     clause_count = 0

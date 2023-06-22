@@ -1,7 +1,7 @@
 from flask import request, current_app as app
 from flask import abort, jsonify
 from flask_restplus import Resource, Namespace, fields
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from app.main.lib.shared_models.shared_model import SharedModel
 
 from app.main.lib.fields import JsonObject
