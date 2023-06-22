@@ -6,9 +6,38 @@ from app.main.lib.image_similarity import add_image, delete_image, search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
 DEFAULT_SEARCH_LIMIT = 1000
 logging.basicConfig(level=logging.INFO)
+
 def get_body_for_text_document(params):
+    """
+      This function should only be called when storing a document in OpenSearch.
+      If we are querying for a document, use format_text_similarity_query.
+    """
     app.logger.info(
-    f"[Alegre Similarity] get_body_for_text_document:params (start) {params}")
+    f"[Alegre Similarity] get_body_for_text_document:params {params}")
+    models = set()
+    if 'model' in params:
+        models.add(params['model'])
+    if 'models' in params:
+        models = models|set(params['models'])
+    if not models:
+        models = ['elasticsearch']
+    body = {
+       'language': params.get('language'),
+       'content': params.get('text'),
+       'created_at': params.get('created_at', datetime.now()),
+       'models': list(models),
+       'context': params.get('context')
+       }
+    app.logger.info(
+      f"[Alegre Similarity] get_body_for_text_document:body {body}")
+    return body
+
+def format_text_similarity_query(params):
+    """
+      Reformat params and fill in defaults where need for **querying** OpenSearch
+    """
+    app.logger.info(
+    f"[Alegre Similarity] format_text_similarity_query:params (start) {params}")
 
     # Combine model and models
     models = set()
@@ -37,7 +66,7 @@ def get_body_for_text_document(params):
       params['content'] = None
 
     app.logger.info(
-      f"[Alegre Similarity] get_body_for_text_document:params (end) {params}")
+      f"[Alegre Similarity] format_text_similarity_query:params (end) {params}")
     return params
 
 def audio_model():
