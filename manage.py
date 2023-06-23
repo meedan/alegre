@@ -3,6 +3,7 @@ import unittest
 import json
 
 from flask_migrate import Migrate, MigrateCommand
+# TODO flask migrate no longer supported https://github.com/miguelgrinberg/Flask-Migrate/issues/407
 from flask_script import Manager
 from elasticsearch import Elasticsearch, TransportError
 import sqlalchemy
@@ -22,7 +23,7 @@ from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
 # (by upgrading to tensorflow 2.2 or higher)
-import tensorflow as tf
+# import tensorflow as tf
 
 config_name = os.getenv('BOILERPLATE_ENV', 'dev')
 app = create_app(config_name)
@@ -31,6 +32,7 @@ app.app_context().push()
 
 manager = Manager(app)
 migrate = Migrate(app, db)
+# TODO: MigrateCommand is no longer supported in recent versions of flask_migrate
 manager.add_command('db', MigrateCommand)
 
 @manager.command

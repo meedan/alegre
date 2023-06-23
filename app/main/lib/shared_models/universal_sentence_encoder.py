@@ -7,6 +7,9 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import angular_similarity
 
 class UniversalSentenceEncoder(SharedModel):
+    """
+    TODO: this class seems to be unused, should be removed
+    """
     def load(self):
         model_path = self.options.get('model_path')
         self.model = hub.load(model_path)
