@@ -44,7 +44,4 @@ def create_app(config_name):
         pybrake.LoggingHandler(notifier=app.extensions['pybrake'], level=logging.ERROR)
       )
     logging.basicConfig(level=logging.INFO)
-  app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-      "pool_pre_ping": True,
-  }
   return app
