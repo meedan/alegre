@@ -30,7 +30,8 @@ class Config:
   }
   SQLALCHEMY_TRACK_MODIFICATIONS = False
   SQLALCHEMY_ENGINE_OPTIONS = {
-    'pool_pre_ping': True
+    'pool_pre_ping': True,
+    'pool_recycle': 3600,
   }
   MODEL_NAME = os.getenv('MODEL_NAME')
   MAX_CLAUSE_COUNT = 1000
