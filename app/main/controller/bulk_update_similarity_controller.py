@@ -1,7 +1,7 @@
 import copy
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from app.main.lib.fields import JsonObject
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
@@ -71,7 +71,7 @@ similarity_request = api.model('bulk_update_similarity_request', {
 class BulkUpdateSimilarityResource(Resource):
     # Assumes less than 10k documents at a time.
     def get_writeable_data_for_request(self):
-        es = Elasticsearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+        es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
         params = request.json
         existing_docs = get_documents_by_ids(app.config['ELASTICSEARCH_SIMILARITY'], [e.get("doc_id") for e in params.get("documents", [])], es)
         updated_cases = get_cases(params, existing_docs)

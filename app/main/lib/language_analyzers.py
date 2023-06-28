@@ -1,5 +1,5 @@
 import json
-from elasticsearch import Elasticsearch
+from opensearchpy import OpenSearch
 from flask import request, current_app as app
 SUPPORTED_LANGUAGES = ["en", "pt", "es", "hi", "bn", "pt-br", "ar", "fr", "de", "cjk", "id"]
 #via https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#bengali-analyzer
@@ -304,7 +304,7 @@ SETTINGS_BY_LANGUAGE = {
 }
 
 def init_indices():
-  es = Elasticsearch(app.config['ELASTICSEARCH_URL'])
+  es = OpenSearch(app.config['ELASTICSEARCH_URL'])
   indices = es.cat.indices(h='index', s='index').split()
   for lang in SUPPORTED_LANGUAGES:
     index_name = app.config['ELASTICSEARCH_SIMILARITY']+"_"+lang
