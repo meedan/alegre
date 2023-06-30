@@ -4,40 +4,20 @@ from flask import request, current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.image_similarity import add_image, delete_image, search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
-DEFAULT_SEARCH_LIMIT = 1000
+DEFAULT_SEARCH_LIMIT = 200
 logging.basicConfig(level=logging.INFO)
 
-def get_body_for_text_document(params):
+def get_body_for_text_document(params, mode):
     """
-      This function should only be called when storing a document in OpenSearch.
-      If we are querying for a document, use format_text_similarity_query.
-    """
-    app.logger.info(
-    f"[Alegre Similarity] get_body_for_text_document:params {params}")
-    models = set()
-    if 'model' in params:
-        models.add(params['model'])
-    if 'models' in params:
-        models = models|set(params['models'])
-    if not models:
-        models = ['elasticsearch']
-    body = {
-       'language': params.get('language'),
-       'content': params.get('text'),
-       'created_at': params.get('created_at', datetime.now()),
-       'models': list(models),
-       'context': params.get('context')
-       }
-    app.logger.info(
-      f"[Alegre Similarity] get_body_for_text_document:body {body}")
-    return body
-
-def format_text_similarity_query(params):
-    """
-      Reformat params and fill in defaults where need for **querying** OpenSearch
+      This function should only be called when querying or storing a
+      document in OpenSearch.
+      @params mode should be "query" (default) or "store"
+      If we are querying for a document, use a permissive approach and keep all params
+      with some reformating. If we are storing, we remove unexpected items in
+      `params` in order to avoid things being stored in OpenSearch unintentionally
     """
     app.logger.info(
-    f"[Alegre Similarity] format_text_similarity_query:params (start) {params}")
+    f"[Alegre Similarity] format_text_similarity:params (start) {params}")
 
     # Combine model and models
     models = set()
@@ -65,8 +45,16 @@ def format_text_similarity_query(params):
     if 'content' not in params:
       params['content'] = None
 
+    if mode=='store':
+      allow_list = set(['language', 'content', 'created_at', 'models', 'context'])
+      keys_to_remove = params.keys() - allow_list
+      app.logger.info(
+        f"[Alegre Similarity] format_text_similarity:running in `store' mode. Removing {keys_to_remove}")
+      for key in keys_to_remove:
+        del params[key]
+
     app.logger.info(
-      f"[Alegre Similarity] format_text_similarity_query:params (end) {params}")
+      f"[Alegre Similarity] format_text_similarity:params (end) {params}")
     return params
 
 def audio_model():
