@@ -44,4 +44,4 @@ class SimilarityResource(Resource):
     @api.doc('Make a text similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"text":"Some Text", "threshold": 0.5, "model": "elasticsearch"}\' "http://[ALEGRE_HOST]/text/similarity"')
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def get(self):
-      return similarity.get_similar_items(similarity.format_text_similarity(request.args or request.json, mode = 'query'), "text")
+      return similarity.get_similar_items(similarity.get_body_for_text_document(request.args or request.json, mode = 'query'), "text")
