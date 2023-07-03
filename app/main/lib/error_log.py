@@ -10,9 +10,5 @@ class ErrorLog:
         if app.extensions.get('pybrake'):
             app.extensions.get('pybrake').notify(err)
         if context:
-            with sentry_sdk.configure_scope() as scope:
-                for key, value in context.items():
-                    scope.set_extra(key, value)
-                sentry_sdk.capture_exception(err)
-        else:
-            sentry_sdk.capture_exception(err)
+            sentry_sdk.set_context("internal_context", context)
+        sentry_sdk.capture_exception(err)
