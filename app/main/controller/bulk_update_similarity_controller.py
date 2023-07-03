@@ -90,6 +90,6 @@ class BulkUpdateSimilarityResource(Resource):
         all_written = []
         for response_data in response:
             for row in response_data:
-                row["doc"].pop("created_at", None)
+                row["_source"].pop("created_at", None)
                 all_written.append(row)
         return all_written

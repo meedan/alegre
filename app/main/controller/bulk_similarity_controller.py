@@ -28,7 +28,7 @@ class BulkSimilarityResource(Resource):
             "_op_type": op_type,
             '_index': app.config['ELASTICSEARCH_SIMILARITY'],
             '_id': doc_id,
-            'doc': body
+            '_source': body
         }
 
     def get_bodies_for_request(self):
