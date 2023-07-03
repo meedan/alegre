@@ -39,7 +39,7 @@ class BulkSimilarityResource(Resource):
             bodies.append(
                 json_parse_timestamp(
                     get_document_body(
-                        similarity.get_body_for_text_document(document)
+                        similarity.get_body_for_text_document(document, mode='store')
                     )
                 )
             )
