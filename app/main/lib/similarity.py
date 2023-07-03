@@ -45,7 +45,7 @@ def get_body_for_text_document(params, mode):
     if 'content' not in params:
       params['content'] = None
 
-    if mode=='store':
+    if mode == 'store':
       allow_list = set(['language', 'content', 'created_at', 'models', 'context'])
       keys_to_remove = params.keys() - allow_list
       app.logger.info(
