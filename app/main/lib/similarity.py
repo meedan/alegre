@@ -11,7 +11,7 @@ def get_body_for_text_document(params, mode):
     """
       This function should only be called when querying or storing a
       document in OpenSearch.
-      @params mode should be "query" (default) or "store"
+      @params mode should be "query" or "store"
       If we are querying for a document, use a permissive approach and keep all params
       with some reformating. If we are storing, we remove unexpected items in
       `params` in order to avoid things being stored in OpenSearch unintentionally
