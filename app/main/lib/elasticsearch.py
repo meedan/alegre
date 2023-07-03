@@ -83,19 +83,23 @@ def update_or_create_document(body, doc_id, index):
       except elasticsearch.exceptions.NotFoundError:
           found_doc = None
       if found_doc:
+          body = {"doc": merge_contexts(body, found_doc)}
+          app.logger.info(f"Sending OpenSearch update: {body}")
           result = es.update(
               id=doc_id,
-              body={"doc": merge_contexts(body, found_doc)},
+              body=body,
               index=index,
               retry_on_conflict=3
           )
       else:
+          app.logger.info(f"Sending OpenSearch store: {body}")
           result = es.index(
               id=doc_id,
               body=body,
               index=index
           )
   else:
+      app.logger.info(f"Sending OpenSearch store without id: {body}")
       result = es.index(
           body=body,
           index=index

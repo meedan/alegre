@@ -17,7 +17,7 @@ def get_body_for_text_document(params, mode):
       `params` in order to avoid things being stored in OpenSearch unintentionally
     """
     app.logger.info(
-    f"[Alegre Similarity] format_text_similarity:params (start) {params}")
+    f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (start) {params}")
 
     # Combine model and models
     models = set()
@@ -49,12 +49,12 @@ def get_body_for_text_document(params, mode):
       allow_list = set(['language', 'content', 'created_at', 'models', 'context'])
       keys_to_remove = params.keys() - allow_list
       app.logger.info(
-        f"[Alegre Similarity] format_text_similarity:running in `store' mode. Removing {keys_to_remove}")
+        f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
       for key in keys_to_remove:
         del params[key]
 
     app.logger.info(
-      f"[Alegre Similarity] format_text_similarity:params (end) {params}")
+      f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (end) {params}")
     return params
 
 def audio_model():

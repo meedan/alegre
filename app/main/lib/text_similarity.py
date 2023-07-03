@@ -203,9 +203,11 @@ def search_text_by_model(search_params):
         else:
             conditions['query']['script_score']['query']['bool']['must'].append(context)
     limit = search_params.get("limit")
+    body = get_body_from_conditions(conditions)
+    app.logger.info(f"Sending OpenSearch query: {body}")
     result = es.search(
         size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit of 1000 is given in similarity.py
-        body=get_body_from_conditions(conditions),
+        body=body,
         index=search_indices
     )
     response = strip_vectors(
