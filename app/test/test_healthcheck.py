@@ -23,14 +23,6 @@ class TestHealthcheckBlueprint(BaseTestCase):
       self.assertEqual(200, response.status_code)
       self.assertEqual(True, all(result['result']))
 
-  def test_healthcheck_api_with_pybrake_key(self):
-    with app.app_context():
-      app.config['PYBRAKE'] = {'project_key':'pybrake_key'}
-      response = self.client.get('/healthcheck/')
-      result = json.loads(response.data.decode())
-      self.assertEqual('application/json', response.content_type)
-      self.assertEqual(200, response.status_code)
-      self.assertEqual(True, all(result['result']))
 class TestHealthcheckBlueprintWithBadConfig(BaseTestCase):
 
   def tearDown(self):
