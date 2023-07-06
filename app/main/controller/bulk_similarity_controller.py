@@ -28,7 +28,7 @@ class BulkSimilarityResource(Resource):
             "_op_type": op_type,
             '_index': app.config['ELASTICSEARCH_SIMILARITY'],
             '_id': doc_id,
-            'doc': body
+            '_source': body
         }
 
     def get_bodies_for_request(self):
@@ -39,7 +39,7 @@ class BulkSimilarityResource(Resource):
             bodies.append(
                 json_parse_timestamp(
                     get_document_body(
-                        similarity.get_body_for_text_document(document)
+                        similarity.get_body_for_text_document(document, mode='store')
                     )
                 )
             )

@@ -90,7 +90,6 @@ psutil==5.8.0
 psycopg2==2.8.4
 pyasn1==0.4.4
 pyasn1-modules==0.2.2
-pybrake==0.4.5
 pycld3==0.22
 pycparser==2.19
 pydantic==1.8.2

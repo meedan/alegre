@@ -1,6 +1,7 @@
 from flask import current_app as app
 from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.error_log import ErrorLog
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
@@ -40,7 +41,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
+      ErrorLog.notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
@@ -203,9 +204,11 @@ def search_text_by_model(search_params):
         else:
             conditions['query']['script_score']['query']['bool']['must'].append(context)
     limit = search_params.get("limit")
+    body = get_body_from_conditions(conditions)
+    app.logger.info(f"Sending OpenSearch query: {body}")
     result = es.search(
-        size=limit or ELASTICSEARCH_DEFAULT_LIMIT,
-        body=get_body_from_conditions(conditions),
+        size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
+        body=body,
         index=search_indices
     )
     response = strip_vectors(

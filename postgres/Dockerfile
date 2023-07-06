@@ -1,18 +1,21 @@
-FROM postgres:11.4
+FROM postgres:12-buster
 
 MAINTAINER Alexey Kovrizhkin <lekovr+dopos@gmail.com>
 
 ENV DOCKERFILE_VERSION 190701
 
-RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list && \
-    rm -rf /etc/apt/sources.list.d/* && \
-    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
-    echo 'deb http://archive.debian.org/debian-security/ stretch/updates main contrib non-free' >> /etc/apt/sources.list && \
-    apt-get update && apt-get install apt-transport-https libcurl3-gnutls -y && \
-    echo 'deb https://apt-archive.postgresql.org/pub/repos/apt stretch-pgdg main' >> /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates gnupg2 && \
+    echo 'deb http://deb.debian.org/debian/ buster main contrib non-free' > /etc/apt/sources.list && \
+    echo 'deb http://security.debian.org/debian-security buster/updates main contrib non-free' >> /etc/apt/sources.list && \
+    echo 'deb https://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >> /etc/apt/sources.list && \
+    apt-key adv --fetch-keys https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
+    apt-get update && \
+    apt-get install -y \
+    apt-transport-https \
+    libcurl3-gnutls \
     gawk \
-    postgresql-plperl-$PG_MAJOR \
+    postgresql-plperl-12 \
     && localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 

@@ -7,7 +7,6 @@ from flask_migrate import Migrate
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.contrib.fixers import ProxyFix
-import pybrake.flask
 import logging
 from .config import config_by_name
 
@@ -37,11 +36,5 @@ def create_app(config_name):
   migrate.init_app(app, db)
 
   with app.app_context():
-    # Init JSON logging, only once to avoid exceptions during tests
-    if app.config['PYBRAKE']['project_key']:
-      pybrake.flask.init_app(app)
-      app.logger.addHandler(
-        pybrake.LoggingHandler(notifier=app.extensions['pybrake'], level=logging.ERROR)
-      )
     logging.basicConfig(level=logging.INFO)
   return app

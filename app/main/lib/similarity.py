@@ -4,25 +4,58 @@ from flask import request, current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.image_similarity import add_image, delete_image, search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
-DEFAULT_SEARCH_LIMIT = 20
+DEFAULT_SEARCH_LIMIT = 200
 logging.basicConfig(level=logging.INFO)
-def get_body_for_text_document(params):
+
+def get_body_for_text_document(params, mode):
+    """
+      This function should only be called when querying or storing a
+      document in OpenSearch.
+      @params mode should be "query" or "store"
+      If we are querying for a document, use a permissive approach and keep all params
+      with some reformating. If we are storing, we remove unexpected items in
+      `params` in order to avoid things being stored in OpenSearch unintentionally
+    """
     app.logger.info(
-    f"[Alegre Similarity] get_body_for_text_document:params {params}")
+    f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (start) {params}")
+
+    # Combine model and models
     models = set()
     if 'model' in params:
         models.add(params['model'])
+        del params['model']
     if 'models' in params:
         models = models|set(params['models'])
     if not models:
         models = ['elasticsearch']
-    body = {'language': params.get('language'), 'content': params.get('text'), 'created_at': params.get("created_at", datetime.now()), 'limit': params.get("limit", DEFAULT_SEARCH_LIMIT), 'models': list(models)}
-    for key in ['context', 'threshold', 'fuzzy', 'min_es_score', 'per_model_threshold']:
-        if key in params:
-            body[key] = params[key]
+    params['models'] = list(models)
+
+    # Rename "text" to "content" if present
+    if 'text' in params:
+      params['content'] = params.get('text')
+      del params["text"]
+
+    # Set defaults
+    if 'created_at' not in params:
+      params['created_at'] = datetime.now()
+    if 'limit' not in params:
+      params['limit'] = DEFAULT_SEARCH_LIMIT
+    if 'language' not in params:
+      params['language'] = None
+    if 'content' not in params:
+      params['content'] = None
+
+    if mode == 'store':
+      allow_list = set(['language', 'content', 'created_at', 'models', 'context'])
+      keys_to_remove = params.keys() - allow_list
+      app.logger.info(
+        f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
+      for key in keys_to_remove:
+        del params[key]
+
     app.logger.info(
-      f"[Alegre Similarity] get_body_for_text_document:body {body}")
-    return body
+      f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (end) {params}")
+    return params
 
 def audio_model():
   return SharedModel.get_client(app.config['AUDIO_MODEL'])

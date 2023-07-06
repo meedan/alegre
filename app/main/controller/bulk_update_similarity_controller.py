@@ -32,7 +32,7 @@ def get_merged_contexts(tmp_doc, existing_doc):
     return copy.deepcopy(merge_contexts(get_document_body(tmp_doc), {"_source": existing_doc})["contexts"])
 
 def update_existing_doc_values(document, existing_doc):
-    cleaned_document = similarity.get_body_for_text_document(document)
+    cleaned_document = similarity.get_body_for_text_document(document, mode='store')
     for model_name in cleaned_document.get("models"):
         tmp_doc = copy.deepcopy(cleaned_document)
         tmp_doc["models"] = [model_name]
@@ -90,6 +90,6 @@ class BulkUpdateSimilarityResource(Resource):
         all_written = []
         for response_data in response:
             for row in response_data:
-                row["doc"].pop("created_at", None)
+                row["_source"].pop("created_at", None)
                 all_written.append(row)
         return all_written
