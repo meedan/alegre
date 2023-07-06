@@ -1,6 +1,7 @@
 from flask import current_app as app
 from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.error_log import ErrorLog
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
@@ -40,7 +41,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
+      ErrorLog.notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
