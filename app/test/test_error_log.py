@@ -6,6 +6,7 @@ from flask import current_app as app
 from unittest.mock import patch
 from unittest import mock
 from app.test.base import BaseTestCase
+from app.main.lib.error_log import ErrorLog
 
 class TestErrorLogBlueprint(BaseTestCase):
     @patch('app.main.lib.error_log.sentry_sdk.capture_exception')
