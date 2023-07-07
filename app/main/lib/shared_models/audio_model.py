@@ -150,7 +150,7 @@ class AudioModel(SharedModel):
                   WHERE score <= :threshold
                   AND 
                   """+context_query+"""
-                  ORDER BY score DESC
+                  ORDER BY score ASC
                 """
             else:
                 cmd = """
@@ -160,7 +160,7 @@ class AudioModel(SharedModel):
                     AS score FROM audios
                   ) f
                   WHERE score <= :threshold
-                  ORDER BY score DESC
+                  ORDER BY score ASC
                 """
             matches = db.session.execute(text(cmd), dict(**{
                 'chromaprint_fingerprint': chromaprint_fingerprint,
