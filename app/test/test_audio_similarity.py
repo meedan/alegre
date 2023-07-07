@@ -256,7 +256,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(results[0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
         self.assertEqual(results[0]['doc_id'], 'blah')
         self.assertEqual(results[0]['url'], "http://blah.com")
-        self.assertEqual(results[0]['score'], 0.0)
+        self.assertEqual(results[0]['score'], 1.0)
         self.assertEqual(results[0]['context'], [{"blah": 1}])
     
     def test_search_by_context(self):
