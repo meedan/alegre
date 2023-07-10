@@ -1,21 +1,26 @@
+import os
+import json
+import requests
+import botocore
+import boto3
+
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-import boto3
-import botocore
-import requests
-import json
-import os
+
+from app.main.lib.error_log import ErrorLog
 
 def safely_handle_transcription_job(callback):
     result = None
     try:
         result = callback()
     except botocore.exceptions.ClientError as error:
+        ErrorLog.notify(error)
         result = {
             'error': error.response['Error']['Code'],
             'message': error.response['Error']['Message'],
         }
     except Exception as e:
+        ErrorLog.notify(e)
         print("Oops!", repr(e), "occurred.")
         result = {
             'error': repr(e),
