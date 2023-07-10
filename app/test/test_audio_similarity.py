@@ -259,6 +259,25 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results[0]['score'], 1.0)
         self.assertEqual(results[0]['context'], [{"blah": 1}])
     
+    def test_audio_model_confirmed_match(self):
+        url1 = 'file:///app/app/test/data/test_audio_1.mp3'
+        url2 = 'file:///app/app/test/data/test_audio_2.mp3'
+        self.model.load()
+        audio_hasher(url1.replace(""))
+        audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case", url=url1, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 456}])
+        audio2 = Audio(chromaprint_fingerprint=audio_hasher(url2.replace("file://", "")), doc_id="second_case", url=url2, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
+        db.session.add(audio)
+        db.session.add(audio2)
+        db.session.commit()
+        result = self.model.search({"url": url1, "context": {"blah": 2}})
+        second_case = [e for e in result["result"] if e["url"] == url2][0]
+        self.assertIsInstance(second_case, dict)
+        self.assertEqual(sorted(second_case.keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+        self.assertEqual(second_case['doc_id'], 'second_case')
+        self.assertEqual(second_case['url'], url2)
+        self.assertEqual(second_case['context'], [{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
+        self.assertGreater(second_case['score'], 0.99)
+
     def test_search_by_context(self):
         self.model.load()
         results = self.model.search_by_context({"blah": 1})
