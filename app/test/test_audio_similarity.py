@@ -263,7 +263,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url1 = 'file:///app/app/test/data/test_audio_1.mp3'
         url2 = 'file:///app/app/test/data/test_audio_2.mp3'
         self.model.load()
-        audio_hasher(url1.replace(""))
         audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case", url=url1, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 456}])
         audio2 = Audio(chromaprint_fingerprint=audio_hasher(url2.replace("file://", "")), doc_id="second_case", url=url2, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
         db.session.add(audio)
