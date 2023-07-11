@@ -86,9 +86,9 @@ class AudioTranscriptionResource(Resource):
             result = None
             response = self.aws_get_transcription(jobName)
             if response['TranscriptionJob']:
-                job_name = response['TranscriptionJob']['TranscriptionJobName']
-                job_status = response['TranscriptionJob']['TranscriptionJobStatus']
-                language_code = response['TranscriptionJob']['LanguageCode']
+                job_name = response['TranscriptionJob'].get('TranscriptionJobName')
+                job_status = response['TranscriptionJob'].get('TranscriptionJobStatus')
+                language_code = response['TranscriptionJob'].get('LanguageCode')
                 result = {
                     'job_name': job_name,
                     'job_status': job_status,
@@ -99,5 +99,8 @@ class AudioTranscriptionResource(Resource):
                     transcriptionResponse = requests.get(transcriptionUri)
                     transcriptionResponseDict = json.loads(transcriptionResponse.text)
                     result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
+                if job_status == "FAILED":
+                    if "must have a speech segment long enough in duration " not in response["TranscriptionJob"]["FailureReason"]:
+                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!", {"response": resposne}))
             return result
         return safely_handle_transcription_job(get_transcription)
