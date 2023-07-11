@@ -101,6 +101,6 @@ class AudioTranscriptionResource(Resource):
                     result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
                 if job_status == "FAILED":
                     if "must have a speech segment long enough in duration " not in response["TranscriptionJob"]["FailureReason"]:
-                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!", {"response": resposne}))
+                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!", {"response": response}))
             return result
         return safely_handle_transcription_job(get_transcription)
