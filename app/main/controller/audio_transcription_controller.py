@@ -99,10 +99,10 @@ class AudioTranscriptionResource(Resource):
                     transcriptionResponse = requests.get(transcriptionUri)
                     transcriptionResponseDict = json.loads(transcriptionResponse.text)
                     result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
-                if job_status == "FAILED":
+                elif job_status == "FAILED":
                     if "must have a speech segment long enough in duration " not in response["TranscriptionJob"]["FailureReason"]:
-                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!", {"response": response}))
-                else:
-                    ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!", {"response": response}))
+                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!"), {"response": response})
+                elif job_status != 'IN_PROGRESS':
+                    ErrorLog.notify(Exception("[ALEGRE] Transcription job unknown status!"), {"response": response})
             return result
         return safely_handle_transcription_job(get_transcription)
