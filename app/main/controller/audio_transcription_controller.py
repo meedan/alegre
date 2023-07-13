@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import botocore
+from botocore.exceptions import BotoCoreError, ClientError
 import boto3
 
 from flask import request, current_app as app
@@ -45,13 +46,19 @@ transcribe = boto3.client(
 @api.route('/')
 class AudioTranscriptionResource(Resource):
     def aws_start_transcription(self, jobName, audioUri):
-        return transcribe.start_transcription_job(
-            TranscriptionJobName=jobName,
-            IdentifyLanguage=True,
-            Media={
-                'MediaFileUri': audioUri
-            }
-        )
+        try:
+            return transcribe.start_transcription_job(
+                TranscriptionJobName=jobName,
+                IdentifyLanguage=True,
+                Media={
+                    'MediaFileUri': audioUri
+                }
+            )
+        except (BotoCoreError, ClientError) as e:
+            if 'ConflictException' not in str(e):
+                return transcribe.get_transcription_job(TranscriptionJobName=jobName)
+            else:
+                raise
 
     def aws_get_transcription(self, jobName):
         return transcribe.get_transcription_job(TranscriptionJobName=jobName)
