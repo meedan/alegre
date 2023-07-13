@@ -55,10 +55,10 @@ class AudioTranscriptionResource(Resource):
                 }
             )
         except (BotoCoreError, ClientError) as e:
-            if 'ConflictException' not in str(e):
+            if 'ConflictException' in str(e):
                 return transcribe.get_transcription_job(TranscriptionJobName=jobName)
             else:
-                raise
+                raise e
 
     def aws_get_transcription(self, jobName):
         return transcribe.get_transcription_job(TranscriptionJobName=jobName)
