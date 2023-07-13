@@ -296,7 +296,12 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertLessEqual(second_case['score'], 0.1)
 
     def test_search_by_context(self):
+        url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
+        hash_key = "blah"
+        audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        db.session.add(audio)
+        db.session.commit()
         results = self.model.search_by_context({"blah": 1})
         self.assertEqual(results[0]['doc_id'], 'blah')
         self.assertEqual(results[0]['url'], "http://blah.com")
