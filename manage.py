@@ -213,7 +213,7 @@ def init_perl_functions():
                 my @corr = &$compare(\@first, \@second, $span);
                 my $maxindex = $_SHARED{maxindex};
                 my $max_corr_index = &$maxindex(\@corr);
-                return 1-@corr[$max_corr_index]
+                return @corr[$max_corr_index]
             }
             return 0.0
         $$
