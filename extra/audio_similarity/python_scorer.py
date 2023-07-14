@@ -57,7 +57,7 @@ def max_index(listx):
             max_index = i
     return max_index
   
-def get_max_corr(corr, source, target, span, step):
+def get_max_corr(corr): #, source, target, span, step
     max_corr_index = max_index(corr)
     #max_corr_offset = -span + max_corr_index * step #This is not used.
     return corr[max_corr_index]
@@ -68,8 +68,8 @@ def get_score(first, second, span=150, step=1):
        return get_max_corr(corr, first, second, span, step)
     return 0
 
-listx = json.loads(sys.argv[1])
-listy = json.loads(sys.argv[2])
+arg1 = json.loads(sys.argv[1])
+arg2 = json.loads(sys.argv[2])
 #listx=[1,2,3,4,5,6]*10 + [30,40,50,60,70,80]*5;
 #listy=[30,40,50,60,70,80]*5;
 #listx=[1,2,3,4,5,6,7,8,9];
@@ -80,7 +80,7 @@ listy = json.loads(sys.argv[2])
 #for offset in range(-2,3,1):
 #	print(cross_correlation(listx,listy,offset))
 #print(compare(listx,listy,150,1));
-print(get_score(listx,listy))
+print(get_score(arg1, arg2))
 
 
 
