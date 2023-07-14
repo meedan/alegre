@@ -207,6 +207,7 @@ def init_perl_functions():
     # DO NOT EDIT HERE.
     # Please see the reference implementations at /extra/audio_simliarity
     # Edit those implementations and ensure output is correct for the test data there.
+    # This returns a similarity metric where 1.0 indicates a perfect match
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
