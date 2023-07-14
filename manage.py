@@ -131,21 +131,22 @@ def init_perl_functions():
             $_SHARED{correlation} = sub {
                 my @x=@{ $_[0]; };
                 my @y=@{ $_[1]; };
-                $len=scalar(@x);
+                my $len=scalar(@x);
                 if (scalar(@x) > scalar(@y)) { 
                    $len = scalar(@y);
                 }
-                $covariance = 0;
+                my $covariance = 0;
+                my $i, my $bits, my $xor, my $convariance;
                 for $i (0..$len-1) {
-                $bits=0;
-                $xor=(int(@x[$i]) ^ int(@y[$i]));
-                $bits=$xor;
-                $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
-                $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
-                $bits = ($bits & 0x0F0F0F0F) + (($bits & 0xF0F0F0F0) >> 4);
-                $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
-                $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
-                $covariance +=32 - $bits;
+                   $bits=0;
+                   $xor=(int($x[$i]) ^ int($y[$i]));
+                   $bits=$xor;
+                   $bits = ($bits & 0x55555555) + (($bits & 0xAAAAAAAA) >> 1);
+                   $bits = ($bits & 0x33333333) + (($bits & 0xCCCCCCCC) >> 2);
+                   $bits = ($bits & 0x0F0F0F0F) + (($bits & 0xF0F0F0F0) >> 4);
+                   $bits = ($bits & 0x00FF00FF) + (($bits & 0xFF00FF00) >> 8);
+                   $bits = ($bits & 0x0000FFFF) + (($bits & 0xFFFF0000) >> 16);
+                   $covariance +=32 - $bits;
                 }
                 $covariance = $covariance / $len;
                 return $covariance/32;
@@ -154,7 +155,7 @@ def init_perl_functions():
                 my @x=@{ $_[0]; };
                 my @y=@{ $_[1]; };
                 my $offset=$_[2];
-                my $min_overlap=20; #Change to 2 for debug.
+                my $min_overlap=$_[3]; #Defaults to span (20)
                 if ($offset > 0) {
                     @x = @x[$offset..scalar(@x)-1]
                 } if ($offset < 0) {
@@ -174,22 +175,23 @@ def init_perl_functions():
                 my @y=@{ $_[1]; };
                 my $crosscorrelation = $_SHARED{crosscorrelation};
                 my $span=$_[2];
-                my $step=1;
                 if ($span > scalar(@x) || $span > scalar(@y)){
                 	$span=scalar(@x)>scalar(@y)? scalar(@y) : scalar(@x);
                 	$span--;
                 }
-                my @corr_xy;
+                my $min_overlap = $span;
+                my @corr_xy, my $offset;
                 for $offset (-1*$span..$span){
-                	push @corr_xy, &$crosscorrelation(\@x, \@y, $offset);
+                	push @corr_xy, &$crosscorrelation(\@x, \@y, $offset, $min_overlap);
                 }
                 return @corr_xy;
             };
             $_SHARED{maxindex} = sub {
                 my @x=@{ $_[0]; };
-                $maxi = 0;
+                my $maxi = 0;
+                my $i;
                 for $i (1..scalar(@x)-1) {
-                	if (@x[$i]>@x[$maxi]) {
+                	if ($x[$i]>$x[$maxi]) {
                 		$maxi = $i;
                 	}
                 }
@@ -213,7 +215,7 @@ def init_perl_functions():
                 my @corr = &$compare(\@first, \@second, $span);
                 my $maxindex = $_SHARED{maxindex};
                 my $max_corr_index = &$maxindex(\@corr);
-                return @corr[$max_corr_index]
+                return $corr[$max_corr_index]
             }
             return 0.0
         $$
