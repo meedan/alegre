@@ -65,7 +65,7 @@ def get_max_corr(corr): #, source, target, span, step
 def get_score(first, second, span=150, step=1):
     if len(first) > 0 and len(second) > 0 and len(first)*0.8 <= len(second) and len(first)*1.2>=len(second):
        corr = compare(first, second, span, step)
-       return get_max_corr(corr, first, second, span, step)
+       return get_max_corr(corr) #, first, second, span, step)
     return 0
 
 arg1 = json.loads(sys.argv[1])
