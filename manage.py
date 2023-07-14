@@ -122,6 +122,9 @@ def init_perl_functions():
         CREATE OR REPLACE LANGUAGE plperl;
       """)
     )
+    # DO NOT EDIT HERE.
+    # Please see the reference implementations at /extra/audio_simliarity
+    # Edit those implementations and ensure output is correct for the test data there.
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
@@ -201,6 +204,9 @@ def init_perl_functions():
         LANGUAGE plperl;
       """)
     )
+    # DO NOT EDIT HERE.
+    # Please see the reference implementations at /extra/audio_simliarity
+    # Edit those implementations and ensure output is correct for the test data there.
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',

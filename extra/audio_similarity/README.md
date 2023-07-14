@@ -16,3 +16,15 @@ cat ex1.json ex2.json | xargs python python_scorer.py
 cat ex1.json ex3.json | xargs python python_scorer.py
 cat ex3.json ex3.json | xargs python python_scorer.py
 ```
+
+Output for these commands are:
+```
+0.998585972850679
+0
+1
+0.9985859728506787
+0
+1.0
+```
+
+Note the functions return **similarity** (one is a perfect match).
