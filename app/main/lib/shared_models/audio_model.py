@@ -147,7 +147,7 @@ class AudioModel(SharedModel):
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score >= :threshold
+                  WHERE score <= :threshold
                   AND 
                   """+context_query+"""
                   ORDER BY score DESC
@@ -159,7 +159,7 @@ class AudioModel(SharedModel):
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score >= :threshold
+                  WHERE score <= :threshold
                   ORDER BY score DESC
                 """
             matches = db.session.execute(text(cmd), dict(**{

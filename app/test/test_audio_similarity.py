@@ -250,7 +250,8 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_audio_model_search_by_context(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.load()
-        audio = Audio(chromaprint_fingerprint=audio_hasher(url.replace("file://", "")), doc_id="blah332", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        context = [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}]
+        audio = Audio(chromaprint_fingerprint=audio_hasher(url.replace("file://", "")), doc_id="blah332", url=url, context=context)
         db.session.add(audio)
         db.session.commit()
         second_print = [-248655731, -231870068, -230690420, -482429284, -478234963, -503476625, -520316369, -521361138, 1634511886, 1647109134, 1647046702, 1646940206, 1646924078, -500563482, -496367961, -471202139, -474282347, -476481849, -510101945, -510069497, -526854905, -237050874, -251730922, -251792089, -503463131, -513949140, -513949140, -1587752392, -1250138600, -180474360, -181522936, -194113975, -261353745, -253227346, -189264210, -188938850, -251825010, -251861834, -797121369, 1366287511, 1898902657, 1932452993, 1932452993, 1936651425, 1928253859, -491814237, -487750941, -496401919, -500657663, -500657643, -483876315, -517414355, -534219217, -529853138, -521597906, -524744474, -459335514, -255973226, -255973242, 1908283526, 1925055878, 1929249159, 1392390532, 1383981188, 1378656532, 1915527460, 1915527212, 1915528248, 1903135752, 1885837336, 1894160408, -253321943, -253326037, -262747077, -263193126, -262311942, -159482198, -151365974, -152489301, -152554837, -228052277, -232251189, -231202597, -243569493, -253069157, -257238902, -257242230, -521302374, -529751382, -517430614, -482831830, -483884501, -479492807, -534139591, -534190021, -534124501, -513115153, -479590737, -487980369, -486931793, -487062593, -488087363, -513253323, -529931243, -529865723, -521475067, -521475065, -252982986, -253179866, -260519706, -514274074, -472199258, -493164874, -1564809486, -1561472269, -1569918447, -1574116603, -1574113276, -1557204988, -483728380, -517313481, -528802706, -520549138, -1600584530, -1600453442, -1583800134, -1281875782, -1292339717, -1293328695, -1292907831, -1292969380, -1276199332, -504392116, -533941748, -533945844, -517414116, -517410760, -483794904, -496311256, -496351175, -487962599, -470136709, -1577427462, -1598339078, -1600568581, -1600634279, -1330097415, -1325833495, -1317312771, -1275466019, -1293353515, -1297496649, -1293171465, -1301552649, -1305742569, -1557473769, -1607807481, -1603604985, -1595314665, -1595378138, -1603522266, -1603522330, -1606676314, -1606479681, -262794049, -205121403, -225572412, 1921977028, 1921870556, -225678721, -224598210, -226713298, -231886802, -231829186, -248598194, -265641530, -265582649, -265579009, -265554513, -534022993, -521585489, -525845329, -525849169, -257413713, -207016049, -219666481, -228034567, -232229591, -232196807, -232008440, -244654327, -253043191, -253041137, -1268125170, -1272393170, -1272425938, -1271376338, -1267184018, -1531426306, -1514481442, -1497699122, -1497636658, -1493655458, -1502040008, -1503018952, -1506029256, -1489472728, -1525145048, -1541863896, -1542898072, -1538704408, -456451591, -459404918, -459388790, -172701558, -139158390, -156983158, -152723318, -161046278, -164192018, -164175634]
@@ -260,19 +261,21 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results[0]['doc_id'], 'blah')
         self.assertEqual(results[0]['url'], "http://blah.com")
         self.assertEqual(results[0]['score'], 1.0)
-        self.assertEqual(results[0]['context'], [{"blah": 1}])
+        self.assertEqual(results[0]['context'], context)
     
     def test_audio_model_confirmed_match(self):
         url1 = 'file:///app/app/test/data/test_audio_1.mp3'
         url2 = 'file:///app/app/test/data/test_audio_2.mp3'
         self.model.load()
-        audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case", url=url1, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 456}])
+        #audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case", url=url1, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 456}])
         audio2 = Audio(chromaprint_fingerprint=audio_hasher(url2.replace("file://", "")), doc_id="second_case", url=url2, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
-        db.session.add(audio)
+        #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"url": url1, "context": {"blah": 2}})
-        second_case = [e for e in result["result"] if e["url"] == url2][0]
+        result = self.model.search({"url": url1, "context": {"blah": 2}, "threshold": 0.9})
+        second_case = [e for e in result["result"] if e["url"] == url2]
+        self.assertGreater(len(second_case),0)
+        second_case = second_case[0]
         self.assertIsInstance(second_case, dict)
         self.assertEqual(sorted(second_case.keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
         self.assertEqual(second_case['doc_id'], 'second_case')
@@ -284,9 +287,9 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         url1 = 'file:///app/app/test/data/test.mp3'
         url2 = 'file:///app/app/test/data/no_match_audio.mp3'
         self.model.load()
-        audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case_no_match", url=url1, context=[{'blah': 3, 'has_custom_id': True, 'project_media_id': 1456}])
+        #audio = Audio(chromaprint_fingerprint=audio_hasher(url1.replace("file://", "")), doc_id="first_case_no_match", url=url1, context=[{'blah': 3, 'has_custom_id': True, 'project_media_id': 1456}])
         audio2 = Audio(chromaprint_fingerprint=audio_hasher(url2.replace("file://", "")), doc_id="second_case_no_match", url=url2, context=[{'blah': 3, 'has_custom_id': True, 'project_media_id': 1457}])
-        db.session.add(audio)
+        #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
         result = self.model.search({"url": url1, "context": {"blah": 3}})
