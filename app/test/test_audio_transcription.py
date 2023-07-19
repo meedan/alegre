@@ -8,8 +8,20 @@ from app.test.base import BaseTestCase
 from unittest import mock
 from collections import namedtuple
 from botocore.exceptions import ClientError
-
+from app.main.controller.audio_transcription_controller import log_abnormal_failure, transcription_response_package
 class TestTranscriptionBlueprint(BaseTestCase):
+    def test_log_abnormal_failure_returns_true(self):
+        self.assertEqual(True, log_abnormal_failure({"TranscriptionJob": {"FailureReason": "Failed to parse audio file."}}))
+        
+    def test_log_abnormal_failure_returns_false(self):
+        with patch("app.main.lib.error_log.ErrorLog.notify") as mock_notify:
+            mock_notify.return_value = True
+            self.assertEqual(False, log_abnormal_failure({"TranscriptionJob": {"FailureReason": "some other problem"}}))
+
+    
+    def test_transcription_response_package(self):
+        self.assertEqual({'job_name': "foo", 'job_status': "bar", 'language_code': "baz"}, transcription_response_package({"TranscriptionJob": {"TranscriptionJobName": "foo", "TranscriptionJobStatus": "bar", "LanguageCode": "baz"}}))
+
     def test_post_transcription_job(self):
         with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_start_transcription', ) as mock_start_transcription:
             mock_start_transcription.return_value = {

@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import botocore
+from botocore.exceptions import BotoCoreError, ClientError
 import boto3
 
 from flask import request, current_app as app
@@ -27,6 +28,21 @@ def safely_handle_transcription_job(callback):
         }
     return result
 
+def log_abnormal_failure(response):
+    normal_failure = False
+    for reason in ["Failed to parse audio file", "must have a speech segment long enough in duration "]:
+        if reason in response["TranscriptionJob"]["FailureReason"]:
+            normal_failure = True
+    if not normal_failure:
+        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!"), {"response": response})
+    return normal_failure
+
+def transcription_response_package(response):
+    return {
+        'job_name': response['TranscriptionJob'].get('TranscriptionJobName'),
+        'job_status': response['TranscriptionJob'].get('TranscriptionJobStatus'),
+        'language_code': response['TranscriptionJob'].get('LanguageCode')
+    }
 api = Namespace('audio_transcription', description='audio transcription operations')
 transcription_post = api.model('transcription_post', {
     'url': fields.String(required=True, description='url of audio to transcribe'),
@@ -45,13 +61,19 @@ transcribe = boto3.client(
 @api.route('/')
 class AudioTranscriptionResource(Resource):
     def aws_start_transcription(self, jobName, audioUri):
-        return transcribe.start_transcription_job(
-            TranscriptionJobName=jobName,
-            IdentifyLanguage=True,
-            Media={
-                'MediaFileUri': audioUri
-            }
-        )
+        try:
+            return transcribe.start_transcription_job(
+                TranscriptionJobName=jobName,
+                IdentifyLanguage=True,
+                Media={
+                    'MediaFileUri': audioUri
+                }
+            )
+        except (BotoCoreError, ClientError) as e:
+            if 'ConflictException' in str(e):
+                return transcribe.get_transcription_job(TranscriptionJobName=jobName)
+            else:
+                raise e
 
     def aws_get_transcription(self, jobName):
         return transcribe.get_transcription_job(TranscriptionJobName=jobName)
@@ -86,23 +108,17 @@ class AudioTranscriptionResource(Resource):
             result = None
             response = self.aws_get_transcription(jobName)
             if response['TranscriptionJob']:
-                job_name = response['TranscriptionJob'].get('TranscriptionJobName')
-                job_status = response['TranscriptionJob'].get('TranscriptionJobStatus')
-                language_code = response['TranscriptionJob'].get('LanguageCode')
-                result = {
-                    'job_name': job_name,
-                    'job_status': job_status,
-                    'language_code': language_code
-                }
-                if job_status == 'COMPLETED':
+                result = transcription_response_package(response)
+                if result["job_status"] == 'COMPLETED':
                     transcriptionUri = response['TranscriptionJob']['Transcript']['TranscriptFileUri']
                     transcriptionResponse = requests.get(transcriptionUri)
                     transcriptionResponseDict = json.loads(transcriptionResponse.text)
                     result['transcription'] = transcriptionResponseDict['results']['transcripts'][0]['transcript']
-                elif job_status == "FAILED":
-                    if "must have a speech segment long enough in duration " not in response["TranscriptionJob"]["FailureReason"]:
-                        ErrorLog.notify(Exception("[ALEGRE] Transcription job failed!"), {"response": response})
-                elif job_status != 'IN_PROGRESS':
+                elif result["job_status"] == "FAILED":
+                    normal_failure = log_abnormal_failure(response)
+                    if normal_failure:
+                        result["job_status"] = "DONE"
+                elif result["job_status"] != 'IN_PROGRESS':
                     ErrorLog.notify(Exception("[ALEGRE] Transcription job unknown status!"), {"response": response})
             return result
         return safely_handle_transcription_job(get_transcription)

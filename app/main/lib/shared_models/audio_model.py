@@ -147,10 +147,10 @@ class AudioModel(SharedModel):
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score <= :threshold
+                  WHERE score >= :threshold
                   AND 
                   """+context_query+"""
-                  ORDER BY score ASC
+                  ORDER BY score DESC
                 """
             else:
                 cmd = """
@@ -159,8 +159,8 @@ class AudioModel(SharedModel):
                     SELECT id, doc_id, chromaprint_fingerprint, url, context, get_audio_chromaprint_score(chromaprint_fingerprint, :chromaprint_fingerprint)
                     AS score FROM audios
                   ) f
-                  WHERE score <= :threshold
-                  ORDER BY score ASC
+                  WHERE score >= :threshold
+                  ORDER BY score DESC
                 """
             matches = db.session.execute(text(cmd), dict(**{
                 'chromaprint_fingerprint': chromaprint_fingerprint,
@@ -170,9 +170,8 @@ class AudioModel(SharedModel):
             rows = []
             for values in matches:
                 row = dict(zip(keys, values))
-                # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
                 row["model"] = "audio"
-                row["score"] = 1-row["score"]
+                row["score"] = row["score"]
                 rows.append(row)
             return rows
         except Exception as e:
@@ -216,7 +215,7 @@ class AudioModel(SharedModel):
         audio, temporary = self.get_audio(task)
         context = self.get_context_for_search(task)
         if audio:
-            threshold = 1-task.get('threshold', 0.0)
+            threshold = task.get('threshold', 0.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
             limit = task.get("limit")
             if temporary:
