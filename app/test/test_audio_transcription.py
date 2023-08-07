@@ -11,6 +11,9 @@ from botocore.exceptions import ClientError
 from app.main.controller.audio_transcription_controller import log_abnormal_failure, transcription_response_package
 class TestTranscriptionBlueprint(BaseTestCase):
     def test_log_abnormal_failure_returns_true(self):
+        self.assertEqual(True, log_abnormal_failure({"TranscriptionJob": {"FailureReason": "Unsupported audio format AAC."}}))
+
+    def test_log_abnormal_failure_returns_true(self):
         self.assertEqual(True, log_abnormal_failure({"TranscriptionJob": {"FailureReason": "Failed to parse audio file."}}))
         
     def test_log_abnormal_failure_returns_false(self):
