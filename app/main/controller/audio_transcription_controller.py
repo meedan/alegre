@@ -30,7 +30,7 @@ def safely_handle_transcription_job(callback):
 
 def log_abnormal_failure(response):
     normal_failure = False
-    for reason in ["Failed to parse audio file", "must have a speech segment long enough in duration ", "Unsupported audio format"]:
+    for reason in ["Failed to parse audio file", "must have a speech segment long enough in duration ", "Unsupported audio format", "data in your input media file isn't valid"]:
         if reason in response["TranscriptionJob"]["FailureReason"]:
             normal_failure = True
     if not normal_failure:
