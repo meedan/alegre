@@ -185,10 +185,10 @@ class AudioModel(SharedModel):
         audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            self.add(task)
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
+            if not task.get("raw"):
+                task["raw"] = {"doc_id": str(uuid.uuid4())}
+            self.add({"body": task})
+            audios = db.session.query(Audio).filter(Audio.doc_id==task["raw"].get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
         return audio, temporary

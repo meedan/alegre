@@ -41,8 +41,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
-            mock_post_request.return_value.status_code = 200
-            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3'}}}
+            mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3'}}}
             response = self.client.post('/audio/similarity/', data=json.dumps({
                 'url': url,
                 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
@@ -57,8 +56,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_basic_http_responses(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
-            mock_post_request.return_value.status_code = 200
-            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
+            mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
             response = self.client.post('/audio/similarity/', data=json.dumps({
                 'url': url,
                 'project_media_id': 1,
@@ -71,8 +69,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_callback_response(self):
         with patch('requests.post') as mock_post_request:
-            mock_post_request.return_value.status_code = 200
-            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
+            mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
             response = self.client.post('/presto/receive/add_item/audio', data=json.dumps({
                 "body": {
                     "id": '123',
@@ -89,9 +86,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        print("RESULT IS LOOKING LIKE:")
-        print(result)
-        self.assertEqual(result['message'], "Message pushed successfully")
+        self.assertEqual(sorted(result['requested'].keys()), ['requested', 'result', 'success'])
 
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
@@ -108,7 +103,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        result = self.model.add({"body": {"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}}}).get("body")
+        result = self.model.add({"body": {"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested']['body'].keys()), ['context', 'doc_id', 'url'])
@@ -141,7 +136,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        result = self.model.add({"body": {"url": url, "project_media_id": 1}}).get("body")
+        result = self.model.add({"body": {"url": url, "project_media_id": 1}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested']['body'].keys()), ['project_media_id', 'url'])
@@ -149,7 +144,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add_wav(self):
         url = 'file:///app/app/test/data/sample.wav'
-        result = self.model.add({"body": {"url": url, "project_media_id": 1}}).get("body")
+        result = self.model.add({"body": {"url": url, "project_media_id": 1}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested']['body'].keys()), ['project_media_id', 'url'])
@@ -244,7 +239,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 3}}}}).get("body")
+        result = self.model.search({"body": {"url": url1, "context": {"blah": 3}, "response": {"hash_value": [1,2,3]}}})
         second_case = [e for e in result["result"] if e["url"] == url2][0]
         self.assertIsInstance(second_case, dict)
         self.assertEqual(sorted(second_case.keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])

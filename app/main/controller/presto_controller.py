@@ -15,7 +15,6 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.args or request.json
-        print([data, model_type])
         if action == "add_item":
             return similarity.callback_add_item(data, model_type)
         elif action == "search_item":

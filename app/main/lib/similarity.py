@@ -106,7 +106,7 @@ def add_item(item, similarity_type):
 
 def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
-      audio_model().add(item)
+      return audio_model().add(item)
 
 def delete_item(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
