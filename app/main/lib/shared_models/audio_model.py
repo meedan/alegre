@@ -59,17 +59,6 @@ class AudioModel(SharedModel):
             raise e
         return saved_audio
 
-    def get_tempfile(self):
-        return tempfile.NamedTemporaryFile()
-
-    def execute_command(self, command):
-        return os.popen(command).read()
-
-    def load(self):
-        self.directory = app.config['PERSISTENT_DISK_PATH']
-        self.ffmpeg_dir = "/usr/local/bin/ffmpeg"
-        pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
-
     def respond(self, task):
         if task["command"] == "delete":
             return self.delete(task)
@@ -100,7 +89,8 @@ class AudioModel(SharedModel):
 
     def add(self, task):
         try:
-            audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
+            body = task.get("body", {})
+            audio = Audio.from_url(body.get("url"), body.get("raw", {}).get("doc_id"), body.get("context", {}), body.get("response", {}).get("hash_value"))
             try:
               audio = self.save(audio)
             except sqlalchemy.exc.IntegrityError:
@@ -212,14 +202,17 @@ class AudioModel(SharedModel):
         return context
 
     def search(self, task):
-        audio, temporary = self.get_audio(task)
-        context = self.get_context_for_search(task)
+        body = task.get("body", {})
+        print("BODY LOOKS LIKE")
+        print(body)
+        audio, temporary = self.get_audio(body)
+        context = self.get_context_for_search(body)
         if audio:
-            threshold = task.get('threshold', 0.0)
+            threshold = task.get("raw", {}).get('threshold', 0.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
-            limit = task.get("limit")
+            limit = body.get("raw", {}).get("limit")
             if temporary:
-                self.delete(task)
+                self.delete(body)
             if limit:
                 return {"result": matches[:limit]}
             else:

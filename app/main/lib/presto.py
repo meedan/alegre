@@ -4,6 +4,14 @@ import requests
 
 class Presto:
     @staticmethod
+    def add_item_callback_url(alegre_host, similarity_type):
+        return f"{alegre_host}/presto/receive/add_item/{similarity_type}"
+
+    @staticmethod
+    def get_similar_items_callback_url(alegre_host, similarity_type):
+        return f"{alegre_host}/presto/receive/search_item/{similarity_type}"
+
+    @staticmethod
     def send_request(presto_host, model_key, callback_url, message):
         return requests.post(f"{presto_host}/process_item/{model_key}", json={
             "callback_url": callback_url,

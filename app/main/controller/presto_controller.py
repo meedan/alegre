@@ -15,8 +15,10 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.args or request.json
-        print(data)
-        if action == "add":
-            return similarity.add_item(data, model_type)
-        elif action == "search":
-            return similarity.get_similar_items(request.args or request.json, model_type)
+        print([data, model_type])
+        if action == "add_item":
+            return similarity.callback_add_item(data, model_type)
+        elif action == "search_item":
+            return similarity.callback_get_similar_items(data, model_type)
+        else:
+            abort(404, description=f"Action type of {action} was not found. Currently available action types are add_item, search_item.")
