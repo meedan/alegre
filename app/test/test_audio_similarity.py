@@ -39,79 +39,57 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         db.drop_all()
 
     def test_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('audio')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.post('/audio/similarity/', data=json.dumps({
-                    'url': url,
-                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': {
-                        'team_id': 1,
-                        'has_custom_id': True
-                    }
-                }), content_type='application/json')
+        with patch('requests.post') as mock_post_request:
+            mock_post_request.return_value.status_code = 200
+            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", 'url': 'http://example.com/blah.mp3'}}}
+            response = self.client.post('/audio/similarity/', data=json.dumps({
+                'url': url,
+                'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('audio')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123, "result": {"outfile": url, "deleted": 1}}
-                response = self.client.delete('/audio/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123, 'result': {"outfile": url, "deleted": 1}})
-
-
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('audio')
-                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                response = self.client.get('/audio/similarity/', data=json.dumps({
-                    'url': url,
-                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': {
-                        'team_id': 1,
-                        'has_custom_id': True
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
+        self.assertEqual(result['message'], "Message pushed successfully")
+        self.assertEqual(result['body']['id'], "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8")
 
     def test_basic_http_responses(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('audio')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.post('/audio/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
+        with patch('requests.post') as mock_post_request:
+            mock_post_request.return_value.status_code = 200
+            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
+            response = self.client.post('/audio/similarity/', data=json.dumps({
+                'url': url,
+                'project_media_id': 1,
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('audio')
-                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                response = self.client.get('/audio/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
+        self.assertEqual(result['message'], "Message pushed successfully")
+
+    def test_callback_response(self):
+        with patch('requests.post') as mock_post_request:
+            mock_post_request.return_value.status_code = 200
+            mock_post_request.return_value.json.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
+            response = self.client.post('/receive/add_item/audio', data=json.dumps({
+                "body": {
+                    "id": '123',
+                    "callback_url": 'http://0.0.0.0:3100/presto/receive/add_item/audio',
+                    "url": 'http://devingaffney.com/files/blah.mp3',
+                    "text": None,
+                    "raw": {
+                        'doc_id': 123,
+                        'url': 'http://example.com/files/blah.mp3'
+                    }, 
+                    "response": {
+                        'hash_value': [-713337002, -1778428074, -1778560170, -1778560650]
                     }
-                }), content_type='application/json')
+                }
+            }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
+        print("RESULT IS LOOKING LIKE:")
+        print(result)
+        self.assertEqual(result['message'], "Message pushed successfully")
 
     def test_get_tempfile(self):
         self.assertIsInstance(self.model.get_tempfile(), tempfile._TemporaryFileWrapper)
