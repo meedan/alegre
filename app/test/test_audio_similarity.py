@@ -99,14 +99,8 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_execute_command(self):
         self.assertIsInstance(self.model.execute_command("ls"), str)
 
-    def test_load(self):
-        self.model.load()
-        self.assertIsInstance(self.model.directory, str)
-        self.assertIsInstance(self.model.ffmpeg_dir, str)
-
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
         self.assertIsInstance(result, dict)
@@ -120,7 +114,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
@@ -129,7 +122,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_search_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         hash_key = "blah"
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
@@ -146,7 +138,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_delete(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         self.model.add({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 1}})
         result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 1}})
         self.assertIsInstance(result, dict)
@@ -156,7 +147,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         result = self.model.add({"url": url, "project_media_id": 1})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
@@ -165,7 +155,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_add_wav(self):
         url = 'file:///app/app/test/data/sample.wav'
-        self.model.load()
         result = self.model.add({"url": url, "project_media_id": 1})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
@@ -174,7 +163,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_search(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         hash_key = "blah"
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
@@ -191,7 +179,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_respond_delete(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         self.model.add({"url": url, "id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
         result = self.model.respond({"url": url, "project_media_id": 1, "command": "delete", "context": {'blah': 1, 'project_media_id': 12342}})
         self.assertIsInstance(result, dict)
@@ -201,7 +188,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_respond_add(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         result = self.model.respond({"url": url, "project_media_id": 1, "command": "add"})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
@@ -210,7 +196,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_respond_search(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         hash_key = "blah"
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
@@ -227,7 +212,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_audio_model_search_by_context(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         context = [{'blah': 15, 'has_custom_id': True, 'project_media_id': 12343}]
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="blah332", url=url, context=context)
         db.session.add(audio)
@@ -244,7 +228,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_audio_model_confirmed_match(self):
         url1 = 'file:///app/app/test/data/test_audio_1.mp3'
         url2 = 'file:///app/app/test/data/test_audio_2.mp3'
-        self.model.load()
         audio2 = Audio(chromaprint_fingerprint=first_hash, doc_id="second_case", url=url2, context=[{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
         #db.session.add(audio)
         db.session.add(audio2)
@@ -263,7 +246,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_audio_model_confirmed_no_match(self):
         url1 = 'file:///app/app/test/data/test.mp3'
         url2 = 'file:///app/app/test/data/no_match_audio.mp3'
-        self.model.load()
         audio2 = Audio(chromaprint_fingerprint=first_hash, doc_id="second_case_no_match", url=url2, context=[{'blah': 3, 'has_custom_id': True, 'project_media_id': 1457}])
         #db.session.add(audio)
         db.session.add(audio2)
@@ -279,7 +261,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_search_by_context(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
-        self.model.load()
         hash_key = "blah"
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="blah32", url="http://blah.com", context=[{'blah': 16, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
@@ -295,7 +276,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
             mock.return_value = False
             url = 'file:///app/app/test/data/test_audio_1.mp3'
-            self.model.load()
             result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
             self.assertIsInstance(result, dict)
             self.assertEqual(False, result['success'])
@@ -304,7 +284,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
             url = 'file:///app/app/test/data/test_audio_1.mp3'
             mock.side_effect = urllib.error.HTTPError(url, 420, "HTTP ERROR HAPPENED", None, None)
-            self.model.load()
             result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
             self.assertIsInstance(result, dict)
             self.assertEqual(False, result['success'])
