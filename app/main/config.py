@@ -37,8 +37,8 @@ class Config:
   AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   IMAGE_MODEL = os.getenv('IMAGE_MODEL', default='phash')
   OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
-  ALEGRE_HOST = os.getenv('ALEGRE_HOST', default=None)
-  PRESTO_HOST = os.getenv('PRESTO_HOST', default=None)
+  ALEGRE_HOST = os.getenv('ALEGRE_HOST', default="0.0.0.0:3100")
+  PRESTO_HOST = os.getenv('PRESTO_HOST', default="presto:8001")
 
 class DevelopmentConfig(Config):
   DEBUG = True
