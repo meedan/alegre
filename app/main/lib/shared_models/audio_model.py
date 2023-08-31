@@ -203,8 +203,6 @@ class AudioModel(SharedModel):
 
     def search(self, task):
         body = task.get("body", {})
-        print("BODY LOOKS LIKE")
-        print(body)
         audio, temporary = self.get_audio(body)
         context = self.get_context_for_search(body)
         if audio:
