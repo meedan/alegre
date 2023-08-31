@@ -19,6 +19,7 @@ from .main.controller.image_classification_controller import api as image_classi
 from .main.controller.image_ocr_controller import api as image_ocr_ns
 from .main.controller.article_controller import api as article_ns
 from .main.controller.graph_controller import api as graph_ns
+from .main.controller.presto_controller import api as presto_ns
 
 blueprint = Blueprint('api', __name__)
 
@@ -44,3 +45,4 @@ api.add_namespace(image_classification_ns, path='/image/classification')
 api.add_namespace(image_ocr_ns, path='/image/ocr')
 api.add_namespace(article_ns, path='/article')
 api.add_namespace(graph_ns, path='/graph/cluster')
+api.add_namespace(presto_ns, path='/presto')
