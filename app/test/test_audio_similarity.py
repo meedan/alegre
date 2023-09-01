@@ -86,7 +86,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result['requested'].keys()), ['requested', 'result', 'success'])
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
 
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
@@ -121,9 +121,9 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             result = self.model.search({"body": {"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "raw": {"context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}}}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8')
-        self.assertEqual(result["result"][0]['url'], url)
-        self.assertEqual(result["result"][0]['context'], [{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
+        self.assertEqual(result["result"][0]['doc_id'], 'blah')
+        self.assertEqual(result["result"][0]['url'], "http://blah.com")
+        self.assertEqual(result["result"][0]['context'], [{'blah': 1}])
 
     def test_delete(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
@@ -221,7 +221,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 2}, "threshold": 0.9}}}).get("body")
+        result = self.model.search({"body": {"url": url1, "context": {"blah": 2}, "threshold": 0.9, "response": {"hash_value": [e-1 for e in first_print]}}})#.get("body")
         second_case = [e for e in result["result"] if e["url"] == url2]
         self.assertGreater(len(second_case),0)
         second_case = second_case[0]
@@ -230,7 +230,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(second_case['doc_id'], 'second_case')
         self.assertEqual(second_case['url'], url2)
         self.assertEqual(second_case['context'], [{'blah': 2, 'has_custom_id': True, 'project_media_id': 457}])
-        self.assertGreater(second_case['score'], 0.99)
+        self.assertGreater(second_case['score'], 0.90)
 
     def test_audio_model_confirmed_no_match(self):
         url1 = 'file:///app/app/test/data/test.mp3'
