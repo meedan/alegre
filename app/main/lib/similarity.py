@@ -106,7 +106,9 @@ def add_item(item, similarity_type):
 
 def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
-      return audio_model().add(item)
+      response = audio_model().add(item)
+  app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  return response
 
 def delete_item(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
@@ -135,7 +137,18 @@ def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
   return response
 
-def callback_get_similar_items(item, similarity_type):
+def validate_item(item, similarity_type):
+  assert "body" in item, "Must have a body as top-level key"
   if similarity_type == "audio":
-    response = audio_model().search(item)
+    body = item.get("body")
+    assert "doc_id" in body or "url" in body, "Must have a unique identifier for the item body"
+    assert "response" in body and "hash_value" in body.get("response", {}), "Must have a hash value in the response from Presto"
+    hash_value = body.get("response", {}).get("hash_value")
+    assert isinstance(hash_value, list), "Hash value must be a list"
+  return item
+
+def callback_get_similar_items(item, similarity_type):
+  validated_item = validate_item(item, similarity_type)
+  if similarity_type == "audio":
+    response = audio_model().search(validated_item)
   return response
