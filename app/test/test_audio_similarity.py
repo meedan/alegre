@@ -68,23 +68,25 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result['message'], "Message pushed successfully")
 
     def test_callback_response(self):
-        with patch('requests.post') as mock_post_request:
-            mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
-            response = self.client.post('/presto/receive/add_item/audio', data=json.dumps({
-                "body": {
-                    "id": '123',
-                    "callback_url": 'http://0.0.0.0:3100/presto/receive/add_item/audio',
-                    "url": 'http://devingaffney.com/files/blah.mp3',
-                    "text": None,
-                    "raw": {
-                        'doc_id': 123,
-                        'url': 'http://example.com/files/blah.mp3'
-                    },
-                    "response": {
-                        'hash_value': [-713337002, -1778428074, -1778560170, -1778560650]
+        with patch('app.main.lib.similarity.callback_add_item') as mock_callback_add_item:
+            with patch('app.main.lib.check_api.CheckAPI') as mock_post_request:
+                mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
+                mock_callback_add_item.return_value = {"requested": {}, "result": {}, "success": True}
+                response = self.client.post('/presto/receive/add_item/audio', data=json.dumps({
+                    "body": {
+                        "id": '123',
+                        "callback_url": 'http://0.0.0.0:3100/presto/receive/add_item/audio',
+                        "url": 'http://devingaffney.com/files/blah.mp3',
+                        "text": None,
+                        "raw": {
+                            'doc_id': 123,
+                            'url': 'http://example.com/files/blah.mp3'
+                        },
+                        "response": {
+                            'hash_value': [-713337002, -1778428074, -1778560170, -1778560650]
+                        }
                     }
-                }
-            }), content_type='application/json')
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result.keys()), ['action', 'data', 'model_type'])
         self.assertEqual(result["action"], "add_item")
