@@ -69,7 +69,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
 
     def test_callback_response(self):
         with patch('app.main.lib.similarity.callback_add_item') as mock_callback_add_item:
-            with patch('app.main.lib.check_api.CheckAPI') as mock_post_request:
+            with patch('app.main.lib.check_api.CheckAPI.return_storage_webhook') as mock_post_request:
                 mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
                 mock_callback_add_item.return_value = {"requested": {}, "result": {}, "success": True}
                 response = self.client.post('/presto/receive/add_item/audio', data=json.dumps({
@@ -90,8 +90,8 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result.keys()), ['action', 'data', 'model_type'])
         self.assertEqual(result["action"], "add_item")
-        self.assertEqual(result["model_type"], "audio__Model")
-        self.assertEqual(sorted(result["data"].keys()) ["requested", "result", "success"])
+        self.assertEqual(result["model_type"], "audio")
+        self.assertEqual(sorted(result["data"].keys()), ["requested", "result", "success"])
 
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
