@@ -86,7 +86,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        return {"action": action, "model_type": model_type, "data": result}
         self.assertEqual(sorted(result.keys()), ['action', 'data', 'model_type'])
         self.assertEqual(result["action"], "add_item")
         self.assertEqual(result["model_type"], "audio__Model")
