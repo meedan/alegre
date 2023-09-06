@@ -17,6 +17,8 @@ class PrestoResource(Resource):
     def post(self, action, model_type):
         data = request.args or request.json
         if action == "add_item":
-            return CheckAPI.return_storage_webhook(app.config['CHECK_API_URL'], action, model_type, similarity.callback_add_item(data, model_type))
+            result = similarity.callback_add_item(data, model_type)
+            CheckAPI.return_storage_webhook(app.config['CHECK_API_URL'], action, model_type, result)
+            return {"action": action, "model_type": model_type, "data": result}
         else:
             abort(404, description=f"Action type of {action} was not found. Currently available action types are add_item, search_item.")
