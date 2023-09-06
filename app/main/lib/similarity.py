@@ -125,9 +125,8 @@ def delete_item(item, similarity_type):
 
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
-  callback_url =  Presto.get_similar_items_callback_url(app.config['ALEGRE_HOST'], similarity_type)
   if similarity_type == "audio":
-    response = Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, model_response_package(item, "search"))
+    response = audio_model().search(model_response_package(item, "search"))
   elif similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "search"))
   elif similarity_type == "image":
@@ -146,9 +145,3 @@ def validate_item(item, similarity_type):
     hash_value = body.get("response", {}).get("hash_value")
     assert isinstance(hash_value, list), "Hash value must be a list"
   return item
-
-def callback_get_similar_items(item, similarity_type):
-  validated_item = validate_item(item, similarity_type)
-  if similarity_type == "audio":
-    response = audio_model().search(validated_item)
-  return response
