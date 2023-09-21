@@ -1,4 +1,6 @@
+import json
 import uuid
+import redis
 from flask import current_app as app
 import requests
 
@@ -20,3 +22,10 @@ class Presto:
             "text": message.get("text"),
             "raw": message
         })
+
+    @staticmethod
+    def blocked_response(message, model_type):
+        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        id = message.get("body", {}).get("id")
+        key, value = r.blpop(f"{model_type}_{id}")
+        return json.loads(value)

@@ -39,7 +39,8 @@ class Config:
   OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
   ALEGRE_HOST = os.getenv('ALEGRE_HOST', default="http://alegre:3100")
   PRESTO_HOST = os.getenv('PRESTO_HOST', default="http://presto:8000")
-  CHECK_API_HOST = os.getenv('CHECK_API_HOST', default="http://check-api:3000")
+  CHECK_API_HOST = os.getenv('CHECK_API_HOST', default="http://api:3000")
+  CHECK_API_TOKEN = os.getenv('CHECK_API_TOKEN', default="dev")
 
 class DevelopmentConfig(Config):
   DEBUG = True

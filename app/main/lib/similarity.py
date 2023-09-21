@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 import logging
 from flask import request, current_app as app
@@ -92,7 +93,8 @@ def add_item(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Adding item")
   callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], similarity_type)
   if similarity_type == "audio":
-    response = Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, model_response_package(item, "add"))
+    response = Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, model_response_package(item, "add")).text
+    response = json.loads(response)
   elif similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "add"))
   elif similarity_type == "image":

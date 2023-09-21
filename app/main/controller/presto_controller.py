@@ -1,5 +1,7 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace
+import redis
+import json
 
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
@@ -16,9 +18,14 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.args or request.json
+        app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             result = similarity.callback_add_item(data, model_type)
             CheckAPI.return_storage_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
+            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            id = data.get("body", {}).get("id")
+            r.lpush(f"{model_type}_{id}", json.dumps(data))
+            r.expire(f"{model_type}_{id}", 60*60*24)
             return {"action": action, "model_type": model_type, "data": result}
         else:
             abort(404, description=f"Action type of {action} was not found. Currently available action types are add_item, search_item.")

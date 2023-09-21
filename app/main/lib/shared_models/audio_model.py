@@ -20,6 +20,7 @@ from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main import db
 from app.main.model.audio import Audio
+from app.main.lib.presto import Presto
 
 def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
@@ -38,7 +39,11 @@ class AudioModel(SharedModel):
                 if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
                     existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
                     flag_modified(existing, 'chromaprint_fingerprint')
-                if audio.context not in existing.context:
+                if isinstance(existing.context, list) and audio.context not in existing.context:
+                    existing.context.append(audio.context)
+                    flag_modified(existing, 'context')
+                if isinstance(existing.context, dict) and audio.context != existing.context:
+                    existing.context = [existing.context]
                     existing.context.append(audio.context)
                     flag_modified(existing, 'context')
                 saved_audio = existing
@@ -202,13 +207,26 @@ class AudioModel(SharedModel):
         return context
 
     def search(self, task):
-        body = task.get("body", {})
+        if "body" in task:
+            body = task.get("body", {})
+            threshold = task.get("raw", {}).get('threshold', 0.0)
+            limit = body.get("raw", {}).get("limit")
+        else:
+            body = task
+            threshold = body.get('threshold', 0.0)
+            limit = body.get("limit")
         audio, temporary = self.get_audio(body)
         context = self.get_context_for_search(body)
+        if audio.chromaprint_fingerprint is None:
+            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+            if task.get("doc_id") is None:
+                task["doc_id"] = str(uuid.uuid4())
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task).text)
+            result = Presto.blocked_response(response, "audio")
+            audio.chromaprint_fingerprint = result["response"]["hash_value"]
+            context = self.get_context_for_search(result["body"]["raw"])
         if audio:
-            threshold = task.get("raw", {}).get('threshold', 0.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
-            limit = body.get("raw", {}).get("limit")
             if temporary:
                 self.delete(body)
             if limit:
