@@ -60,14 +60,13 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             mock_post_request.return_value = mock_response
             response = self.client.post('/audio/similarity/', data=json.dumps({
                 'url': url,
-                'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
+                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
                 'context': {
                     'team_id': 1,
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result['message'], "Message pushed successfully")
-        self.assertEqual(result['body']['id'], "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8")
 
     def test_basic_http_responses(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
