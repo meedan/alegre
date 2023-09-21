@@ -1,10 +1,11 @@
 import tempfile
 import unittest
+
 import json
 from flask import current_app as app
 import redis
 from sqlalchemy import text
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from app.main import db
 from app.test.base import BaseTestCase
