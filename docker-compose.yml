@@ -50,18 +50,18 @@ services:
       REPMGR_NODE_NAME: pg-0
       REPMGR_NODE_NETWORK_NAME: pg-0
       REPMGR_PORT_NUMBER: 5432
-  # xlm_r_bert_base_nli_stsb_mean_tokens:
-  #   build: .
-  #   platform: linux/x86_64
-  #   command: ["make", "run_model"]
-  #   volumes:
-  #     - ".:/app"
-  #   depends_on:
-  #     - redis
-  #   env_file:
-  #     - .env_file
-  #   environment:
-  #     MODEL_NAME: meantokens
+#  xlm_r_bert_base_nli_stsb_mean_tokens:
+#   build: .
+#   platform: linux/x86_64
+#   command: ["make", "run_model"]
+#   volumes:
+#     - ".:/app"
+#   depends_on:
+#     - redis
+#   env_file:
+#     - .env_file
+#   environment:
+#     MODEL_NAME: meantokens
   # indian_sbert:
   #   build: .
   #   platform: linux/x86_64
@@ -74,6 +74,18 @@ services:
   #     - .env_file
   #   environment:
   #     MODEL_NAME: indiansbert
+#  paraphrase_multilingual_mpnet_base_v2:
+#   build: .
+#   platform: linux/x86_64
+#   command: ["make", "run_model"]
+#   volumes:
+#     - ".:/app"
+#   depends_on:
+#     - redis
+#   env_file:
+#     - .env_file
+#   environment:
+#     MODEL_NAME: paraphrasemultilingualmpnetbasev2
   # mdeberta_v3_filipino:
   #   build: .
   #   platform: linux/x86_64

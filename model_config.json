@@ -29,5 +29,12 @@
     "class": "AudioModel",
     "key": "audio-model",
     "options": {}
+  },
+    "paraphrasemultilingualmpnetbasev2": {
+    "class": "ParaphraseMultilingualMpnetBaseV2",
+    "key": "paraphrase-multilingual-mpnet-base-v2",
+    "options": {
+      "model_name": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
+    }
   }
 }
