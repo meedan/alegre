@@ -7,8 +7,6 @@ from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 from app.main.lib.webhook import Webhook
 
-CALLBACK_HOST = app.config['CHECK_API_HOST']
-
 api = Namespace('presto', description='presto callback url')
 presto = api.model('presto', {
     'body': JsonObject(required=False, description='Original body of the message sent - will contain ID, callback_url, and original url/text of request'),
@@ -23,7 +21,7 @@ class PrestoResource(Resource):
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             result = similarity.callback_add_item(data, model_type)
-            Webhook.return_webhook(CALLBACK_HOST, action, model_type, result)
+            Webhook.return_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             id = data.get("body", {}).get("id")
             r.lpush(f"{model_type}_{id}", json.dumps(data))
