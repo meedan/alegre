@@ -6,7 +6,9 @@ import json
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 from app.main.lib.webhook import Webhook
+
 CALLBACK_HOST = app.config['CHECK_API_HOST']
+
 api = Namespace('presto', description='presto callback url')
 presto = api.model('presto', {
     'body': JsonObject(required=False, description='Original body of the message sent - will contain ID, callback_url, and original url/text of request'),
