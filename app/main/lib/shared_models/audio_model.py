@@ -95,7 +95,7 @@ class AudioModel(SharedModel):
     def add(self, task):
         try:
             body = task.get("body", {})
-            audio = Audio.from_url(body.get("url"), body.get("raw", {}).get("doc_id"), body.get("context", {}), body.get("response", {}).get("hash_value"))
+            audio = Audio.from_url(body.get("url"), body.get("raw", {}).get("doc_id"), body.get("raw", {}).get("context", {}), task.get("response", {}).get("hash_value"))
             try:
               audio = self.save(audio)
             except sqlalchemy.exc.IntegrityError:
