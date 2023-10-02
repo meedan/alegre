@@ -144,7 +144,7 @@ def get_similar_items(item, similarity_type):
   return response
 
 def validate_item(item, similarity_type):
-  assert "body" in item, "Must have a body as top-level key"
+  assert "body" in item or ("response" in item and "raw" in item) , "Must have a body as top-level key or be a body itself"
   if similarity_type == "audio":
     body = item.get("body")
     assert "doc_id" in body or "url" in body, "Must have a unique identifier for the item body"
