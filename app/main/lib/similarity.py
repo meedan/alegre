@@ -90,10 +90,10 @@ def model_response_package(item, command):
   return response_package
 
 def add_item(item, similarity_type):
-  _ = validate_item(item, similarity_type)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Adding item")
   callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], similarity_type)
   if similarity_type == "audio":
+    _ = validate_item(item, similarity_type)
     response = Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[similarity_type], callback_url, model_response_package(item, "add")).text
     response = json.loads(response)
   elif similarity_type == "video":
@@ -116,9 +116,9 @@ def callback_add_item(item, similarity_type):
   return response
 
 def delete_item(item, similarity_type):
-  _ = validate_item(item, similarity_type)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
   if similarity_type == "audio":
+    _ = validate_item(item, similarity_type)
     response = audio_model().get_shared_model_response(model_response_package(item, "delete"))
   elif similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "delete"))
@@ -130,9 +130,9 @@ def delete_item(item, similarity_type):
   return response
 
 def get_similar_items(item, similarity_type):
-  _ = validate_item(item, similarity_type)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
+    _ = validate_item(item, similarity_type)
     response = audio_model().search(model_response_package(item, "search"))
   elif similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "search"))
