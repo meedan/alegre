@@ -11,18 +11,6 @@ COPY ./threatexchange/tmk/cpp /app/threatexchange/tmk/cpp
 COPY ./threatexchange/pdq/cpp /app/threatexchange/pdq/cpp
 RUN make -C /app/threatexchange/tmk/cpp
 
-# Copy chromaprint files and build
-COPY ./chromaprint /app/chromaprint
-RUN cd chromaprint && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TOOLS=ON .
-RUN cd chromaprint && make
-RUN cd chromaprint && make install
-
-# Set up libraries
-RUN rm /usr/lib/x86_64-linux-gnu/libchromaprint.so.1.5.0
-RUN rm /usr/lib/x86_64-linux-gnu/libchromaprint.so.1
-RUN ln -s /usr/local/lib/libchromaprint.so.1.5.0 /usr/lib/x86_64-linux-gnu/libchromaprint.so.1.5.0
-RUN ln -s /usr/local/lib/libchromaprint.so.1 /usr/lib/x86_64-linux-gnu/libchromaprint.so.1
-
 # Other configurations
 RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
 

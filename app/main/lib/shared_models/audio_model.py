@@ -39,11 +39,7 @@ class AudioModel(SharedModel):
                 if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
                     existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
                     flag_modified(existing, 'chromaprint_fingerprint')
-                if isinstance(existing.context, list) and audio.context not in existing.context:
-                    existing.context.append(audio.context)
-                    flag_modified(existing, 'context')
-                if isinstance(existing.context, dict) and audio.context != existing.context:
-                    existing.context = [existing.context]
+                if audio.context not in existing.context:
                     existing.context.append(audio.context)
                     flag_modified(existing, 'context')
                 saved_audio = existing
@@ -207,6 +203,9 @@ class AudioModel(SharedModel):
         return context
 
     def search(self, task):
+        # here, we have to unpack the task contents to pull out the body,
+        # which may be embedded in a body key in the dict if its coming from a presto callback.
+        # alternatively, the "body" is just the entire dictionary.
         if "body" in task:
             body = task.get("body", {})
             threshold = task.get("raw", {}).get('threshold', 0.0)
@@ -222,6 +221,8 @@ class AudioModel(SharedModel):
             if task.get("doc_id") is None:
                 task["doc_id"] = str(uuid.uuid4())
             response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task).text)
+            # Warning: this is a blocking hold to wait until we get a response in 
+            # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "audio")
             audio.chromaprint_fingerprint = result["response"]["hash_value"]
             context = self.get_context_for_search(result["body"]["raw"])

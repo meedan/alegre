@@ -4,12 +4,9 @@ from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, BIT, ARRAY
 from scipy.io import wavfile
 import scipy.signal
 import numpy as np
-from pydub import AudioSegment #requires ffmpeg and ffprobe to be on the PATH
-import timeout_decorator
 
 from app.main import db
 
-# @timeout_decorator.timeout(15)
 class Audio(db.Model):
   """ Model for storing video related details """
   __tablename__ = 'audios'
