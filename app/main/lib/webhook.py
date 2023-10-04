@@ -1,4 +1,3 @@
-import uuid
 from flask import current_app as app
 import requests
 

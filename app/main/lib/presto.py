@@ -26,6 +26,6 @@ class Presto:
     @staticmethod
     def blocked_response(message, model_type):
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-        id = message.get("body", {}).get("id")
-        key, value = r.blpop(f"{model_type}_{id}")
+        item_id = message.get("body", {}).get("id")
+        _, value = r.blpop(f"{model_type}_{item_id}")
         return json.loads(value)
