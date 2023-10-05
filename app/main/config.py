@@ -37,6 +37,10 @@ class Config:
   AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   IMAGE_MODEL = os.getenv('IMAGE_MODEL', default='phash')
   OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
+  ALEGRE_HOST = os.getenv('ALEGRE_HOST', default="http://alegre:3100")
+  PRESTO_HOST = os.getenv('PRESTO_HOST', default="http://presto:8000")
+  CHECK_API_HOST = os.getenv('CHECK_API_HOST', default="http://api:3000")
+  WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN', default="dev")
 
 class DevelopmentConfig(Config):
   DEBUG = True
