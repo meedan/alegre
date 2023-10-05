@@ -25,6 +25,7 @@ build_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
+    - feature/CV2-3482_deploy-new-model
 
 deploy_qa:
   image: python:3-alpine
@@ -51,6 +52,8 @@ deploy_qa:
     - ecs deploy ecs-qa  qa-alegre-meantokens --diff --image qa-alegre-meantokens $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-meantokens MODEL_NAME meantokens -e qa-alegre-meantokens SENTENCE_TRANSFORMERS_HOME /mnt/models/meantokens-cache -e qa-alegre-meantokens APP alegre -e qa-alegre-meantokens DEPLOY_ENV qa -e qa-alegre-meantokens ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-meantokens.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-fptg $NAME /qa/alegre/$NAME " >> qa-alegre-fptg.env.args; done
     - ecs deploy ecs-qa  qa-alegre-fptg --diff --image qa-alegre-fptg $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-fptg MODEL_NAME mdebertav3filipino -e qa-alegre-fptg SENTENCE_TRANSFORMERS_HOME /mnt/models/fptg-cache -e qa-alegre-fptg APP alegre -e qa-alegre-fptg DEPLOY_ENV qa -e qa-alegre-fptg ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-fptg.env.args`
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-multilingual $NAME /qa/alegre/$NAME " >> qa-alegre-multilingual.env.args; done
+    - ecs deploy ecs-qa  qa-alegre-multilingual --diff --image qa-alegre-multilingual $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-multilingual MODEL_NAME mdebertav3filipino -e qa-alegre-multilingual SENTENCE_TRANSFORMERS_HOME /mnt/models/multilingual-cache -e qa-alegre-multilingual APP alegre -e qa-alegre-multilingual DEPLOY_ENV qa -e qa-alegre-multilingual ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-multilingual.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-video $NAME /qa/alegre/$NAME " >> qa-alegre-video.env.args; done
     - ecs deploy ecs-qa  qa-alegre-video --diff --image qa-alegre-video $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-video MODEL_NAME video -e qa-alegre-video PERSISTENT_DISK_PATH /mnt/models/video -e qa-alegre-video APP alegre -e qa-alegre-video DEPLOY_ENV qa -e qa-alegre-video ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-video.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-audio $NAME /qa/alegre/$NAME " >> qa-alegre-audio.env.args; done
@@ -60,6 +63,7 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
+    - feature/CV2-3482_deploy-new-model
 
 build_live:
   image: docker:latest
