@@ -260,16 +260,8 @@ def run_video_matcher():
   VideoMatcher.start_server()
 
 @manager.command
-def live_init():
-  init(True)
-
-@manager.command
-def init(run_in_live=False):
+def init():
   """Initializes the service."""
-  if not run_in_live and app.config['ENVIRONMENT'] not in ['local', 'qa']:
-    print("Skipping init command. This command can cause race conditions when multiple tasks are running.")
-    print("If you want to run a migration or init in Live, please use manually run live_init.")
-    return False
   # Create ES indexes.
   es = OpenSearch(app.config['ELASTICSEARCH_URL'])
   try:
