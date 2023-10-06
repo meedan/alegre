@@ -14,7 +14,7 @@ services:
       plugins.security.disabled: "true"
       # xpack.security.enabled: "false"
     volumes:
-      - "opensearch:/usr/share/opensearch/data"
+      - "elasticsearch:/usr/share/opensearch/data"
   # kibana:
   #   image: docker.elastic.co/kibana/kibana:7.9.2
   #   ports:
