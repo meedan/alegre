@@ -5,23 +5,24 @@ volumes:
   postgres:
 services:
   elasticsearch:
-    build: ./elasticsearch
+    build: ./opensearch
     ports:
       - "9200:9200"
     environment:
       discovery.type: single-node
       transport.host: 127.0.0.1
-      xpack.security.enabled: "false"
+      plugins.security.disabled: "true"
+      # xpack.security.enabled: "false"
     volumes:
-      - "elasticsearch:/usr/share/elasticsearch/data"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.2
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      - "opensearch:/usr/share/opensearch/data"
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.9.2
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
+  #   environment:
+  #     ELASTICSEARCH_URL: http://elasticsearch:9200
   redis:
     image: redis:5
     ports:
@@ -141,7 +142,7 @@ services:
       - ".:/app"
     depends_on:
       - postgres
-      - kibana
+      # - kibana
       - redis
       # - video
       # - xlm_r_bert_base_nli_stsb_mean_tokens

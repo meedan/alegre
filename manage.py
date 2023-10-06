@@ -275,7 +275,7 @@ def init():
     else:
       raise
   es.indices.put_mapping(
-    body=json.load(open('./elasticsearch/alegre_similarity.json')),
+    body=json.load(open('./opensearch/alegre_similarity.json')),
     # include_type_name=True,
     index=app.config['ELASTICSEARCH_SIMILARITY']
   )
