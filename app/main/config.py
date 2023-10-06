@@ -4,7 +4,6 @@ import json
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-  ENVIRONMENT = os.getenv("DEPLOY_ENV", "local")
   SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious_secret_key')
   DEBUG = False
   ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL', 'http://elasticsearch:9200')
