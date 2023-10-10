@@ -256,7 +256,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 2}}, "threshold": 0.9, "response": {"hash_value": [e-1 for e in first_print]}}})#.get("body")
+        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 2}}, "threshold": 0.9}, "response": {"hash_value": [e-1 for e in first_print]}})#.get("body")
         second_case = [e for e in result["result"] if e["url"] == url2]
         self.assertGreater(len(second_case),0)
         second_case = second_case[0]
@@ -274,7 +274,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 3}}, "response": {"hash_value": [1,2,3]}}})
+        result = self.model.search({"body": {"url": url1, "raw": {"context": {"blah": 3}}}, "response": {"hash_value": [1,2,3]}})
         second_case = [e for e in result["result"] if e["url"] == url2][0]
         self.assertIsInstance(second_case, dict)
         self.assertEqual(sorted(second_case.keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])

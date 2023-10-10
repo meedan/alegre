@@ -3,6 +3,7 @@ import json
 from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
 import numpy as np
+import redis
 
 from app.main import db
 from app.test.base import BaseTestCase
