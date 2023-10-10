@@ -26,8 +26,9 @@ class PrestoResource(Resource):
         data = request.args or request.json
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
-            result = similarity.callback_add_item(data, model_type)
-            Webhook.return_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
+            result = similarity.callback_add_item(dict(**data.get("body"), **data.get("response", {})), model_type)
+            if data.get("body", {}).get("requires_callback"):
+                Webhook.return_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
             r = redis.Redis(
                 host=app.config['REDIS_HOST'],
                 port=app.config['REDIS_PORT'],

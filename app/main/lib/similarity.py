@@ -17,6 +17,21 @@ PRESTO_MODEL_MAP = {
     "indiansbert": "indian_sbert__Mode",
     "mdebertav3filipino": "fptg__Model",
 }
+def get_body_for_media_document(params, mode):
+    """
+      This function should only be called when querying or storing a media object.
+      @params mode should be "query" or "store"
+      If we are querying for a document, use a permissive approach and keep all params
+      with some reformating. If we are storing, we remove unexpected items in
+      `params` in order to avoid things being stored in OpenSearch unintentionally
+    """
+    app.logger.info(
+    f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (start) {params}")
+    if 'created_at' not in params:
+      params['created_at'] = datetime.now()
+    if 'limit' not in params:
+      params['limit'] = DEFAULT_SEARCH_LIMIT
+    return params
 
 def get_body_for_text_document(params, mode):
     """
@@ -63,7 +78,6 @@ def get_body_for_text_document(params, mode):
         f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
       for key in keys_to_remove:
         del params[key]
-
     app.logger.info(
       f"[Alegre Similarity] get_body_for_text_document (mode={mode}):params (end) {params}")
     return params
@@ -139,3 +153,17 @@ def get_similar_items(item, similarity_type):
     response = search_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
   return response
+
+def blocking_get_similar_items(item, similarity_type):
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
+  if similarity_type == "audio":
+    response = audio_model().blocking_search(model_response_package(item, "search"))
+  elif similarity_type == "video":
+    response = video_model().blocking_search(model_response_package(item, "search"))
+  elif similarity_type == "image":
+    response = blocking_search_image(item)
+  elif similarity_type == "text":
+    response = blocking_search_text(item)
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+  return response
+

@@ -3,6 +3,7 @@ import uuid
 import redis
 from flask import current_app as app
 import requests
+from app.main.lib.serializer import safe_serializer
 
 class Presto:
     @staticmethod
@@ -14,14 +15,18 @@ class Presto:
         return f"{alegre_host}/presto/receive/search_item/{similarity_type}"
 
     @staticmethod
-    def send_request(presto_host, model_key, callback_url, message):
-        return requests.post(f"{presto_host}/process_item/{model_key}", json={
+    def send_request(presto_host, model_key, callback_url, message, requires_callback=True):
+        data = {
             "callback_url": callback_url,
             "id": message.get("doc_id", str(uuid.uuid4())),
             "url": message.get("url"),
             "text": message.get("text"),
-            "raw": message
-        })
+            "raw": message,
+            "requires_callback": requires_callback
+        }
+        headers = {"Content-Type": "application/json"}
+        json_data = json.dumps(data, default=safe_serializer)
+        return requests.post(f"{presto_host}/process_item/{model_key}", data=json_data, headers=headers)
 
     @staticmethod
     def blocked_response(message, model_type):
