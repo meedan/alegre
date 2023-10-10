@@ -236,12 +236,12 @@ class AudioModel(SharedModel):
             limit = body.get("raw", {}).get("limit")
             if not body.get("raw"):
                 body["raw"] = {}
-            body["raw"]["hash_value"] = task["response"].get("hash_value")
+            body["hash_value"] = task["response"].get("hash_value")
         else:
             body = task
             threshold = body.get('threshold', 0.0)
             limit = body.get("limit")
-        audio, temporary = self.get_audio(body.get("raw"))
+        audio, temporary = self.get_audio(body)
         context = self.get_context_for_search(body)
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
