@@ -4,20 +4,8 @@ from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, BIT, ARRAY
 from scipy.io import wavfile
 import scipy.signal
 import numpy as np
-from pydub import AudioSegment #requires ffmpeg and ffprobe to be on the PATH
-import timeout_decorator
-import acoustid
 
 from app.main import db
-
-# @timeout_decorator.timeout(15)
-def audio_hasher(filename):
-  try:
-    return acoustid.chromaprint.decode_fingerprint(
-      acoustid.fingerprint_file(filename)[1]
-    )[0]
-  except acoustid.FingerprintGenerationError:
-    return []
 
 class Audio(db.Model):
   """ Model for storing video related details """
@@ -35,14 +23,12 @@ class Audio(db.Model):
   )
 
   @staticmethod
-  def from_url(url, doc_id, context={}):
+  def from_url(url, doc_id, context={}, hash_value=[]):
     """Fetch an audio from a URL and load it
       :param url: Audio URL
+      :param doc_id: Audio Doc ID
+      :param context: Audio Context
+      :param hash_value: Audio fingerprint
       :returns: Audio object
     """
-    remote_request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    remote_response = urllib.request.urlopen(remote_request)
-    temp_file = tempfile.NamedTemporaryFile()
-    with open(temp_file.name, 'wb') as out_file:
-      out_file.write(remote_response.read())
-    return Audio(chromaprint_fingerprint=audio_hasher(temp_file.name), doc_id=doc_id, url=url, context=context)
+    return Audio(chromaprint_fingerprint=hash_value, doc_id=doc_id, url=url, context=context)

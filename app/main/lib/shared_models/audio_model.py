@@ -20,6 +20,7 @@ from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main import db
 from app.main.model.audio import Audio
+from app.main.lib.presto import Presto
 
 def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
@@ -59,17 +60,6 @@ class AudioModel(SharedModel):
             raise e
         return saved_audio
 
-    def get_tempfile(self):
-        return tempfile.NamedTemporaryFile()
-
-    def execute_command(self, command):
-        return os.popen(command).read()
-
-    def load(self):
-        self.directory = app.config['PERSISTENT_DISK_PATH']
-        self.ffmpeg_dir = "/usr/local/bin/ffmpeg"
-        pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
-
     def respond(self, task):
         if task["command"] == "delete":
             return self.delete(task)
@@ -100,7 +90,8 @@ class AudioModel(SharedModel):
 
     def add(self, task):
         try:
-            audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
+            body = task.get("body", {})
+            audio = Audio.from_url(body.get("url"), body.get("raw", {}).get("doc_id"), body.get("raw", {}).get("context", {}), task.get("response", {}).get("hash_value"))
             try:
               audio = self.save(audio)
             except sqlalchemy.exc.IntegrityError:
@@ -195,10 +186,10 @@ class AudioModel(SharedModel):
         audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            self.add(task)
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
+            if not task.get("raw"):
+                task["raw"] = {"doc_id": str(uuid.uuid4())}
+            self.add(dict(**{"body": task}, **task))
+            audios = db.session.query(Audio).filter(Audio.doc_id==task["raw"].get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
         return audio, temporary
@@ -212,14 +203,33 @@ class AudioModel(SharedModel):
         return context
 
     def search(self, task):
-        audio, temporary = self.get_audio(task)
-        context = self.get_context_for_search(task)
+        # here, we have to unpack the task contents to pull out the body,
+        # which may be embedded in a body key in the dict if its coming from a presto callback.
+        # alternatively, the "body" is just the entire dictionary.
+        if "body" in task:
+            body = task.get("body", {})
+            threshold = task.get("raw", {}).get('threshold', 0.0)
+            limit = body.get("raw", {}).get("limit")
+        else:
+            body = task
+            threshold = body.get('threshold', 0.0)
+            limit = body.get("limit")
+        audio, temporary = self.get_audio(body)
+        context = self.get_context_for_search(body)
+        if audio.chromaprint_fingerprint is None:
+            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+            if task.get("doc_id") is None:
+                task["doc_id"] = str(uuid.uuid4())
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task).text)
+            # Warning: this is a blocking hold to wait until we get a response in 
+            # a redis key that we've received something from presto.
+            result = Presto.blocked_response(response, "audio")
+            audio.chromaprint_fingerprint = result["response"]["hash_value"]
+            context = self.get_context_for_search(result["body"]["raw"])
         if audio:
-            threshold = task.get('threshold', 0.0)
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
-            limit = task.get("limit")
             if temporary:
-                self.delete(task)
+                self.delete(body)
             if limit:
                 return {"result": matches[:limit]}
             else:

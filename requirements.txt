@@ -93,7 +93,6 @@ pyasn1-modules==0.2.2
 pycld3==0.22
 pycparser==2.19
 pydantic==1.8.2
-pydub==0.25.1
 PyJWT==2.4.0
 pyparsing==2.4.7
 python-dateutil==2.7.3
@@ -134,7 +133,6 @@ tensorflow-text==2.3.0
 termcolor==1.1.0
 thinc==7.3.1
 threadpoolctl==2.2.0
-timeout-decorator==0.5.0
 tinysegmenter==0.3
 tldextract==3.1.0
 tmkpy==0.1.1
@@ -152,5 +150,4 @@ wasabi==0.8.2
 Werkzeug==0.16.0
 wrapt==1.11.1
 zipp==3.5.0
-pyacoustid==1.2.2
 sentry-sdk[flask]==1.5.12
