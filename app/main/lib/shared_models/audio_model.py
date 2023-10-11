@@ -214,7 +214,6 @@ class AudioModel(SharedModel):
         # a redis key that we've received something from presto.
         result = Presto.blocked_response(response, "audio")
         audio.chromaprint_fingerprint = result["response"]["hash_value"]
-        context = self.get_context_for_search(result["body"]["raw"])
         if audio:
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
