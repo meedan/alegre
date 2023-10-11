@@ -236,7 +236,7 @@ class AudioModel(SharedModel):
             limit = body.get("raw", {}).get("limit")
             if not body.get("raw"):
                 body["raw"] = {}
-            body["hash_value"] = task["response"].get("hash_value")
+            body["hash_value"] = task.get("response", {}).get("hash_value")
         else:
             body = task
             threshold = body.get('threshold', 0.0)
