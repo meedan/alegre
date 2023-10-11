@@ -28,7 +28,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-            r.set(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", {"response": {"hash_value": [1,2,3]}})
+            r.set(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"response": {"hash_value": [1,2,3]}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -59,7 +59,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-            r.set(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", {"response": {"hash_value": [1,2,3]}})
+            r.set(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"response": {"hash_value": [1,2,3]}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
