@@ -1,8 +1,6 @@
 from flask import request, current_app as app
-from flask import abort, jsonify
+from flask import abort
 from flask_restplus import Resource, Namespace, fields
-from opensearchpy import OpenSearch
-from app.main.lib.shared_models.shared_model import SharedModel
 
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity

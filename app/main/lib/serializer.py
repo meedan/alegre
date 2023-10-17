@@ -1,4 +1,3 @@
-import json
 import datetime
 
 def safe_serializer(obj):
