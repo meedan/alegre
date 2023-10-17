@@ -158,12 +158,8 @@ def blocking_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
     response = audio_model().blocking_search(model_response_package(item, "search"))
-  elif similarity_type == "video":
-    response = video_model().blocking_search(model_response_package(item, "search"))
-  elif similarity_type == "image":
-    response = blocking_search_image(item)
-  elif similarity_type == "text":
-    response = blocking_search_text(item)
-  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-  return response
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  else:
+      raise Exception(f"{similarity_type} modality not implemented for blocking requests!")
 
