@@ -1,5 +1,3 @@
-from flask import request, current_app as app
-from flask import abort
 from flask_restplus import Resource, Namespace, fields
 
 from app.main.lib.fields import JsonObject
