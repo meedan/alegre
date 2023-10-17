@@ -1,3 +1,4 @@
+from flask import request
 from flask_restplus import Resource, Namespace, fields
 
 from app.main.lib.fields import JsonObject
