@@ -21,14 +21,3 @@ class Audio(db.Model):
   __table_args__ = (
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )
-
-  @staticmethod
-  def from_url(url, doc_id, context={}, hash_value=[]):
-    """Fetch an audio from a URL and load it
-      :param url: Audio URL
-      :param doc_id: Audio Doc ID
-      :param context: Audio Context
-      :param hash_value: Audio fingerprint
-      :returns: Audio object
-    """
-    return Audio(chromaprint_fingerprint=hash_value, doc_id=doc_id, url=url, context=context)
