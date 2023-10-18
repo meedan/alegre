@@ -144,6 +144,14 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['url'])
 
+    def test_add_by_doc_id_embedded_raw(self):
+        url = 'file:///app/app/test/data/test_audio_1.mp3'
+        result = self.model.add({"url": url, "raw": {'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}}})
+        self.assertIsInstance(result, dict)
+        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
+        self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
+        self.assertEqual(sorted(result['result'].keys()), ['url'])
+
     def test_search_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         hash_key = "blah"
