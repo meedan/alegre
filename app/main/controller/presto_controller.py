@@ -24,10 +24,11 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.args or request.json
+        print(data)
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             result = similarity.callback_add_item(dict(**data.get("body"), **data.get("response", {})), model_type)
-            if data.get("body", {}).get("requires_callback"):
+            if data.get("body", {}).get("raw", {}).get("requires_callback"):
                 Webhook.return_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
             r = redis.Redis(
                 host=app.config['REDIS_HOST'],
