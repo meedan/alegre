@@ -39,6 +39,8 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
                     'text': None,
                     'raw': {
                         'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'callback_url': 'http://example.com/search_results',
+                        'final_task': 'search',
                         'url': 'http://example.com/blah.mp3'
                     }
                 }
@@ -47,6 +49,7 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
             response = self.client.get('/similarity/async/audio', data=json.dumps({
                 'url': url,
                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                'callback_url': 'http://example.com/search_results',
                 'context': {
                     'team_id': 1,
                 }
@@ -74,6 +77,8 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
                     'text': None,
                     'raw': {
                         'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'callback_url': 'http://example.com/search_results',
+                        'final_task': 'search',
                         'url': 'http://example.com/blah.mp3'
                     }
                 }
@@ -81,6 +86,7 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
             mock_post_request.return_value = mock_response
             response = self.client.get('/similarity/async/audio', data=json.dumps({
                 'url': url,
+                'callback_url': 'http://example.com/search_results',
                 'project_media_id': 1,
                 'context': {
                     'team_id': 1,

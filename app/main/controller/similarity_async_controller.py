@@ -8,6 +8,7 @@ api = Namespace('similarity_sync', description='synchronous similarity operation
 similarity_sync_request = api.model('similarity_sync_request', {
     'text': fields.String(required=False, description='text to be stored or queried for similarity'),
     'url': fields.String(required=False, description='url for item to be stored or queried for similarity'),
+    'callback_url': fields.String(required=False, description='callback_url for final search results'),
     'doc_id': fields.String(required=False, description='text ID to constrain uniqueness'),
     'models': fields.List(required=False, description='similarity models to use: ["elasticsearch"] (pure Elasticsearch, default) or the key name of an active model', cls_or_instance=fields.String),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
@@ -25,4 +26,4 @@ class AsyncSimilarityResource(Resource):
             package = similarity.get_body_for_text_document(request.json, 'query')
         else:
             package = similarity.get_body_for_media_document(request.json, 'query')
-        return similarity.get_similar_items(package, similarity_type)
+        return similarity.async_get_similar_items(package, similarity_type)

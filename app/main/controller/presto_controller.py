@@ -28,8 +28,11 @@ class PrestoResource(Resource):
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             result = similarity.callback_add_item(dict(**data.get("body"), **data.get("response", {})), model_type)
+            if data.get("body", {}).get("raw", {}).get("final_task") == "search":
+                result = similarity.callback_search_item(dict(**data.get("body"), **data.get("response", {})), model_type)
+            callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST'])
             if data.get("body", {}).get("raw", {}).get("requires_callback"):
-                Webhook.return_webhook(app.config['CHECK_API_HOST'], action, model_type, result)
+                Webhook.return_webhook(callback_url, action, model_type, result)
             r = redis.Redis(
                 host=app.config['REDIS_HOST'],
                 port=app.config['REDIS_PORT'],
