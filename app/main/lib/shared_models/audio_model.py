@@ -233,20 +233,10 @@ class AudioModel(SharedModel):
             task["doc_id"] = str(uuid.uuid4())
         task["final_task"] = "search"
         response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
-        # Warning: this is a blocking hold to wait until we get a response in 
-        # a redis key that we've received something from presto.
-        result = Presto.blocked_response(response, "audio")
-        audio.chromaprint_fingerprint = result["response"]["hash_value"]
-        if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
-            if temporary:
-                self.delete(task)
-            if task.get("limit"):
-                return {"result": matches[:task.get("limit")]}
-            else:
-                return {"result": matches}
+        if response:
+            return response
         else:
-            return {"error": "Audio not found for provided task", "task": task}
+            return {"error": "Audio could not be sent for fingerprinting", "task": task}
 
     def search(self, task):
         # here, we have to unpack the task contents to pull out the body,

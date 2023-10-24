@@ -15,6 +15,7 @@ similarity_sync_request = api.model('similarity_sync_request', {
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=True, description='context'),
     'fuzzy': fields.Boolean(required=False, description='whether or not to use fuzzy search on GET queries (only used when model is set to \'elasticsearch\')'),
+    'requires_callback': fields.Boolean(required=False, description='whether or not to trigger a callback event to the provided URL'),
 })
 @api.route('/<string:similarity_type>')
 class AsyncSimilarityResource(Resource):
@@ -26,4 +27,6 @@ class AsyncSimilarityResource(Resource):
             package = similarity.get_body_for_text_document(request.json, 'query')
         else:
             package = similarity.get_body_for_media_document(request.json, 'query')
+        #Default to true for this endpoint instead of false in most other cases
+        package["requires_callback"] = request.json.get("requires_callback", True)
         return similarity.async_get_similar_items(package, similarity_type)
