@@ -30,7 +30,7 @@ class PrestoResource(Resource):
             result = similarity.callback_add_item(dict(**data.get("body"), **data.get("response", {})), model_type)
             if data.get("body", {}).get("raw", {}).get("final_task") == "search":
                 result = similarity.callback_search_item(dict(**data.get("body"), **data.get("response", {})), model_type)
-            callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST'])
+            callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
             if data.get("body", {}).get("raw", {}).get("requires_callback"):
                 app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
                 Webhook.return_webhook(callback_url, action, model_type, result)
