@@ -225,6 +225,19 @@ class AudioModel(SharedModel):
         else:
             return {"error": "Audio not found for provided task", "task": task}
 
+    def async_search(self, task):
+        audio, temporary = self.get_audio(task)
+        context = self.get_context_for_search(task)
+        callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+        if task.get("doc_id") is None:
+            task["doc_id"] = str(uuid.uuid4())
+        task["final_task"] = "search"
+        response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
+        if response:
+            return response
+        else:
+            return {"error": "Audio could not be sent for fingerprinting", "task": task}
+
     def search(self, task):
         # here, we have to unpack the task contents to pull out the body,
         # which may be embedded in a body key in the dict if its coming from a presto callback.
