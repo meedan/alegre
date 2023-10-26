@@ -72,7 +72,7 @@ def get_body_for_text_document(params, mode):
       params['content'] = None
 
     if mode == 'store':
-      allow_list = set(['language', 'content', 'created_at', 'models', 'context'])
+      allow_list = set(['language', 'content', 'created_at', 'models', 'context', 'callback_url'])
       keys_to_remove = params.keys() - allow_list
       app.logger.info(
         f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
@@ -92,6 +92,7 @@ def model_response_package(item, command):
   response_package = {
     "limit": item.get("limit", DEFAULT_SEARCH_LIMIT) or DEFAULT_SEARCH_LIMIT,
     "url": item.get("url"),
+    "callback_url": item.get("callback_url"),
     "doc_id": item.get("doc_id"),
     "context": item.get("context", {}),
     "created_at": item.get("created_at"),
@@ -129,6 +130,14 @@ def callback_add_item(item, similarity_type):
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   return response
 
+def callback_search_item(item, similarity_type):
+  if similarity_type == "audio":
+      response = audio_model().search(model_response_package(item, "search"))
+      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  else:
+      app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  return response
+
 def delete_item(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
   if similarity_type == "audio":
@@ -159,6 +168,15 @@ def blocking_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
     response = audio_model().blocking_search(model_response_package(item, "search"))
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  else:
+      raise Exception(f"{similarity_type} modality not implemented for blocking requests!")
+
+def async_get_similar_items(item, similarity_type):
+  app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
+  if similarity_type == "audio":
+    response = audio_model().async_search(model_response_package(item, "search"))
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   else:
