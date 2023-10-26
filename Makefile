@@ -1,10 +1,12 @@
 .PHONY: run test wait
 
-run: wait
+migration: wait
 	python manage.py init_perl_functions
 	python manage.py init
 	python manage.py db stamp head
 	python manage.py db upgrade
+
+run: wait
 	python manage.py run
 
 # The model and worker entry points run repeatedly to
