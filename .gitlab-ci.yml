@@ -46,7 +46,7 @@ deploy_qa:
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-migration $NAME /qa/alegre/$NAME " >> qa-alegre-migration.env.args; done
     - ecs update qa-alegre-migration --image qa-alegre-migration $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e qa-alegre-migration APP alegre -e qa-alegre-migration DEPLOY_ENV qa -e qa-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e qa-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-migration.env.args`
-    - taskArn=$(aws ecs run-task --cluster ecs-qa --task-definition live-check-api-migration --query 'tasks[].taskArn' --output text)
+    - taskArn=$(aws ecs run-task --cluster ecs-qa --task-definition qa-alegre-migration --query 'tasks[].taskArn' --output text)
     - echo "Migration task started - $taskArn"
     - aws ecs wait tasks-stopped --cluster ecs-qa --tasks $taskArn
     - echo "Migration task finished."
