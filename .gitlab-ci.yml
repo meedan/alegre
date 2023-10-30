@@ -25,7 +25,6 @@ build_qa:
     - docker push "$QA_ECR_API_BASE_URL:latest"
   only:
     - develop
-    - bugfix/no-migrations-test
 
 deploy_qa:
   image: python:3-alpine
@@ -69,7 +68,6 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - bugfix/no-migrations-test
 
 build_live:
   image: docker:latest
@@ -110,6 +108,12 @@ deploy_live:
     - pip install ecs-deploy==1.14.0
     - pip install awscli==1.29.59
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
+    - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-migration $NAME /live/alegre/$NAME " >> live-alegre-migration.env.args; done
+    - ecs update live-alegre-migration --image live-alegre-migration $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e live-alegre-migration APP alegre -e live-alegre-migration DEPLOY_ENV live -e live-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e live-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-migration.env.args`
+    - taskArn=$(aws ecs run-task --cluster ecs-live --task-definition live-alegre-migration --query 'tasks[].taskArn' --output text)
+    - echo "Migration task started - $taskArn"
+    - aws ecs wait tasks-stopped --cluster ecs-live --tasks $taskArn
+    - echo "Migration task finished."
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-c APP alegre -e live-alegre-c DEPLOY_ENV live -e live-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-c.env.args`
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-indiansbert $NAME /live/alegre/$NAME " >> live-alegre-indiansbert.env.args; done
