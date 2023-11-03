@@ -282,7 +282,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         #db.session.add(audio)
         db.session.add(audio2)
         db.session.commit()
-        result = self.model.search({"body": {"url": url1, "context": {"blah": 3}, "response": {"hash_value": [1,2,3]}}})
+        result = self.model.search({"body": {"url": url1, "context": {"blah": 3}, "hash_value": [1,2,3]}})
         second_case = [e for e in result["result"] if e["url"] == url2][0]
         self.assertIsInstance(second_case, dict)
         self.assertEqual(sorted(second_case.keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
