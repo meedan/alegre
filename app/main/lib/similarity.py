@@ -141,7 +141,7 @@ def callback_search_item(item, similarity_type):
 def delete_item(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] Deleting item")
   if similarity_type == "audio":
-    response = audio_model().get_shared_model_response(model_response_package(item, "delete"))
+    response = audio_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "delete"))
   elif similarity_type == "image":
