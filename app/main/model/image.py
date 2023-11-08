@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from pgvector.sqlalchemy import Vector
 
 logging.basicConfig(level=logging.INFO)
 
@@ -22,7 +23,7 @@ class ImageModel(db.Model):
   doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
-
+  sscd = db.Column(Vector(256), nullable=True, index=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
@@ -43,6 +44,7 @@ class ImageModel(db.Model):
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
     phash = compute_phash_int(im)
+    sscd = None
     try:
       pdq = compute_pdq(io.BytesIO(raw))
     except:

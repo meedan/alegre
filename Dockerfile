@@ -6,6 +6,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
+#RUN git clone https://github.com/pgvector/pgvector-python.git
+#RUN cd pgvector-python && pip install -r requirements.txt
+
 # Copy necessary threatexchange folders
 COPY ./threatexchange/tmk/cpp /app/threatexchange/tmk/cpp
 COPY ./threatexchange/pdq/cpp /app/threatexchange/pdq/cpp
