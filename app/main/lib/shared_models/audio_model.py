@@ -213,7 +213,7 @@ class AudioModel(SharedModel):
         # Warning: this is a blocking hold to wait until we get a response in 
         # a redis key that we've received something from presto.
         result = Presto.blocked_response(response, "audio")
-        audio.chromaprint_fingerprint = result["response"]["hash_value"]
+        audio.chromaprint_fingerprint = result["body"]["hash_value"]
         if audio:
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
@@ -248,7 +248,7 @@ class AudioModel(SharedModel):
             limit = body.get("raw", {}).get("limit")
             if not body.get("raw"):
                 body["raw"] = {}
-            body["hash_value"] = task.get("response", {}).get("hash_value")
+            body["hash_value"] = task.get("body", {}).get("hash_value")
         else:
             body = task
             threshold = body.get('threshold', 0.0)
@@ -263,7 +263,7 @@ class AudioModel(SharedModel):
             # Warning: this is a blocking hold to wait until we get a response in 
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "audio")
-            audio.chromaprint_fingerprint = result["response"]["hash_value"]
+            audio.chromaprint_fingerprint = result["body"]["hash_value"]
             context = self.get_context_for_search(result["body"]["raw"])
         if audio:
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
