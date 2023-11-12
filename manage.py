@@ -230,6 +230,13 @@ def init_perl_functions():
         LANGUAGE plperl;
       """)
     )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+          CREATE EXTENSION IF NOT EXISTS vector;
+          """)
+    )
     db.create_all()
 
 @manager.command
@@ -318,13 +325,6 @@ def init():
         AS $$ SELECT 1.0-length(replace(value::text,'0',''))::float/length(value::text); $$
         LANGUAGE SQL IMMUTABLE STRICT;
       """)
-    )
-    sqlalchemy.event.listen(
-      db.metadata,
-      'before_create',
-      DDL("""
-          CREATE EXTENSION IF NOT EXISTS vector;
-          """)
     )
     db.create_all()
 
