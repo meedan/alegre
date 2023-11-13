@@ -12,6 +12,9 @@
       "request": {
         "method": "get",
         "path": "/image/similarity/",
+        "headers": {
+          "Content-Type": "application/json"
+        },
         "body": {
             "uri": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg",
             "threshold": 0.89
@@ -78,6 +81,9 @@
       "request": {
         "method": "get",
         "path": "/image/ocr/",
+        "headers": {
+          "Content-Type": "application/json"
+        },
         "body": {
             "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
         }
@@ -103,6 +109,9 @@
       "request": {
         "method": "get",
         "path": "/image/classification/",
+        "headers": {
+          "Content-Type": "application/json"
+        },
         "body": {
             "uri": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
         }
