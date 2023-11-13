@@ -34,13 +34,12 @@ def save(image):
     flag_modified(existing, 'context')
   except NoResultFound as e:
     # Otherwise, add new image, but with context as an array
-    if image.context:
+    if not isinstance(image.context, list):
       image.context = [image.context]
     db.session.add(image)
   except Exception as e:
     db.session.rollback()
     raise e
-
   try:
     db.session.commit()
   except Exception as e:

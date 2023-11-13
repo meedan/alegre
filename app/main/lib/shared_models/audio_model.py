@@ -46,7 +46,7 @@ class AudioModel(SharedModel):
         except NoResultFound as e:
             # Otherwise, add new audio, but with context as an array
             app.logger.debug("Adding Audio object that looks like "+str(audio.__dict__))
-            if audio.context and not isinstance(audio.context, list):
+            if not isinstance(audio.context, list):
                 audio.context = [audio.context]
                 app.logger.debug("Set context to "+str(audio.context))
             db.session.add(audio)
