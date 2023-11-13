@@ -9,7 +9,7 @@ image_similarity_request = api.model('image_similarity_request', {
   'url': fields.String(required=False, description='image URL to be stored or queried for similarity'),
   'doc_id': fields.String(required=False, description='image ID to constrain uniqueness'),
   'threshold': fields.Float(required=False, default=0.9, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
-  'context': JsonObject(required=False, default=[], description='context')
+  'context': JsonObject(required=False, default={}, description='context')
 })
 
 @api.route('/')
