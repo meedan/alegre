@@ -79,7 +79,7 @@
         "method": "get",
         "path": "/image/ocr/",
         "body": {
-            "uri": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
+            "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
         }
       },
       "response": {
