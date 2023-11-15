@@ -76,8 +76,8 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            lookup = urllib.parse.urlencode({'url': url,'callback_url': 'http://example.com/search_results','project_media_id': 1,'context': json.dumps({'team_id': 1,})})
-            response = self.client.get('/similarity/async/audio?'+lookup, content_type='application/json')
+            lookup = urllib.parse.urlencode({'url': url,'callback_url': 'http://example.com/search_results','project_media_id': 1,'context': json.dumps({'team_id': 1})})
+            response = self.client.get('/similarity/async/audio?'+lookup)
         result = json.loads(response.data.decode())
         self.assertEqual(result['message'], "Message pushed successfully")
 

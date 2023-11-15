@@ -68,7 +68,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
-            lookup = urllib.parse.urlencode({'text': 'this is a test','context': json.dumps(){'dbid': [12, 13],'app': 'check'}}))
+            lookup = urllib.parse.urlencode({'text': 'this is a test','context': json.dumps({'dbid': [12, 13],'app': 'check'})}))
             response = self.client.get(
                 '/text/similarity/?'+lookup,
                 content_type='application/json'
