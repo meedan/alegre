@@ -1,4 +1,5 @@
 import unittest
+import urllib.parse
 import json
 from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
@@ -46,14 +47,8 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            response = self.client.get('/similarity/async/audio', data=json.dumps({
-                'url': url,
-                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                'callback_url': 'http://example.com/search_results',
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
+            lookup = urllib.parse.urlencode({'url': url,'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",'callback_url': 'http://example.com/search_results','context': json.dumps({'team_id': 1,})})
+            response = self.client.get('/similarity/async/audio?'+lookup, content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result['message'], "Message pushed successfully")
 
@@ -81,14 +76,8 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            response = self.client.get('/similarity/async/audio', data=json.dumps({
-                'url': url,
-                'callback_url': 'http://example.com/search_results',
-                'project_media_id': 1,
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
+            lookup = urllib.parse.urlencode({'url': url,'callback_url': 'http://example.com/search_results','project_media_id': 1,'context': json.dumps({'team_id': 1,})})
+            response = self.client.get('/similarity/async/audio?'+lookup, content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result['message'], "Message pushed successfully")
 

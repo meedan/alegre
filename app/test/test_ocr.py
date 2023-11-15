@@ -11,11 +11,7 @@ class TestOcrBlueprint(BaseTestCase):
     def test_ocr_api_successful(self):
         with self.client:
             response = self.client.get(
-                '/image/ocr/',
-                data=json.dumps({
-                  'url': 'https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg',
-                }),
-                content_type='application/json'
+                '/image/ocr/?url=https://i.pinimg.com/564x/46/3a/db/463adb6e3c936114192b1929e5ec2c95.jpg',
             )
             result = json.loads(response.data.decode())
 
@@ -34,11 +30,7 @@ class TestOcrBlueprint(BaseTestCase):
     def test_ocr_api_image_without_text(self):
         with self.client:
             response = self.client.get(
-                '/image/ocr/',
-                data=json.dumps({
-                  'url': 'https://i.pinimg.com/564x/0d/da/56/0dda56a791e3af7a4023f073b4d3c099.jpg',
-                }),
-                content_type='application/json'
+                '/image/ocr/?url=https://i.pinimg.com/564x/0d/da/56/0dda56a791e3af7a4023f073b4d3c099.jpg',
             )
             result = json.loads(response.data.decode())
             self.assertIsNone(result)
@@ -47,10 +39,7 @@ class TestOcrBlueprint(BaseTestCase):
         with patch('app.main.controller.image_ocr_controller.CLIENT') as client:
             client.return_value= Exception('We can not access the URL currently. Please download the content and pass it in')
             response = self.client.get(
-                '/image/ocr/',
-                data=json.dumps({
-                'url': 'https://i.imgur.com/ewGClFQ.png',
-                }),
+                '/image/ocr/?url=https://i.imgur.com/ewGClFQ.png',
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())

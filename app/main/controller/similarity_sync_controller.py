@@ -25,8 +25,9 @@ class SyncSimilarityResource(Resource):
         app.logger.warning(f"Request args are {request.args}")
         args = request.args.to_dict()
         app.logger.warning(f"Args are {args}")
-        if args and isinstance(args.get("context"), str):
-            args["context"] = json.loads(args.get("context"))
+        for key in ["context", "models", "per_model_threshold", "vector"]:
+            if args and args.get(key) and isinstance(args.get(key), str):
+                args[key] = json.loads(args.get(key))
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
         else:

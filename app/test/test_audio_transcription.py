@@ -1,3 +1,4 @@
+import urllib.parse
 import unittest
 import json
 
@@ -57,10 +58,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
                     'LanguageCode': 'en-EN',
                 }
             }
-            response = self.client.get('/audio/transcription/',
-                data=json.dumps({
-                  'job_name': 'Aloha',
-                }),
+            response = self.client.get('/audio/transcription/?job_name=Aloha',
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
@@ -98,10 +96,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
                 transcription_text = """{"jobName":"audiot","accountId":"848416313321","results":{"language_code":"pt-BR","transcripts":[{"transcript":"a tragédia da"}]}}"""
                 struct_helper = namedtuple('struct_helper', 'text')
                 requests.return_value = struct_helper(text = transcription_text)
-                response = self.client.get('/audio/transcription/',
-                    data=json.dumps({
-                    'job_name': 'Aloha',
-                    }),
+                response = self.client.get('/audio/transcription/?job_name=Aloha',
                     content_type='application/json'
                 )
                 result = json.loads(response.data.decode())
@@ -112,10 +107,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
     def test_get_transcription_job_error(self):
         with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_get_transcription', ) as mock_get_transcription:
             mock_get_transcription.return_value = {}
-            response = self.client.get('/audio/transcription/',
-                data=json.dumps({
-                  'job_name': 'Aloha',
-                }),
+            response = self.client.get('/audio/transcription/?job_name=Aloha',
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
@@ -125,10 +117,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
 
     def test_handle_bot3_exception(self):
         with patch('botocore.client.BaseClient._make_api_call', side_effect= ClientError({'Error': {'Message': 'Duplicated file', 'Code': 'TypeAlreadyExistsFault'}}, 'test-op')):
-            response = self.client.get('/audio/transcription/',
-                data=json.dumps({
-                  'job_name': 'Aloha',
-                }),
+            response = self.client.get('/audio/transcription/?job_name=Aloha',
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
@@ -138,11 +127,8 @@ class TestTranscriptionBlueprint(BaseTestCase):
 
     def test_post_transcription_job_with_boto_client(self):
         with patch('botocore.client.BaseClient._make_api_call'):
-            response = self.client.post('/audio/transcription/',
-                data=json.dumps({
-                  'url': 's3://hello-audio-transcription/en-01.wav',
-                  'job_name': 'Aloha',
-                }),
+            lookup = urllib.parse.urlencode({'url': 's3://hello-audio-transcription/en-01.wav','job_name': 'Aloha',})
+            response = self.client.post('/audio/transcription/?'+lookup,
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
