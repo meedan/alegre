@@ -39,15 +39,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
-                response = self.client.get(
-                    '/text/similarity/',
-                    data=json.dumps({
-                      'text': example['text'],
-                      'language': example['language'],
-                      'threshold': 0.0
-                    }),
-                    content_type='application/json'
-                )
+                lookup = urllib.parse.urlencode({'text': example['text'],'language': example['language'],'threshold': 0.0})
+                response = self.client.get('/text/similarity/?'+lookup)
                 result = json.loads(response.data.decode())
                 print(result)
                 self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
