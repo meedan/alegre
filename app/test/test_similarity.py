@@ -384,7 +384,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         es = OpenSearch(app.config['ELASTICSEARCH_URL'])
         es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
 
-        lookup = urllib.parse.urlencode({'text': 'how to slice a banana','model': TestSimilarityBlueprint.use_model_key,'context': json.dumps({'dbid': 54})})
+        lookup = urllib.parse.urlencode({'text': 'how to slice a banana','model': TestSimilarityBlueprint.test_model_key,'context': json.dumps({'dbid': 54})})
         response = self.client.get(
             '/text/similarity/?'+lookup
         )
@@ -400,8 +400,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
       lookup = urllib.parse.urlencode({'threshold': 0.7,'model': TestSimilarityBlueprint.use_model_key,'context': json.dumps({'dbid': 54})})
       response = self.client.get(
-        '/text/similarity/?'+lookup,
-        content_type='application/json'
+        '/text/similarity/?'+lookup
       )
       result = json.loads(response.data.decode())
       self.assertEqual(0, len(result['result']))
@@ -421,8 +420,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
       lookup = urllib.parse.urlencode({'text': 'how to delete an invoice', 'vector': json.dumps(vector),'model': TestSimilarityBlueprint.use_model_key,'context': json.dumps({'dbid': 54})})
       response = self.client.get(
-          '/text/similarity/?'+lookup,
-          content_type='application/json'
+          '/text/similarity/?'+lookup
       )
       result = json.loads(response.data.decode())
       self.assertEqual(1, len(result['result']))
@@ -449,11 +447,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             
             self.assertEqual(1, len(result['result']))
             data['min_es_score']=10+result['result'][0]['_score']
-
-            lookup = urllib.parse.urlencode({'text':'min_es_score', 'models': json.dumps(["elasticsearch"])})
-            response = self.client.get(
-                '/text/similarity/?'+lookup
-            )
+            lookup = urllib.parse.urlencode({'text':'min_es_score', 'models': json.dumps(["elasticsearch"]), 'min_es_score': data['min_es_score']})
+            response = self.client.get('/text/similarity/?'+lookup)
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
 

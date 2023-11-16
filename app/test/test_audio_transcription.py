@@ -128,9 +128,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
     def test_post_transcription_job_with_boto_client(self):
         with patch('botocore.client.BaseClient._make_api_call'):
             lookup = urllib.parse.urlencode({'url': 's3://hello-audio-transcription/en-01.wav','job_name': 'Aloha',})
-            response = self.client.post('/audio/transcription/?'+lookup,
-                content_type='application/json'
-            )
+            response = self.client.post('/audio/transcription/?'+lookup)
             result = json.loads(response.data.decode())
             self.assertEqual('application/json', response.content_type)
             self.assertEqual(200, response.status_code)

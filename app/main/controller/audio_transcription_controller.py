@@ -82,8 +82,8 @@ class AudioTranscriptionResource(Resource):
     @api.doc('Start transcription job')
     @api.expect(transcription_post, validate=False)
     def post(self):
-        jobName = request.get_json().get('job_name', '')
-        audioUri = request.get_json().get('url', '')
+        jobName = request.args.get('job_name', '')
+        audioUri = request.args.get('url', '')
         def start_transcription():
             result = None
             response = self.aws_start_transcription(jobName, audioUri)

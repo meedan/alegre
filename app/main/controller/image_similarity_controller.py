@@ -36,7 +36,7 @@ class ImageSimilarityResource(Resource):
         request_json = {}
     app.logger.warning(f"Request args are {request.args}")
     value = request.args.get(key) or (request_json and request_json.get(key))
-    if key in ["context", "models", "per_model_threshold", "vector"]:
+    if key in ["context", "models", "per_model_threshold", "vector"] and value:
       return json.loads(value)
     else:
       return value
