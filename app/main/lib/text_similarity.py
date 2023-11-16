@@ -174,6 +174,8 @@ def search_text_by_model(search_params):
     if model_key.lower() == 'elasticsearch':
         conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
+        if language == 'None':
+            language = None
         # 'auto' indicates we should try to guess the appropriate language
         if language == 'auto':
             text = search_params.get("content")
