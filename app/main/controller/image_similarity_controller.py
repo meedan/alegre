@@ -1,3 +1,4 @@
+import json
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
@@ -28,7 +29,17 @@ class ImageSimilarityResource(Resource):
     return similarity.add_item(request.json, "image")
 
   def get_from_args_or_json(self, request, key):
-    return request.args.get(key) or (request.json and request.json.get(key))
+    request_json = None
+    try:
+        request_json = request.json
+    except json.decoder.JSONDecodeError:
+        request_json = {}
+    app.logger.warning(f"Request args are {request.args}")
+    value = request.args.get(key) or (request_json and request_json.get(key))
+    if key in ["context", "models", "per_model_threshold", "vector"]:
+      return json.loads(value)
+    else:
+      return value
 
   def request_package(self, request):
     return {
