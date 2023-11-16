@@ -34,6 +34,7 @@ class SimilarityResource(Resource):
     @api.doc('Store a text in the similarity database')
     @api.expect(similarity_request, validate=True)
     def post(self):
+        import code;code.interact(local=dict(globals(), **locals())) 
         doc_id = request.json.get("doc_id")
         item = similarity.get_body_for_text_document(request.json, mode='store')
         item["doc_id"] = doc_id
