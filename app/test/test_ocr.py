@@ -11,7 +11,7 @@ class TestOcrBlueprint(BaseTestCase):
     def test_ocr_api_successful(self):
         with self.client:
             response = self.client.get(
-                '/image/ocr/?url=https://i.pinimg.com/564x/46/3a/db/463adb6e3c936114192b1929e5ec2c95.jpg',
+                '/image/ocr/?url=https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg',
             )
             result = json.loads(response.data.decode())
 
