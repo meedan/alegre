@@ -57,7 +57,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertEqual(4, len(result['result']))
 
             response = self.client.post(
-                '/text/similarity/',
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'something different'
                 }),

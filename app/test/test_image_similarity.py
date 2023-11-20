@@ -251,7 +251,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       mock_execute.side_effect = Exception('Simulated db.session.execute error')
 
       # Test adding an image.
-    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      response = self.client.post('/image/similarity/search/', data=json.dumps({
         'url': url,
         'context': {
           'team_id': 1,

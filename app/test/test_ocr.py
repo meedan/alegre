@@ -22,15 +22,6 @@ class TestOcrBlueprint(BaseTestCase):
             self.assertIn('selected by the editor', result['text'])
             self.assertIn('The New York Times', result['text'])
 
-    def test_ocr_api_successful_get_with_query_request(self):
-        with self.client:
-            response = self.client.post(
-                '/image/ocr/?url=https://i.pinimg.com/564x/46/3a/db/463adb6e3c936114192b1929e5ec2c95.jpg',
-            )
-            result = json.loads(response.data.decode())
-
-            self.assertIn('Love in', result['text'])
-
     def test_ocr_api_image_without_text(self):
         with self.client:
             response = self.client.post(

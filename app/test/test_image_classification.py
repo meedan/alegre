@@ -41,7 +41,9 @@ class TestImageClassificationBlueprint(BaseTestCase):
 
     def test_image_classification_api_with_query_request(self):
         response = self.client.post(
-            '/image/classification/?uri=https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg',
+            '/image/classification/',
+            data=json.dumps({"uri":"https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg"}),
+            content_type='application/json'
         )
         result = json.loads(response.data.decode())
         self.assertEqual('application/json', response.content_type)
