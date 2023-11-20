@@ -12,6 +12,8 @@ from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
 from pgvector.sqlalchemy import Vector
 
+from app.main.lib.presto import Presto
+import json
 logging.basicConfig(level=logging.INFO)
 
 class ImageModel(db.Model):
@@ -44,12 +46,25 @@ class ImageModel(db.Model):
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
     phash = compute_phash_int(im)
-    sscd = None
     try:
       pdq = compute_pdq(io.BytesIO(raw))
     except:
       pdq=None
       e = sys.exc_info()[0]
       app.logger.error(f"PDQ failure: {e}")
+    try:
+      # Call presto to calculate SSCD embeddings
+      callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "image_sscd__Model")
+      model_response_package = {"url": url
+        , "command": "add_item"}
+      response = Presto.send_request(app.config['PRESTO_HOST'], "image_sscd__Model", callback_url,
+                                     model_response_package).text
+      response = json.loads(response)
+      result = Presto.blocked_response(response, "image_sscd__Model")
+      sscd = result['body']['hash_value']
+    except:
+      sscd = None
+      app.logger.error(f"SSCD failure: {e}")
+
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at)
+    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)
