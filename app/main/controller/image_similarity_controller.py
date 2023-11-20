@@ -23,6 +23,11 @@ class ImageSimilarityResource(Resource):
 
   @api.response(200, 'image signature successfully stored in the similarity database.')
   @api.doc('Store an image signature in the similarity database')
+  @api.doc(params={
+    'url': 'image URL to be stored or queried for similarity',
+    'models': 'A list of image similarity models to use. Supported models are phash, pdq, and sscd',
+    'context': 'context'
+  })
   @api.expect(image_similarity_request, validate=True)
   def post(self):
     return similarity.add_item(request.json, "image")
@@ -36,10 +41,16 @@ class ImageSimilarityResource(Resource):
       "context": self.get_from_args_or_json(request, 'context'),
       "threshold": self.get_from_args_or_json(request, 'threshold'),
       "limit": (self.get_from_args_or_json(request, 'limit') or similarity.DEFAULT_SEARCH_LIMIT),
+      "models": (self.get_from_args_or_json(request, 'models') or [app.config['IMAGE_MODEL']]),
     }
 
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make a image similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"url":"http://some.link/video.mp4", "threshold": 0.5}\' "http://[ALEGRE_HOST]/image/similarity"')
-  @api.doc(params={'url': 'image URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'})
+  @api.doc(params={
+    'url': 'image URL to be stored or queried for similarity',
+    'models': 'A list of image similarity models to use. Supported models are "phash", "pdq", and "sscd"',
+    'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)',
+    'context': 'context'
+  })
   def get(self):
     return similarity.get_similar_items(self.request_package(request), "image")

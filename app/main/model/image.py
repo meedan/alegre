@@ -34,38 +34,51 @@ class ImageModel(db.Model):
   )
 
   @staticmethod
-  def from_url(url, doc_id, context={}, created_at=None):
+  def from_url(url, doc_id, context={}, created_at=None, models=None):
     """Fetch an image from a URL and load it
       :param url: Image URL
       :returns: ImageModel object
     """
-    app.logger.info(f"Starting image hash for doc_id {doc_id}.")
+    app.logger.info(f"Starting image hash for doc_id {doc_id} and models {models}.")
     ImageFile.LOAD_TRUNCATED_IMAGES = True
     remote_request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     remote_response = urllib.request.urlopen(remote_request)
     raw = remote_response.read()
-    im = Image.open(io.BytesIO(raw)).convert('RGB')
-    phash = compute_phash_int(im)
     try:
-      pdq = compute_pdq(io.BytesIO(raw))
+      if not isinstance(models, list):
+        models = [models]
+      models = [m.lower() for m in models]
     except:
-      pdq=None
-      e = sys.exc_info()[0]
-      app.logger.error(f"PDQ failure: {e}")
-    try:
-      # Call presto to calculate SSCD embeddings
-      callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "image_sscd__Model")
-      model_response_package = {"url": url
-        , "command": "add_item"}
-      response = Presto.send_request(app.config['PRESTO_HOST'], "image_sscd__Model", callback_url,
-                                     model_response_package).text
-      response = json.loads(response)
-      result = Presto.blocked_response(response, "image_sscd__Model")
-      sscd = result['body']['hash_value']
-    except:
-      sscd = None
-      e = sys.exc_info()[0]
-      app.logger.error(f"SSCD failure: {e}")
+      app.logger.warn(f"Unable to lowercase list of models in from_url. {models}")
+
+    phash = None
+    pdq = None
+    sscd = None
+    if "phash" in models:
+      im = Image.open(io.BytesIO(raw)).convert('RGB')
+      phash = compute_phash_int(im)
+    if "pdq" in models:
+      try:
+        pdq = compute_pdq(io.BytesIO(raw))
+      except:
+        pdq=None
+        e = sys.exc_info()[0]
+        app.logger.error(f"PDQ failure: {e}")
+    if "sscd" in models:
+      try:
+        # Call presto to calculate SSCD embeddings
+        callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "image_sscd__Model")
+        model_response_package = {"url": url
+          , "command": "add_item"}
+        response = Presto.send_request(app.config['PRESTO_HOST'], "image_sscd__Model", callback_url,
+                                      model_response_package).text
+        response = json.loads(response)
+        result = Presto.blocked_response(response, "image_sscd__Model")
+        sscd = result['body']['hash_value']
+      except:
+        sscd = None
+        e = sys.exc_info()[0]
+        app.logger.error(f"SSCD failure: {e}")
 
     sha256 = sha256_stream(io.BytesIO(raw))
     return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)

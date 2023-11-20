@@ -65,22 +65,29 @@ def search_image(params):
   context = params.get("context")
   threshold = params.get("threshold")
   limit = params.get("limit")
+  models = params.get("models")
+  try:
+    models = [m.lower() for m in models]
+  except:
+    app.logger.warn(f"Unable to lowercase list of models in search_image. {models}")
+
   if not context:
     context = {}
   if not threshold:
     threshold = 0.9
   if url:
+    result = []
     image = ImageModel.from_url(url, None)
     model=app.config['IMAGE_MODEL']
-    if model and model.lower()=="pdq":
+    if "pdq" in models:
       app.logger.info(f"Searching with PDQ.")
-      result = search_by_pdq(image.pdq, threshold, context, limit)
-    elif model and model.lower()=="sscd":
+      result += search_by_pdq(image.pdq, threshold, context, limit)
+    if "sscd" in models:
       app.logger.info(f"Searching with sscd.")
-      result = search_by_sscd(image.sscd, threshold, context, limit)
-    else:
+      result += search_by_sscd(image.sscd, threshold, context, limit)
+    if "phash" in models:
       app.logger.info(f"Searching with phash.")
-      result = search_by_phash(image.phash, threshold, context, limit)
+      result += search_by_phash(image.phash, threshold, context, limit)
   else:
     result = search_by_context(context, limit)
   return {
