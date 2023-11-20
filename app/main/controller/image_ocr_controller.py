@@ -22,12 +22,9 @@ class ImageOcrResource(Resource):
     @api.doc(params={'url': 'url of image to extract text from'})
 
     @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=2, max=5), stop=(tenacity.stop_after_attempt(3) | tenacity.stop_after_delay(10)), after=_after_log, reraise=True)
-    def get(self):
+    def post(self):
         image = vision.types.Image()
-        if(request.args.get('url')):
-            image.source.image_uri=request.args.get('url')
-        else:
-            image.source.image_uri = request.json['url']
+        image.source.image_uri = request.json['url']
 
         response = CLIENT.document_text_detection(image=image)
 

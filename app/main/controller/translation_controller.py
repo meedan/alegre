@@ -19,17 +19,12 @@ class TranslationResource(Resource):
     def get(self):
         client = get_credentialed_google_client(translate.Client)
         source_language = None
-        if(request.args.get('from')):
-            source_language = request.args.get('from')
-        elif 'from' in request.json:
+        if 'from' in request.json:
             source_language = request.json['from']
         else:
             source_language = client.detect_language([request.json['text']])[0]['language']
 
-        if(request.args.get('text')):
-            result = client.translate(request.args.get('text'), source_language=source_language, target_language=request.args.get('to'))
-        else:
-            result = client.translate(request.json['text'], source_language=source_language, target_language=request.json['to'])
+        result = client.translate(request.json['text'], source_language=source_language, target_language=request.json['to'])
         return {
             'text': result['translatedText']
         }

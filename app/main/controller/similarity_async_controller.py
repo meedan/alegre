@@ -23,9 +23,8 @@ class AsyncSimilarityResource(Resource):
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"text":"Some Text", "threshold": 0.5, "model": "elasticsearch"}\' "http://[ALEGRE_HOST]/text/similarity"')
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
-    def get(self, similarity_type):
-        app.logger.warning(f"Request args are {request.args}")
-        args = request.args.to_dict()
+    def post(self, similarity_type):
+        args = request.json
         app.logger.warning(f"Args are {args}")
         for key in ["context", "models", "per_model_threshold", "vector"]:
             if args and args.get(key) and isinstance(args.get(key), str):

@@ -23,7 +23,7 @@ class PrestoResource(Resource):
     @api.response(200, 'Successfully responded to presto callback.')
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
-        data = request.args or request.json
+        data = request.json
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")

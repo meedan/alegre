@@ -10,9 +10,15 @@
       "description": "a request to link similar images",
       "providerState": "an image URL",
       "request": {
-        "method": "get",
+        "method": "post",
         "path": "/image/similarity/",
-        "query": "url=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg&threshold=0.89"
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+            "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg",
+            "threshold": 0.89 
+        }
       },
       "response": {
         "status": 200,
@@ -74,7 +80,12 @@
       "request": {
         "method": "get",
         "path": "/image/ocr/",
-        "query": "url=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg"
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+            "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
+        }
       },
       "response": {
         "status": 200,
@@ -97,7 +108,12 @@
       "request": {
         "method": "get",
         "path": "/image/classification/",
-        "query": "uri=https%3A%2F%2Fi.pinimg.com%2F564x%2F0f%2F73%2F57%2F0f7357637b2b203e9f32e73c24d126d7.jpg"
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+            "uri": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg"
+        }
       },
       "response": {
         "status": 200,

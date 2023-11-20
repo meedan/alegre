@@ -82,8 +82,8 @@ class AudioTranscriptionResource(Resource):
     @api.doc('Start transcription job')
     @api.expect(transcription_post, validate=False)
     def post(self):
-        jobName = request.args.get('job_name', '')
-        audioUri = request.args.get('url', '')
+        jobName = request.json.get('job_name', '')
+        audioUri = request.json.get('url', '')
         def start_transcription():
             result = None
             response = self.aws_start_transcription(jobName, audioUri)
@@ -95,15 +95,13 @@ class AudioTranscriptionResource(Resource):
             return result
         return safely_handle_transcription_job(start_transcription)
 
+@api.route('/result/')
+class AudioTranscriptionResultResource(Resource):
     @api.response(200, 'OK')
     @api.doc('Get transcription result')
     @api.doc(params={'job_name': 'unique transcription job identifier'})
-    def get(self):
-        jobName = ''
-        if (request.args.get('job_name')):
-            jobName = request.args.get('job_name')
-        else:
-            jobName = request.json['job_name']
+    def post(self):
+        jobName = request.json.get('job_name')
         def get_transcription():
             result = None
             response = self.aws_get_transcription(jobName)

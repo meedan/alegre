@@ -189,6 +189,7 @@ class AudioModel(SharedModel):
             temporary = True
             if not task.get("doc_id"):
                 task["doc_id"] = str(uuid.uuid4())
+            app.logger.debug("Adding temporary audio object of "+str(task))
             self.add(task)
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:

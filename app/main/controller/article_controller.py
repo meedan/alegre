@@ -24,10 +24,7 @@ class ArticleResource(Resource):
             app.logger.info(e)
 
     def respond(self, request):
-        if(request.args.get('url')):
-            url=request.args.get('url')
-        else:
-            url=request.json['url']
+        url=request.json['url']
         existing_cases = db.session.query(ArticleModel).filter(ArticleModel.url==url).all()
         if existing_cases:
             return existing_cases[-1].to_dict()
