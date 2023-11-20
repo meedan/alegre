@@ -30,7 +30,7 @@ class VideoSimilaritySearchResource(Resource):
     @api.response(200, 'video similarity successfully queried.')
     @api.doc('Make a video similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"url":"http://some.link/video.mp4", "threshold": 0.5}\' "http://[ALEGRE_HOST]/video/similarity"')
     @api.doc(params={'url': 'video URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'} )
-    def get(self):
+    def post(self):
         args = request.json
         app.logger.warning(f"Args are {args}")
         for key in ["context", "models", "per_model_threshold", "vector"]:

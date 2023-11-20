@@ -40,5 +40,5 @@ class ImageSimilaritySearchResource(Resource):
   @api.response(200, 'image similarity successfully queried.')
   @api.doc('Make a image similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"url":"http://some.link/video.mp4", "threshold": 0.5}\' "http://[ALEGRE_HOST]/image/similarity"')
   @api.doc(params={'url': 'image URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'})
-  def get(self):
+  def post(self):
     return similarity.get_similar_items(request_package(request), "image")

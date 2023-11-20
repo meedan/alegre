@@ -110,7 +110,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
 
     def test_handle_bot3_exception(self):
         with patch('botocore.client.BaseClient._make_api_call', side_effect= ClientError({'Error': {'Message': 'Duplicated file', 'Code': 'TypeAlreadyExistsFault'}}, 'test-op')):
-            response = self.client.post('/audio/transcription/result',
+            response = self.client.post('/audio/transcription/result/',
                 data=json.dumps({
                   'job_name': 'Aloha',
                 }),
