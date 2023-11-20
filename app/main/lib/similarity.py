@@ -126,6 +126,8 @@ def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  elif similarity_type == "image_sscd__Model":
+      return None
   else:
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   return response
