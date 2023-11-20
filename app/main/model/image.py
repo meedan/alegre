@@ -64,6 +64,7 @@ class ImageModel(db.Model):
       sscd = result['body']['hash_value']
     except:
       sscd = None
+      e = sys.exc_info()[0]
       app.logger.error(f"SSCD failure: {e}")
 
     sha256 = sha256_stream(io.BytesIO(raw))
