@@ -19,7 +19,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
             r.delete(key)
 
     def test_image_classification_api(self):
-        response = self.client.get(
+        response = self.client.post(
             '/image/classification/',
             data=json.dumps(dict(
                 uri='https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg'
@@ -40,7 +40,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
         }, result['result']['flags'])
 
     def test_image_classification_api_with_query_request(self):
-        response = self.client.get(
+        response = self.client.post(
             '/image/classification/?uri=https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg',
         )
         result = json.loads(response.data.decode())
@@ -57,7 +57,7 @@ class TestImageClassificationBlueprint(BaseTestCase):
         }, result['result']['flags'])
 
     def test_image_classification_error(self):
-        response = self.client.get(
+        response = self.client.post(
             '/image/classification/',
             data=json.dumps(dict(
                 uri='https://bad.url/blah'
@@ -80,14 +80,14 @@ class TestImageClassificationBlueprint(BaseTestCase):
                     'spam': vision.enums.Likelihood.UNKNOWN
                 }}
             }
-            response = self.client.get(
+            response = self.client.post(
                 '/image/classification/',
                 data=json.dumps(dict(
                     uri='https://i.imgur.com/ewGClFQ.png'
                 )),
                 content_type='application/json'
             )
-            response = self.client.get(
+            response = self.client.post(
                 '/image/classification/',
                 data=json.dumps(dict(
                     uri='https://i.imgur.com/ewGClFQ.png'

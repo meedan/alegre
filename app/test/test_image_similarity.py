@@ -1,4 +1,3 @@
-import urllib.parse
 import unittest
 import json
 from flask import current_app as app
@@ -92,56 +91,90 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     ], ImageModel.query.filter_by(sha256=image.sha256).one().context)
 
     # Test searching by context.
-    lookup = urllib.parse.urlencode({'context': json.dumps({'team_id': 2})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'context': {
+        'team_id': 2
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
     # Test searching by context with array of possible values.
-    lookup = urllib.parse.urlencode({'context': json.dumps({'team_id': [2, 3]})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'context': {
+        'team_id': [2, 3]
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
     # Test searching by context with array of possible values, where no response should be found.
-    lookup = urllib.parse.urlencode({'context': json.dumps({'team_id': [-1, -2]})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'context': {
+        'team_id': [-1, -2]
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
 
     # Test querying for identical images.
     url = 'file:///app/app/test/data/lenna-512.jpg'
-    lookup = urllib.parse.urlencode({'url': url, 'threshold': 1.0, 'context': json.dumps({})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {}
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
     # Test querying with context.
-    lookup = urllib.parse.urlencode({'url': url, 'threshold': 1.0, 'context': json.dumps({'team_id': 1})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {
+        'team_id': 1
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
     # Test querying with multi context.
-    lookup = urllib.parse.urlencode({'url': url, 'threshold': 1.0, 'context': json.dumps({'team_id': [1, 2, 3]})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {
+        'team_id': [1, 2, 3]
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
     # Test empty querying with multi context.
-    lookup = urllib.parse.urlencode({'url': url, 'threshold': 1.0, 'context': json.dumps({'team_id': [-1, -2]})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {
+        'team_id': [-1, -2]
+      }
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
 
     # Test querying for similar but not identical images.
     url = 'file:///app/app/test/data/lenna-256.png'
-    lookup = urllib.parse.urlencode({'url': url, 'threshold': 1.0, 'context': json.dumps({})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'threshold': 1.0,
+      'context': {}
+    }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
-    lookup = urllib.parse.urlencode({'url': url, 'context': json.dumps({'team_id': 2})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url,
+      'context': {
+        'team_id': 2
+      }
+    }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
 
@@ -218,8 +251,13 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       mock_execute.side_effect = Exception('Simulated db.session.execute error')
 
       # Test adding an image.
-      lookup = urllib.parse.urlencode({'url': url, 'context': json.dumps({'team_id': 1, 'project_media_id': 1})})
-      response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+        'url': url,
+        'context': {
+          'team_id': 1,
+          'project_media_id': 1
+        }
+      }), content_type='application/json')
       self.assertEqual(500, response.status_code)
 
   def test_add_image_error(self):
@@ -248,8 +286,11 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    lookup = urllib.parse.urlencode({'context': json.dumps({'team_id': 'aa'})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'context': {
+        'team_id': 'aa'
+      }
+    }), content_type='application/json')
     self.assertEqual(500, response.status_code)
     result = json.loads(response.data.decode())
 
@@ -264,8 +305,10 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    lookup = urllib.parse.urlencode({'context': json.dumps({})})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'context': {
+      }
+    }), content_type='application/json')
     self.assertEqual(200, response.status_code)
 
   def test_search_using_url(self):
@@ -280,8 +323,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    lookup = urllib.parse.urlencode({'url': url})
-    response = self.client.get('/image/similarity/?'+lookup)
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
+      'url': url
+    }), content_type='application/json')
     result = get_context_query(context, False, True)
     self.assertIn({'context_team_id': 2}, result)
 

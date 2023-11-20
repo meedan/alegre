@@ -1,4 +1,3 @@
-import urllib.parse
 import unittest
 import json
 from opensearchpy import helpers, OpenSearch, TransportError
@@ -45,14 +44,13 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            lookup = urllib.parse.urlencode({
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
                 'url': url,
                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                'context': json.dumps({
+                'context': {
                     'team_id': 1,
-                })
-            })
-            response = self.client.get('/similarity/sync/audio?'+lookup, content_type='application/json')
+                }
+            }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
         self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
@@ -81,14 +79,13 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            lookup = urllib.parse.urlencode({
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
                 'url': url,
                 'project_media_id': 1,
-                'context': json.dumps({
+                'context': {
                     'team_id': 1,
-                })
-            })
-            response = self.client.get('/similarity/sync/audio?'+lookup, content_type='application/json')
+                }
+            }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')

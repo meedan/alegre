@@ -1,4 +1,3 @@
-import urllib.parse
 import tempfile
 import unittest
 import json
@@ -46,17 +45,22 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
                 mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                lookup = urllib.parse.urlencode({
+                response = self.client.post('/video/similarity/search/', data=json.dumps({
                     'url': url,
                     'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': json.dumps({
+                    'context': {
                         'team_id': 1,
                         'has_custom_id': True
-                    })
-                })
-                response = self.client.get('/video/similarity/?'+lookup)
-                lookup = urllib.parse.urlencode({'url': url,'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",'context': json.dumps({'team_id': [1,0],'has_custom_id': True})})
-                response2 = self.client.get('/video/similarity/?'+lookup)
+                    }
+                }), content_type='application/json')
+                response2 = self.client.post('/video/similarity/search/', data=json.dumps({
+                    'url': url,
+                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
+                    'context': {
+                        'team_id': [1,0],
+                        'has_custom_id': True
+                    }
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
         result2 = json.loads(response2.data.decode())
@@ -94,15 +98,13 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
                 mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                lookup = urllib.parse.urlencode({
+                response = self.client.post('/video/similarity/search/', data=json.dumps({
                     'url': url,
                     'project_media_id': 1,
-                    'context': json.dumps({
+                    'context': {
                         'team_id': 1,
-                        'has_custom_id': True
-                    })
-                })
-                response = self.client.get('/video/similarity/?'+lookup)
+                    }
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
 
@@ -126,16 +128,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
                 mock_get_shared_model_client.return_value = SharedModelStub('video')
                 mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                lookup = urllib.parse.urlencode({
+                response = self.client.post('/video/similarity/search/', data=json.dumps({
                     'url': url,
                     'project_media_id': 1,
-                    'context': json.dumps({
+                    'context': {
                         'team_id': 1,
-                        'has_custom_id': True
-                    }),
+                    },
                     'match_across_content_types': True
-                })
-                response = self.client.get('/video/similarity/?'+lookup)
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
 

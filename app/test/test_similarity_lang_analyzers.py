@@ -1,5 +1,4 @@
 import unittest
-import urllib.parse
 import json
 from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
@@ -39,10 +38,16 @@ class TestSimilarityBlueprint(BaseTestCase):
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
-                lookup = urllib.parse.urlencode({'text': example['text'],'language': example['language'],'threshold': 0.0})
-                response = self.client.get('/text/similarity/?'+lookup)
+                response = self.client.post(
+                    '/text/similarity/search/',
+                    data=json.dumps({
+                      'text': example['text'],
+                      'language': example['language'],
+                      'threshold': 0.0
+                    }),
+                    content_type='application/json'
+                )
                 result = json.loads(response.data.decode())
-                print(result)
                 self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
 
     def test_auto_language_id(self):
@@ -61,15 +66,21 @@ class TestSimilarityBlueprint(BaseTestCase):
                 expected_lang = expected_lang_ids[n]
                 response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
-                print(result)
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 if expected_lang is None:
                     es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
                 else:
                     es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
-                lookup = urllib.parse.urlencode({'text': example['text'], 'language': expected_lang, 'threshold': 0.0})
-                response = self.client.get('/text/similarity/?'+lookup)
+                response = self.client.post(
+                    '/text/similarity/search/',
+                    data=json.dumps({
+                      'text': example['text'],
+                      'language': expected_lang, # <- note correct lang id must be here
+                      'threshold': 0.0
+                    }),
+                    content_type='application/json'
+                )
                 result = json.loads(response.data.decode())
                 # indirectly checking classification by confirming which index was included in result
                 index_alias = app.config['ELASTICSEARCH_SIMILARITY']
@@ -99,8 +110,15 @@ class TestSimilarityBlueprint(BaseTestCase):
                   es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
               else:
                   es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
-              lookup = urllib.parse.urlencode({'text': example['text'], 'language': 'auto', 'threshold': 0.0})
-              response = self.client.get('/text/similarity/?'+lookup)
+              response = self.client.post(
+                  '/text/similarity/search/',
+                  data=json.dumps({
+                    'text': example['text'],
+                    'language': 'auto', # <- NOTE 'auto' should guess and find correct id
+                    'threshold': 0.0
+                  }),
+                  content_type='application/json'
+              )
               result = json.loads(response.data.decode())
               # indirectly checking classification by confirming which index was included in result
               index_alias = app.config['ELASTICSEARCH_SIMILARITY']
