@@ -75,6 +75,9 @@ def search_image(params):
     if model and model.lower()=="pdq":
       app.logger.info(f"Searching with PDQ.")
       result = search_by_pdq(image.pdq, threshold, context, limit)
+    elif model and model.lower()=="sscd":
+      app.logger.info(f"Searching with sscd.")
+      result = search_by_sscd(image.sscd, threshold, context, limit)
     else:
       app.logger.info(f"Searching with phash.")
       result = search_by_phash(image.phash, threshold, context, limit)
@@ -191,6 +194,51 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     for values in matches:
       row = dict(zip(keys, values))
       row["model"] = "image/pdq"
+      rows.append(row)
+    return rows
+  except Exception as e:
+    db.session.rollback()
+    raise e
+
+
+@tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
+def search_by_sscd(sscd, threshold, context, limit=None):
+
+  try:
+    context_query, context_hash = get_context_query(context)
+    # operator <=> is cosine distance (1 - cosine distance to give the similarity)
+    if context_query:
+        cmd = """
+          SELECT * FROM (
+            SELECT id, sha256, sscd, url, context, 1 - (sscd <=> :sscd)
+            AS score FROM images
+          ) f
+          WHERE score >= :threshold
+          AND 
+          """+context_query+"""
+          ORDER BY score DESC
+        """
+    else:
+        cmd = """
+          SELECT * FROM (
+            SELECT id, sha256, sscd, url, context, 1 - (sscd <=> :sscd)
+            AS score FROM images
+          ) f
+          WHERE score >= :threshold
+          ORDER BY score DESC
+        """
+    if limit:
+        cmd = cmd+" LIMIT :limit"
+    matches = db.session.execute(text(cmd), dict(**{
+      'sscd': str(sscd),
+      'threshold': threshold,
+      'limit': limit,
+    }, **context_hash)).fetchall()
+    keys = ('id', 'sha256', 'sscd', 'url', 'context', 'score')
+    rows = []
+    for values in matches:
+      row = dict(zip(keys, values))
+      row["model"] = "image/sscd"
       rows.append(row)
     return rows
   except Exception as e:
