@@ -11,7 +11,7 @@
       "providerState": "an image URL",
       "request": {
         "method": "post",
-        "path": "/image/similarity/",
+        "path": "/image/similarity/search/",
         "headers": {
           "Content-Type": "application/json"
         },
@@ -78,7 +78,7 @@
       "description": "a request to extract text",
       "providerState": "an image URL",
       "request": {
-        "method": "get",
+        "method": "post",
         "path": "/image/ocr/",
         "headers": {
           "Content-Type": "application/json"
@@ -106,7 +106,7 @@
       "description": "a request to get image flags",
       "providerState": "an image URL",
       "request": {
-        "method": "get",
+        "method": "post",
         "path": "/image/classification/",
         "headers": {
           "Content-Type": "application/json"
