@@ -71,9 +71,9 @@ similarity_request = api.model('bulk_update_similarity_request', {
 class BulkUpdateSimilarityResource(Resource):
     # Assumes less than 10k documents at a time.
     def get_writeable_data_for_request(self):
-        es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+        es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
         params = request.json
-        existing_docs = get_documents_by_ids(app.config['ELASTICSEARCH_SIMILARITY'], [e.get("doc_id") for e in params.get("documents", [])], es)
+        existing_docs = get_documents_by_ids(app.config['OPENSEARCH_SIMILARITY'], [e.get("doc_id") for e in params.get("documents", [])], es)
         updated_cases = get_cases(params, existing_docs)
         new_cases = get_cases(params, existing_docs, False)
         return updated_cases, new_cases

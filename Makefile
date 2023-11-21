@@ -5,6 +5,7 @@ migration: wait
 	python manage.py init
 	python manage.py db stamp head
 	python manage.py db upgrade
+	echo "Migrations complete."
 
 run: wait
 	python manage.py run

@@ -9,6 +9,8 @@ import sqlalchemy
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
 import json_logging
+import logging
+import sys
 import redis
 from rq import Connection, Worker
 
@@ -23,6 +25,9 @@ from PIL import Image
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
 # (by upgrading to tensorflow 2.2 or higher)
 import tensorflow as tf
+
+alegre_index_name = os.getenv('ALEGRE_INDEX', 'alegre_similarity')
+alegre_init_index_name = os.getenv('ALEGRE_INIT_INDEX', 'alegre_similarity')
 
 config_name = os.getenv('BOILERPLATE_ENV', 'dev')
 app = create_app(config_name)
@@ -55,6 +60,11 @@ def test_simple_perl_function():
 @manager.command
 def init_simple_perl_function():
   with app.app_context():
+    json_logging.init_non_web(enable_json=True)
+    logger = logging.getLogger("init")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    logger.info("Starting init_simple_perl_function ...")
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
@@ -115,6 +125,11 @@ def init_simple_perl_function():
 @manager.command
 def init_perl_functions():
   with app.app_context():
+    json_logging.init_non_web(enable_json=True)
+    logger = logging.getLogger("init")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    logger.info("Starting init_perl_functions ...")
     sqlalchemy.event.listen(
       db.metadata,
       'before_create',
@@ -262,25 +277,32 @@ def run_video_matcher():
 @manager.command
 def init():
   """Initializes the service."""
+  json_logging.init_non_web(enable_json=True)
+  logger = logging.getLogger("init")
+  logger.setLevel(logging.DEBUG)
+  logger.addHandler(logging.StreamHandler(sys.stdout))
+  logger.info("Starting init ...")
   # Create ES indexes.
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+  logger.info("Creating indices with init index name: " + alegre_init_index_name)
+  es = OpenSearch(app.config['OPENSEARCH_URL'])
   try:
     if config_name == 'test':
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-    es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es.indices.delete(index=alegre_init_index_name, ignore=[400, 404])
+    es.indices.create(alegre_init_index_name)
   except TransportError as e:
     # ignore already existing index
     if e.error == 'resource_already_exists_exception':
       pass
     else:
       raise
-  es.indices.put_mapping(
-    body=json.load(open('./elasticsearch/alegre_similarity.json')),
-    # include_type_name=True,
-    index=app.config['ELASTICSEARCH_SIMILARITY']
-  )
+  # For now, omit mapping updates.
+  #es.indices.put_mapping(
+  #  body=json.load(open('./opensearch/alegre_similarity.json')),
+  #  index=alegre_init_index_name
+  #)
   init_indices()
   # Create database.
+  logger.info("Creating database ...")
   with app.app_context():
     if not database_exists(db.engine.url):
       create_database(db.engine.url)

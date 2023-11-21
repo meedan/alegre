@@ -17,12 +17,12 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-      es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+      es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
       es.indices.put_mapping(
         body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
       # also make sure all the language specific indices have been dropped and recreated
       # (this is slow and runs before each test)
@@ -36,8 +36,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                 response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
-                es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-                es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
+                es = OpenSearch(app.config['OPENSEARCH_URL'])
+                es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+example['language'])
                 response = self.client.get(
                     '/text/similarity/',
                     data=json.dumps({
@@ -48,7 +48,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     content_type='application/json'
                 )
                 result = json.loads(response.data.decode())
-                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
+                self.assertTrue(app.config['OPENSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
 
     def test_auto_language_id(self):
         # language examples as input to language classifier
@@ -67,11 +67,11 @@ class TestSimilarityBlueprint(BaseTestCase):
                 response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
                 self.assertEqual(True, result['success'])
-                es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+                es = OpenSearch(app.config['OPENSEARCH_URL'])
                 if expected_lang is None:
-                    es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+                    es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
                 else:
-                    es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
+                    es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang)
                 response = self.client.get(
                     '/text/similarity/',
                     data=json.dumps({
@@ -83,9 +83,9 @@ class TestSimilarityBlueprint(BaseTestCase):
                 )
                 result = json.loads(response.data.decode())
                 # indirectly checking classification by confirming which index was included in result
-                index_alias = app.config['ELASTICSEARCH_SIMILARITY']
+                index_alias = app.config['OPENSEARCH_SIMILARITY']
                 if expected_lang is not None:
-                    index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
+                    index_alias = app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang
                 self.assertTrue(index_alias in [e['_index'] for e in result['result']])
 
     def test_auto_language_query(self):
@@ -105,11 +105,11 @@ class TestSimilarityBlueprint(BaseTestCase):
               response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
               result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
               self.assertEqual(True, result['success'])
-              es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+              es = OpenSearch(app.config['OPENSEARCH_URL'])
               if expected_lang is None:
-                  es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+                  es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
               else:
-                  es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
+                  es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang)
               response = self.client.get(
                   '/text/similarity/',
                   data=json.dumps({
@@ -121,9 +121,9 @@ class TestSimilarityBlueprint(BaseTestCase):
               )
               result = json.loads(response.data.decode())
               # indirectly checking classification by confirming which index was included in result
-              index_alias = app.config['ELASTICSEARCH_SIMILARITY']
+              index_alias = app.config['OPENSEARCH_SIMILARITY']
               if expected_lang is not None:
-                  index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
+                  index_alias = app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang
               self.assertTrue(index_alias in [e['_index'] for e in result['result']])
     
 

@@ -304,17 +304,17 @@ SETTINGS_BY_LANGUAGE = {
 }
 
 def init_indices():
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+  es = OpenSearch(app.config['OPENSEARCH_URL'])
   indices = es.cat.indices(h='index', s='index').split()
   for lang in SUPPORTED_LANGUAGES:
-    index_name = app.config['ELASTICSEARCH_SIMILARITY']+"_"+lang
+    index_name = app.config['OPENSEARCH_SIMILARITY']+"_"+lang
     if index_name not in indices:
       es.indices.create(index=index_name)
     else:
       es.indices.delete(index=index_name)
       es.indices.create(index=index_name)
     es.indices.close(index=index_name)
-    mapping = json.load(open('./elasticsearch/alegre_similarity_base.json'))
+    mapping = json.load(open('./opensearch/alegre_similarity_base.json'))
     mapping["properties"]["content"]["analyzer"] = "rebuilt_"+lang
     es.indices.put_settings(
       body=SETTINGS_BY_LANGUAGE[lang],

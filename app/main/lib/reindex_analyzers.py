@@ -10,11 +10,11 @@ from flask import request, current_app as app
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 import cld3
 def get_all_documents():
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
   try:
     docs = scan(es,
       size=10000,
-      index=app.config['ELASTICSEARCH_SIMILARITY'],
+      index=app.config['OPENSEARCH_SIMILARITY'],
     )
     for hit in docs:
       yield hit
@@ -23,7 +23,7 @@ def get_all_documents():
     return []
 
 def get_docs_to_transform(team_id, language=None):
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
     docs_to_transform = {}
     for doc in get_all_documents_matching_context({"team_id": team_id}):
         if not language:
@@ -44,12 +44,12 @@ def get_cached_docs_to_transform(team_id, language=None):
         return get_docs_to_transform(team_id, language)
 
 def store_updated_docs(docs_to_transform):
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
     for doc_id, language in docs_to_transform.items():
         try:
-            already_done = es.get(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+language, id=doc_id)
+            already_done = es.get(index=app.config['OPENSEARCH_SIMILARITY']+"_"+language, id=doc_id)
         except opensearchpy.exceptions.NotFoundError:
-            found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+            found_doc = es.get(index=app.config['OPENSEARCH_SIMILARITY'], id=doc_id)
             if found_doc:
                 source = found_doc["_source"]
                 keys_to_pop = [e for e in source.keys() if 'vector' in e or 'model_' in e]
@@ -59,7 +59,7 @@ def store_updated_docs(docs_to_transform):
                 finished = False
                 while not finished and fail_count < 5:
                     try:
-                        update_or_create_document(source, doc_id, app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+                        update_or_create_document(source, doc_id, app.config['OPENSEARCH_SIMILARITY']+"_"+language)
                         finished = True
                     except opensearchpy.exceptions.ConnectionError:
                         fail_count += 1

@@ -1,26 +1,6 @@
 { 
   "mappings": {
     "properties": {
-      "vector_768": {
-        "type": "knn_vector",
-        "dimension": 768
-      },
-      "vector_xlm-r-bert-base-nli-stsb-mean-tokens": {
-        "type": "knn_vector",
-        "dimension": 768
-      },
-      "vector_openai-text-embedding-ada-002": {
-      "type": "dense_vector",
-      "dims": 1536
-    },
-      "vector_paraphrase-filipino-mpnet-base-v2": {
-        "type": "knn_vector",
-        "dimension": 768
-      },
-      "vector_indian-sbert": {
-        "type": "knn_vector",
-        "dimension": 768
-      },
       "content": {
         "type": "text"
       },
@@ -32,6 +12,26 @@
       },
       "model": {
         "type": "keyword"
+      },
+      "vector_768": {
+        "type": "knn_vector",
+        "dimension": 768
+      },
+      "vector_xlm-r-bert-base-nli-stsb-mean-tokens": {
+        "type": "knn_vector",
+        "dimension": 768
+      },
+      "vector_openai-text-embedding-ada-002": {
+        "type": "knn_vector",
+        "dimension": 1536
+      },
+      "vector_paraphrase-filipino-mpnet-base-v2": {
+        "type": "knn_vector",
+        "dimension": 768
+      },
+      "vector_indian-sbert": {
+        "type": "knn_vector",
+        "dimension": 768
       }
     }
   }
