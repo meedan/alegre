@@ -29,7 +29,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
         self.assertEqual({'job_name': "foo", 'job_status': "bar", 'language_code': "baz"}, transcription_response_package({"TranscriptionJob": {"TranscriptionJobName": "foo", "TranscriptionJobStatus": "bar", "LanguageCode": "baz"}}))
 
     def test_post_transcription_job(self):
-        with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_start_transcription', ) as mock_start_transcription:
+        with patch('app.main.controller.audio_transcription_controller.aws_start_transcription', ) as mock_start_transcription:
             mock_start_transcription.return_value = {
                 'TranscriptionJob': {
                     'TranscriptionJobName': 'Aloha',
@@ -49,7 +49,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
             self.assertEqual(sorted(result.keys()), ['job_name', 'job_status'])
 
     def test_get_transcription_job(self):
-        with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_get_transcription', ) as mock_get_transcription:
+        with patch('app.main.controller.audio_transcription_controller.aws_get_transcription', ) as mock_get_transcription:
             mock_get_transcription.return_value = {
                 'TranscriptionJob': {
                     'TranscriptionJobName': 'Aloha',
@@ -69,7 +69,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
             self.assertEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code'])
 
     def test_get_completed_transcription_job(self):
-        with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_get_transcription', ) as mock_get_transcription:
+        with patch('app.main.controller.audio_transcription_controller.aws_get_transcription', ) as mock_get_transcription:
             with patch('requests.get') as requests:
                 url = 'file:///app/app/test/data/test_audio_1.mp3'
                 mock_get_transcription.return_value = {
@@ -95,7 +95,7 @@ class TestTranscriptionBlueprint(BaseTestCase):
                 self.assertEqual(sorted(result.keys()), ['job_name', 'job_status', 'language_code', 'transcription'])
 
     def test_get_transcription_job_error(self):
-        with patch('app.main.controller.audio_transcription_controller.AudioTranscriptionResource.aws_get_transcription', ) as mock_get_transcription:
+        with patch('app.main.controller.audio_transcription_controller.aws_get_transcription', ) as mock_get_transcription:
             mock_get_transcription.return_value = {}
             response = self.client.post('/audio/transcription/result/',
                 data=json.dumps({
