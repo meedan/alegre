@@ -12,12 +12,12 @@ image_similarity_request = api.model('image_similarity_request', {
   'threshold': fields.Float(required=False, default=0.9, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
   'context': JsonObject(required=False, default=[], description='context')
 })
-def request_package(request):
+def request_package(request_obj):
   return {
-    "url": request.json.get('url'),
-    "context": request.json.get('context'),
-    "threshold": request.json.get('threshold'),
-    "limit": (request.json.get('limit') or similarity.DEFAULT_SEARCH_LIMIT),
+    "url": request_obj.json.get('url'),
+    "context": request_obj.json.get('context'),
+    "threshold": request_obj.json.get('threshold'),
+    "limit": (request_obj.json.get('limit') or similarity.DEFAULT_SEARCH_LIMIT),
   }
 
 @api.route('/')
