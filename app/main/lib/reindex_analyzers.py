@@ -1,7 +1,7 @@
 import json
 import opensearchpy
 from opensearchpy import OpenSearch
-from app.main.lib.elasticsearch import get_all_documents_matching_context, update_or_create_document
+from app.main.lib.opensearch import get_all_documents_matching_context, update_or_create_document
 from app.main.lib.error_log import ErrorLog
 from opensearchpy.helpers import scan
 

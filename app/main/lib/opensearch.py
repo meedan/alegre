@@ -1,4 +1,4 @@
-# Elasticsearch helpers
+# OpenSearch helpers
 import opensearchpy
 from opensearchpy import OpenSearch
 

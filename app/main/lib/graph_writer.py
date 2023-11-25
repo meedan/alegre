@@ -1,4 +1,4 @@
-from app.main.lib.elasticsearch import get_all_documents_matching_context
+from app.main.lib.opensearch import get_all_documents_matching_context
 from app.main.lib import text_similarity
 from app.main.lib import image_similarity
 from flask import current_app as app
@@ -58,7 +58,7 @@ def package_item_for_query(item, graph, data_type):
   elif data_type == "text":
     vector_keys = [k for k in item["_source"].keys() if "vector" in k]
     vector_key = ""
-    model = graph.context.get("model") or "elasticsearch"
+    model = graph.context.get("model") or "opensearch"
     if vector_keys:
       vector_key = vector_keys[0]
     return {

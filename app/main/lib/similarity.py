@@ -53,7 +53,7 @@ def get_body_for_text_document(params, mode):
     if 'models' in params:
         models = models|set(params['models'])
     if not models:
-        models = ['elasticsearch']
+        models = ['opensearch']
     params['models'] = list(models)
 
     # Rename "text" to "content" if present

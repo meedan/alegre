@@ -1,6 +1,6 @@
 from flask import current_app as app
 from opensearchpy import OpenSearch
-from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.opensearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.error_log import ErrorLog
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
@@ -16,7 +16,7 @@ def get_document_body(body):
     context = body.get("context", {})
     if context:
       body["contexts"] = [context]
-    if model_key != 'elasticsearch':
+    if model_key != 'opensearch':
       if model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
           vector = retrieve_openai_embeddings(body['content'], model_key)
           if vector == None:
@@ -47,7 +47,7 @@ def search_text(search_params):
   return results
 
 def get_model_and_threshold(search_params):
-  model_key = 'elasticsearch'
+  model_key = 'opensearch'
   threshold = 0.9
   if 'model' in search_params:
       model_key = search_params['model']
@@ -73,7 +73,7 @@ def get_body_from_conditions(conditions):
         body = conditions
     return body
 
-def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
+def get_opensearch_base_conditions(search_params, clause_count, threshold):
     conditions = [
         {
             'match': {
@@ -142,7 +142,7 @@ def strip_vectors(results):
 
 def restrict_results(results, search_params, model_key):
     out_results = []
-    if search_params.get("min_es_score") and model_key == "elasticsearch":
+    if search_params.get("min_es_score") and model_key == "opensearch":
         for result in results:
             if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
                 out_results.append(result)
@@ -167,8 +167,8 @@ def search_text_by_model(search_params):
         matches, clause_count = generate_matches(search_params['context'])
     if clause_count >= app.config['MAX_CLAUSE_COUNT']:
         return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
-    if model_key.lower() == 'elasticsearch':
-        conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
+    if model_key.lower() == 'opensearch':
+        conditions = get_opensearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
         # 'auto' indicates we should try to guess the appropriate language
         if language == 'auto':
