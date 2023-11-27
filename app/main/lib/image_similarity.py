@@ -66,6 +66,8 @@ def search_image(params):
   threshold = params.get("threshold")
   limit = params.get("limit")
   models = params.get("models")
+  # if models is None:
+  #   models = ['phash']
   try:
     models = [m.lower() for m in models]
   except:
@@ -77,12 +79,12 @@ def search_image(params):
     threshold = 0.9
   if url:
     result = []
-    image = ImageModel.from_url(url, None)
+    image = ImageModel.from_url(url, None,models = models)
     model=app.config['IMAGE_MODEL']
     if "pdq" in models:
       app.logger.info(f"Searching with PDQ.")
       result += search_by_pdq(image.pdq, threshold, context, limit)
-    if "sscd" in models:
+    if "sscd" in models: # and image.sscd is not None:
       app.logger.info(f"Searching with sscd.")
       result += search_by_sscd(image.sscd, threshold, context, limit)
     if "phash" in models:
