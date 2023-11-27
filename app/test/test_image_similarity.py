@@ -46,23 +46,23 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(result['test_count'], 0.5625)
 
   def test_truncated_image_fetch(self):
-    image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg', '1-2-3')
+    image = ImageModel.from_url('file:///app/app/test/data/truncated_img.jpg', '1-2-3', models=['phash'])
     self.assertEqual(image.phash, 25444816931300591)
 
   def test_image_fetch(self):
-    image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png', '1-2-3')
+    image = ImageModel.from_url('file:///app/app/test/data/lenna-512.png', '1-2-3', models=['phash'])
     self.assertEqual(image.phash, 45655524591978137)
 
   def test_image_api(self):
     url = 'file:///app/app/test/data/lenna-512.png'
-
     # Test adding an image.
     response = self.client.post('/image/similarity/', data=json.dumps({
       'url': url,
       'context': {
         'team_id': 1,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
@@ -74,11 +74,12 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 2,
         'project_media_id': 2
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    image = ImageModel.from_url(url, '1-2-3')
+    image = ImageModel.from_url(url, '1-2-3', models=['phash'])
     self.assertListEqual([
       {
         'team_id': 1,
@@ -94,7 +95,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
         'team_id': 2
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -103,7 +105,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
         'team_id': [2, 3]
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -112,7 +115,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
         'team_id': [-1, -2]
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
@@ -122,7 +126,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
-      'context': {}
+      'context': {},
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -133,7 +138,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'threshold': 1.0,
       'context': {
         'team_id': 1
-      }
+      },
+      'models': ['phash']
+
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -144,7 +151,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'threshold': 1.0,
       'context': {
         'team_id': [1, 2, 3]
-      }
+      },
+      'models': ['phash']
+
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -155,7 +164,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'threshold': 1.0,
       'context': {
         'team_id': [-1, -2]
-      }
+      },
+      'models': ['phash']
+
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
@@ -165,7 +176,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     response = self.client.get('/image/similarity/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
-      'context': {}
+      'context': {},
+      'models': ['phash']
+
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
@@ -173,7 +186,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'url': url,
       'context': {
         'team_id': 2
-      }
+      },
+      'models': ['phash']
+
     }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
     self.assertEqual(1, len(result['result']))
@@ -187,7 +202,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 1,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     url = 'file:///app/app/test/data/lenna-512.png'
@@ -198,7 +214,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 2,
         'project_media_id': 2
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     image = ImageModel.query.filter_by(url=url).all()[0]
@@ -213,7 +230,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 1,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
@@ -224,7 +242,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 1,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json') # threshold should default to 0.9 == round(1 - 0.9) * 64.0 == 6
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['deleted'])
@@ -242,7 +261,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
         'context': {
           'team_id': 1,
           'project_media_id': 1
-        }
+        },
+        'models': ['phash']
       }), content_type='application/json')
       result = json.loads(response.data.decode())
       self.assertEqual(500, response.status_code)
@@ -256,7 +276,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
         'context': {
           'team_id': 1,
           'project_media_id': 1
-        }
+        },
+        'models': ['phash']
       }), content_type='application/json')
       self.assertEqual(500, response.status_code)
 
@@ -271,7 +292,8 @@ class TestImageSimilarityBlueprint(BaseTestCase):
           'context': {
             'team_id': 1,
             'project_media_id': 1
-          }
+          },
+          'models': ['phash']
         }), content_type='application/json')
         self.assertEqual(500, response.status_code)
 
@@ -282,14 +304,16 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 2,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
         'team_id': 'aa'
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     self.assertEqual(500, response.status_code)
     result = json.loads(response.data.decode())
@@ -301,13 +325,15 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 2,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
     response = self.client.get('/image/similarity/', data=json.dumps({
       'context': {
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     self.assertEqual(200, response.status_code)
 
@@ -319,12 +345,14 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       'context': {
         'team_id': 2,
         'project_media_id': 1
-      }
+      },
+      'models': ['phash']
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
     response = self.client.get('/image/similarity/', data=json.dumps({
-      'url': url
+      'url': url,
+      'models': ['phash']
     }), content_type='application/json')
     result = get_context_query(context, False, True)
     self.assertIn({'context_team_id': 2}, result)
