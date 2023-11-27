@@ -7,7 +7,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller.bulk_similarity_controller import BulkSimilarityResource
 from app.main.lib import similarity
 from app.main.lib.text_similarity import get_document_body
-from app.main.lib.elasticsearch import merge_contexts
+from app.main.lib.opensearch import merge_contexts
 def get_documents_by_ids(index, ids, es):
     query = {
         "query": {

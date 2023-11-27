@@ -6,7 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
   SECRET_KEY = os.getenv('SECRET_KEY', 'my_precious_secret_key')
   DEBUG = False
-  OPENSEARCH_URL = os.getenv('OPENSEARCH_URL', 'http://elasticsearch:9200')
+  OPENSEARCH_URL = os.getenv('OPENSEARCH_URL', 'http://opensearch:9200')
   OPENSEARCH_SIMILARITY = 'alegre_similarity'
   REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
   REDIS_PORT = os.getenv('REDIS_PORT', 6379)
