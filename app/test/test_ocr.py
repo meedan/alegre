@@ -10,7 +10,7 @@ from google.cloud import vision
 class TestOcrBlueprint(BaseTestCase):
     def test_ocr_api_successful(self):
         with self.client:
-            response = self.client.get(
+            response = self.client.post(
                 '/image/ocr/',
                 data=json.dumps({
                   'url': 'https://i.pinimg.com/564x/5f/35/b1/5f35b1bce78a5e51c4f356ddbacf840f.jpg',
@@ -22,18 +22,9 @@ class TestOcrBlueprint(BaseTestCase):
             self.assertIn('selected by the editor', result['text'])
             self.assertIn('The New York Times', result['text'])
 
-    def test_ocr_api_successful_get_with_query_request(self):
-        with self.client:
-            response = self.client.get(
-                '/image/ocr/?url=https://i.pinimg.com/564x/46/3a/db/463adb6e3c936114192b1929e5ec2c95.jpg',
-            )
-            result = json.loads(response.data.decode())
-
-            self.assertIn('Love in', result['text'])
-
     def test_ocr_api_image_without_text(self):
         with self.client:
-            response = self.client.get(
+            response = self.client.post(
                 '/image/ocr/',
                 data=json.dumps({
                   'url': 'https://i.pinimg.com/564x/0d/da/56/0dda56a791e3af7a4023f073b4d3c099.jpg',
@@ -46,7 +37,7 @@ class TestOcrBlueprint(BaseTestCase):
     def test_ocr_google_api_error(self):
         with patch('app.main.controller.image_ocr_controller.CLIENT') as client:
             client.return_value= Exception('We can not access the URL currently. Please download the content and pass it in')
-            response = self.client.get(
+            response = self.client.post(
                 '/image/ocr/',
                 data=json.dumps({
                 'url': 'https://i.imgur.com/ewGClFQ.png',

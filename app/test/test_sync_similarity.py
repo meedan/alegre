@@ -44,7 +44,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            response = self.client.get('/similarity/sync/audio', data=json.dumps({
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
                 'url': url,
                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
                 'context': {
@@ -79,7 +79,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             })
             mock_post_request.return_value = mock_response
-            response = self.client.get('/similarity/sync/audio', data=json.dumps({
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
                 'url': url,
                 'project_media_id': 1,
                 'context': {

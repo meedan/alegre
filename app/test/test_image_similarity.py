@@ -91,7 +91,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     ], ImageModel.query.filter_by(sha256=image.sha256).one().context)
 
     # Test searching by context.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'context': {
         'team_id': 2
       }
@@ -100,7 +100,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(1, len(result['result']))
 
     # Test searching by context with array of possible values.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'context': {
         'team_id': [2, 3]
       }
@@ -109,7 +109,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(1, len(result['result']))
 
     # Test searching by context with array of possible values, where no response should be found.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'context': {
         'team_id': [-1, -2]
       }
@@ -119,7 +119,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
 
     # Test querying for identical images.
     url = 'file:///app/app/test/data/lenna-512.jpg'
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
       'context': {}
@@ -128,7 +128,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(1, len(result['result']))
 
     # Test querying with context.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
       'context': {
@@ -139,7 +139,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(1, len(result['result']))
 
     # Test querying with multi context.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
       'context': {
@@ -150,7 +150,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     self.assertEqual(1, len(result['result']))
 
     # Test empty querying with multi context.
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
       'context': {
@@ -162,14 +162,14 @@ class TestImageSimilarityBlueprint(BaseTestCase):
 
     # Test querying for similar but not identical images.
     url = 'file:///app/app/test/data/lenna-256.png'
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'threshold': 1.0,
       'context': {}
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(0, len(result['result']))
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url,
       'context': {
         'team_id': 2
@@ -251,7 +251,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
       mock_execute.side_effect = Exception('Simulated db.session.execute error')
 
       # Test adding an image.
-      response = self.client.get('/image/similarity/', data=json.dumps({
+      response = self.client.post('/image/similarity/search/', data=json.dumps({
         'url': url,
         'context': {
           'team_id': 1,
@@ -286,7 +286,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'context': {
         'team_id': 'aa'
       }
@@ -305,7 +305,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'context': {
       }
     }), content_type='application/json')
@@ -323,7 +323,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
     }), content_type='application/json')
     result = json.loads(response.data.decode())
     self.assertEqual(True, result['success'])
-    response = self.client.get('/image/similarity/', data=json.dumps({
+    response = self.client.post('/image/similarity/search/', data=json.dumps({
       'url': url
     }), content_type='application/json')
     result = get_context_query(context, False, True)
