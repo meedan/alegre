@@ -9,6 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 from pgvector.sqlalchemy import Vector
 from app.main import create_app, db
+import sqlalchemy
+from sqlalchemy.schema import DDL
 
 
 # revision identifiers, used by Alembic.
@@ -19,12 +21,17 @@ depends_on = None
 
 
 def upgrade():
-    # op.add_column('images', sa.Column('sscd', Vector(256), nullable=True))
-    pass
-
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+          CREATE EXTENSION IF NOT EXISTS vector;
+          """)
+    )
+    op.add_column('images', sa.Column('sscd', Vector(256), nullable=True))
+    op.create_index(op.f('ix_images_sscd'), 'images', ['sscd'], unique=False)
 
 def downgrade():
-    # op.drop_index(op.f('ix_images_sscd'), table_name='images')
-    # op.drop_column('images', 'sscd')
-    pass
+    op.drop_index(op.f('ix_images_sscd'), table_name='images')
+    op.drop_column('images', 'sscd')
 
