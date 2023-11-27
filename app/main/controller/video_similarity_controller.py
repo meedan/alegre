@@ -32,7 +32,7 @@ class VideoSimilaritySearchResource(Resource):
     @api.doc(params={'url': 'video URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'} )
     def post(self):
         args = request.json
-        app.logger.warning(f"Args are {args}")
+        app.logger.debug(f"Args are {args}")
         for key in ["context", "models", "per_model_threshold", "vector"]:
             if args and args.get(key) and isinstance(args.get(key), str):
                 args[key] = json.loads(args.get(key))

@@ -144,7 +144,7 @@ def restrict_results(results, search_params, model_key):
     out_results = []
     try:
         min_es_score = float(search_params.get("min_es_score"))
-    except:
+    except (ValueError, TypeError) as e:
         min_es_score = None
     if min_es_score is not None and model_key == "elasticsearch":
         for result in results:

@@ -23,7 +23,7 @@ class SyncSimilarityResource(Resource):
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def post(self, similarity_type):
         args = request.json
-        app.logger.warning(f"Args are {args}")
+        app.logger.debug(f"Args are {args}")
         for key in ["context", "models", "per_model_threshold", "vector"]:
             if args and args.get(key) and isinstance(args.get(key), str):
                 args[key] = json.loads(args.get(key))
