@@ -190,7 +190,7 @@ class VideoModel(SharedModel):
             except Exception as err:
               ErrorLog.notify(err)
               raise err
-            threshold = task.get("threshold", 0.0) or 0.0
+            threshold = float(task.get("threshold", 0.0) or 0.0)
             results = []
             for i,score in enumerate(scores):
                 if score > threshold:

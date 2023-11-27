@@ -19,11 +19,8 @@ class ImageClassificationResource(Resource):
     @api.response(200, 'image classification successfully queried.')
     @api.doc('Classify and label an image')
     @api.doc(params={'uri': 'image URL to be queried for classification'})
-    def get(self):
-        if(request.args.get('uri')):
-            uri=request.args.get('uri')
-        else:
-            uri=request.json['uri']
+    def post(self):
+        uri=request.json['uri']
         # Read from cache first.
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
         key = 'image_classification:' + hashlib.md5(uri.encode('utf-8')).hexdigest()

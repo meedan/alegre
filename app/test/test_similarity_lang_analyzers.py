@@ -38,8 +38,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['OPENSEARCH_URL'])
                 es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+example['language'])
-                response = self.client.get(
-                    '/text/similarity/',
+                response = self.client.post(
+                    '/text/similarity/search/',
                     data=json.dumps({
                       'text': example['text'],
                       'language': example['language'],
@@ -72,8 +72,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                     es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
                 else:
                     es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang)
-                response = self.client.get(
-                    '/text/similarity/',
+                response = self.client.post(
+                    '/text/similarity/search/',
                     data=json.dumps({
                       'text': example['text'],
                       'language': expected_lang, # <- note correct lang id must be here
@@ -110,8 +110,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                   es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
               else:
                   es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY']+"_"+expected_lang)
-              response = self.client.get(
-                  '/text/similarity/',
+              response = self.client.post(
+                  '/text/similarity/search/',
                   data=json.dumps({
                     'text': example['text'],
                     'language': 'auto', # <- NOTE 'auto' should guess and find correct id

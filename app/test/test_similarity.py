@@ -46,8 +46,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             es = OpenSearch(app.config['OPENSEARCH_URL'])
             es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test'
                 }),
@@ -56,8 +56,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(4, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'something different'
                 }),
@@ -66,8 +66,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -80,8 +80,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -94,8 +94,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -108,8 +108,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -122,8 +122,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -136,8 +136,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John',
                   'threshold': 0.7
@@ -160,8 +160,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             es = OpenSearch(app.config['OPENSEARCH_URL'])
             es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'models': ["elasticsearch"],
@@ -172,8 +172,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(4, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'models': ["elasticsearch"],
@@ -183,8 +183,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(4, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'something different',
                   'models': ["elasticsearch"],
@@ -194,8 +194,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -209,8 +209,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -224,8 +224,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -239,8 +239,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -254,8 +254,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
                   'context': {
@@ -269,8 +269,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(1, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John',
                   'threshold': 0.7,
@@ -303,12 +303,12 @@ class TestSimilarityBlueprint(BaseTestCase):
             es = OpenSearch(app.config['OPENSEARCH_URL'])
             es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
             lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            post_response = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
-            post_response_fuzzy = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
             lookup["fuzzy"] = False
-            post_response_fuzzy = self.client.get('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             self.assertEqual(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
 
     def test_elasticsearch_update_text(self):
@@ -410,8 +410,8 @@ class TestSimilarityBlueprint(BaseTestCase):
 
             es = OpenSearch(app.config['OPENSEARCH_URL'])
             es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
                   'language': 'en',
@@ -422,8 +422,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'नमस्ते मेरा नाम करीम है',
                   'language': 'hi'
@@ -442,8 +442,8 @@ class TestSimilarityBlueprint(BaseTestCase):
 
         es = OpenSearch(app.config['OPENSEARCH_URL'])
         es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
-        response = self.client.get(
-            '/text/similarity/',
+        response = self.client.post(
+            '/text/similarity/search/',
             data=json.dumps({
               'text': 'how to delete an invoice',
               'model': TestSimilarityBlueprint.use_model_key,
@@ -458,8 +458,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
-        response = self.client.get(
-            '/text/similarity/',
+        response = self.client.post(
+            '/text/similarity/search/',
             data=json.dumps({
               'text': 'purge an invoice',
               'model': TestSimilarityBlueprint.use_model_key,
@@ -472,8 +472,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual(1, len(result['result']))
-        response = self.client.get(
-            '/text/similarity/',
+        response = self.client.post(
+            '/text/similarity/search/',
             data=json.dumps({
               'text': 'purge an invoice',
               'model': TestSimilarityBlueprint.use_model_key,
@@ -490,8 +490,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         similarity = result['result'][0]['_score']
         self.assertGreater(similarity, 0.7)
 
-        response = self.client.get(
-            '/text/similarity/',
+        response = self.client.post(
+            '/text/similarity/search/',
             data=json.dumps({
               'text': 'purge an invoice',
               'model': TestSimilarityBlueprint.use_model_key,
@@ -517,8 +517,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         es = OpenSearch(app.config['OPENSEARCH_URL'])
         es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
-        response = self.client.get(
-            '/text/similarity/',
+        response = self.client.post(
+            '/text/similarity/search/',
             data=json.dumps({
               'text': 'how to slice a banana',
               'model': TestSimilarityBlueprint.test_model_key,
@@ -538,8 +538,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
 
-      response = self.client.get(
-        '/text/similarity/',
+      response = self.client.post(
+            '/text/similarity/search/',
         data=json.dumps({
           'model': TestSimilarityBlueprint.use_model_key,
           'threshold': 0.7,
@@ -565,8 +565,8 @@ class TestSimilarityBlueprint(BaseTestCase):
       model = SharedModel.get_client(TestSimilarityBlueprint.use_model_key)
       vector = model.get_shared_model_response('how to delete an invoice')
 
-      response = self.client.get(
-          '/text/similarity/',
+      response = self.client.post(
+          '/text/similarity/search/',
           data=json.dumps({
             'text': 'how to delete an invoice',
             'model': TestSimilarityBlueprint.use_model_key,
@@ -591,8 +591,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             es = OpenSearch(app.config['OPENSEARCH_URL'])
             es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
             
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps(data),
                 content_type='application/json'
             )
@@ -601,8 +601,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertEqual(1, len(result['result']))
             data['min_es_score']=10+result['result'][0]['_score']
 
-            response = self.client.get(
-                '/text/similarity/',
+            response = self.client.post(
+                '/text/similarity/search/',
                 data=json.dumps(data),
                 content_type='application/json'
             )

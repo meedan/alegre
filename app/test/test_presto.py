@@ -44,8 +44,6 @@ class TestPrestoBlueprint(BaseTestCase):
                     "requires_callback": False,
                     "final_task": "search",
                 },
-            },
-            "response": {
                 "hash_value": [
                     377259661,
                     376226445,

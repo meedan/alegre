@@ -23,7 +23,7 @@ class TestTranslationBlueprint(BaseTestCase):
 
     def test_translation_api(self):
         with self.client:
-            response = self.client.get(
+            response = self.client.post(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'borracha en la oficina',
@@ -35,7 +35,7 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('drunk in the office', result['text'])
 
-            response = self.client.get(
+            response = self.client.post(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'borracha na oficina',
@@ -47,7 +47,7 @@ class TestTranslationBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual('rubber in the workshop', result['text'])
 
-            response = self.client.get(
+            response = self.client.post(
                 '/text/translation/',
                 data=json.dumps({
                   'text': 'i am testing this',
@@ -57,12 +57,6 @@ class TestTranslationBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual('estou testando isso', result['text'].lower())
-
-            response = self.client.get(
-              '/text/translation/?text=borracha na oficina&from=pt&to=en',
-            )
-            result = json.loads(response.data.decode())
-            self.assertEqual('rubber in the workshop', result['text'])
 
     def test_translation_error_if_not_credentials(self):
       with patch('os.path.exists') as mock:

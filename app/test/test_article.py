@@ -46,7 +46,7 @@ class TestArticleBlueprint(BaseTestCase):
             article.parse()
             article.nlp()
             mock_get_article.return_value = article
-            response = self.client.get(
+            response = self.client.post(
                 '/article/',
                 data=json.dumps(dict(
                     url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
@@ -58,19 +58,10 @@ class TestArticleBlueprint(BaseTestCase):
             self.assertEqual(200, response.status_code)
             self.assertEqual(sorted(result.keys()), ['authors', 'keywords', 'links', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
 
-    def test_article_api_get_query_request(self):
-        response = self.client.get(
-            '/article/?url=http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/',
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual('application/json', response.content_type)
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(sorted(result.keys()), ['authors', 'keywords', 'links', 'movies', 'publish_date', 'source_url', 'summary', 'tags', 'text', 'title', 'top_image'])
-
     def test_article_api_error_response(self):
         with patch('app.main.controller.article_controller.ArticleResource.respond', ) as mock_get_error_response:
             mock_get_error_response.return_value = {"error": "response error"}
-            response = self.client.get(
+            response = self.client.post(
                 '/article/',
                 data=json.dumps(dict(
                     url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
@@ -96,7 +87,7 @@ class TestArticleBlueprint(BaseTestCase):
     def test_article_not_parsed_response(self):
         with patch('app.main.controller.article_controller.ArticleResource.get_article', ) as mock_get_error_response:
             mock_get_error_response.return_value = None
-            response = self.client.get(
+            response = self.client.post(
                 '/article/',
                 data=json.dumps(dict(
                     url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
@@ -111,7 +102,7 @@ class TestArticleBlueprint(BaseTestCase):
     def test_article_download_error(self):
         with patch('newspaper.Article.download' ) as mock_download:
             mock_download.return_value = Exception()
-            response = self.client.get(
+            response = self.client.post(
                 '/article/',
                 data=json.dumps(dict(
                     url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'

@@ -23,13 +23,13 @@ class PrestoResource(Resource):
     @api.response(200, 'Successfully responded to presto callback.')
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
-        data = request.args or request.json
+        data = request.json
         app.logger.info(f"PrestoResource {action}")
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")
-            result = similarity.callback_add_item(dict(**data.get("body"), **data.get("response", {})), model_type)
+            result = similarity.callback_add_item(data.get("body"), model_type)
             if data.get("body", {}).get("raw", {}).get("final_task") == "search":
-                result = similarity.callback_search_item(dict(**data.get("body"), **data.get("response", {})), model_type)
+                result = similarity.callback_search_item(data.get("body"), model_type)
             callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
             if data.get("body", {}).get("raw", {}).get("requires_callback"):
                 app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
