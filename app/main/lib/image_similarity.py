@@ -51,7 +51,7 @@ def add_image(save_params):
   try:
     if save_params.get("doc_id"):
       delete_image(save_params)
-    image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"))
+    image = ImageModel.from_url(save_params['url'], save_params.get('doc_id'), save_params['context'], save_params.get("created_at"), save_params.get('models'))
     save(image)
     return {
       'success': True
@@ -65,19 +65,29 @@ def search_image(params):
   context = params.get("context")
   threshold = params.get("threshold")
   limit = params.get("limit")
+  models = params.get("models")
+  try:
+    models = [m.lower() for m in models]
+  except:
+    app.logger.warn(f"Unable to lowercase list of models in search_image. {models}")
+
   if not context:
     context = {}
   if not threshold:
     threshold = 0.9
   if url:
+    result = []
     image = ImageModel.from_url(url, None)
     model=app.config['IMAGE_MODEL']
-    if model and model.lower()=="pdq":
+    if "pdq" in models:
       app.logger.info(f"Searching with PDQ.")
-      result = search_by_pdq(image.pdq, threshold, context, limit)
-    else:
+      result += search_by_pdq(image.pdq, threshold, context, limit)
+    if "sscd" in models:
+      app.logger.info(f"Searching with sscd.")
+      result += search_by_sscd(image.sscd, threshold, context, limit)
+    if "phash" in models:
       app.logger.info(f"Searching with phash.")
-      result = search_by_phash(image.phash, threshold, context, limit)
+      result += search_by_phash(image.phash, threshold, context, limit)
   else:
     result = search_by_context(context, limit)
   return {
@@ -191,6 +201,51 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     for values in matches:
       row = dict(zip(keys, values))
       row["model"] = "image/pdq"
+      rows.append(row)
+    return rows
+  except Exception as e:
+    db.session.rollback()
+    raise e
+
+
+@tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
+def search_by_sscd(sscd, threshold, context, limit=None):
+
+  try:
+    context_query, context_hash = get_context_query(context)
+    # operator <=> is cosine distance (1 - cosine distance to give the similarity)
+    if context_query:
+        cmd = """
+          SELECT * FROM (
+            SELECT id, sha256, sscd, url, context, 1 - (sscd <=> :sscd)
+            AS score FROM images
+          ) f
+          WHERE score >= :threshold
+          AND 
+          """+context_query+"""
+          ORDER BY score DESC
+        """
+    else:
+        cmd = """
+          SELECT * FROM (
+            SELECT id, sha256, sscd, url, context, 1 - (sscd <=> :sscd)
+            AS score FROM images
+          ) f
+          WHERE score >= :threshold
+          ORDER BY score DESC
+        """
+    if limit:
+        cmd = cmd+" LIMIT :limit"
+    matches = db.session.execute(text(cmd), dict(**{
+      'sscd': str(sscd),
+      'threshold': threshold,
+      'limit': limit,
+    }, **context_hash)).fetchall()
+    keys = ('id', 'sha256', 'sscd', 'url', 'context', 'score')
+    rows = []
+    for values in matches:
+      row = dict(zip(keys, values))
+      row["model"] = "image/sscd"
       rows.append(row)
     return rows
   except Exception as e:
