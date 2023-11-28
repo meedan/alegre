@@ -191,9 +191,7 @@ class AudioModel(SharedModel):
                 task["doc_id"] = str(uuid.uuid4())
             app.logger.debug("Adding temporary audio object of "+str(task))
             self.add(task)
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios and not audio:
-                audio = audios[0]
+            audio = self.get_by_doc_id_or_url(task)
         return audio, temporary
 
     def get_context_for_search(self, task):
