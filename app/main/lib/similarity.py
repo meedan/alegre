@@ -72,7 +72,7 @@ def get_body_for_text_document(params, mode):
       params['content'] = None
 
     if mode == 'store':
-      allow_list = set(['language', 'content', 'created_at', 'models', 'context', 'callback_url'])
+      allow_list = set(['doc_id', 'language', 'content', 'created_at', 'models', 'context', 'callback_url'])
       keys_to_remove = params.keys() - allow_list
       app.logger.info(
         f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
