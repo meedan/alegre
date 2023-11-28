@@ -176,7 +176,7 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
-        elif task.get('url'):
+        if task.get('url'):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
