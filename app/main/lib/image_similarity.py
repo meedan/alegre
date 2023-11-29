@@ -61,8 +61,8 @@ def add_image(save_params):
     db.session.rollback()
     raise e
 
-def blocking_search_image(task, modality):
-    image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, modality)
+def blocking_search_image(task):
+    image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
     threshold = params.get("threshold")
     limit = params.get("limit")
     model = app.config['IMAGE_MODEL']

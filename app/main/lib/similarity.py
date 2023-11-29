@@ -155,7 +155,7 @@ def get_similar_items(item, similarity_type):
 def blocking_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
-    response = audio_model().blocking_search(model_response_package(item, "search"))
+    response = audio_model().blocking_search(model_response_package(item, "search"), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   elif similarity_type == "image":
