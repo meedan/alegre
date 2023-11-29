@@ -22,9 +22,9 @@ class Audio(db.Model):
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )
 
-  @staticmethod
+  @classmethod
   def from_task_data(cls, task):
-    return Audio(
+    return cls(
       chromaprint_fingerprint=task.get("hash_value"),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
       url=task.get("url"),

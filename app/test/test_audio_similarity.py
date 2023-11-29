@@ -158,7 +158,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
-        with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
+        with patch('app.main.lib.media_crud.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
             mock_get_by_doc_id_or_url.return_value = audio
             self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}}).get("body")
             result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
@@ -199,7 +199,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
-        with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
+        with patch('app.main.lib.media_crud.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
             mock_get_by_doc_id_or_url.return_value = audio
             self.model.add({"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}}).get("body")
             result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
@@ -232,7 +232,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", url=url, context=[{'blah': 1, 'has_custom_id': True, 'project_media_id': 12343}])
         db.session.add(audio)
         db.session.commit()
-        with patch('app.main.lib.shared_models.audio_model.AudioModel.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
+        with patch('app.main.lib.media_crud.get_by_doc_id_or_url', ) as mock_get_by_doc_id_or_url:
             mock_get_by_doc_id_or_url.return_value = audio
             self.model.respond({"command": "add", "threshold": 0.0, "doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
             result = self.model.respond({"command": "search", "body": {"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}}})
@@ -305,7 +305,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         self.assertEqual(results, [])
 
     def test_handle_save_error(self):
-        with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
+        with patch('app.main.lib.media_crud.save', ) as mock:
             mock.return_value = False
             url = 'file:///app/app/test/data/test_audio_1.mp3'
             result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
@@ -313,7 +313,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
             self.assertEqual(False, result['success'])
 
     def test_handle_http_error(self):
-        with patch('app.main.lib.shared_models.audio_model.AudioModel.save', ) as mock:
+        with patch('app.main.lib.media_crud.save', ) as mock:
             url = 'file:///app/app/test/data/test_audio_1.mp3'
             mock.side_effect = urllib.error.HTTPError(url, 420, "HTTP ERROR HAPPENED", None, None)
             result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})

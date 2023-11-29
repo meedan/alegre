@@ -30,9 +30,9 @@ class ImageModel(db.Model):
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )
 
-  @staticmethod
+  @classmethod
   def from_task_data(cls, task):
-    return ImageModel(
+    return cls(
       pdq=task.get("hash_value"),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
       url=task.get("url"),

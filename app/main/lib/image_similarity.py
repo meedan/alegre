@@ -3,6 +3,7 @@ from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
+from app.main.lib import media_crud
 from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound

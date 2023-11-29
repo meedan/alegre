@@ -27,7 +27,13 @@ def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
 
 class AudioModel(SharedModel):
-    def blocking_search(task, modality):
+    def delete(self, task):
+        return media_crud.delete(task, Audio)
+
+    def add(self, task):
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+
+    def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
         audio.chromaprint_fingerprint = result["body"]["hash_value"]
         if audio:
@@ -41,8 +47,8 @@ class AudioModel(SharedModel):
         else:
             return {"error": "Audio not found for provided task", "task": task}
 
-    def async_search(task, modality):
-        return get_async_presto_response(task, Audio, modality)
+    def async_search(self, task, modality):
+        return media_crud.get_async_presto_response(task, Audio, modality)
 
     def search(self, task):
         # here, we have to unpack the task contents to pull out the body,
@@ -59,7 +65,7 @@ class AudioModel(SharedModel):
             body = task
             threshold = body.get('threshold', 0.0)
             limit = body.get("limit")
-        obj, temporary = media_crud.get_object(body, Audio)
+        audio, temporary = media_crud.get_object(body, Audio)
         context = media_crud.get_context_for_search(body)
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
@@ -84,9 +90,9 @@ class AudioModel(SharedModel):
 
     def respond(self, task):
         if task["command"] == "delete":
-            return media_crud.delete(task, Audio)
+            return self.delete(task)
         elif task["command"] == "add":
-            return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+            return self.add(task)
         elif task["command"] == "search":
             return self.search(task)
 
