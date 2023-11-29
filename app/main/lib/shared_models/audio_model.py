@@ -45,8 +45,10 @@ class AudioModel(SharedModel):
                 saved_audio = existing
         except NoResultFound as e:
             # Otherwise, add new audio, but with context as an array
+            app.logger.debug("Adding Audio object that looks like "+str(audio.__dict__))
             if audio.context and not isinstance(audio.context, list):
                 audio.context = [audio.context]
+                app.logger.debug("Set context to "+str(audio.context))
             db.session.add(audio)
             saved_audio = audio
         except Exception as e:
@@ -90,8 +92,7 @@ class AudioModel(SharedModel):
 
     def add(self, task):
         try:
-            body = task.get("body", {})
-            audio = Audio.from_url(body.get("url"), body.get("raw", {}).get("doc_id"), body.get("raw", {}).get("context", {}), task.get("response", {}).get("hash_value"))
+            audio = Audio(chromaprint_fingerprint=task.get("hash_value"), doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")), url=task.get("url"), context=task.get("context", task.get("raw", {}).get("context")))
             try:
               audio = self.save(audio)
             except sqlalchemy.exc.IntegrityError:
@@ -175,7 +176,7 @@ class AudioModel(SharedModel):
             audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
             if audios and not audio:
                 audio = audios[0]
-        elif task.get('url'):
+        if task.get('url'):
             audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
             if audios and not audio:
                 audio = audios[0]
@@ -186,12 +187,11 @@ class AudioModel(SharedModel):
         audio = self.get_by_doc_id_or_url(task)
         if audio is None:
             temporary = True
-            if not task.get("raw"):
-                task["raw"] = {"doc_id": str(uuid.uuid4())}
-            self.add(dict(**{"body": task}, **task))
-            audios = db.session.query(Audio).filter(Audio.doc_id==task["raw"].get("doc_id")).all()
-            if audios and not audio:
-                audio = audios[0]
+            if not task.get("doc_id"):
+                task["doc_id"] = str(uuid.uuid4())
+            app.logger.debug("Adding temporary audio object of "+str(task))
+            self.add(task)
+            audio = self.get_by_doc_id_or_url(task)
         return audio, temporary
 
     def get_context_for_search(self, task):
@@ -202,6 +202,41 @@ class AudioModel(SharedModel):
             context.pop("content_type", None)
         return context
 
+    def blocking_search(self, task):
+        audio, temporary = self.get_audio(task)
+        context = self.get_context_for_search(task)
+        callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+        if task.get("doc_id") is None:
+            task["doc_id"] = str(uuid.uuid4())
+        response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
+        # Warning: this is a blocking hold to wait until we get a response in 
+        # a redis key that we've received something from presto.
+        result = Presto.blocked_response(response, "audio")
+        audio.chromaprint_fingerprint = result["body"]["hash_value"]
+        if audio:
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
+            if temporary:
+                self.delete(task)
+            if task.get("limit"):
+                return {"result": matches[:task.get("limit")]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Audio not found for provided task", "task": task}
+
+    def async_search(self, task):
+        audio, temporary = self.get_audio(task)
+        context = self.get_context_for_search(task)
+        callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+        if task.get("doc_id") is None:
+            task["doc_id"] = str(uuid.uuid4())
+        task["final_task"] = "search"
+        response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
+        if response:
+            return response
+        else:
+            return {"error": "Audio could not be sent for fingerprinting", "task": task}
+
     def search(self, task):
         # here, we have to unpack the task contents to pull out the body,
         # which may be embedded in a body key in the dict if its coming from a presto callback.
@@ -210,6 +245,9 @@ class AudioModel(SharedModel):
             body = task.get("body", {})
             threshold = task.get("raw", {}).get('threshold', 0.0)
             limit = body.get("raw", {}).get("limit")
+            if not body.get("raw"):
+                body["raw"] = {}
+            body["hash_value"] = task.get("body", {}).get("hash_value")
         else:
             body = task
             threshold = body.get('threshold', 0.0)
@@ -220,11 +258,11 @@ class AudioModel(SharedModel):
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
             if task.get("doc_id") is None:
                 task["doc_id"] = str(uuid.uuid4())
-            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task).text)
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
             # Warning: this is a blocking hold to wait until we get a response in 
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "audio")
-            audio.chromaprint_fingerprint = result["response"]["hash_value"]
+            audio.chromaprint_fingerprint = result["body"]["hash_value"]
             context = self.get_context_for_search(result["body"]["raw"])
         if audio:
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)

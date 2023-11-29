@@ -43,7 +43,9 @@ class SharedModel(object):
   @staticmethod
   def get_client(model_key, options={}):
     r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    model_class = json.loads(r.get('SharedModel:%s' % model_key).decode('utf-8'))['model_class']
+    model_info = r.get("SharedModel:%s" % model_key)
+    assert model_info is not None, f"Unable locate model info for key {model_key}"
+    model_class = json.loads(model_info.decode('utf-8'))['model_class']
     class_ = SharedModel.import_model_class(model_class)
     return class_(model_key, options)
 

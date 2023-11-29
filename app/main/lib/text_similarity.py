@@ -142,9 +142,14 @@ def strip_vectors(results):
 
 def restrict_results(results, search_params, model_key):
     out_results = []
-    if search_params.get("min_es_score") and model_key == "elasticsearch":
+    try:
+        min_es_score = float(search_params.get("min_es_score"))
+    except (ValueError, TypeError) as e:
+        app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
+        min_es_score = None
+    if min_es_score is not None and model_key == "elasticsearch":
         for result in results:
-            if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
+            if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
         return out_results
     return results
@@ -170,6 +175,8 @@ def search_text_by_model(search_params):
     if model_key.lower() == 'elasticsearch':
         conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
+        if language == 'None':
+            language = None
         # 'auto' indicates we should try to guess the appropriate language
         if language == 'auto':
             text = search_params.get("content")
