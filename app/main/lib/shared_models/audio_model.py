@@ -18,6 +18,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
+from app.main.lib import media_crud
 from app.main import db
 from app.main.model.audio import Audio
 from app.main.lib.presto import Presto
@@ -26,83 +27,68 @@ def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
 
 class AudioModel(SharedModel):
-    @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-    def save(self, audio):
-        saved_audio = None
-        try:
-            # First locate existing audio and append new context
-            existing = db.session.query(Audio).filter(Audio.url==audio.url).one()
-            if existing:
-                if audio.hash_value is not None  and not existing.hash_value:
-                    existing.hash_value = audio.hash_value
-                    flag_modified(existing, 'hash_value')
-                if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
-                    existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
-                    flag_modified(existing, 'chromaprint_fingerprint')
-                if audio.context not in existing.context:
-                    existing.context.append(audio.context)
-                    flag_modified(existing, 'context')
-                saved_audio = existing
-        except NoResultFound as e:
-            # Otherwise, add new audio, but with context as an array
-            app.logger.debug("Adding Audio object that looks like "+str(audio.__dict__))
-            if audio.context and not isinstance(audio.context, list):
-                audio.context = [audio.context]
-                app.logger.debug("Set context to "+str(audio.context))
-            db.session.add(audio)
-            saved_audio = audio
-        except Exception as e:
-            db.session.rollback()
-            raise e
-        try:
-            db.session.commit()
-            return saved_audio
-        except Exception as e:
-            db.session.rollback()
-            raise e
-        return saved_audio
+    def blocking_search(task, modality):
+        audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
+        audio.chromaprint_fingerprint = result["body"]["hash_value"]
+        if audio:
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
+            if temporary:
+                media_crud.delete(task, Audio)
+            if task.get("limit"):
+                return {"result": matches[:task.get("limit")]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Audio not found for provided task", "task": task}
+
+    def async_search(task, modality):
+        return get_async_presto_response(task, Audio, modality)
+
+    def search(self, task):
+        # here, we have to unpack the task contents to pull out the body,
+        # which may be embedded in a body key in the dict if its coming from a presto callback.
+        # alternatively, the "body" is just the entire dictionary.
+        if "body" in task:
+            body = task.get("body", {})
+            threshold = task.get("raw", {}).get('threshold', 0.0)
+            limit = body.get("raw", {}).get("limit")
+            if not body.get("raw"):
+                body["raw"] = {}
+            body["hash_value"] = task.get("body", {}).get("hash_value")
+        else:
+            body = task
+            threshold = body.get('threshold', 0.0)
+            limit = body.get("limit")
+        obj, temporary = media_crud.get_object(body, Audio)
+        context = media_crud.get_context_for_search(body)
+        if audio.chromaprint_fingerprint is None:
+            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+            if task.get("doc_id") is    None:
+                task["doc_id"] = str(uuid.uuid4())
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
+            # Warning: this is a blocking hold to wait until we get a response in 
+            # a redis key that we've received something from presto.
+            result = Presto.blocked_response(response, "audio")
+            audio.chromaprint_fingerprint = result["body"]["hash_value"]
+            context = media_crud.get_context_for_search(result["body"]["raw"])
+        if audio:
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
+            if temporary:
+                media_crud.delete(body, Audio)
+            if limit:
+                return {"result": matches[:limit]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Audio not found for provided task", "task": task}
 
     def respond(self, task):
         if task["command"] == "delete":
-            return self.delete(task)
+            return media_crud.delete(task, Audio)
         elif task["command"] == "add":
-            return self.add(task)
+            return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
         elif task["command"] == "search":
             return self.search(task)
-
-    def delete(self, task):
-        deleted = False
-        audio = None
-        if 'doc_id' in task:
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios:
-                audio = audios[0]
-        elif 'url' in task:
-            audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
-            if audios:
-                audio = audios[0]
-        if audio:
-            if task.get("context", {}) in audio.context and len(audio.context) > 1:
-                deleted = drop_context_from_record(audio, task.get("context", {}))
-            else:
-                deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-            return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
-        else:
-            return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
-
-    def add(self, task):
-        try:
-            audio = Audio(chromaprint_fingerprint=task.get("hash_value"), doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")), url=task.get("url"), context=task.get("context", task.get("raw", {}).get("context")))
-            try:
-              audio = self.save(audio)
-            except sqlalchemy.exc.IntegrityError:
-              audio = None
-            if audio:
-              return {"requested": task, "result": {"url": audio.url}, "success": True}
-            else:
-              return {"requested": task, "result": {"url": task.get("url")}, "success": False}
-        except urllib.error.HTTPError:
-            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
@@ -169,109 +155,3 @@ class AudioModel(SharedModel):
         except Exception as e:
             db.session.rollback()
             raise e
-
-    def get_by_doc_id_or_url(self, task):
-        audio = None
-        if task.get('doc_id'):
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios and not audio:
-                audio = audios[0]
-        if task.get('url'):
-            audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
-            if audios and not audio:
-                audio = audios[0]
-        return audio
-
-    def get_audio(self, task):
-        temporary = False
-        audio = self.get_by_doc_id_or_url(task)
-        if audio is None:
-            temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            app.logger.debug("Adding temporary audio object of "+str(task))
-            self.add(task)
-            audio = self.get_by_doc_id_or_url(task)
-        return audio, temporary
-
-    def get_context_for_search(self, task):
-        context = {}
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
-        return context
-
-    def blocking_search(self, task):
-        audio, temporary = self.get_audio(task)
-        context = self.get_context_for_search(task)
-        callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
-        if task.get("doc_id") is None:
-            task["doc_id"] = str(uuid.uuid4())
-        response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
-        # Warning: this is a blocking hold to wait until we get a response in 
-        # a redis key that we've received something from presto.
-        result = Presto.blocked_response(response, "audio")
-        audio.chromaprint_fingerprint = result["body"]["hash_value"]
-        if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
-            if temporary:
-                self.delete(task)
-            if task.get("limit"):
-                return {"result": matches[:task.get("limit")]}
-            else:
-                return {"result": matches}
-        else:
-            return {"error": "Audio not found for provided task", "task": task}
-
-    def async_search(self, task):
-        audio, temporary = self.get_audio(task)
-        context = self.get_context_for_search(task)
-        callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
-        if task.get("doc_id") is None:
-            task["doc_id"] = str(uuid.uuid4())
-        task["final_task"] = "search"
-        response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
-        if response:
-            return response
-        else:
-            return {"error": "Audio could not be sent for fingerprinting", "task": task}
-
-    def search(self, task):
-        # here, we have to unpack the task contents to pull out the body,
-        # which may be embedded in a body key in the dict if its coming from a presto callback.
-        # alternatively, the "body" is just the entire dictionary.
-        if "body" in task:
-            body = task.get("body", {})
-            threshold = task.get("raw", {}).get('threshold', 0.0)
-            limit = body.get("raw", {}).get("limit")
-            if not body.get("raw"):
-                body["raw"] = {}
-            body["hash_value"] = task.get("body", {}).get("hash_value")
-        else:
-            body = task
-            threshold = body.get('threshold', 0.0)
-            limit = body.get("limit")
-        audio, temporary = self.get_audio(body)
-        context = self.get_context_for_search(body)
-        if audio.chromaprint_fingerprint is None:
-            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
-            if task.get("doc_id") is None:
-                task["doc_id"] = str(uuid.uuid4())
-            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
-            # Warning: this is a blocking hold to wait until we get a response in 
-            # a redis key that we've received something from presto.
-            result = Presto.blocked_response(response, "audio")
-            audio.chromaprint_fingerprint = result["body"]["hash_value"]
-            context = self.get_context_for_search(result["body"]["raw"])
-        if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
-            if temporary:
-                self.delete(body)
-            if limit:
-                return {"result": matches[:limit]}
-            else:
-                return {"result": matches}
-        else:
-            return {"error": "Audio not found for provided task", "task": task}
-    

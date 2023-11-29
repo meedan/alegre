@@ -31,6 +31,15 @@ class ImageModel(db.Model):
   )
 
   @staticmethod
+  def from_task_data(cls, task):
+    return ImageModel(
+      pdq=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
+
+  @staticmethod
   def from_url(url, doc_id, context={}, created_at=None):
     """Fetch an image from a URL and load it
       :param url: Image URL

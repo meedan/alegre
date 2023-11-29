@@ -4,19 +4,11 @@ import logging
 from flask import request, current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
-from app.main.lib.presto import Presto
-from app.main.lib.image_similarity import add_image, delete_image, search_image
+from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
+from app.main.lib.image_similarity import add_image, delete_image, search_image, blocking_search_image
 from app.main.lib.text_similarity import add_text, delete_text, search_text
 DEFAULT_SEARCH_LIMIT = 200
 logging.basicConfig(level=logging.INFO)
-PRESTO_MODEL_MAP = {
-    "audio": "audio__Model",
-    "video": "video__Model",
-    "image": "image__Model",
-    "meantokens": "mean_tokens__Model",
-    "indiansbert": "indian_sbert__Mode",
-    "mdebertav3filipino": "fptg__Model",
-}
 def get_body_for_media_document(params, mode):
     """
       This function should only be called when querying or storing a media object.
@@ -153,12 +145,8 @@ def delete_item(item, similarity_type):
 
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
-  if similarity_type == "audio":
-    response = audio_model().search(model_response_package(item, "search"))
-  elif similarity_type == "video":
+  if similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "search"))
-  elif similarity_type == "image":
-    response = search_image(item)
   elif similarity_type == "text":
     response = search_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
@@ -170,6 +158,10 @@ def blocking_get_similar_items(item, similarity_type):
     response = audio_model().blocking_search(model_response_package(item, "search"))
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
+  elif similarity_type == "image":
+    response = blocking_search_image(item)
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
   else:
       raise Exception(f"{similarity_type} modality not implemented for blocking requests!")
 
@@ -177,6 +169,10 @@ def async_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
     response = audio_model().async_search(model_response_package(item, "search"))
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  elif similarity_type == "image":
+    response = async_search_image(item)
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   else:
