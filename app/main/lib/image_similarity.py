@@ -66,6 +66,7 @@ def blocking_search_image(task):
     threshold = task.get("threshold", 0.0)
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
+    import code;code.interact(local=dict(globals(), **locals())) 
     if image:
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
@@ -95,17 +96,17 @@ def search_by_context(context, limit=None):
     context_query, context_hash = get_context_query(context)
     if context_query:
       cmd = """
-          SELECT id, sha256, phash, url, context FROM images
+          SELECT id, phash, url, context FROM images
           WHERE 
         """+context_query
     else:
       cmd = """
-          SELECT id, sha256, phash, url, context FROM images
+          SELECT id, phash, url, context FROM images
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
     matches = db.session.execute(text(cmd), dict(**context_hash, **{'limit': limit})).fetchall()
-    keys = ('id', 'sha256', 'phash', 'url', 'context')
+    keys = ('id', 'phash', 'url', 'context')
     rows = [dict(zip(keys, values)) for values in matches]
     for row in rows:
       row["context"] = [c for c in row["context"] if context_matches(context, c)]
@@ -122,7 +123,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -133,7 +134,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -146,7 +147,7 @@ def search_by_phash(phash, threshold, context, limit=None):
       'threshold': threshold,
       'limit': limit,
     }, **context_hash)).fetchall()
-    keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
+    keys = ('id', 'phash', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
@@ -167,7 +168,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -178,7 +179,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -191,7 +192,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
       'threshold': threshold,
       'limit': limit,
     }, **context_hash)).fetchall()
-    keys = ('id', 'sha256', 'pdq', 'url', 'context', 'score')
+    keys = ('id', 'pdq', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))

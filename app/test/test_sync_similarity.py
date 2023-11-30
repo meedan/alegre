@@ -121,7 +121,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'pdq', 'score', 'sha256', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'phash', 'score', 'url'])
         self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.jpg')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
@@ -156,7 +156,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'pdq', 'score', 'sha256', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'phash', 'score', 'url'])
         self.assertEqual(result["result"][0]['url'],'http://example.com/lenna-512.png')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
