@@ -63,8 +63,8 @@ def add_image(save_params):
 
 def blocking_search_image(task):
     image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
-    threshold = params.get("threshold")
-    limit = params.get("limit")
+    threshold = task.get("threshold")
+    limit = task.get("limit")
     model = app.config['IMAGE_MODEL']
     if image:
         if model and model.lower() == "pdq":
