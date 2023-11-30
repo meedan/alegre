@@ -76,9 +76,9 @@ def blocking_search_image(task):
         if temporary:
             media_crud.delete(task, ImageModel)
         if task.get("limit"):
-            return {"result": matches[:task.get("limit")]}
+            return {"result": result[:task.get("limit")]}
         else:
-            return {"result": matches}
+            return {"result": result}
     else:
         return {"error": "Image not found for provided task", "task": task}
 
