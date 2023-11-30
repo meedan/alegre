@@ -8,6 +8,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from flask import current_app as app
 from app.main import db
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
+from app.main.lib.similarity_helpers import drop_context_from_record
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
 

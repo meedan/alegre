@@ -18,7 +18,7 @@ class ImageModel(db.Model):
   __tablename__ = 'images'
 
   id = db.Column(db.Integer, primary_key=True)
-  sha256 = db.Column(db.String(64, convert_unicode=True), nullable=False, index=True)
+  sha256 = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True)
   doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
