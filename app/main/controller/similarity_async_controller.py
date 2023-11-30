@@ -11,7 +11,7 @@ similarity_sync_request = api.model('similarity_sync_request', {
     'url': fields.String(required=False, description='url for item to be stored or queried for similarity'),
     'callback_url': fields.String(required=False, description='callback_url for final search results'),
     'doc_id': fields.String(required=False, description='text ID to constrain uniqueness'),
-    'models': fields.List(required=False, description='similarity models to use: ["opensearch"] (pure OpenSearch, default) or the key name of an active model', cls_or_instance=fields.String),
+    'models': fields.List(required=False, description='similarity models to use: ["opensearch"] (pure OpenSearch, default) or the key name of an active model. Legacy elasticsearch model supported for migration purposes.', cls_or_instance=fields.String),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),
     'threshold': fields.Float(required=False, description='minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)'),
     'context': JsonObject(required=True, description='context'),
