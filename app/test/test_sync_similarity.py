@@ -22,109 +22,109 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         db.session.remove()
         db.drop_all()
 
-    # def test_audio_basic_http_responses_with_doc_id(self):
-    #     url = 'file:///app/app/test/data/test_audio_1.mp3'
-    #     with patch('requests.post') as mock_post_request:
-    #         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    #         r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-    #         r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
-    #         mock_response = Mock()
-    #         mock_response.text = json.dumps({
-    #             'message': 'Message pushed successfully',
-    #             'queue': 'audio__Model',
-    #             'body': {
-    #                 'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-    #                 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                 'url': 'http://example.com/blah.mp3',
-    #                 'text': None,
-    #                 'raw': {
-    #                     'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                     'url': 'http://example.com/blah.mp3'
-    #                 }
-    #             }
-    #         })
-    #         mock_post_request.return_value = mock_response
-    #         response = self.client.post('/similarity/sync/audio', data=json.dumps({
-    #             'url': url,
-    #             'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #             'context': {
-    #                 'team_id': 1,
-    #             }
-    #         }), content_type='application/json')
-    #     result = json.loads(response.data.decode())
-    #     self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-    #     self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
-    #     self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
-    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-    #
-    # def test_audio_basic_http_responses(self):
-    #     url = 'file:///app/app/test/data/test_audio_1.mp3'
-    #     with patch('requests.post') as mock_post_request:
-    #         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    #         r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-    #         r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
-    #         mock_response = Mock()
-    #         mock_response.text = json.dumps({
-    #             'message': 'Message pushed successfully',
-    #             'queue': 'audio__Model',
-    #             'body': {
-    #                 'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-    #                 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                 'url': 'http://example.com/blah.mp3',
-    #                 'text': None,
-    #                 'raw': {
-    #                     'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                     'url': 'http://example.com/blah.mp3'
-    #                 }
-    #             }
-    #         })
-    #         mock_post_request.return_value = mock_response
-    #         response = self.client.post('/similarity/sync/audio', data=json.dumps({
-    #             'url': url,
-    #             'project_media_id': 1,
-    #             'context': {
-    #                 'team_id': 1,
-    #             }
-    #         }), content_type='application/json')
-    #     result = json.loads(response.data.decode())
-    #     self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-    #     self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
-    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-    #
-    # def test_image_basic_http_responses_with_doc_id(self):
-    #     url = 'file:///app/app/test/data/lenna-512.jpg'
-    #     with patch('requests.post') as mock_post_request:
-    #         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-    #         r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-    #         r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": '1000110001110010001110110110101010111111011110001000111011111010000100110110101000100111010110100110111011101010010011010100111001010100110001100001001010010110001000110010011010000100110001111001010010001001011000110001100111110100011000111111110010100101'}}))
-    #         mock_response = Mock()
-    #         mock_response.text = json.dumps({
-    #             'message': 'Message pushed successfully',
-    #             'queue': 'image__Model',
-    #             'body': {
-    #                 'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
-    #                 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                 'url': 'http://example.com/lenna-512.png',
-    #                 'text': None,
-    #                 'raw': {
-    #                     'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #                     'url': 'http://example.com/lenna-512.png'
-    #                 }
-    #             }
-    #         })
-    #         mock_post_request.return_value = mock_response
-    #         response = self.client.post('/similarity/sync/image', data=json.dumps({
-    #             'url': url,
-    #             'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-    #             'context': {
-    #                 'team_id': 1,
-    #             }
-    #         }), content_type='application/json')
-    #     result = json.loads(response.data.decode())
-    #     self.assertEqual(sorted(result["result"][0].keys()), ['pdq', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-    #     self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
-    #     self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.jpg')
-    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    def test_audio_basic_http_responses_with_doc_id(self):
+        url = 'file:///app/app/test/data/test_audio_1.mp3'
+        with patch('requests.post') as mock_post_request:
+            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            mock_response = Mock()
+            mock_response.text = json.dumps({
+                'message': 'Message pushed successfully',
+                'queue': 'audio__Model',
+                'body': {
+                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
+                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/blah.mp3',
+                    'text': None,
+                    'raw': {
+                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'url': 'http://example.com/blah.mp3'
+                    }
+                }
+            })
+            mock_post_request.return_value = mock_response
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
+                'url': url,
+                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+        self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
+        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
+        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+
+    def test_audio_basic_http_responses(self):
+        url = 'file:///app/app/test/data/test_audio_1.mp3'
+        with patch('requests.post') as mock_post_request:
+            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            mock_response = Mock()
+            mock_response.text = json.dumps({
+                'message': 'Message pushed successfully',
+                'queue': 'audio__Model',
+                'body': {
+                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
+                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/blah.mp3',
+                    'text': None,
+                    'raw': {
+                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'url': 'http://example.com/blah.mp3'
+                    }
+                }
+            })
+            mock_post_request.return_value = mock_response
+            response = self.client.post('/similarity/sync/audio', data=json.dumps({
+                'url': url,
+                'project_media_id': 1,
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
+        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+
+    def test_image_basic_http_responses_with_doc_id(self):
+        url = 'file:///app/app/test/data/lenna-512.jpg'
+        with patch('requests.post') as mock_post_request:
+            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": '1000110001110010001110110110101010111111011110001000111011111010000100110110101000100111010110100110111011101010010011010100111001010100110001100001001010010110001000110010011010000100110001111001010010001001011000110001100111110100011000111111110010100101'}}))
+            mock_response = Mock()
+            mock_response.text = json.dumps({
+                'message': 'Message pushed successfully',
+                'queue': 'image__Model',
+                'body': {
+                    'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
+                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/lenna-512.png',
+                    'text': None,
+                    'raw': {
+                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'url': 'http://example.com/lenna-512.png'
+                    }
+                }
+            })
+            mock_post_request.return_value = mock_response
+            response = self.client.post('/similarity/sync/image', data=json.dumps({
+                'url': url,
+                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'pdq', 'score', 'sha256', 'url'])
+        self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
+        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.jpg')
+        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
     def test_image_basic_http_responses(self):
         url = 'file:///app/app/test/data/lenna-512.jpg'
@@ -156,7 +156,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['pdq', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'pdq', 'score', 'sha256', 'url'])
         self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.png')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
