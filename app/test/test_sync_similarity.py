@@ -94,7 +94,6 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def test_image_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/lenna-512.jpg'
         with patch('requests.post') as mock_post_request:
-            wtih patch('')
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
             r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
