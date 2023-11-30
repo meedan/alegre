@@ -63,18 +63,22 @@ def add_image(save_params):
 
 def blocking_search_image(task):
     image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
-    threshold = task.get("threshold")
-    limit = task.get("limit")
+    threshold = task.get("threshold", 0.0)
+    limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
     if image:
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
+            image.pdq = presto_result["body"]["hash_value"]
             result = search_by_pdq(image.pdq, threshold, context, limit)
         else:
             app.logger.info(f"Searching with phash.")
+            image.phash = presto_result["body"]["hash_value"]
             result = search_by_phash(image.phash, threshold, context, limit)
         if temporary:
             media_crud.delete(task, ImageModel)
+        else:
+            media_crud.save(image, ImageModel, ["pdq", "phash"])
         if task.get("limit"):
             return {"result": result[:task.get("limit")]}
         else:

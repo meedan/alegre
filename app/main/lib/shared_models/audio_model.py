@@ -40,6 +40,8 @@ class AudioModel(SharedModel):
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
                 media_crud.delete(task, Audio)
+            else:
+                media_crud.save(audio, Audio, ["hash_value", "chromaprint_fingerprint"])
             if task.get("limit"):
                 return {"result": matches[:task.get("limit")]}
             else:
