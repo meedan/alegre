@@ -15,7 +15,7 @@ from app.main.lib.shared_models.audio_model import AudioModel
 class TestSyncSimilarityBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        first_print = '1000110001110010001110110110101010111111011110001000111011111010000100110110101000100111010110100110111011101010010011010100111001010100110001100001001010010110001000110010011010000100110001111001010010001001011000110001100111110100011000111111110010100101'
+        first_print = 49805440634311326
         self.model = AudioModel('audio')
 
     def tearDown(self): # done in our pytest fixture after yield
@@ -94,9 +94,10 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def test_image_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/lenna-512.jpg'
         with patch('requests.post') as mock_post_request:
+            wtih patch('')
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": '1000110001110010001110110110101010111111011110001000111011111010000100110110101000100111010110100110111011101010010011010100111001010100110001100001001010010110001000110010011010000100110001111001010010001001011000110001100111110100011000111111110010100101'}}))
+            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -131,7 +132,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": '1000110001110010001110110110101010111111011110001000111011111010000100110110101000100111010110100110111011101010010011010100111001010100110001100001001010010110001000110010011010000100110001111001010010001001011000110001100111110100011000111111110010100101'}}))
+            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
