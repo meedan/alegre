@@ -58,7 +58,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
     def test_audio_basic_http_responses(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
+        url = 'http://example.com/blah.mp3'
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
@@ -88,7 +88,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
             }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
+        self.assertEqual(result["result"][0]['url'], 'http://example.com/blah.mp3')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
     def test_image_basic_http_responses_with_doc_id(self):
@@ -127,7 +127,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
     def test_image_basic_http_responses(self):
-        url = 'file:///app/app/test/data/lenna-512.jpg'
+        url = 'http://example.com/lenna-512.png'
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
@@ -157,7 +157,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
             }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'pdq', 'score', 'sha256', 'url'])
-        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.png')
+        self.assertEqual(result["result"][0]['url'],'http://example.com/lenna-512.png')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
 if __name__ == '__main__':
