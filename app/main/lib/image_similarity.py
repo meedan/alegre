@@ -66,7 +66,6 @@ def blocking_search_image(task):
     threshold = task.get("threshold", 0.0)
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
-    import code;code.interact(local=dict(globals(), **locals())) 
     if image:
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
