@@ -77,7 +77,7 @@ def get_by_doc_id_or_url(task, model):
         objs = db.session.query(model).filter(model.doc_id==task.get("doc_id")).all()
         if objs:
             obj = objs[0]
-    elif 'url' in task:
+    if 'url' in task:
         objs = db.session.query(model).filter(model.url==task.get("url")).all()
         if objs:
             obj = objs[0]
