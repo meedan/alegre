@@ -1,3 +1,4 @@
+import copy
 import uuid
 import urllib.error
 import json
@@ -20,16 +21,20 @@ def save(obj, model, modifiable_fields=[]):
         existing = db.session.query(model).filter(model.url==obj.url).one()
         if existing:
             for field in modifiable_fields:
-                if obj.hash_value is not None  and not existing.hash_value:
+                if getattr(obj, field) is not None  and not getattr(existing, field):
                     setattr(existing, field, getattr(obj, field))
                     flag_modified(existing, field)
-            if obj.context not in existing.context:
-                existing.context.append(obj.context)
-                flag_modified(existing, 'context')
+                if isinstance(obj.context, list):
+                    existing.context = [dict(t) for t in set(tuple(sorted(d.items())) for d in obj.context + existing.context)]
+                    flag_modified(existing, 'context')
+                elif isinstance(obj.context, dict) and obj.context not in existing.context:
+                    existing.context.append(obj.context)
+                    flag_modified(existing, 'context')
             saved_obj = existing
     except NoResultFound as e:
         # Otherwise, add new audio, but with context as an array
-        app.logger.debug(f"Adding {model} object that looks like "+str(obj.__dict__))
+        app.logger.info(f"Adding {model} object that looks like "+str(obj.__dict__))
+        app.logger.info(f"The context is "+str(obj.context))
         if obj.context and not isinstance(obj.context, list):
             obj.context = [obj.context]
             app.logger.debug("Set context to "+str(obj.context))
@@ -98,23 +103,23 @@ def get_object(task, model):
 
 def get_context_for_search(task):
     context = {}
-    if task.get('context'):
-        context = task.get('context')
-    if task.get("match_across_content_types"):
+    dup = copy.deepcopy(task)
+    if dup.get('context'):
+        context = dup.get('context')
+    if dup.get("match_across_content_types"):
         context.pop("content_type", None)
-    context.pop("project_media_id", None)
     return context
 
 def get_blocked_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
-    context = get_context_for_search(task)
+    obj.context = get_context_for_search(task)
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
     response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
     # Warning: this is a blocking hold to wait until we get a response in 
     # a redis key that we've received something from presto.
-    return obj, temporary, context, Presto.blocked_response(response, modality)
+    return obj, temporary, obj.context, Presto.blocked_response(response, modality)
 
 def get_async_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)

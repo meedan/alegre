@@ -61,6 +61,9 @@ def add_image(save_params):
     db.session.rollback()
     raise e
 
+def callback_add(task):
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])
+
 def blocking_search_image(task):
     image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
     threshold = task.get("threshold", 0.0)
