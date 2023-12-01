@@ -15,7 +15,6 @@ def _after_log(retry_state):
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def save(obj, model, modifiable_fields=[]):
-    saved_object = None
     try:
         # First locate existing audio and append new context
         existing = db.session.query(model).filter(model.url==obj.url).one()
@@ -67,13 +66,13 @@ def add(task, model, modifiable_fields=[]):
     try:
         obj = model.from_task_data(task)
         try:
-          obj = save(obj, model, modifiable_fields)
+            obj = save(obj, model, modifiable_fields)
         except sqlalchemy.exc.IntegrityError:
-          obj = None
+            obj = None
         if obj:
-          return {"requested": task, "result": {"url": obj.url}, "success": True}
+            return {"requested": task, "result": {"url": obj.url}, "success": True}
         else:
-          return {"requested": task, "result": {"url": task.get("url")}, "success": False}
+            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
     except urllib.error.HTTPError:
         return {"requested": task, "result": {"url": task.get("url")}, "success": False}
 
@@ -122,7 +121,7 @@ def get_blocked_presto_response(task, model, modality):
     return obj, temporary, obj.context, Presto.blocked_response(response, modality)
 
 def get_async_presto_response(task, model, modality):
-    obj, temporary = get_object(task, model)
+    _, temporary = get_object(task, model)
     context = get_context_for_search(task)
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
