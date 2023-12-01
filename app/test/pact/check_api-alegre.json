@@ -7,40 +7,6 @@
   },
   "interactions": [
     {
-      "description": "a request to link similar images",
-      "providerState": "an image URL",
-      "request": {
-        "method": "post",
-        "path": "/similarity/sync/image",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-            "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg",
-            "threshold": 0.89 
-        }
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "result": [
-            {
-              "id": 1,
-              "sha256": "ebf6b1968d01298a193eb6a8d0f81590dd70e950d1481ad9c4c5b3f43d3f5258",
-              "phash": 25131435933209733,
-              "url": "https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg",
-              "context": {
-              },
-              "score": 1.0
-            }
-          ]
-        }
-      }
-    },
-    {
       "description": "a request to identify its language",
       "providerState": "a text exists",
       "request": {
