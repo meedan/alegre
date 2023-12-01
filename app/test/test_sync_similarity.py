@@ -94,69 +94,73 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def test_image_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/lenna-512.jpg'
         with patch('requests.post') as mock_post_request:
-            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-            r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'image__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/lenna-512.png',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/lenna-512.png'
+            with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
+                mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
+                r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+                r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                mock_response = Mock()
+                mock_response.text = json.dumps({
+                    'message': 'Message pushed successfully',
+                    'queue': 'image__Model',
+                    'body': {
+                        'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
+                        'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'url': 'http://example.com/lenna-512.png',
+                        'text': None,
+                        'raw': {
+                            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                            'url': 'http://example.com/lenna-512.png'
+                        }
                     }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/similarity/sync/image', data=json.dumps({
-                'url': url,
-                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
+                })
+                mock_post_request.return_value = mock_response
+                response = self.client.post('/similarity/sync/image', data=json.dumps({
+                    'url': url,
+                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'context': {
+                        'team_id': 1,
+                    }
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'phash', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
         self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
-        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/lenna-512.jpg')
+        self.assertEqual(result["result"][0]['url'], 'http://example.com/lenna-512.png')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
     def test_image_basic_http_responses(self):
         url = 'http://example.com/lenna-512.png'
         with patch('requests.post') as mock_post_request:
-            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
-            r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'image__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/lenna-512.png',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/lenna-512.png'
+            with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
+                mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
+                r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+                r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                mock_response = Mock()
+                mock_response.text = json.dumps({
+                    'message': 'Message pushed successfully',
+                    'queue': 'image__Model',
+                    'body': {
+                        'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
+                        'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'url': 'http://example.com/lenna-512.png',
+                        'text': None,
+                        'raw': {
+                            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                            'url': 'http://example.com/lenna-512.png'
+                        }
                     }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/similarity/sync/image', data=json.dumps({
-                'url': url,
-                'project_media_id': 1,
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
+                })
+                mock_post_request.return_value = mock_response
+                response = self.client.post('/similarity/sync/image', data=json.dumps({
+                    'url': url,
+                    'project_media_id': 1,
+                    'context': {
+                        'team_id': 1,
+                    }
+                }), content_type='application/json')
         result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'id', 'model', 'phash', 'score', 'url'])
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
         self.assertEqual(result["result"][0]['url'],'http://example.com/lenna-512.png')
         self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 

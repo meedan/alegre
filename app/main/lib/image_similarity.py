@@ -95,17 +95,17 @@ def search_by_context(context, limit=None):
     context_query, context_hash = get_context_query(context)
     if context_query:
       cmd = """
-          SELECT id, phash, url, context FROM images
+          SELECT id, doc_id, phash, url, context FROM images
           WHERE 
         """+context_query
     else:
       cmd = """
-          SELECT id, phash, url, context FROM images
+          SELECT id, doc_id, phash, url, context FROM images
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**context_hash, **{'limit': limit})).fetchall()
-    keys = ('id', 'phash', 'url', 'context')
+    matches = execute_command(text(cmd), dict(**context_hash, **{'limit': limit}))
+    keys = ('id', 'doc_id', 'phash', 'url', 'context')
     rows = [dict(zip(keys, values)) for values in matches]
     for row in rows:
       row["context"] = [c for c in row["context"] if context_matches(context, c)]
@@ -114,7 +114,10 @@ def search_by_context(context, limit=None):
   except Exception as e:
     db.session.rollback()
     raise e  
-  
+
+def execute_command(cmd, params):
+  return db.session.execute(cmd, params).fetchall()
+
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context, limit=None):
   try:
@@ -122,7 +125,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, doc_id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -133,7 +136,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, doc_id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -141,12 +144,12 @@ def search_by_phash(phash, threshold, context, limit=None):
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**{
+    matches = execute_command(text(cmd), dict(**{
       'phash': phash,
       'threshold': threshold,
       'limit': limit,
-    }, **context_hash)).fetchall()
-    keys = ('id', 'phash', 'url', 'context', 'score')
+    }, **context_hash))
+    keys = ('id', 'doc_id', 'phash', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
@@ -167,7 +170,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, doc_id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -178,7 +181,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, doc_id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -186,12 +189,12 @@ def search_by_pdq(pdq, threshold, context, limit=None):
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**{
+    matches = execute_command(text(cmd), dict(**{
       'pdq': pdq,
       'threshold': threshold,
       'limit': limit,
-    }, **context_hash)).fetchall()
-    keys = ('id', 'pdq', 'url', 'context', 'score')
+    }, **context_hash))
+    keys = ('id', 'doc_id', 'pdq', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
