@@ -111,7 +111,7 @@ def get_context_for_search(task):
 
 def get_blocked_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
-    obj.context = get_context_for_search(task)
+    obj.context = [get_context_for_search(task)]
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
@@ -122,7 +122,7 @@ def get_blocked_presto_response(task, model, modality):
 
 def get_async_presto_response(task, model, modality):
     _, temporary = get_object(task, model)
-    context = get_context_for_search(task)
+    context = [get_context_for_search(task)]
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())

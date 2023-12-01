@@ -73,11 +73,11 @@ def blocking_search_image(task):
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
             image.pdq = presto_result["body"]["hash_value"]
-            result = search_by_pdq(image.pdq, threshold, context, limit)
+            result = search_by_pdq(image.pdq, threshold, context[0], limit)
         else:
             app.logger.info(f"Searching with phash.")
             image.phash = presto_result["body"]["hash_value"]
-            result = search_by_phash(image.phash, threshold, context, limit)
+            result = search_by_phash(image.phash, threshold, context[0], limit)
         if temporary:
             media_crud.delete(task, ImageModel)
         else:

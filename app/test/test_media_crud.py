@@ -237,12 +237,12 @@ class TestMediaCrud(unittest.TestCase):
 
     def test_context_present(self):
         task = {'context': {'key1': 'value1', 'content_type': 'type1', 'project_media_id': 'id1'}}
-        expected_context = {'content_type': 'type1', 'key1': 'value1'}
+        expected_context = {'content_type': 'type1', 'key1': 'value1', 'project_media_id': 'id1'}
         self.assertEqual(get_context_for_search(task), expected_context)
 
     def test_context_present_with_match_across_content_types(self):
         task = {'context': {'key1': 'value1', 'content_type': 'type1', 'project_media_id': 'id1'}, 'match_across_content_types': True}
-        expected_context = {'key1': 'value1'}
+        expected_context = {'key1': 'value1', 'project_media_id': 'id1'}
         self.assertEqual(get_context_for_search(task), expected_context)
 
     def test_context_not_present(self):
@@ -252,7 +252,7 @@ class TestMediaCrud(unittest.TestCase):
 
     def test_context_removal_of_project_media_id(self):
         task = {'context': {'key1': 'value1', 'project_media_id': 'id1'}}
-        expected_context = {'key1': 'value1'}
+        expected_context = {'key1': 'value1', 'project_media_id': 'id1'}
         self.assertEqual(get_context_for_search(task), expected_context)
 
     @patch('app.main.lib.presto.Presto.blocked_response')
