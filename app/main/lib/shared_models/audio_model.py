@@ -68,7 +68,6 @@ class AudioModel(SharedModel):
             threshold = body.get('threshold', 0.0)
             limit = body.get("limit")
         audio, temporary = media_crud.get_object(body, Audio)
-        _, context_hash = get_context_query(body["context"])
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
             if task.get("doc_id") is    None:
@@ -78,9 +77,8 @@ class AudioModel(SharedModel):
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "audio")
             audio.chromaprint_fingerprint = result["body"]["hash_value"]
-            _, context_hash = get_context_query(result["body"]["raw"])
         if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context_hash)
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, body["context"])
             if temporary:
                 media_crud.delete(body, Audio)
             if limit:

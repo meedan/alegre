@@ -267,7 +267,7 @@ class TestMediaCrud(unittest.TestCase):
 
         # Mock return values
         mock_get_object.return_value = (MagicMock(), False)
-        mock_get_context_for_search.return_value = {"context_key": "context_value"}
+        mock_get_context_for_search.return_value = [{"context_key": "context_value"}]
         mock_send_request.return_value = MagicMock(text=json.dumps({"response_key": "response_value"}))
         mock_blocked_response.return_value = {"blocked_response_key": "blocked_response_value"}
 
