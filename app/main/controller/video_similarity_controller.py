@@ -33,7 +33,4 @@ class VideoSimilaritySearchResource(Resource):
     def post(self):
         args = request.json
         app.logger.debug(f"Args are {args}")
-        for key in ["context", "models", "per_model_threshold", "vector"]:
-            if args and args.get(key) and isinstance(args.get(key), str):
-                args[key] = json.loads(args.get(key))
         return similarity.get_similar_items(args, "video")

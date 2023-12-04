@@ -26,9 +26,6 @@ class AsyncSimilarityResource(Resource):
     def post(self, similarity_type):
         args = request.json
         app.logger.debug(f"Args are {args}")
-        for key in ["context", "models", "per_model_threshold", "vector"]:
-            if args and args.get(key) and isinstance(args.get(key), str):
-                args[key] = json.loads(args.get(key))
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
         else:
