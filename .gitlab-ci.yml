@@ -109,7 +109,7 @@ deploy_live:
     - pip install awscli==1.29.59
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-migration $NAME /live/alegre/$NAME " >> live-alegre-migration.env.args; done
-    - ecs update live-alegre-migration --image live-alegre-migration $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e live-alegre-migration APP alegre -e live-alegre-migration DEPLOY_ENV live -e live-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e live-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-migration.env.args`
+    - ecs update live-alegre-migration --image live-alegre-migration $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e live-alegre-migration APP alegre -e live-alegre-migration DEPLOY_ENV live -e live-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e live-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-migration.env.args`
     - taskArn=$(aws ecs run-task --cluster ecs-live --task-definition live-alegre-migration --query 'tasks[].taskArn' --output text)
     - echo "Migration task started - $taskArn"
     - aws ecs wait tasks-stopped --cluster ecs-live --tasks $taskArn
