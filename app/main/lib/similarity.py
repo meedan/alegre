@@ -148,6 +148,7 @@ def delete_item(item, similarity_type):
 
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
+  reponse = None
   if similarity_type == "video":
     response = video_model().get_shared_model_response(model_response_package(item, "search"))
   elif similarity_type == "text":
