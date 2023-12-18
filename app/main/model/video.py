@@ -24,3 +24,14 @@ class Video(db.Model):
     self.filepath = str(uuid.uuid4())
     self.folder = self.filepath.split("-")[1]
     super().__init__(**kwargs)
+
+  @classmethod
+  def from_task_data(cls, task):
+    return cls(
+      hash_value=task.get("hash_value"),
+      folder=task.get("folder"),
+      filepath=task.get("filepath"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
