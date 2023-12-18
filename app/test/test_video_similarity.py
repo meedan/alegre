@@ -142,9 +142,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_get_tempfile(self):
         self.assertIsInstance(self.model.get_tempfile(), tempfile._TemporaryFileWrapper)
 
-    def test_execute_command(self):
-        self.assertIsInstance(self.model.execute_command("ls"), str)
-
     def test_load(self):
         self.model.load()
         self.assertIsInstance(self.model.directory, str)

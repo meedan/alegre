@@ -158,10 +158,8 @@ def delete_item(item, similarity_type):
 
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
-  response = None
-  if similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "search"))
-  elif similarity_type == "text":
+  reponse = None
+  if similarity_type == "text":
     response = search_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
   return response
@@ -174,6 +172,10 @@ def blocking_get_similar_items(item, similarity_type):
     return response
   elif similarity_type == "image":
     response = blocking_search_image(item)
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  elif similarity_type == "video":
+    response = video_model().blocking_search(model_response_package(item, "search"), "video")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   else:
@@ -191,6 +193,10 @@ def async_get_similar_items(item, similarity_type):
     return response
   elif similarity_type == "image":
     response = async_search_image(item, "image")
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  elif similarity_type == "video":
+    response = video_model().async_search(model_response_package(item, "search"), "video")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   else:

@@ -8,6 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.attributes import flag_modified
 from flask import current_app as app
 from app.main import db
+from app.main.model.video import Video
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.similarity_helpers import drop_context_from_record
 def merge_dict_lists(list1, list2):
@@ -20,15 +21,19 @@ def merge_dict_lists(list1, list2):
     """
     def to_hashable(d):
         return tuple((k, tuple(v) if isinstance(v, list) else v) for k, v in sorted(d.items()))
-
     def to_dict(t):
         return {k: list(v) if isinstance(v, tuple) else v for k, v in t}
-
     unique = set(to_hashable(d) for d in list1 + list2)
     return [to_dict(d) for d in unique]
 
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
+
+def tmk_file_path(folder, filepath, create_path=True):
+    directory = app.config['PERSISTENT_DISK_PATH']
+    if create_path:
+        pathlib.Path(f"{directory}/{folder}").mkdir(parents=True, exist_ok=True)
+    return f"{directory}/{folder}/{filepath}.tmk"
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def save(obj, model, modifiable_fields=[]):
@@ -74,6 +79,10 @@ def delete(task, model):
         if task.get("context", {}) in obj.context and len(obj.context) > 1:
             deleted = drop_context_from_record(obj, task.get("context", {}))
         else:
+            if isinstance(obj, Video):
+                filepath = tmk_file_path(obj.folder, obj.filepath)
+                if os.path.exists(filepath):
+                    os.remove(filepath)
             deleted = db.session.query(model).filter(model.id==obj.id).delete()
         return {"requested": task, "result": {"url": obj.url, "deleted": deleted}}
     else:
