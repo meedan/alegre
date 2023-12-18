@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 import logging
 from flask import request, current_app as app
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
+from app.main.lib.shared_models.video_model import VideoModel
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.image_similarity import add_image, callback_add, delete_image, blocking_search_image, async_search_image, async_search_image_on_callback
 from app.main.lib.text_similarity import add_text, delete_text, search_text
@@ -78,7 +78,7 @@ def audio_model():
   return AudioModel(app.config['AUDIO_MODEL'])
 
 def video_model():
-  return SharedModel.get_client(app.config['VIDEO_MODEL'])
+  return VideoModel(app.config['VIDEO_MODEL'])
 
 def model_response_package(item, command):
   response_package = {
