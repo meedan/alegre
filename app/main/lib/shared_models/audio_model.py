@@ -3,7 +3,6 @@ import binascii
 import uuid
 import os
 import tempfile
-import pathlib
 import urllib.error
 import urllib.request
 import shutil
