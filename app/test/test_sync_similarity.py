@@ -167,7 +167,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def test_video_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.shared_models.VideoModel.execute_command') as mock_db_response:
+            with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
                 mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055])]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
@@ -204,7 +204,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def test_video_basic_http_responses(self):
         url = 'http://example.com/chair-19-sd-bar.mp4'
         with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.shared_models.VideoModel.execute_command') as mock_db_response:
+            with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
                 mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055])]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
