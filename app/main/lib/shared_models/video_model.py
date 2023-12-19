@@ -43,7 +43,6 @@ class VideoModel(SharedModel):
         return added
 
     def blocking_search(self, task, modality):
-        app.logger.error(f"blocking_search task is {task}")
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.folder = presto_result["body"]["folder"]
         video.filepath = presto_result["body"]["filepath"]
