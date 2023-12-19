@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response
+from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response, tmk_file_path
 from app.main import db
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
@@ -352,6 +352,9 @@ class TestMediaCrud(unittest.TestCase):
 
         # Assert the expected result
         self.assertEqual(result, json.loads(mock_response))
+
+    def test_tmk_file_path(self):
+        self.assertIsInstance(tmk_file_path("foo", "bar"), str)
 
 if __name__ == '__main__':
     unittest.main()
