@@ -47,7 +47,7 @@ class VideoModel(SharedModel):
         video.filepath = presto_result["body"]["filepath"]
         video.hash_value = presto_result["body"]["hash_value"]
         if video:
-            matches = self.search(task.get("threshold", 0.0), context[0], True)
+            matches = self.search(task, context[0], True)
             if temporary:
                 media_crud.delete(task, Audio)
             else:
