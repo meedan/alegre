@@ -50,7 +50,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'filepath', 'folder', 'hash_value', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['outfile', 'url'])
+        self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -83,7 +83,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['filepath', 'folder', 'hash_value', 'project_media_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['outfile', 'url'])
+        self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
