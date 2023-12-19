@@ -33,6 +33,7 @@ class VideoModel(SharedModel):
         return media_crud.delete(task, Video)
 
     def add(self, task, blocking=False):
+        app.logger.error(f"Task looks like: {task}")
         added = media_crud.add(task, Video, ["folder", "filepath", "hash_value"])
         if task.get("match_across_content_types", False):
             am = AudioModel('audio')
