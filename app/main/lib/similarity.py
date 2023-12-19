@@ -108,7 +108,8 @@ def add_item(item, similarity_type):
     response = Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[similarity_type], callback_url, model_response_package(item, "add")).text
     response = json.loads(response)
   elif similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "add"))
+    response = Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[similarity_type], callback_url, model_response_package(item, "add")).text
+    response = json.loads(response)
   elif similarity_type == "image":
     response = add_image(item)
   elif similarity_type == "text":
