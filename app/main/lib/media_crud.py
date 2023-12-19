@@ -77,7 +77,6 @@ def delete(task, model):
         return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
 def add(task, model, modifiable_fields=[]):
-    app.logger.error(f"from_task_data Task looks like: {task}")
     try:
         obj = model.from_task_data(task)
         try:

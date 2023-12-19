@@ -27,10 +27,11 @@ class Video(db.Model):
 
   @classmethod
   def from_task_data(cls, task):
+    temp_uuid = str(uuid.uuid4())
     return cls(
       hash_value=task.get("hash_value"),
-      folder=task.get("folder"),
-      filepath=task.get("filepath"),
+      folder=task.get("folder", temp_uuid.split("-")[1]),
+      filepath=task.get("filepath", temp_uuid),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
       url=task.get("url"),
       context=task.get("context", task.get("raw", {}).get("context"))
