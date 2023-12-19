@@ -94,6 +94,9 @@ def model_response_package(item, command):
     "match_across_content_types": item.get("match_across_current_type", False),
     "requires_callback": item.get("requires_callback", False)
   }
+  for optional_key in ["folder", "filepath"]:
+      if optional_key in item.keys():
+          response_package[optional_key] = item[optional_key]
   app.logger.info(f"[Alegre Similarity] [Item {item}, Command {command}] Response package looks like {response_package}")
   return response_package
 
