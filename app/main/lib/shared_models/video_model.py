@@ -24,7 +24,7 @@ from app.main.lib.error_log import ErrorLog
 from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
-FFMPEG_DIR = "/usr/local/bin/ffmpeg"
+from app.main.model.audio import Audio
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
