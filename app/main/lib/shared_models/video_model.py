@@ -54,6 +54,12 @@ class VideoModel(SharedModel):
             else:
                 media_crud.save(audio, Audio, ["hash_value", "chromaprint_fingerprint"])
             if task.get("limit"):
+                app.logger.error(f"matches in blocking_search is {matches}")
+                matches_type = type(matches)
+                app.logger.error(f"matches type in blocking_search is {matches_type}")
+                app.logger.error(f"task in blocking_search is {task}")
+                task_type = type(task)
+                app.logger.error(f"task type in blocking_search is {task_type}")
                 return {"result": matches[:task.get("limit")]}
             else:
                 return {"result": matches}
