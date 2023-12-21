@@ -142,6 +142,10 @@ class VideoModel(SharedModel):
                 if score > threshold:
                     results.append({
                         "context": qualified_matches[i].get("context", {}),
+                        "folder": qualified_matches[i].get("folder"),
+                        "filepath": qualified_matches[i].get("filepath"),
+                        "doc_id": qualified_matches[i].get("doc_id"),
+                        "url": qualified_matches[i].get("url"),
                         "filename": files[i],
                         "score": score,
                         "model": "video"
