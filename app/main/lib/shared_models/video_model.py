@@ -107,6 +107,8 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task, context, blocking=False):
+        app.logger.error(f"task is {task}")
+        app.logger.error(f"context is {context}")
         video = None
         temporary = False
         video = media_crud.get_by_doc_id_or_url(task, Video)
@@ -120,6 +122,7 @@ class VideoModel(SharedModel):
                 video = videos[0]
         if video:
             matches = self.search_by_context(context)
+            app.logger.error(f"matches is {matches}")
             default_list = list(np.zeros(len(video.hash_value)))
             try:
                 l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value", default_list) or default_list for r in matches], [video.hash_value], 'cosine'))).tolist()
@@ -130,6 +133,7 @@ class VideoModel(SharedModel):
             for i,match in enumerate(matches):
                 if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
                     qualified_matches.append(match)
+            app.logger.error(f"qualified_matches is {qualified_matches}")
             files = self.get_fullpath_files(qualified_matches, False)
             try:
             	scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
