@@ -64,7 +64,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
         app.logger.error(f"test_search_by_doc_id result is {result}")
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'model': 'video', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'result': [{'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'}]})
 
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -98,7 +98,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
         app.logger.error(f"test_search result is {result}")
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'model': 'video', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(result["result"][0], {'result': [{'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'}]})
 
     def test_get_fullpath_files(self):
         self.model.load()
