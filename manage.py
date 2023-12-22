@@ -19,6 +19,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
+from sqlalchemy import text
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
 # (by upgrading to tensorflow 2.2 or higher)
@@ -229,6 +230,13 @@ def init_perl_functions():
         LANGUAGE plperl;
       """)
     )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+      CREATE EXTENSION IF NOT EXISTS vector;
+      """)
+    )
     db.create_all()
 
 @manager.command
@@ -341,6 +349,5 @@ def run_rq_worker():
       qs = ['default']
       w = Worker(qs)
       w.work()
-  
 if __name__ == '__main__':
   manager.run()
