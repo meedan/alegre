@@ -14,6 +14,7 @@ from sqlalchemy import text
 import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
+import boto3
 
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
@@ -25,6 +26,25 @@ from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
 from app.main.model.audio import Audio
+
+def download_file_from_s3(bucket: str, filename: str, local_path: str):
+    """
+    Generic download helper for s3. Could be moved over to helpers folder...
+    This function downloads a file from an S3 bucket to a local path.
+    """
+    # Set up the S3 client
+    s3_client = boto3.client('s3')
+    # Extract the file name from the S3 file path
+    file_name = filename.split('/')[-1]
+    # Specify the full path to save the file
+    full_local_path = f"{local_path}/{file_name}"
+    # Download the file from S3
+    try:
+        s3_client.download_file(bucket, filename, full_local_path)
+        logger.info(f'Successfully downloaded file {file_name} from S3 bucket to {full_local_path}.')
+    except Exception as e:
+        logger.error(f'Failed to download file {file_name} from S3 bucket: {e}')
+
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
@@ -35,6 +55,7 @@ class VideoModel(SharedModel):
     def add(self, task, blocking=False):
         app.logger.error(f"Task looks like: {task}")
         added = media_crud.add(task, Video, ["folder", "filepath", "hash_value"])
+        download_file_from_s3(added.folder, added.filepath, media_crud.tmk_file_path(added.folder, added.filepath))
         if task.get("match_across_content_types", False):
             am = AudioModel('audio')
             am.add(self.overload_context_to_denote_content_type(task))
