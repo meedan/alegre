@@ -155,7 +155,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.return_value = mock_obj
 
         # Test
-        result = add(task, model, modifiable_fields)
+        result, _ = add(task, model, modifiable_fields)
 
         # Assert
         self.assertTrue(result['success'])
@@ -176,7 +176,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.side_effect = sqlalchemy.exc.IntegrityError(None, None, None)
 
         # Test
-        result = add(task, model, modifiable_fields)
+        result, _ = add(task, model, modifiable_fields)
 
         # Assert
         self.assertFalse(result['success'])
@@ -194,7 +194,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_from_task_data.side_effect = urllib.error.HTTPError(None, None, None, None, None)
 
         # Test
-        result = add(task, model, modifiable_fields)
+        result, _ = add(task, model, modifiable_fields)
 
         # Assert
         self.assertFalse(result['success'])
