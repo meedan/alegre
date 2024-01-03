@@ -27,7 +27,7 @@ class PrestoResource(Resource):
         app.logger.info(f"PrestoResource {action}/{model_type}")
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")
-            result, obj = similarity.callback_add_item(data.get("body"), model_type)
+            result = similarity.callback_add_item(data.get("body"), model_type)
             if data.get("body", {}).get("raw", {}).get("final_task") == "search":
                 result = similarity.callback_search_item(data.get("body"), model_type)
             callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
