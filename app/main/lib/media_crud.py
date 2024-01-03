@@ -98,11 +98,11 @@ def add(task, model, modifiable_fields=[]):
         except sqlalchemy.exc.IntegrityError:
             obj = None
         if obj:
-            return {"requested": task, "result": {"url": obj.url}, "success": True}
+            return {"requested": task, "result": {"url": obj.url}, "success": True}, obj
         else:
-            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
+            return {"requested": task, "result": {"url": task.get("url")}, "success": False}, None
     except urllib.error.HTTPError:
-        return {"requested": task, "result": {"url": task.get("url")}, "success": False}
+        return {"requested": task, "result": {"url": task.get("url")}, "success": False}, None
 
 def get_by_doc_id_or_url(task, model):
     obj = None

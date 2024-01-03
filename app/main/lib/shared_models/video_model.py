@@ -54,8 +54,8 @@ class VideoModel(SharedModel):
 
     def add(self, task, blocking=False):
         app.logger.error(f"Task looks like: {task}")
-        added = media_crud.add(task, Video, ["folder", "filepath", "hash_value"])
-        download_file_from_s3(added.folder, added.filepath, media_crud.tmk_file_path(added.folder, added.filepath))
+        added, obj = media_crud.add(task, Video, ["folder", "filepath", "hash_value"])
+        download_file_from_s3(obj.folder, obj.filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         if task.get("match_across_content_types", False):
             am = AudioModel('audio')
             am.add(self.overload_context_to_denote_content_type(task))

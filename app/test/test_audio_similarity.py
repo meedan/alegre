@@ -101,7 +101,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         with patch('app.main.lib.similarity.callback_add_item') as mock_callback_add_item:
             with patch('app.main.lib.webhook.Webhook.return_webhook') as mock_post_request:
                 mock_post_request.return_value = {'message': 'Message pushed successfully', 'queue': 'audio__Model', 'body': {'callback_url': 'http://alegre:3100/presto/receive/add_item/audio', 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3', 'text': None, 'raw': {'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 'url': 'http://example.com/blah.mp3'}}}
-                mock_callback_add_item.return_value = {"requested": {}, "result": {}, "success": True}
+                mock_callback_add_item.return_value = ({"requested": {}, "result": {}, "success": True}, Audio())
                 response = self.client.post('/presto/receive/add_item/audio', data=json.dumps({
                     "body": {
                         "id": '123',
