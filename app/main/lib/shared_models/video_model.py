@@ -41,9 +41,9 @@ def download_file_from_s3(bucket: str, filename: str, local_path: str):
     # Download the file from S3
     try:
         s3_client.download_file(bucket, filename, full_local_path)
-        logger.info(f'Successfully downloaded file {file_name} from S3 bucket to {full_local_path}.')
+        app.logger.info(f'Successfully downloaded file {file_name} from S3 bucket to {full_local_path}.')
     except Exception as e:
-        logger.error(f'Failed to download file {file_name} from S3 bucket: {e}')
+        app.logger.error(f'Failed to download file {file_name} from S3 bucket: {e}')
 
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
