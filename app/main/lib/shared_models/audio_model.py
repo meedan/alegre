@@ -30,7 +30,7 @@ class AudioModel(SharedModel):
         return media_crud.delete(task, Audio)
 
     def add(self, task):
-        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
     def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
