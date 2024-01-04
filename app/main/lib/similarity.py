@@ -162,7 +162,7 @@ def delete_item(item, similarity_type):
 
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
-  reponse = None
+  response = None
   if similarity_type == "text":
     response = search_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
