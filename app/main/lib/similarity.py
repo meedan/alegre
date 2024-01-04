@@ -120,13 +120,14 @@ def add_item(item, similarity_type):
 
 def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
-      response, obj = audio_model().add(item)
+      response = audio_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   if similarity_type == "image":
       response, obj = callback_add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   else:
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
+  print(f"callback_add_item response is {response}")
   return response
 
 def callback_search_item(item, similarity_type):
