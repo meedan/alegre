@@ -49,6 +49,9 @@ def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
 class VideoModel(SharedModel):
+    def overload_context_to_denote_content_type(self, task):
+        return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
+
     def delete(self, task):
         return media_crud.delete(task, Video)
 
@@ -71,9 +74,9 @@ class VideoModel(SharedModel):
         if video:
             matches = self.search(task, context[0], True).get("result")
             if temporary:
-                media_crud.delete(task, Audio)
+                media_crud.delete(task, Video)
             else:
-                media_crud.save(audio, Audio, ["hash_value", "chromaprint_fingerprint"])
+                media_crud.save(video, Video, ["hash_value", "chromaprint_fingerprint"])
             if task.get("limit"):
                 return {"result": matches[:task.get("limit")]}
             else:
