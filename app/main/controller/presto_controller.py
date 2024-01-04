@@ -42,9 +42,9 @@ class PrestoResource(Resource):
             item_id = data.get("body", {}).get("id")
             r.lpush(f"{model_type}_{item_id}", json.dumps(data))
             r.expire(f"{model_type}_{item_id}", 60*60*24)
-            output = {"action": action, "model_type": model_type, "data": result}
+            output = {"action": action, "model_type": model_type, "data": result[0]}
             print(f"PrestoResource {output}")
-            return {"action": action, "model_type": model_type, "data": result}
+            return {"action": action, "model_type": model_type, "data": result[0]}
         abort(
             404,
             description=f"Action type of {action} was not found. Currently available action types are add_item, search_item."
