@@ -63,7 +63,7 @@ def add_image(save_params):
     raise e
 
 def callback_add(task):
-    return media_crud.add(task, ImageModel, ["pdq", "phash"])
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
 
 def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
     if image:
