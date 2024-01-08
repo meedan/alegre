@@ -23,7 +23,6 @@ build_qa:
   only:
     - develop
     - feature/CV2-3482_deploy-new-model
-    - quickfix/gitlab-ci-build-image
 
 deploy_qa:
   image: python:3-alpine
