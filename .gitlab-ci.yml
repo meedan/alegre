@@ -17,12 +17,13 @@ build_qa:
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   script:
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_API_BASE_URL
-    - docker build --build-arg DEPLOY_BRANCH=develop --build-arg TIMESTAMP=$(date '+%Y%m%d%H%M%S') -f production/Dockerfile -t "$ECR_API_BASE_URL/qa/alegre/api:$CI_COMMIT_SHA"  .
+    - docker build --cache-from "$ECR_API_BASE_URL/qa/alegre/api:latest" -f production/Dockerfile -t "$ECR_API_BASE_URL/qa/alegre/api:$CI_COMMIT_SHA" -t "$ECR_API_BASE_URL/qa/alegre/api:latest" .
     - docker push "$ECR_API_BASE_URL/qa/alegre/api:$CI_COMMIT_SHA"
     - docker push "$ECR_API_BASE_URL/qa/alegre/api:latest"
   only:
     - develop
     - feature/CV2-3482_deploy-new-model
+    - quickfix/gitlab-ci-build-image
 
 deploy_qa:
   image: python:3-alpine
@@ -75,7 +76,7 @@ build_live:
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   script:
     - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_API_BASE_URL
-    - docker build --build-arg DEPLOY_BRANCH=develop --build-arg TIMESTAMP=$(date '+%Y%m%d%H%M%S') -f production/Dockerfile -t "$ECR_API_BASE_URL/live/alegre/api:$CI_COMMIT_SHA"  .
+    - docker build -f production/Dockerfile -t "$ECR_API_BASE_URL/live/alegre/api:$CI_COMMIT_SHA"  .
     - docker push "$ECR_API_BASE_URL/live/alegre/api:$CI_COMMIT_SHA"
   only:
     - master
