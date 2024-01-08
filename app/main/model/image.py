@@ -25,7 +25,7 @@ class ImageModel(db.Model):
   doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
-  sscd = db.Column(Vector(512), nullable=True, index=True)
+  sscd = db.Column(Vector(512), nullable=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)

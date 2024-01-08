@@ -28,9 +28,9 @@ def upgrade():
           """)
     )
     op.add_column('images', sa.Column('sscd', Vector(256), nullable=True))
-    op.create_index(op.f('ix_images_sscd'), 'images', ['sscd'], unique=False)
+    # op.create_index(op.f('ix_images_sscd'), 'images', ['sscd'], unique=False)
 
 def downgrade():
-    op.drop_index(op.f('ix_images_sscd'), table_name='images')
+    # op.drop_index(op.f('ix_images_sscd'), table_name='images')
     op.drop_column('images', 'sscd')
 
