@@ -142,8 +142,8 @@ services:
       - ".:/app"
     depends_on:
       - postgres
-      - kibana
       - redis
+      # - kibana
       # - video
       # - xlm_r_bert_base_nli_stsb_mean_tokens
       # - indian_sbert
