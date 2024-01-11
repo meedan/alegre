@@ -13,7 +13,6 @@ A media analysis service. Part of the [Check platform](https://meedan.com/check)
 
 The Alegre API Swagger UI unfortunately [does not support sending body payloads to GET methods](https://github.com/swagger-api/swagger-ui/issues/2136). To test those API methods, you can still fill in your arguments, and click "Execute" - Swagger will fail, but show you a `curl` command that you can use in your console.
 
-- Open http://localhost:5601 for the Kibana UI
 - Open http://localhost:9200 for the OpenSearch API
 - `docker-compose exec alegre flask shell` to get inside a Python shell in docker container with the loaded app
 

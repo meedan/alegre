@@ -15,14 +15,6 @@ services:
     volumes:
       - "./opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
       - "opensearch:/usr/share/opensearch/data"
-#  kibana:
-#    image: docker.elastic.co/kibana/kibana:7.9.2
-#    ports:
-#      - "5601:5601"
-#    depends_on:
-#      - opensearch
-#    environment:
-#      OPENSEARCH_URL: http://opensearch:9200
   redis:
     image: redis:6.2
     ports:
