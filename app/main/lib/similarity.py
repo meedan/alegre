@@ -91,7 +91,7 @@ def model_response_package(item, command):
     "command": command,
     "threshold": item.get("threshold", 0.0),
     "per_model_threshold": item.get("per_model_threshold", {}),
-    "match_across_content_types": item.get("match_across_current_type", False),
+    "match_across_content_types": item.get("match_across_current_type", True),
     "confirmed": item.get("confirmed", False),
     "requires_callback": item.get("requires_callback", False)
   }

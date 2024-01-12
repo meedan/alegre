@@ -56,11 +56,8 @@ def save(obj, model, modifiable_fields=[]):
             saved_obj = existing
     except NoResultFound as e:
         # Otherwise, add new audio, but with context as an array
-        app.logger.info(f"Adding {model} object that looks like "+str(obj.__dict__))
-        app.logger.info(f"The context is "+str(obj.context))
         if obj.context and not isinstance(obj.context, list):
             obj.context = [obj.context]
-            app.logger.debug("Set context to "+str(obj.context))
         db.session.add(obj)
         saved_obj = obj
     except Exception as e:
@@ -92,7 +89,7 @@ def delete(task, model):
 
 def add(task, model, modifiable_fields=[]):
     try:
-        obj = model.from_task_data(task)
+        obj = model.from_task_data(task, get_by_doc_id_or_url(task, model))
         try:
             obj = save(obj, model, modifiable_fields)
         except sqlalchemy.exc.IntegrityError:
@@ -137,16 +134,32 @@ def get_context_for_search(task):
         context.pop("content_type", None)
     return context
 
+def get_presto_request_response(modality, callback_url, task):
+    return json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
+
+def ensure_context_appended(task, existing):
+    context = task.get("context", task.get("raw", {}).get("context"))
+    if isinstance(context, list):
+      existing.context = [dict(t) for t in set(tuple(sorted(d.items())) for d in context + existing.context)]
+      flag_modified(existing, 'context')
+    elif isinstance(context, dict) and context not in existing.context:
+      existing.context.append(context)
+      flag_modified(existing, 'context')
+    return existing
+
 def get_blocked_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
-    obj.context = [get_context_for_search(task)]
+    obj = ensure_context_appended(task, obj)
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
-    response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
-    # Warning: this is a blocking hold to wait until we get a response in 
-    # a redis key that we've received something from presto.
-    return obj, temporary, obj.context, Presto.blocked_response(response, modality)
+    if obj.requires_encoding:
+        response = get_presto_request_response(modality, callback_url, task)
+        # Warning: this is a blocking hold to wait until we get a response in 
+        # a redis key that we've received something from presto.
+        return obj, temporary, [get_context_for_search(task)], Presto.blocked_response(response, modality)
+    else:
+        return obj, temporary, [get_context_for_search(task)], obj.canned_response
 
 def get_async_presto_response(task, model, modality):
     _, temporary = get_object(task, model)
@@ -155,7 +168,7 @@ def get_async_presto_response(task, model, modality):
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
     task["final_task"] = "search"
-    response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
+    response = get_presto_request_response(modality, callback_url, task)
     if response:
         return response
     else:

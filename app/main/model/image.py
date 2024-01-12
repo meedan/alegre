@@ -30,14 +30,36 @@ class ImageModel(db.Model):
   __table_args__ = (
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )
+
+  @property
+  def canned_response(self):
+    model = app.config['IMAGE_MODEL']
+    if model and model.lower() == "pdq":
+      return {"body": {"hash_value": self.pdq}}
+    else:
+      return {"body": {"hash_value": self.phash}}
+
+  @property
+  def requires_encoding(self):
+    model = app.config['IMAGE_MODEL']
+    if model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.hash)):
+      return True
+    else:
+      return False
+
   @classmethod
-  def from_task_data(cls, task):
-    return cls(
-      pdq=task.get("hash_value"),
-      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
-      url=task.get("url"),
-      context=task.get("context", task.get("raw", {}).get("context"))
-    )
+  def from_task_data(cls, task, existing):
+    if existing:
+      if not existing.hash_value:
+        existing.hash_value = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
+    else:
+      return cls(
+        pdq=task.get("hash_value"),
+        doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+        url=task.get("url"),
+        context=task.get("context", task.get("raw", {}).get("context"))
+      )
 
   @staticmethod
   def from_url(url, doc_id, context={}, created_at=None):
