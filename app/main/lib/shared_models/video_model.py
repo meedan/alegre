@@ -152,20 +152,20 @@ class VideoModel(SharedModel):
         temporary = False
         hash_value = None
         retries = 0
-        video = media_crud.get_by_doc_id_or_url(task, Video)
-        if video is None:
-            temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            self.add(task, blocking)
-            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-            if videos and not video:
-                video = videos[0]
-        hash_value = video.hash_value
-        # while hash_value is None and retries < 5:
-        #     if not hash_value:
-        #         time.sleep(1)
-        #     retries += 1
+        while hash_value is None and retries < 5:
+            video = media_crud.get_by_doc_id_or_url(task, Video)
+            if video is None:
+                temporary = True
+                if not task.get("doc_id"):
+                    task["doc_id"] = str(uuid.uuid4())
+                self.add(task, blocking)
+                videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
+                if videos and not video:
+                    video = videos[0]
+            hash_value = video.hash_value
+            if not hash_value:
+                time.sleep(1)
+            retries += 1
         if video:
             matches = self.search_by_context(context)
             default_list = list(np.zeros(len(video.hash_value)))
