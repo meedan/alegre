@@ -91,7 +91,7 @@ def model_response_package(item, command):
     "command": command,
     "threshold": item.get("threshold", 0.0),
     "per_model_threshold": item.get("per_model_threshold", {}),
-    "match_across_content_types": item.get("match_across_current_type", False),
+    "match_across_content_types": item.get("match_across_current_type", True),
     "requires_callback": item.get("requires_callback", False)
   }
   for optional_key in ["folder", "filepath"]:
@@ -122,8 +122,11 @@ def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
-  if similarity_type == "image":
-      response, obj = callback_add(item)
+  elif similarity_type == "image":
+      response = callback_add(item)
+      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  elif similarity_type == "video":
+      response = video_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   else:
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
@@ -133,6 +136,9 @@ def callback_add_item(item, similarity_type):
 def callback_search_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().search(model_response_package(item, "search"))
+      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+  elif similarity_type == "video":
+      response = video_model().search(model_response_package(item, "search"))
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   else:
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
