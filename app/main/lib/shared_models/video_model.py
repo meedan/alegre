@@ -163,6 +163,7 @@ class VideoModel(SharedModel):
             hash_value = video.hash_value
             if not hash_value:
                 time.sleep(1)
+            retries += 1
         if video:
             matches = self.search_by_context(context)
             default_list = list(np.zeros(len(video.hash_value)))
