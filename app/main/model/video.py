@@ -41,12 +41,12 @@ class Video(db.Model):
 
   @classmethod
   def from_task_data(cls, task, existing):
+    app.logger.error(f"Running from_task_data for {task}, {existing}")
     if existing:
       if not existing.hash_value:
         existing.hash_value = task.get("hash_value")
       return media_crud.ensure_context_appended(task, existing)
     else:
-      app.logger.error(f"No existing document!")
       temp_uuid = str(uuid.uuid4())
       return cls(
         hash_value=task.get("hash_value"),
