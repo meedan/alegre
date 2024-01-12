@@ -41,7 +41,7 @@ class ImageModel(db.Model):
   @property
   def requires_encoding(self):
     model = app.config['IMAGE_MODEL']
-    if model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.hash)):
+    if model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.phash)):
       return True
     else:
       return False
