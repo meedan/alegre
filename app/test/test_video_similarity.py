@@ -35,7 +35,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": [1,2,3], "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
@@ -45,7 +45,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        result = self.model.add({"folder": "foo", "filepath": "bar", "hash_value": [1,2,3], "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+        result = self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'filepath', 'folder', 'hash_value', 'url'])
