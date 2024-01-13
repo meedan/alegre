@@ -79,7 +79,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_add(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        result = self.model.add({"folder": "foo", "filepath": "bar", "hash_value": [1,2,3], "url": url, "project_media_id": 1})
+        result = self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "efgh"}, "url": url, "project_media_id": 1})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
         self.assertEqual(sorted(result['requested'].keys()), ['filepath', 'folder', 'hash_value', 'project_media_id', 'url'])
