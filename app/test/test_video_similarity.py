@@ -59,7 +59,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             with patch('tmkpy.query', ) as mock_tmk_query:
                 mock_tmk_query.return_value = (0.99,)
                 mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
-                self.model.add({"folder": "foo", "filepath": "bar", "hash_value": IDENTICAL_HASH_VALUE, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+                self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
                 result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}}, {"blah": 1, "has_custom_id": True, 'project_media_id': 12343})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
@@ -69,7 +69,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": [1,2,3], "url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
+        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"folder": "abcd", "filepath": "edfg", "hash_value": [1,2,3]}, "url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
         result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
@@ -93,7 +93,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             with patch('tmkpy.query', ) as mock_tmk_query:
                 mock_tmk_query.return_value = (0.99,)
                 mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
-                self.model.add({"folder": "foo", "filepath": "bar", "hash_value": IDENTICAL_HASH_VALUE, "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+                self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
                 result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}}, {"blah": 1, 'project_media_id': 12343})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
@@ -115,7 +115,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_search_by_context(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": [1,2,3], "url": url, "context": {"blah": 1 }})
+        self.model.add({"folder": "foo", "filepath": "bar", "hash_value": {"folder": "abcd", "filepath": "edfg", "hash_value": [1,2,3]}, "url": url, "context": {"blah": 1 }})
         results = self.model.search_by_context({"blah": 1})
         self.assertEqual(results[0]['url'], url)
         self.assertEqual(results[0]['context'], [{"blah": 1}])
