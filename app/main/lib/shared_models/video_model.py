@@ -38,7 +38,7 @@ def download_file_from_s3(bucket: str, filename: str, local_path: str):
     access_key = app.config['AWS_ACCESS_KEY_ID']
     secret_key = app.config['AWS_SECRET_ACCESS_KEY']
     region = app.config['AWS_DEFAULT_REGION']
-    secure = s3_url.startswith('https')
+    secure = s3_url and s3_url.startswith('https')
     s3_client = boto3.client('s3',
                              endpoint_url=s3_url,
                              aws_access_key_id=access_key,
