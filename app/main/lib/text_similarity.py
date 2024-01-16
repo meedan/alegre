@@ -16,7 +16,7 @@ def get_document_body(body):
     context = body.get("context", {})
     if context:
       body["contexts"] = [context]
-    if model_key != 'opensearch' and model_key != 'elasticsearch':
+    if model_key != 'elasticsearch':
       if model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
           vector = retrieve_openai_embeddings(body['content'], model_key)
           if vector == None:
@@ -47,12 +47,10 @@ def search_text(search_params):
   return results
 
 def get_model_and_threshold(search_params):
-  model_key = 'opensearch'
+  model_key = 'elasticsearch'
   threshold = 0.9
   if 'model' in search_params:
       model_key = search_params['model']
-  if model_key == 'elasticsearch':
-      model_key = 'opensearch'
   if 'threshold' in search_params:
       threshold = search_params['threshold']
   if 'per_model_threshold' in search_params and search_params['per_model_threshold'].get(model_key):
@@ -144,14 +142,12 @@ def strip_vectors(results):
 
 def restrict_results(results, search_params, model_key):
     out_results = []
-    if model_key == 'elasticsearch':
-        model_key = 'opensearch'
     try:
         min_es_score = float(search_params.get("min_es_score"))
     except (ValueError, TypeError) as e:
         app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
         min_es_score = None
-    if min_es_score is not None and model_key == "opensearch":
+    if min_es_score is not None and model_key == "elasticsearch":
         for result in results:
             if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
@@ -176,7 +172,7 @@ def search_text_by_model(search_params):
         matches, clause_count = generate_matches(search_params['context'])
     if clause_count >= app.config['MAX_CLAUSE_COUNT']:
         return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
-    if model_key.lower() == 'opensearch':
+    if model_key.lower() == 'elasticsearch':
         conditions = get_opensearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
         if language == 'None':
