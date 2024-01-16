@@ -132,7 +132,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertTrue(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
+        mock_from_task_data.assert_called_once_with(task, mock_obj)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
@@ -159,7 +159,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertFalse(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
+        mock_from_task_data.assert_called_once_with(task, mock_obj)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
@@ -183,7 +183,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertFalse(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
+        mock_from_task_data.assert_called_once_with(task, mock_obj)
         mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
