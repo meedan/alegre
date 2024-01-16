@@ -143,11 +143,14 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], "http://example.com/url")
 
 
+    @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_success(self, mock_from_task_data, mock_save):
+    def test_add_success(self, mock_from_task_data, mock_save, mock_commit, mock_query):
         # Setup
+        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
+        mock_model.query.filter.return_value.one.return_value = mock_obj
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
         modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
@@ -166,11 +169,14 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
+    @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_integrity_error(self, mock_from_task_data, mock_save):
+    def test_add_integrity_error(self, mock_from_task_data, mock_save, mock_commit, mock_query):
         # Setup
+        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
+        mock_model.query.filter.return_value.one.return_value = mock_obj
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
         modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
@@ -189,10 +195,13 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
+    @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_http_error(self, mock_from_task_data, mock_commit):
+    def test_add_http_error(self, mock_from_task_data, mock_commit, mock_query):
         # Setup
+        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
+        mock_model.query.filter.return_value.one.return_value = mock_obj
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
         modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
