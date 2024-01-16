@@ -109,6 +109,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], "http://example.com/url")
 
 
+    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
     def test_add_success(self, mock_from_task_data, mock_save):
@@ -129,7 +130,9 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
+        mock_commit.assert_called_once()
 
+    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
     def test_add_integrity_error(self, mock_from_task_data, mock_save):
@@ -150,9 +153,11 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
+        mock_commit.assert_called_once()
 
+    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_http_error(self, mock_from_task_data):
+    def test_add_http_error(self, mock_from_task_data, mock_commit):
         # Setup
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
@@ -167,6 +172,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task)
+        mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
     def test_get_by_doc_id_or_url(self, mock_query):
