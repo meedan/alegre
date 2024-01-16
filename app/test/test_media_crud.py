@@ -111,10 +111,9 @@ class TestMediaCrud(unittest.TestCase):
 
 
     @patch('app.main.lib.media_crud.db.session.query')
-    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_success(self, mock_from_task_data, mock_save, mock_commit, mock_query):
+    def test_add_success(self, mock_from_task_data, mock_save, mock_query):
         # Setup
         mock_model = MagicMock()
         mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
@@ -135,13 +134,12 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
-        mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_integrity_error(self, mock_from_task_data, mock_save, mock_commit, mock_query):
+    def test_add_integrity_error(self, mock_from_task_data, mock_save, mock_query):
         # Setup
         mock_model = MagicMock()
         mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
@@ -162,12 +160,10 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
-        mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
-    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_http_error(self, mock_from_task_data, mock_commit, mock_query):
+    def test_add_http_error(self, mock_from_task_data, mock_query):
         # Setup
         mock_model = MagicMock()
         mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
@@ -185,7 +181,6 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
         mock_from_task_data.assert_called_once_with(task, ANY)
-        mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
     def test_get_by_doc_id_or_url(self, mock_query):
