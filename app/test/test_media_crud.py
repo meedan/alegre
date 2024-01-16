@@ -170,7 +170,6 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
 
     @patch('app.main.lib.media_crud.db.session.query')
-    @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
     def test_add_integrity_error(self, mock_from_task_data, mock_save, mock_query):
