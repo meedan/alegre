@@ -1,3 +1,4 @@
+from unittest.mock import ANY
 import unittest
 from unittest.mock import patch, MagicMock
 from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response, tmk_file_path
@@ -166,7 +167,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertTrue(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task, mock_obj)
+        mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
@@ -193,7 +194,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertFalse(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task, mock_obj)
+        mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
         mock_commit.assert_called_once()
 
@@ -217,7 +218,7 @@ class TestMediaCrud(unittest.TestCase):
         self.assertFalse(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task, mock_obj)
+        mock_from_task_data.assert_called_once_with(task, ANY)
         mock_commit.assert_called_once()
 
     @patch('app.main.lib.media_crud.db.session.query')
