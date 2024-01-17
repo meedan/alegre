@@ -4,6 +4,14 @@ import redis
 from flask import current_app as app
 import requests
 from app.main.lib.serializer import safe_serializer
+PRESTO_MODEL_MAP = {
+    "audio": "audio__Model",
+    "video": "video__Model",
+    "image": "image__Model",
+    "meantokens": "mean_tokens__Model",
+    "indiansbert": "indian_sbert__Mode",
+    "mdebertav3filipino": "fptg__Model",
+}
 
 class Presto:
     @staticmethod

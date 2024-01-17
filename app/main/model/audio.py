@@ -21,3 +21,12 @@ class Audio(db.Model):
   __table_args__ = (
     db.Index('ix_audios_context', context, postgresql_using='gin'),
   )
+
+  @classmethod
+  def from_task_data(cls, task):
+    return cls(
+      chromaprint_fingerprint=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )

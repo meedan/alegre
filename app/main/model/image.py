@@ -18,7 +18,7 @@ class ImageModel(db.Model):
   __tablename__ = 'images'
 
   id = db.Column(db.Integer, primary_key=True)
-  sha256 = db.Column(db.String(64, convert_unicode=True), nullable=False, index=True)
+  sha256 = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True)
   doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
@@ -29,6 +29,15 @@ class ImageModel(db.Model):
   __table_args__ = (
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )
+
+  @classmethod
+  def from_task_data(cls, task):
+    return cls(
+      pdq=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
 
   @staticmethod
   def from_url(url, doc_id, context={}, created_at=None):
