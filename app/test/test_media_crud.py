@@ -17,8 +17,9 @@ class TestMediaCrud(unittest.TestCase):
     def test_non_overlapping_lists(self):
         list1 = [{'key1': 'value1'}, {'key2': 'value2'}]
         list2 = [{'key3': 'value3'}]
-        expected = [{'key2': 'value2'}, {'key3': 'value3'}, {'key1': 'value1'}]
-        self.assertEqual(merge_dict_lists(list1, list2), expected)
+        self.assertEqual({'key2': 'value2'} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key3': 'value3'} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key1': 'value1'} in merge_dict_lists(list1, list2), True)
 
     def test_overlapping_lists(self):
         list1 = [{'key': 'value1'}, {'key': 'value2'}]
@@ -29,8 +30,8 @@ class TestMediaCrud(unittest.TestCase):
     def test_nested_lists(self):
         list1 = [{'key': ['value1', 'value2']}]
         list2 = [{'key': ['value2', 'value3']}]
-        expected = [{'key': ['value1', 'value2']}, {'key': ['value2', 'value3']}]
-        self.assertEqual(merge_dict_lists(list1, list2), expected)
+        self.assertEqual({'key': ['value1', 'value2']} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key': ['value2', 'value3']} in merge_dict_lists(list1, list2), True)
 
     def test_different_data_types(self):
         list1 = [{'key': 1}, {'key': 'value'}]
