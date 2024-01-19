@@ -11,6 +11,38 @@ import urllib.error
 import json
 
 class TestMediaCrud(unittest.TestCase):
+    def test_empty_lists(self):
+        self.assertEqual(merge_dict_lists([], []), [])
+
+    def test_non_overlapping_lists(self):
+        list1 = [{'key1': 'value1'}, {'key2': 'value2'}]
+        list2 = [{'key3': 'value3'}]
+        expected = [{'key1': 'value1'}, {'key2': 'value2'}, {'key3': 'value3'}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
+
+    def test_overlapping_lists(self):
+        list1 = [{'key': 'value1'}, {'key': 'value2'}]
+        list2 = [{'key': 'value1'}]
+        expected = [{'key': 'value1'}, {'key': 'value2'}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
+
+    def test_nested_lists(self):
+        list1 = [{'key': ['value1', 'value2']}]
+        list2 = [{'key': ['value2', 'value3']}]
+        expected = [{'key': ['value1', 'value2']}, {'key': ['value2', 'value3']}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
+
+    def test_different_data_types(self):
+        list1 = [{'key': 1}, {'key': 'value'}]
+        list2 = [{'key': 1.0}]
+        expected = [{'key': 1}, {'key': 'value'}, {'key': 1.0}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
+
+    def test_single_element_lists(self):
+        list1 = [{'key': 'value'}]
+        list2 = [{'key': 'value'}]
+        expected = [{'key': 'value'}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
 
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.db.session.add')
