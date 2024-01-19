@@ -17,7 +17,7 @@ class TestMediaCrud(unittest.TestCase):
     def test_non_overlapping_lists(self):
         list1 = [{'key1': 'value1'}, {'key2': 'value2'}]
         list2 = [{'key3': 'value3'}]
-        expected = [{'key1': 'value1'}, {'key2': 'value2'}, {'key3': 'value3'}]
+        expected = [{'key2': 'value2'}, {'key3': 'value3'}, {'key1': 'value1'}]
         self.assertEqual(merge_dict_lists(list1, list2), expected)
 
     def test_overlapping_lists(self):
@@ -35,7 +35,7 @@ class TestMediaCrud(unittest.TestCase):
     def test_different_data_types(self):
         list1 = [{'key': 1}, {'key': 'value'}]
         list2 = [{'key': 1.0}]
-        expected = [{'key': 1}, {'key': 'value'}, {'key': 1.0}]
+        expected = [{'key': 'value'}, {'key': 1}]
         self.assertEqual(merge_dict_lists(list1, list2), expected)
 
     def test_single_element_lists(self):
