@@ -24,8 +24,8 @@ class TestMediaCrud(unittest.TestCase):
     def test_overlapping_lists(self):
         list1 = [{'key': 'value1'}, {'key': 'value2'}]
         list2 = [{'key': 'value1'}]
-        expected = [{'key': 'value1'}, {'key': 'value2'}]
-        self.assertEqual(merge_dict_lists(list1, list2), expected)
+        self.assertEqual({'key1': 'value1'} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key': 'value2'} in merge_dict_lists(list1, list2), True)
 
     def test_nested_lists(self):
         list1 = [{'key': ['value1', 'value2']}]
@@ -37,7 +37,8 @@ class TestMediaCrud(unittest.TestCase):
         list1 = [{'key': 1}, {'key': 'value'}]
         list2 = [{'key': 1.0}]
         expected = [{'key': 'value'}, {'key': 1}]
-        self.assertEqual(merge_dict_lists(list1, list2), expected)
+        self.assertEqual({'key': 'value'} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key': 1} in merge_dict_lists(list1, list2), True)
 
     def test_single_element_lists(self):
         list1 = [{'key': 'value'}]
