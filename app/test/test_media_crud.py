@@ -24,7 +24,7 @@ class TestMediaCrud(unittest.TestCase):
     def test_overlapping_lists(self):
         list1 = [{'key': 'value1'}, {'key': 'value2'}]
         list2 = [{'key': 'value1'}]
-        self.assertEqual({'key1': 'value1'} in merge_dict_lists(list1, list2), True)
+        self.assertEqual({'key': 'value1'} in merge_dict_lists(list1, list2), True)
         self.assertEqual({'key': 'value2'} in merge_dict_lists(list1, list2), True)
 
     def test_nested_lists(self):
