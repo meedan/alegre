@@ -17,28 +17,28 @@ class TestMediaCrud(unittest.TestCase):
     def test_non_overlapping_lists(self):
         list1 = [{'key1': 'value1'}, {'key2': 'value2'}]
         list2 = [{'key3': 'value3'}]
-        self.assertEqual({'key2': 'value2'} in merge_dict_lists(list1, list2), True)
-        self.assertEqual({'key3': 'value3'} in merge_dict_lists(list1, list2), True)
-        self.assertEqual({'key1': 'value1'} in merge_dict_lists(list1, list2), True)
+        self.assertTrue({'key2': 'value2'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key3': 'value3'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key1': 'value1'} in merge_dict_lists(list1, list2))
 
     def test_overlapping_lists(self):
         list1 = [{'key': 'value1'}, {'key': 'value2'}]
         list2 = [{'key': 'value1'}]
-        self.assertEqual({'key': 'value1'} in merge_dict_lists(list1, list2), True)
-        self.assertEqual({'key': 'value2'} in merge_dict_lists(list1, list2), True)
+        self.assertTrue({'key': 'value1'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': 'value2'} in merge_dict_lists(list1, list2))
 
     def test_nested_lists(self):
         list1 = [{'key': ['value1', 'value2']}]
         list2 = [{'key': ['value2', 'value3']}]
-        self.assertEqual({'key': ['value1', 'value2']} in merge_dict_lists(list1, list2), True)
-        self.assertEqual({'key': ['value2', 'value3']} in merge_dict_lists(list1, list2), True)
+        self.assertTrue({'key': ['value1', 'value2']} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': ['value2', 'value3']} in merge_dict_lists(list1, list2))
 
     def test_different_data_types(self):
         list1 = [{'key': 1}, {'key': 'value'}]
         list2 = [{'key': 1.0}]
         expected = [{'key': 'value'}, {'key': 1}]
-        self.assertEqual({'key': 'value'} in merge_dict_lists(list1, list2), True)
-        self.assertEqual({'key': 1} in merge_dict_lists(list1, list2), True)
+        self.assertTrue({'key': 'value'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': 1} in merge_dict_lists(list1, list2))
 
     def test_single_element_lists(self):
         list1 = [{'key': 'value'}]
