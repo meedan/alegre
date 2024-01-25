@@ -1,7 +1,7 @@
 from unittest.mock import ANY
 import unittest
 from unittest.mock import patch, MagicMock
-from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response, tmk_file_path
+from app.main.lib.media_crud import merge_dict_lists, tmk_file_path, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response
 from app.main import db
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
