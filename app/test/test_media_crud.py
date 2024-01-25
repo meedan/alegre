@@ -1,7 +1,7 @@
 from unittest.mock import ANY
 import unittest
 from unittest.mock import patch, MagicMock
-from app.main.lib.media_crud import save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response, tmk_file_path
+from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response
 from app.main import db
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
@@ -12,6 +12,40 @@ import urllib.error
 import json
 
 class TestMediaCrud(unittest.TestCase):
+    def test_empty_lists(self):
+        self.assertEqual(merge_dict_lists([], []), [])
+
+    def test_non_overlapping_lists(self):
+        list1 = [{'key1': 'value1'}, {'key2': 'value2'}]
+        list2 = [{'key3': 'value3'}]
+        self.assertTrue({'key2': 'value2'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key3': 'value3'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key1': 'value1'} in merge_dict_lists(list1, list2))
+
+    def test_overlapping_lists(self):
+        list1 = [{'key': 'value1'}, {'key': 'value2'}]
+        list2 = [{'key': 'value1'}]
+        self.assertTrue({'key': 'value1'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': 'value2'} in merge_dict_lists(list1, list2))
+
+    def test_nested_lists(self):
+        list1 = [{'key': ['value1', 'value2']}]
+        list2 = [{'key': ['value2', 'value3']}]
+        self.assertTrue({'key': ['value1', 'value2']} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': ['value2', 'value3']} in merge_dict_lists(list1, list2))
+
+    def test_different_data_types(self):
+        list1 = [{'key': 1}, {'key': 'value'}]
+        list2 = [{'key': 1.0}]
+        expected = [{'key': 'value'}, {'key': 1}]
+        self.assertTrue({'key': 'value'} in merge_dict_lists(list1, list2))
+        self.assertTrue({'key': 1} in merge_dict_lists(list1, list2))
+
+    def test_single_element_lists(self):
+        list1 = [{'key': 'value'}]
+        list2 = [{'key': 'value'}]
+        expected = [{'key': 'value'}]
+        self.assertEqual(merge_dict_lists(list1, list2), expected)
 
     @patch('app.main.lib.media_crud.db.session.commit')
     @patch('app.main.lib.media_crud.db.session.add')
