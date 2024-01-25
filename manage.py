@@ -6,6 +6,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from opensearchpy import OpenSearch, TransportError
 import sqlalchemy
+from sqlalchemy import text
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
 import json_logging
@@ -19,7 +20,6 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
-from sqlalchemy import text
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
 # (by upgrading to tensorflow 2.2 or higher)

@@ -12,8 +12,6 @@ from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
 from pgvector.sqlalchemy import Vector
 
-from app.main.lib.presto import Presto
-import json
 logging.basicConfig(level=logging.INFO)
 
 class ImageModel(db.Model):
