@@ -15,6 +15,7 @@ RUN apt-get update && \
     apt-transport-https \
     libcurl3-gnutls \
     gawk \
+    postgresql-13-pgvector \
     postgresql-plperl-13 \
     && localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
