@@ -6,6 +6,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from opensearchpy import OpenSearch, TransportError
 import sqlalchemy
+from sqlalchemy import text
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
 import json_logging
@@ -244,6 +245,13 @@ def init_perl_functions():
         LANGUAGE plperl;
       """)
     )
+    sqlalchemy.event.listen(
+      db.metadata,
+      'before_create',
+      DDL("""
+      CREATE EXTENSION IF NOT EXISTS vector;
+      """)
+    )
     db.create_all()
 
 @manager.command
@@ -363,6 +371,5 @@ def run_rq_worker():
       qs = ['default']
       w = Worker(qs)
       w.work()
-  
 if __name__ == '__main__':
   manager.run()
