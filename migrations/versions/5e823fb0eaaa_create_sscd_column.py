@@ -27,7 +27,7 @@ def upgrade():
           CREATE EXTENSION IF NOT EXISTS vector;
           """)
     )
-    op.add_column('images', sa.Column('sscd', Vector(256), nullable=True))
+    op.add_column('images', sa.Column('sscd', Vector(512), nullable=True))
     # op.create_index(op.f('ix_images_sscd'), 'images', ['sscd'], unique=False)
 
 def downgrade():
