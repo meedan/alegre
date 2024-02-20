@@ -1,3 +1,4 @@
+import os
 import io
 import urllib.request
 import logging
@@ -10,6 +11,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from app.main.lib import media_crud
 from pgvector.sqlalchemy import Vector
 
 logging.basicConfig(level=logging.INFO)
@@ -50,8 +52,12 @@ class ImageModel(db.Model):
   @classmethod
   def from_task_data(cls, task, existing):
     if existing:
-      if not existing.hash_value:
-        existing.hash_value = task.get("hash_value")
+      if os.getenv("IMAGE_MODEL") == 'pdq':
+          if not existing.pdq:
+            existing.pdq = task.get("hash_value")
+      elif os.getenv("IMAGE_MODEL") == 'phash':
+          if not existing.phash:
+            existing.phash = task.get("hash_value")
       return media_crud.ensure_context_appended(task, existing)
     else:
       return cls(
