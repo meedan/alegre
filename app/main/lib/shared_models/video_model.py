@@ -79,9 +79,8 @@ class VideoModel(SharedModel):
             am = AudioModel('audio')
             am.add(self.overload_context_to_denote_content_type(task))
             audio_matches = am.blocking_search(task, "audio")
-        for match in audio_matches["result"]:
-            matches.append(match)
-        return matches
+            return audio_matches["result"]
+        return []
 
     def blocking_search(self, task, modality):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
@@ -157,15 +156,7 @@ class VideoModel(SharedModel):
         hash_value = None
         retries = 0
         while hash_value is None and retries < 5:
-            video = media_crud.get_by_doc_id_or_url(task, Video)
-            if video is None:
-                temporary = True
-                if not task.get("doc_id"):
-                    task["doc_id"] = str(uuid.uuid4())
-                self.add(task, blocking)
-                videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-                if videos and not video:
-                    video = videos[0]
+            video, temporary = media_crud.get_object(task, Video)
             hash_value = video.hash_value
             if not hash_value:
                 time.sleep(1)
