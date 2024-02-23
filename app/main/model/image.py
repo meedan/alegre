@@ -38,16 +38,13 @@ class ImageModel(db.Model):
     model = app.config['IMAGE_MODEL']
     if model and model.lower() == "pdq":
       return {"body": {"hash_value": self.pdq}}
-    else:
+    elif model and model.lower() == "pdq":
       return {"body": {"hash_value": self.phash}}
 
   @property
   def requires_encoding(self):
     model = app.config['IMAGE_MODEL']
-    if model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.phash)):
-      return True
-    else:
-      return False
+    return model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.phash))
 
   @classmethod
   def from_task_data(cls, task, existing):
@@ -59,13 +56,12 @@ class ImageModel(db.Model):
           if not existing.phash:
             existing.phash = task.get("hash_value")
       return media_crud.ensure_context_appended(task, existing)
-    else:
-      return cls(
-        pdq=task.get("hash_value"),
-        doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
-        url=task.get("url"),
-        context=task.get("context", task.get("raw", {}).get("context"))
-      )
+    return cls(
+      pdq=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
 
   @staticmethod
   def from_url(url, doc_id, context={}, created_at=None):

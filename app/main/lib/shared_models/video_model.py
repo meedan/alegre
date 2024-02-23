@@ -27,7 +27,6 @@ from app.main.lib.error_log import ErrorLog
 from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
-from app.main.model.audio import Audio
 
 def download_file_from_s3(bucket: str, filename: str, local_path: str):
     """
@@ -66,7 +65,7 @@ class VideoModel(SharedModel):
     def delete(self, task):
         return media_crud.delete(task, Video)
 
-    def add(self, task, blocking=False):
+    def add(self, task):
         s3_folder = task["hash_value"]["folder"]
         s3_filepath = task["hash_value"]["filepath"]
         task["hash_value"] = task["hash_value"]["hash_value"]
@@ -75,22 +74,27 @@ class VideoModel(SharedModel):
         download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         return added
 
+    def store_audio(self, task):
+        if task.get("match_across_content_types", True):
+            am = AudioModel('audio')
+            am.add(self.overload_context_to_denote_content_type(task))
+            audio_matches = am.blocking_search(task, "audio")
+        for match in audio_matches["result"]:
+            matches.append(match)
+        return matches
+
     def blocking_search(self, task, modality):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.hash_value = presto_result["body"]["hash_value"]
         audio_matches = {"result": []}
         if video:
             matches = self.search(task, context[0], True).get("result")
-            if task.get("match_across_content_types", True):
-                am = AudioModel('audio')
-                am.add(self.overload_context_to_denote_content_type(task))
-                audio_matches = am.blocking_search(task, "audio")
+            for match in self.store_audio(task):
+                matches.append(match)
             if temporary:
                 media_crud.delete(task, Video)
             else:
                 media_crud.save(video, Video, ["hash_value"])
-            for match in audio_matches["result"]:
-                matches.append(match)
             matches.sort(key=lambda x: x['score'], reverse=True)
             if task.get("limit"):
                 return {"result": matches[:task.get("limit")]}
@@ -180,7 +184,6 @@ class VideoModel(SharedModel):
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
-                params = [media_crud.tmk_file_path(video.folder, video.filepath),files,1]
                 scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
             except Exception as err:
                 ErrorLog.notify(err)
