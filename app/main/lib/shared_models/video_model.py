@@ -85,7 +85,6 @@ class VideoModel(SharedModel):
     def blocking_search(self, task, modality):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.hash_value = presto_result["body"]["hash_value"]
-        audio_matches = {"result": []}
         if video:
             matches = self.search(task, context[0], True).get("result")
             for match in self.store_audio(task):
