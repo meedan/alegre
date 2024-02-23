@@ -1,10 +1,11 @@
 import os
 import uuid
+
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlalchemy.orm.attributes import flag_modified
+from flask import current_app as app
 
 from app.main import db
-from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from app.main.lib import media_crud
 
 class Video(db.Model):
@@ -30,14 +31,18 @@ class Video(db.Model):
 
   @property
   def canned_response(self):
-    return {"body": {"hash_value": self.hash_value, "folder": self.folder, "filepath": self.filepath}}
+    return {
+      "body": {
+        "hash_value": self.hash_value,
+        "folder": self.folder,
+        "filepath": self.filepath
+      }
+    }
 
   @property
   def requires_encoding(self):
-    if self.hash_value and os.path.exists(media_crud.tmk_file_path(self.folder, self.filepath, False)):
-      return False
-    else:
-      return True
+    file_exists = os.path.exists(media_crud.tmk_file_path(self.folder, self.filepath, False))
+    return self.hash_value and file_exists
 
   @classmethod
   def from_task_data(cls, task, existing):
@@ -46,13 +51,12 @@ class Video(db.Model):
       if not existing.hash_value:
         existing.hash_value = task.get("hash_value")
       return media_crud.ensure_context_appended(task, existing)
-    else:
-      temp_uuid = str(uuid.uuid4())
-      return cls(
-        hash_value=task.get("hash_value"),
-        folder=task.get("folder", temp_uuid.split("-")[1]),
-        filepath=task.get("filepath", temp_uuid),
-        doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
-        url=task.get("url"),
-        context=task.get("context", task.get("raw", {}).get("context"))
-      )
+    temp_uuid = str(uuid.uuid4())
+    return cls(
+      hash_value=task.get("hash_value"),
+      folder=task.get("folder", temp_uuid.split("-")[1]),
+      filepath=task.get("filepath", temp_uuid),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
