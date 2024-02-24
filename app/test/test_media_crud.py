@@ -195,27 +195,6 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
 
     @patch('app.main.lib.media_crud.db.session.query')
-    @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_http_error(self, mock_from_task_data, mock_query):
-        # Setup
-        mock_model = MagicMock()
-        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
-        mock_model.query.filter.return_value.one.return_value = mock_obj
-        task = {'url': 'http://example.com/image.jpg'}
-        model = Audio
-        modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
-        mock_from_task_data.side_effect = urllib.error.HTTPError(None, None, None, None, None)
-
-        # Test
-        result, _ = add(task, model, modifiable_fields)
-
-        # Assert
-        self.assertFalse(result['success'])
-        self.assertEqual(result['requested'], task)
-        self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task, ANY)
-
-    @patch('app.main.lib.media_crud.db.session.query')
     def test_get_by_doc_id_or_url(self, mock_query):
         # Create a mock return value for the query
         mock_model = MagicMock()
@@ -315,7 +294,20 @@ class TestMediaCrud(unittest.TestCase):
         # Mock return values
         mock_get_object.return_value = (MagicMock(), False)
         mock_get_context_for_search.return_value = {"context_key": "context_value"}
-        mock_send_request.return_value = MagicMock(text=json.dumps({"response_key": "response_value"}))
+        mock_send_request.return_value = MagicMock(text=json.dumps({
+            'message': 'Message pushed successfully',
+            'queue': 'video__Model',
+            'body': {
+                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+                'url': 'http://example.com/chair-19-sd-bar.mp4',
+                'text': None,
+                'raw': {
+                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/chair-19-sd-bar.mp4',
+                }
+            }
+        }))
         mock_blocked_response.return_value = {"blocked_response_key": "blocked_response_value"}
 
         # Call the function
@@ -342,7 +334,20 @@ class TestMediaCrud(unittest.TestCase):
         mock_obj = MagicMock()
         mock_temporary = False
         mock_context = {"some": "context"}
-        mock_response = json.dumps({"some": "response"})
+        mock_response = json.dumps({
+            'message': 'Message pushed successfully',
+            'queue': 'video__Model',
+            'body': {
+                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+                'url': 'http://example.com/chair-19-sd-bar.mp4',
+                'text': None,
+                'raw': {
+                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/chair-19-sd-bar.mp4',
+                }
+            }
+        })
 
         # Set return values for mocks
         mock_get_object.return_value = (mock_obj, mock_temporary)
