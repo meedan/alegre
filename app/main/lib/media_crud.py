@@ -88,17 +88,15 @@ def delete(task, model):
         return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
 
 def add(task, model, modifiable_fields=[]):
+    obj = model.from_task_data(task, get_by_doc_id_or_url(task, model))
     try:
-        obj = model.from_task_data(task, get_by_doc_id_or_url(task, model))
-        try:
-            obj = save(obj, model, modifiable_fields)
-        except sqlalchemy.exc.IntegrityError:
-            obj = None
-        if obj:
-            return {"requested": task, "result": {"url": obj.url}, "success": True}, obj
-        else:
-            return {"requested": task, "result": {"url": task.get("url")}, "success": False}, None
-    except urllib.error.HTTPError:
+        obj = save(obj, model, modifiable_fields)
+    except sqlalchemy.exc.IntegrityError:
+        app.logger.error(f"sqlalchemy.exc.IntegrityError! Failed to store obj of {model} for task of {task} with modifiable fields of {modifiable_fields}!")
+        obj = None
+    if obj:
+        return {"requested": task, "result": {"url": obj.url}, "success": True}, obj
+    else:
         return {"requested": task, "result": {"url": task.get("url")}, "success": False}, None
 
 def get_by_doc_id_or_url(task, model):
@@ -135,7 +133,11 @@ def get_context_for_search(task):
     return context
 
 def get_presto_request_response(modality, callback_url, task):
-    return json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
+    response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
+    assert response["message"] == "Message pushed successfully", f"Bad response message for {modality}, {callback_url}, {task} - response was {response}"
+    assert response["queue"] == PRESTO_MODEL_MAP[modality], f"Bad queue for {modality}, {callback_url}, {task} - response was {response}"
+    assert isinstance(response["body"], dict), f"Bad body for {modality}, {callback_url}, {task} - response was {response}"
+    return response
 
 def ensure_context_appended(task, existing):
     context = task.get("context", task.get("raw", {}).get("context"))
@@ -157,9 +159,9 @@ def get_blocked_presto_response(task, model, modality):
         response = get_presto_request_response(modality, callback_url, task)
         # Warning: this is a blocking hold to wait until we get a response in 
         # a redis key that we've received something from presto.
-        return obj, temporary, [get_context_for_search(task)], Presto.blocked_response(response, modality)
+        return obj, temporary, get_context_for_search(task), Presto.blocked_response(response, modality)
     else:
-        return obj, temporary, [get_context_for_search(task)], obj.canned_response
+        return obj, temporary, get_context_for_search(task), obj.canned_response
 
 def get_async_presto_response(task, model, modality):
     _, temporary = get_object(task, model)

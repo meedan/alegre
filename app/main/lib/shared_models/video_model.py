@@ -27,25 +27,28 @@ from app.main.lib.error_log import ErrorLog
 from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
-
+MINIO_HOST = "minio:9000"
 def download_file_from_s3(bucket: str, filename: str, local_path: str):
     """
     Generic download helper for s3. Could be moved over to helpers folder...
     This function downloads a file from an S3 bucket to a local path.
     """
     # Set up the S3 client
-    s3_url = app.config['S3_ENDPOINT']
-    access_key = app.config['AWS_ACCESS_KEY_ID']
-    secret_key = app.config['AWS_SECRET_ACCESS_KEY']
-    region = app.config['AWS_DEFAULT_REGION']
-    secure = s3_url and s3_url.startswith('https')
-    s3_client = boto3.client('s3',
-                             endpoint_url=s3_url,
-                             aws_access_key_id=access_key,
-                             aws_secret_access_key=secret_key,
-                             config=Config(signature_version='s3v4'),
-                             region_name=region,
-                             use_ssl=secure)
+    if MINIO_HOST in app.config['S3_ENDPOINT']:
+        s3_url = app.config['S3_ENDPOINT']
+        access_key = app.config['AWS_ACCESS_KEY_ID']
+        secret_key = app.config['AWS_SECRET_ACCESS_KEY']
+        region = app.config['AWS_DEFAULT_REGION']
+        secure = s3_url and s3_url.startswith('https')
+        s3_client = boto3.client('s3',
+                                 endpoint_url=s3_url,
+                                 aws_access_key_id=access_key,
+                                 aws_secret_access_key=secret_key,
+                                 config=Config(signature_version='s3v4'),
+                                 region_name=region,
+                                 use_ssl=secure)
+    else:
+        s3_client = boto3.client('s3')
     # Extract the file name from the S3 file path
     tmk_file = filename.split('/')[-1]
     # Specify the full path to save the file
@@ -69,7 +72,6 @@ class VideoModel(SharedModel):
         s3_folder = task["hash_value"]["folder"]
         s3_filepath = task["hash_value"]["filepath"]
         task["hash_value"] = task["hash_value"]["hash_value"]
-        app.logger.error(f"Task looks like: {task}")
         added, obj = media_crud.add(task, Video, ["hash_value"])
         download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         return added
@@ -86,7 +88,7 @@ class VideoModel(SharedModel):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.hash_value = presto_result["body"]["hash_value"]
         if video:
-            matches = self.search(task, context[0], True).get("result")
+            matches = self.search(task, context, True).get("result")
             for match in self.store_audio(task):
                 matches.append(match)
             if temporary:

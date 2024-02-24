@@ -328,7 +328,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_blocked_response.assert_called_once()
 
         self.assertFalse(temporary)
-        self.assertEqual(context, [{"context_key": "context_value"}])
+        self.assertEqual(context, {"context_key": "context_value"})
         self.assertEqual(response, {"blocked_response_key": "blocked_response_value"})
 
     @patch('app.main.lib.presto.Presto.send_request')

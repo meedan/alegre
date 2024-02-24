@@ -36,9 +36,9 @@ class ImageModel(db.Model):
   @property
   def canned_response(self):
     model = app.config['IMAGE_MODEL']
-    if model and model.lower() == "pdq":
+    if model == "pdq":
       return {"body": {"hash_value": self.pdq}}
-    elif model and model.lower() == "pdq":
+    elif model == "phash":
       return {"body": {"hash_value": self.phash}}
 
   @property
