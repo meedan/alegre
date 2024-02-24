@@ -131,7 +131,7 @@ def get_context_for_search(task):
 def get_presto_request_response(modality, callback_url, task):
     response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
     assert response["message"] == "Message pushed successfully", f"Bad response message for {modality}, {callback_url}, {task} - response was {response}"
-    assert response["queue"] == PRESTO_MODEL_MAP[modality], f"Bad queue for {modality}, {callback_url}, {task} - response was {response}"
+    assert response["queue"] in PRESTO_MODEL_MAP.values(), f"Unknown queue for {modality}, {callback_url}, {task} - response was {response}"
     assert isinstance(response["body"], dict), f"Bad body for {modality}, {callback_url}, {task} - response was {response}"
     return response
 
