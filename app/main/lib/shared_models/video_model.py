@@ -34,7 +34,7 @@ def download_file_from_s3(bucket: str, filename: str, local_path: str):
     This function downloads a file from an S3 bucket to a local path.
     """
     # Set up the S3 client
-    if app.config['S3_ENDPOINT'] ad MINIO_HOST in app.config['S3_ENDPOINT']:
+    if app.config['S3_ENDPOINT'] and MINIO_HOST in app.config['S3_ENDPOINT']:
         s3_url = app.config['S3_ENDPOINT']
         access_key = app.config['AWS_ACCESS_KEY_ID']
         secret_key = app.config['AWS_SECRET_ACCESS_KEY']
