@@ -126,10 +126,10 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}}).get("body")
-        result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
+        result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['doc_id', 'url'])
+        self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
         self.assertEqual(sorted(result['result'].keys()), ['deleted', 'url'])
         #try to delete a item already deleted
         result = self.model.delete({'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
