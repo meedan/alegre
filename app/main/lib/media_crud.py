@@ -75,7 +75,7 @@ def delete(task, model):
     deleted = False
     obj = get_by_doc_id_or_url(task, model)
     if obj:
-        if task.get("context", {}) in obj.context and len(obj.context) > 1:
+        if task["context"] in obj.context and len(obj.context) > 1:
             deleted = drop_context_from_record(obj, task.get("context", {}))
         else:
             if isinstance(obj, Video):
