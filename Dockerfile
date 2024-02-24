@@ -3,14 +3,8 @@ WORKDIR /app
 
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
-RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 # Copy necessary threatexchange folders
-COPY ./threatexchange/tmk/cpp /app/threatexchange/tmk/cpp
-COPY ./threatexchange/pdq/cpp /app/threatexchange/pdq/cpp
-RUN make -C /app/threatexchange/tmk/cpp
-
 # Other configurations
 RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
 
@@ -22,8 +16,6 @@ RUN pip install pact-python
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy threatexchange/pdq/python directory
-COPY ./threatexchange/pdq/python /app/threatexchange/pdq/python
-RUN cd threatexchange/pdq/python && pip install .
 
 # Run NLTK download
 RUN python3 -c 'import nltk; nltk.download("punkt")'

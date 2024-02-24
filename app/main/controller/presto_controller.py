@@ -43,7 +43,7 @@ class PrestoResource(Resource):
             r.lpush(f"{model_type}_{item_id}", json.dumps(data))
             r.expire(f"{model_type}_{item_id}", 60*60*24)
             output = {"action": action, "model_type": model_type, "data": result}
-            print(f"PrestoResource value is {output}")
+            app.logger.info(f"PrestoResource value is {output}")
             return {"action": action, "model_type": model_type, "data": result}
         abort(
             404,
