@@ -62,7 +62,7 @@ def add_image(save_params):
     raise e
 
 def callback_add(task):
-    return media_crud.add(task, ImageModel, ["pdq", "phash"])
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
 
 def blocking_search_image(task):
     image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
@@ -73,11 +73,11 @@ def blocking_search_image(task):
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
             image.pdq = presto_result["body"]["hash_value"]
-            result = search_by_pdq(image.pdq, threshold, context[0], limit)
+            result = search_by_pdq(image.pdq, threshold, context, limit)
         else:
             app.logger.info(f"Searching with phash.")
             image.phash = presto_result["body"]["hash_value"]
-            result = search_by_phash(image.phash, threshold, context[0], limit)
+            result = search_by_phash(image.phash, threshold, context, limit)
         if temporary:
             media_crud.delete(task, ImageModel)
         else:
