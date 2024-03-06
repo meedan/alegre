@@ -27,7 +27,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -62,7 +62,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -98,7 +98,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": 49805440634311326}}}))
                 mock_response = Mock()
                 mock_response.text = json.dumps({
                     'message': 'Message pushed successfully',
@@ -135,7 +135,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": 49805440634311326}}}))
                 mock_response = Mock()
                 mock_response.text = json.dumps({
                     'message': 'Message pushed successfully',
@@ -173,9 +173,9 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                     mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055])]
                     r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                     r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                    r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
+                    r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"result": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}}))
                     r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                    r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
+                    r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
                     mock_response = Mock()
                     mock_response.text = json.dumps({
                         'message': 'Message pushed successfully',
@@ -214,9 +214,9 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                     mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055])]
                     r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                     r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                    r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
+                    r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"result": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}}))
                     r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                    r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
+                    r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
                     mock_response = Mock()
                     mock_response.text = json.dumps({
                         'message': 'Message pushed successfully',
