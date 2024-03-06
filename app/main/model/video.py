@@ -1,8 +1,11 @@
+import os
 import uuid
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
-
+from flask import current_app as app
+from sqlalchemy.orm.attributes import flag_modified
+from app.main.lib import media_crud
 
 class Video(db.Model):
   """ Model for storing video related details """
@@ -24,3 +27,29 @@ class Video(db.Model):
     self.filepath = str(uuid.uuid4())
     self.folder = self.filepath.split("-")[1]
     super().__init__(**kwargs)
+
+  @property
+  def canned_response(self):
+    return {"body": {"hash_value": self.hash_value, "folder": self.folder, "filepath": self.filepath}}
+
+  @property
+  def requires_encoding(self):
+    return not (self.hash_value and os.path.exists(media_crud.tmk_file_path(self.folder, self.filepath, False)))
+
+  @classmethod
+  def from_task_data(cls, task, existing):
+    app.logger.error(f"Running from_task_data for {task}, {existing}")
+    if existing:
+      if not existing.hash_value:
+        existing.hash_value = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
+    else:
+      temp_uuid = str(uuid.uuid4())
+      return cls(
+        hash_value=task.get("hash_value"),
+        folder=task.get("folder", temp_uuid.split("-")[1]),
+        filepath=task.get("filepath", temp_uuid),
+        doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+        url=task.get("url"),
+        context=task.get("context", task.get("raw", {}).get("context"))
+      )

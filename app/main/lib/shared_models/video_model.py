@@ -1,3 +1,4 @@
+import time
 import json
 import uuid
 import os
@@ -14,57 +15,102 @@ from sqlalchemy import text
 import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
+import boto3
+from botocore.client import Config
 
 from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
+from app.main.lib import media_crud
 from app.main.lib.error_log import ErrorLog
 from app.main import db
 from app.main.model.video import Video
+MINIO_HOST = "minio:9000"
+def download_file_from_s3(bucket: str, filename: str, local_path: str):
+    """
+    Generic download helper for s3. Could be moved over to helpers folder...
+    This function downloads a file from an S3 bucket to a local path.
+    """
+    # Set up the S3 client
+    if app.config['S3_ENDPOINT'] and MINIO_HOST in app.config['S3_ENDPOINT']:
+        s3_url = app.config['S3_ENDPOINT']
+        access_key = app.config['AWS_ACCESS_KEY_ID']
+        secret_key = app.config['AWS_SECRET_ACCESS_KEY']
+        region = app.config['AWS_DEFAULT_REGION']
+        secure = s3_url and s3_url.startswith('https')
+        s3_client = boto3.client('s3',
+                                 endpoint_url=s3_url,
+                                 aws_access_key_id=access_key,
+                                 aws_secret_access_key=secret_key,
+                                 config=Config(signature_version='s3v4'),
+                                 region_name=region,
+                                 use_ssl=secure)
+    else:
+        s3_client = boto3.client('s3')
+    # Extract the file name from the S3 file path
+    tmk_file = filename.split('/')[-1]
+    # Specify the full path to save the file
+    try:
+        s3_client.download_file(bucket, tmk_file, local_path)
+        app.logger.info(f'Successfully downloaded file {tmk_file} from S3 bucket.')
+    except Exception as e:
+        app.logger.error(f'Failed to download file {tmk_file} from S3 bucket: {e}')
+
 
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
 class VideoModel(SharedModel):
-    @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-    def save(self, video):
-        saved_video = None
-        try:
-            # First locate existing video and append new context
-            existing = db.session.query(Video).filter(Video.url==video.url).one()
-            if existing:
-                if video.hash_value and not existing.hash_value:
-                    existing.hash_value = video.hash_value
-                    flag_modified(existing, 'hash_value')
-                if video.context not in existing.context:
-                    if isinstance(video.context, list):
-                        existing.context.append(video.context[0])
-                    else:
-                        existing.context.append(video.context)
-                    flag_modified(existing, 'context')
-                saved_video = existing
-        except NoResultFound as e:
-            # Otherwise, add new video, but with context as an array
-            if video.context and not isinstance(video.context, list):
-                video.context = [video.context]
-            db.session.add(video)
-            saved_video = video
-        except Exception as e:
-            db.session.rollback()
-            raise e
-        try:
-            db.session.commit()
-            return saved_video
-        except Exception as e:
-            db.session.rollback()
-            raise e
+    def overload_context_to_denote_content_type(self, task):
+        return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
+
+    def delete(self, task):
+        return media_crud.delete(task, Video)
+
+    def add(self, task):
+        s3_folder = task["hash_value"]["folder"]
+        s3_filepath = task["hash_value"]["filepath"]
+        task["hash_value"] = task["hash_value"]["hash_value"]
+        added, obj = media_crud.add(task, Video, ["hash_value"])
+        download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
+        return added
+
+    def store_audio(self, task):
+        if task.get("match_across_content_types", True):
+            am = AudioModel('audio')
+            am.add(self.overload_context_to_denote_content_type(task))
+            audio_matches = am.blocking_search(task, "audio")
+            return audio_matches["result"]
+        return []
+
+    def blocking_search(self, task, modality):
+        video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
+        video.hash_value = presto_result["body"]["hash_value"]
+        if video:
+            matches = self.search(task, context, True).get("result")
+            for match in self.store_audio(task):
+                matches.append(match)
+            if temporary:
+                media_crud.delete(task, Video)
+            else:
+                media_crud.save(video, Video, ["hash_value"])
+            matches.sort(key=lambda x: x['score'], reverse=True)
+            if task.get("limit"):
+                return {"result": matches[:task.get("limit")]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Video not found for provided task", "task": task}
+
+    def async_search(self, task, modality):
+        return media_crud.get_async_presto_response(task, Video, modality)
 
     def get_tempfile(self):
         return tempfile.NamedTemporaryFile()
 
-    def execute_command(self, command):
-        return os.popen(command).read()
+    def execute_command(self, cmd, params):
+      return db.session.execute(cmd, params).fetchall()
 
     def load(self):
         self.directory = app.config['PERSISTENT_DISK_PATH']
@@ -80,57 +126,10 @@ class VideoModel(SharedModel):
         elif task["command"] == "search":
             return self.search(task)
 
-    def delete_video(self, video, task):
-        deleted = False
-        filepath = self.tmk_file_path(video.folder, video.filepath)
-        if task.get("context", {}) in video.context and len(video.context) > 1:
-            deleted = drop_context_from_record(video, task.get("context", {}))
-        else:
-            if os.path.exists(filepath):
-                os.remove(filepath)
-            deleted = db.session.query(Video).filter(Video.id==video.id).delete()
-        return filepath, deleted
-
-    def delete(self, task):
-        deleted = False
-        filepath = None
-        if 'doc_id' in task:
-            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-            if videos:
-                video = videos[0]
-        elif 'url' in task:
-            videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
-            if videos:
-                video = videos[0]
-        if video:
-            filepath, deleted = self.delete_video(video, task)
-        return {"requested": task, "result": {"outfile": filepath, "deleted": deleted}}
-
-    def overload_context_to_denote_content_type(self, task):
-        return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
-
-    def add(self, task):
-        try:
-            temp_video_file = self.get_tempfile()
-            remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
-            with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
-                shutil.copyfileobj(response, out_file)
-            tmk_file_output = tmkpy.hashVideo(temp_video_file.name,self.ffmpeg_dir)
-            hash_value=tmk_file_output.getPureAverageFeature()
-            video = Video(doc_id=task.get("doc_id"), url=task["url"], context=task.get("context", {}), hash_value=hash_value)
-            video = self.save(video)
-            tmk_file_output.writeToOutputFile(self.tmk_file_path(video.folder, video.filepath), self.tmk_program_name())
-            if task.get("match_across_content_types", False):
-                am = AudioModel('audio')
-                am.add(self.overload_context_to_denote_content_type(task))
-            return {"requested": task, "result": {"outfile": self.tmk_file_path(video.folder, video.filepath)}, "success": True}
-        except urllib.error.HTTPError:
-            return {"requested": task, "result": {"url": video.url}, "success": False}
-
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context)
+            context_query, context_hash = get_context_query(context, True)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
@@ -140,7 +139,7 @@ class VideoModel(SharedModel):
                 cmd = """
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
-            matches = db.session.execute(text(cmd), context_hash).fetchall()
+            matches = self.execute_command(text(cmd), context_hash)
             keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
@@ -150,28 +149,17 @@ class VideoModel(SharedModel):
             db.session.rollback()
             raise e
 
-    def search(self, task):
-        context = {}
+    def search(self, task, context, blocking=False):
         video = None
         temporary = False
-        if task.get('context'):
-            context = task.get('context')
-        if task.get('doc_id'):
-            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-            if videos and not video:
-                video = videos[0]
-        elif task.get('url'):
-            videos = db.session.query(Video).filter(Video.url==task.get("url")).all()
-            if videos and not video:
-                video = videos[0]
-        if video is None:
-            temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            self.add(task)
-            videos = db.session.query(Video).filter(Video.doc_id==task.get("doc_id")).all()
-            if videos and not video:
-                video = videos[0]
+        hash_value = None
+        retries = 0
+        while hash_value is None and retries < 5:
+            video, temporary = media_crud.get_object(task, Video)
+            hash_value = video.hash_value
+            if not hash_value:
+                time.sleep(1)
+            retries += 1
         if video:
             matches = self.search_by_context(context)
             default_list = list(np.zeros(len(video.hash_value)))
@@ -186,16 +174,20 @@ class VideoModel(SharedModel):
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
-            	scores = tmkpy.query(self.tmk_file_path(video.folder, video.filepath),files,1)
+                scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
             except Exception as err:
-              ErrorLog.notify(err)
-              raise err
+                ErrorLog.notify(err)
+                raise err
             threshold = float(task.get("threshold", 0.0) or 0.0)
             results = []
             for i,score in enumerate(scores):
                 if score > threshold:
                     results.append({
                         "context": qualified_matches[i].get("context", {}),
+                        "folder": qualified_matches[i].get("folder"),
+                        "filepath": qualified_matches[i].get("filepath"),
+                        "doc_id": qualified_matches[i].get("doc_id"),
+                        "url": qualified_matches[i].get("url"),
                         "filename": files[i],
                         "score": score,
                         "model": "video"
@@ -213,15 +205,10 @@ class VideoModel(SharedModel):
     def tmk_program_name(self):
         return "AlegreVideoEncoder"
 
-    def tmk_file_path(self, folder, filepath, create_path=True):
-        if create_path:
-            pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
-        return f"{self.directory}/{folder}/{filepath}.tmk"
-        
     def get_fullpath_files(self, matches, check_exists=True):
         full_paths = []
         for match in matches:
-            filename = self.tmk_file_path(match["folder"], match["filepath"], check_exists)
+            filename = media_crud.tmk_file_path(match["folder"], match["filepath"], check_exists)
             if check_exists and os.path.exists(filename) or not check_exists:
                 full_paths.append(filename)
         return full_paths
