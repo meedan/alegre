@@ -69,9 +69,9 @@ class VideoModel(SharedModel):
         return media_crud.delete(task, Video)
 
     def add(self, task):
-        s3_folder = task["hash_value"]["folder"]
-        s3_filepath = task["hash_value"]["filepath"]
-        task["hash_value"] = task["hash_value"]["hash_value"]
+        s3_folder = task["result"]["folder"]
+        s3_filepath = task["result"]["filepath"]
+        task["hash_value"] = task["result"]["hash_value"]
         added, obj = media_crud.add(task, Video, ["hash_value"])
         download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         return added
@@ -86,7 +86,7 @@ class VideoModel(SharedModel):
 
     def blocking_search(self, task, modality):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
-        video.hash_value = presto_result["body"]["hash_value"]
+        video.hash_value = presto_result["body"]["result"]["hash_value"]
         if video:
             matches = self.search(task, context, True).get("result")
             for match in self.store_audio(task):
