@@ -27,7 +27,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -62,7 +62,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": [1,2,3]}}))
+            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
             mock_response = Mock()
             mock_response.text = json.dumps({
                 'message': 'Message pushed successfully',
@@ -98,7 +98,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": 49805440634311326}}}))
                 mock_response = Mock()
                 mock_response.text = json.dumps({
                     'message': 'Message pushed successfully',
@@ -135,7 +135,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
                 r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
                 r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": 49805440634311326}}}))
                 mock_response = Mock()
                 mock_response.text = json.dumps({
                     'message': 'Message pushed successfully',
