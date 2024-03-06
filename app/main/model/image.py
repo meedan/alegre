@@ -1,3 +1,4 @@
+import os
 import io
 import urllib.request
 import logging
@@ -10,6 +11,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from app.main.lib import media_crud
 from pgvector.sqlalchemy import Vector
 
 logging.basicConfig(level=logging.INFO)
@@ -30,8 +32,30 @@ class ImageModel(db.Model):
   __table_args__ = (
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )
+
+  @property
+  def canned_response(self):
+    model = app.config['IMAGE_MODEL']
+    if model == "pdq":
+      return {"body": {"hash_value": self.pdq}}
+    elif model == "phash":
+      return {"body": {"hash_value": self.phash}}
+
+  @property
+  def requires_encoding(self):
+    model = app.config['IMAGE_MODEL']
+    return model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.phash))
+
   @classmethod
-  def from_task_data(cls, task):
+  def from_task_data(cls, task, existing):
+    if existing:
+      if os.getenv("IMAGE_MODEL") == 'pdq':
+          if not existing.pdq:
+            existing.pdq = task.get("hash_value")
+      elif os.getenv("IMAGE_MODEL") == 'phash':
+          if not existing.phash:
+            existing.phash = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
     return cls(
       pdq=task.get("hash_value"),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),

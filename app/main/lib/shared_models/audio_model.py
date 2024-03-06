@@ -3,7 +3,6 @@ import binascii
 import uuid
 import os
 import tempfile
-import pathlib
 import urllib.error
 import urllib.request
 import shutil
@@ -31,13 +30,13 @@ class AudioModel(SharedModel):
         return media_crud.delete(task, Audio)
 
     def add(self, task):
-        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
     def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
         audio.chromaprint_fingerprint = presto_result["body"]["hash_value"]
         if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context[0])
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
                 media_crud.delete(task, Audio)
             else:
