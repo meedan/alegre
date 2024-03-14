@@ -38,7 +38,7 @@ class Video(db.Model):
 
   @classmethod
   def from_task_data(cls, task, existing):
-    app.logger.error(f"Running from_task_data for {task}, {existing}")
+    app.logger.info(f"Running from_task_data for {task}, {existing}")
     if existing:
       if not existing.hash_value:
         existing.hash_value = task.get("hash_value")
