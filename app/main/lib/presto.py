@@ -40,6 +40,5 @@ class Presto:
     def blocked_response(message, model_type):
         r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
         item_id = message.get("body", {}).get("id")
-        app.logger.info(f"Waiting for present of key with name '{model_type}_{item_id}'....")
         _, value = r.blpop(f"{model_type}_{item_id}")
         return json.loads(value)
