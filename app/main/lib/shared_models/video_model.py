@@ -20,9 +20,10 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
 from app.main.lib.error_log import ErrorLog
+from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
-
+FFMPEG_DIR = "/usr/local/bin/ffmpeg"
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
@@ -60,6 +61,9 @@ class VideoModel(SharedModel):
             db.session.rollback()
             raise e
 
+    def async_search(self, task, modality):
+        return media_crud.get_async_presto_response(task, Video, modality)
+
     def get_tempfile(self):
         return tempfile.NamedTemporaryFile()
 
@@ -68,7 +72,6 @@ class VideoModel(SharedModel):
 
     def load(self):
         self.directory = app.config['PERSISTENT_DISK_PATH']
-        self.ffmpeg_dir = "/usr/local/bin/ffmpeg"
         pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
 
     def respond(self, task):
@@ -115,7 +118,7 @@ class VideoModel(SharedModel):
             remote_request = urllib.request.Request(task["url"], headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(remote_request) as response, open(temp_video_file.name, 'wb') as out_file:
                 shutil.copyfileobj(response, out_file)
-            tmk_file_output = tmkpy.hashVideo(temp_video_file.name,self.ffmpeg_dir)
+            tmk_file_output = tmkpy.hashVideo(temp_video_file.name,FFMPEG_DIR)
             hash_value=tmk_file_output.getPureAverageFeature()
             video = Video(doc_id=task.get("doc_id"), url=task["url"], context=task.get("context", {}), hash_value=hash_value)
             video = self.save(video)
@@ -214,6 +217,7 @@ class VideoModel(SharedModel):
         return "AlegreVideoEncoder"
 
     def tmk_file_path(self, folder, filepath, create_path=True):
+        self.load()
         if create_path:
             pathlib.Path(f"{self.directory}/{folder}").mkdir(parents=True, exist_ok=True)
         return f"{self.directory}/{folder}/{filepath}.tmk"

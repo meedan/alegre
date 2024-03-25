@@ -71,7 +71,7 @@ class TestPrestoBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(result["action"], "add_item")
         self.assertEqual(result["model_type"], "audio")
-        self.assertEqual(result["data"]["result"][0]["score"], 1.0)
+        self.assertEqual(result["data"]["results"]["result"][0]["score"], 1.0)
 
 if __name__ == '__main__':
     unittest.main()
