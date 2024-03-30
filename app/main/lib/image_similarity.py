@@ -91,7 +91,7 @@ def blocking_search_image(task):
     threshold = task.get("threshold", 0.0)
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
-    hash_value = presto_result["body"]["result"]["hash_value"]
+    hash_value = presto_result["body"]["hash_value"]
     return search_image(image, model, limit, threshold, task, hash_value, context[0], temporary)
 
 def async_search_image(task, modality):
