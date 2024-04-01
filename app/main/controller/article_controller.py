@@ -1,7 +1,7 @@
 import sys
 from flask import abort, request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-from newspaper import Article
+# from newspaper import Article
 from app.main import db
 from app.main.model.article import ArticleModel
 
@@ -13,6 +13,7 @@ article_request = api.model('article_request', {
 @api.route('/')
 class ArticleResource(Resource):
     def get_article(self, url):
+        raise Exception("Currently Offline due to LXML issues")
         try:
             article = Article(url)
             article.download()
