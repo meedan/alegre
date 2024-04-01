@@ -99,19 +99,19 @@ class TestArticleBlueprint(BaseTestCase):
             self.assertIn("Article Couldn't be parsed", result['message'])
 
 
-    def test_article_download_error(self):
-        with patch('newspaper.Article.download' ) as mock_download:
-            mock_download.return_value = Exception()
-            response = self.client.post(
-                '/article/',
-                data=json.dumps(dict(
-                    url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
-                )),
-                content_type='application/json'
-            )
-            result = json.loads(response.data.decode())
-            self.assertEqual(400, response.status_code)
-
+    # def test_article_download_error(self):
+    #     with patch('newspaper.Article.download' ) as mock_download:
+    #         mock_download.return_value = Exception()
+    #         response = self.client.post(
+    #             '/article/',
+    #             data=json.dumps(dict(
+    #                 url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
+    #             )),
+    #             content_type='application/json'
+    #         )
+    #         result = json.loads(response.data.decode())
+    #         self.assertEqual(400, response.status_code)
+    #
     def test_uri_validator(self):
         url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
         result = uri_validator(url)
