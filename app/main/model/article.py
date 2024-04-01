@@ -2,7 +2,7 @@ import io
 import urllib.request
 
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
-from newspaper.cleaners import DocumentCleaner
+# from newspaper.cleaners import DocumentCleaner
 from urllib.parse import urlparse
 
 from app.main import db
@@ -57,6 +57,7 @@ class ArticleModel(db.Model):
       :returns: ArticleModel object
     """
     if article:
+        raise Exception("Currently Offline due to LXML issues")
         document_cleaner = DocumentCleaner(article.config)
         article.doc = article.config.get_parser().fromstring(article.html)
         article.doc = document_cleaner.clean(article.doc)
