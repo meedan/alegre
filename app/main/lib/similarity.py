@@ -119,10 +119,10 @@ def callback_add_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
-  if similarity_type == "video":
+  elif similarity_type == "video":
       response = video_model().add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
-  if similarity_type == "image":
+  elif similarity_type == "image":
       response = callback_add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   else:
@@ -131,16 +131,16 @@ def callback_add_item(item, similarity_type):
 
 def callback_search_item(item, similarity_type):
   if similarity_type == "audio":
-      response = audio_model().search(model_response_package(item, "search"))
-      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+      response = audio_model().search(model_response_package(item.get("raw"), "search"))
+      app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
       response = video_model().search(model_response_package(item, "search"))
-      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+      app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = async_search_image_on_callback(item)
-      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+      app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   else:
-      app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
+      app.logger.warning(f"[Alegre Similarity] InvalidCallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] No response")
   return {"item": item, "results": response}
 
 def delete_item(item, similarity_type):

@@ -31,6 +31,7 @@ class AudioModel(SharedModel):
         return media_crud.delete(task, Audio)
 
     def add(self, task):
+        task["hash_value"] = task["result"]["hash_value"]
         return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
 
     def blocking_search(self, task, modality):
@@ -62,7 +63,8 @@ class AudioModel(SharedModel):
             limit = body.get("raw", {}).get("limit")
             if not body.get("raw"):
                 body["raw"] = {}
-            body["hash_value"] = task.get("body", {}).get("hash_value")
+            body["hash_value"] = task.get("body", {}).get("result", {}).get("hash_value")
+            body["context"] = task.get("body", {}).get("raw", {}).get("context")
         else:
             body = task
             threshold = body.get('threshold', 0.0)
