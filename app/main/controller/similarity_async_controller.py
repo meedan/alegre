@@ -29,9 +29,7 @@ class AsyncSimilarityResource(Resource):
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
         else:
-            app.logger.warning("Got to setting package...")
             package = similarity.get_body_for_media_document(args, 'query')
-            app.logger.warning(f"Package is: {package}")
         #Default to true for this endpoint instead of false in most other cases
         package["requires_callback"] = args.get("requires_callback", True)
         return similarity.async_get_similar_items(package, similarity_type)
