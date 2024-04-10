@@ -26,8 +26,10 @@ class SyncSimilarityResource(Resource):
         app.logger.debug(f"Args are {args}")
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
-        else:
-            app.logger.warning("Got to setting package...")
+            return similarity.get_similar_items(package, similarity_type)
+        elif similarity_type == "video":
             package = similarity.get_body_for_media_document(args, 'query')
-            app.logger.warning(f"Package is: {package}")
-        return similarity.blocking_get_similar_items(package, similarity_type)
+            return similarity.get_similar_items(package, similarity_type)
+        else:
+            package = similarity.get_body_for_media_document(args, 'query')
+            return similarity.blocking_get_similar_items(package, similarity_type)

@@ -148,7 +148,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_load(self):
         self.model.load()
         self.assertIsInstance(self.model.directory, str)
-        self.assertIsInstance(self.model.ffmpeg_dir, str)
 
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'

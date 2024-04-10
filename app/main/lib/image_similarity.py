@@ -21,6 +21,7 @@ def delete_image(params):
         deleted = drop_context_from_record(image, params.get("context", {}))
       else:
         deleted = db.session.query(ImageModel).filter(ImageModel.id==image.id).delete()
+    db.session.commit()
   if deleted:
     return {'deleted': True}
   else:
@@ -64,33 +65,47 @@ def add_image(save_params):
 def callback_add(task):
     return media_crud.add(task, ImageModel, ["pdq", "phash"])
 
-def blocking_search_image(task):
-    image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
-    threshold = task.get("threshold", 0.0)
-    limit = task.get("limit", 200)
-    model = app.config['IMAGE_MODEL']
+def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
     if image:
         if model and model.lower() == "pdq":
             app.logger.info(f"Searching with PDQ.")
-            image.pdq = presto_result.get("body", {}).get("result", {}).get("hash_value")
-            result = search_by_pdq(image.pdq, threshold, context[0], limit)
+            image.pdq = hash_value
+            result = search_by_pdq(image.pdq, threshold, context, limit)
         else:
             app.logger.info(f"Searching with phash.")
-            image.phash = presto_result.get("body", {}).get("result", {}).get("hash_value")
-            result = search_by_phash(image.phash, threshold, context[0], limit)
+            image.phash = hash_value
+            result = search_by_phash(image.phash, threshold, context, limit)
         if temporary:
             media_crud.delete(task, ImageModel)
         else:
             media_crud.save(image, ImageModel, ["pdq", "phash"])
-        if task.get("limit"):
-            return {"result": result[:task.get("limit")]}
+        if limit:
+            return {"result": result[:limit]}
         else:
             return {"result": result}
     else:
         return {"error": "Image not found for provided task", "task": task}
 
+def blocking_search_image(task):
+    image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
+    threshold = task.get("threshold", 0.0)
+    limit = task.get("limit", 200)
+    model = app.config['IMAGE_MODEL']
+    hash_value = presto_result["body"]["hash_value"]
+    return search_image(image, model, limit, threshold, task, hash_value, context[0], temporary)
+
 def async_search_image(task, modality):
     return media_crud.get_async_presto_response(task, ImageModel, modality)
+
+def async_search_image_on_callback(task):
+    app.logger.info("async_search_image_on_callback is running")
+    app.logger.info(task)
+    image = media_crud.get_by_doc_id_or_url(task, ImageModel)
+    model = app.config['IMAGE_MODEL']
+    threshold = task.get("raw", {}).get("threshold", 0.0)
+    limit = task.get("raw", {}).get("limit", 200)
+    context = task.get("raw", {}).get("context", {})
+    return search_image(image, model, limit, threshold, task, task["result"]["hash_value"], context, False)
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):

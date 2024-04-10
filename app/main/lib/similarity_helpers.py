@@ -30,7 +30,7 @@ def get_context_query(context, value_as_json=False, vars_as_hash=True):
     context_query = []
     context_hash = {}
     for key, value in context.items():
-        if key != "project_media_id":
+        if key not in ["project_media_id", "temporary_media"]:
             if isinstance(value, list):
                 context_clause = "("
                 for i,v in enumerate(value):

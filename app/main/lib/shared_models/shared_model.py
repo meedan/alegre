@@ -9,6 +9,15 @@ import importlib
 import os
 import hashlib
 import re
+from json import JSONEncoder
+
+class CustomEncoder(JSONEncoder):
+    """Custom JSON Encoder that converts datetime objects to ISO format."""
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return JSONEncoder.default(self, obj)
+
 
 from flask import current_app as app
 
@@ -107,7 +116,7 @@ class SharedModel(object):
     return task
 
   def encode_task(self, task):
-    return json.dumps(task._asdict())
+    return json.dumps(task._asdict(), cls=CustomEncoder)
 
   def push_task(self, task):
     app.logger.info('[%s] Pushing task %s', self.queue_name, task.task_id)

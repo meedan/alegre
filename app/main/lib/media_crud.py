@@ -33,7 +33,7 @@ def _after_log(retry_state):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def save(obj, model, modifiable_fields=[]):
     try:
-        # First locate existing audio and append new context
+        # First locate existing media and append new context
         existing = db.session.query(model).filter(model.url==obj.url).one()
         if existing:
             for field in modifiable_fields:
