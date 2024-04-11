@@ -52,7 +52,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
             self.assertIsInstance(result, dict)
             self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
-            self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'filepath', 'folder', 'result', 'url'])
+            self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'filepath', 'folder', 'hash_value', 'result', 'url'])
             self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search_by_doc_id(self):
@@ -64,7 +64,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                 mock_tmk_query.return_value = (0.99,)
                 mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
                 self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
-                result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}}, {"blah": 1, "has_custom_id": True, 'project_media_id': 12343})
+                result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
         app.logger.error(f"test_search_by_doc_id result is {result}")
@@ -90,7 +90,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "efgh"}, "url": url, "project_media_id": 1})
             self.assertIsInstance(result, dict)
             self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
-            self.assertEqual(sorted(result['requested'].keys()), ['filepath', 'folder', 'project_media_id', 'result', 'url'])
+            self.assertEqual(sorted(result['requested'].keys()), ['filepath', 'folder', 'hash_value', 'project_media_id', 'result', 'url'])
             self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search(self):
@@ -102,7 +102,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                 mock_tmk_query.return_value = (0.99,)
                 mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
                 self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
-                result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}}, {"blah": 1, 'project_media_id': 12343})
+                result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
         app.logger.error(f"test_search result is {result}")

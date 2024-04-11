@@ -85,7 +85,7 @@ class VideoModel(SharedModel):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.hash_value = presto_result["body"]["hash_value"]
         if video:
-            matches = self.search(task, context, True).get("result")
+            matches = self.search(task).get("result")
             if temporary:
                 media_crud.delete(task, Video)
             else:
