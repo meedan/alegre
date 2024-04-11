@@ -33,13 +33,13 @@ class AudioModel(SharedModel):
         hash_value = (task.get("result", {}) or {}).get("hash_value")
         if hash_value:
             task["hash_value"] = hash_value
-        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
     def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
         audio.chromaprint_fingerprint = presto_result.get("body", {}).get("result", {}).get("hash_value")
         if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context[0])
             if temporary:
                 media_crud.delete(task, Audio)
             else:

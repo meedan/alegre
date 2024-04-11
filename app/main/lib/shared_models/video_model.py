@@ -69,9 +69,9 @@ class VideoModel(SharedModel):
         return media_crud.delete(task, Video)
 
     def add(self, task):
-        s3_folder = task["hash_value"]["folder"]
-        s3_filepath = task["hash_value"]["filepath"]
-        task["hash_value"] = task["hash_value"]["hash_value"]
+        hash_value = (task.get("result", {}) or {}).get("hash_value")
+        s3_folder = (task.get("result", {}) or {}).get("folder")
+        s3_filepath = (task.get("result", {}) or {}).get("filepath")
         added, obj = media_crud.add(task, Video, ["hash_value"])
         download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         return added
