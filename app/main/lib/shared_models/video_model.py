@@ -27,6 +27,8 @@ from app.main.lib.error_log import ErrorLog
 from app.main.lib import media_crud
 from app.main import db
 from app.main.model.video import Video
+from app.main.lib.presto import Presto
+
 MINIO_HOST = "minio:9000"
 def download_file_from_s3(bucket: str, filename: str, local_path: str):
     """
@@ -63,6 +65,7 @@ def _after_log(retry_state):
 
 class VideoModel(SharedModel):
     def overload_context_to_denote_content_type(self, task):
+        app.logger.error(f"input to overload_context_to_denote_content_type_v2 is {task}")
         return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
 
     def delete(self, task):
@@ -72,39 +75,27 @@ class VideoModel(SharedModel):
         hash_value = (task.get("result", {}) or {}).get("hash_value")
         s3_folder = (task.get("result", {}) or {}).get("folder")
         s3_filepath = (task.get("result", {}) or {}).get("filepath")
-        added, obj = media_crud.add(task, Video, ["hash_value"])
+        if hash_value:
+            task["hash_value"] = hash_value
+        added, obj = media_crud.add(task, Video, ["hash_value", "folder", "filepath"])
         download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
         return added
-
-    def store_audio(self, task):
-        if task.get("match_across_content_types", True):
-            am = AudioModel('audio')
-            am.add(self.overload_context_to_denote_content_type(task))
-            audio_matches = am.blocking_search(task, "audio")
-            return audio_matches["result"]
-        return []
 
     def blocking_search(self, task, modality):
         video, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Video, modality)
         video.hash_value = presto_result["body"]["hash_value"]
         if video:
             matches = self.search(task, context, True).get("result")
-            for match in self.store_audio(task):
-                matches.append(match)
             if temporary:
                 media_crud.delete(task, Video)
             else:
                 media_crud.save(video, Video, ["hash_value"])
-            matches.sort(key=lambda x: x['score'], reverse=True)
             if task.get("limit"):
                 return {"result": matches[:task.get("limit")]}
             else:
                 return {"result": matches}
         else:
             return {"error": "Video not found for provided task", "task": task}
-
-    def async_search(self, task, modality):
-        return media_crud.get_async_presto_response(task, Video, modality)
 
     def async_search(self, task, modality):
         return media_crud.get_async_presto_response(task, Video, modality)
@@ -131,7 +122,7 @@ class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context, True)
+            context_query, context_hash = get_context_query(context)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
@@ -151,19 +142,20 @@ class VideoModel(SharedModel):
             db.session.rollback()
             raise e
 
-    def search(self, task, context, blocking=False):
-        video = None
-        temporary = False
-        hash_value = None
-        retries = 0
-        while hash_value is None and retries < 5:
-            video, temporary = media_crud.get_object(task, Video)
-            hash_value = video.hash_value
-            if not hash_value:
-                time.sleep(1)
-            retries += 1
+    def search(self, task):
+        body, threshold, limit = media_crud.parse_task_search(task)
+        video, temporary = media_crud.get_object(body, Video)
+        if video.hash_value is None:
+            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "video")
+            if task.get("doc_id") is    None:
+                task["doc_id"] = str(uuid.uuid4())
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "video__Model", callback_url, task, False).text)
+            # Warning: this is a blocking hold to wait until we get a response in 
+            # a redis key that we've received something from presto.
+            result = Presto.blocked_response(response, "video")
+            video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
         if video:
-            matches = self.search_by_context(context)
+            matches = self.search_by_context(body["context"])
             default_list = list(np.zeros(len(video.hash_value)))
             try:
                 l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value", default_list) or default_list for r in matches], [video.hash_value], 'cosine'))).tolist()

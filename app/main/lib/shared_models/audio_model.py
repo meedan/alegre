@@ -55,21 +55,7 @@ class AudioModel(SharedModel):
         return media_crud.get_async_presto_response(task, Audio, modality)
 
     def search(self, task):
-        # here, we have to unpack the task contents to pull out the body,
-        # which may be embedded in a body key in the dict if its coming from a presto callback.
-        # alternatively, the "body" is just the entire dictionary.
-        if "body" in task:
-            body = task.get("body", {})
-            threshold = task.get("raw", {}).get('threshold', 0.0)
-            limit = body.get("raw", {}).get("limit")
-            if not body.get("raw"):
-                body["raw"] = {}
-            body["hash_value"] = body.get("result", {}).get("hash_value")
-            body["context"] = body.get("context", body.get("raw", {}).get("context"))
-        else:
-            body = task
-            threshold = body.get('threshold', 0.0)
-            limit = body.get("limit")
+        body, threshold, limit = media_crud.parse_task_search(task)
         audio, temporary = media_crud.get_object(body, Audio)
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")

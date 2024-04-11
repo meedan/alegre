@@ -176,3 +176,20 @@ def get_async_presto_response(task, model, modality):
     else:
         return {"error": f"{model} could not be sent for fingerprinting", "task": task}
 
+def parse_task_search(task):
+    # here, we have to unpack the task contents to pull out the body,
+    # which may be embedded in a body key in the dict if its coming from a presto callback.
+    # alternatively, the "body" is just the entire dictionary.
+    if "body" in task:
+        body = task.get("body", {})
+        threshold = task.get("raw", {}).get('threshold', 0.0)
+        limit = body.get("raw", {}).get("limit")
+        if not body.get("raw"):
+            body["raw"] = {}
+        body["hash_value"] = body.get("result", {}).get("hash_value")
+        body["context"] = body.get("context", body.get("raw", {}).get("context"))
+    else:
+        body = task
+        threshold = body.get('threshold', 0.0)
+        limit = body.get("limit")
+    return body, threshold, limit

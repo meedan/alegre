@@ -125,7 +125,8 @@ def callback_add_item(item, similarity_type):
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
       response = video_model().add(item)
-      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
+      audio_response = audio_model().add(video_model().overload_context_to_denote_content_type(item.get("raw")))
+      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}, audio_response is {audio_response}")
   elif similarity_type == "image":
       response = callback_add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
@@ -133,12 +134,22 @@ def callback_add_item(item, similarity_type):
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
   return response
 
+def merge_audio_and_video_responses(video_response, audio_response):
+    full_responses = []
+    for result_set in [video_response["result"], audio_response["result"]]:
+        for result in result_set:
+            full_responses.append(result)
+    full_responses.sort(key=lambda x: x['score'], reverse=True)
+    return {"result": full_responses}
+
 def callback_search_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().search(model_response_package(item.get("raw"), "search"))
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
-      response = video_model().search(model_response_package(item, "search"))
+      video_response = video_model().search(model_response_package(item.get("raw"), "search"))
+      audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")))
+      response = merge_audio_and_video_responses(video_response, audio_response)
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = async_search_image_on_callback(item)
@@ -193,6 +204,7 @@ def async_get_similar_items(item, similarity_type):
     return response
   elif similarity_type == "video":
     response = video_model().async_search(model_response_package(item, "search"), "video")
+    audio_response = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   elif similarity_type == "image":
