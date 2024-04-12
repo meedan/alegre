@@ -355,7 +355,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_send_request.return_value = MagicMock(text=mock_response)
 
         # Call the function under test
-        result = get_async_presto_response(test_task, test_model, test_modality)
+        result = get_async_presto_response(test_task, test_model, test_modality)[0]
 
         # Assert that the mocks were called correctly
         mock_get_object.assert_called_once_with(test_task, test_model)
