@@ -199,22 +199,18 @@ def blocking_get_similar_items(item, similarity_type):
 def async_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
-    response = audio_model().async_search(model_response_package(item, "search"), "audio")
+    response, waiting_for_callback = audio_model().async_search(model_response_package(item, "search"), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback
   elif similarity_type == "video":
-    response = video_model().async_search(model_response_package(item, "search"), "video")
-    audio_response = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
+    response, waiting_for_callback = video_model().async_search(model_response_package(item, "search"), "video")
+    audio_response, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback or waiting_for_audio_callback
   elif similarity_type == "image":
-    response = async_search_image(item, "image")
+    response, waiting_for_callback = async_search_image(item, "image")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
-  elif similarity_type == "video":
-    response = video_model().async_search(model_response_package(item, "search"), "video")
-    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback
   else:
       raise Exception(f"{similarity_type} modality not implemented for async requests!")
 

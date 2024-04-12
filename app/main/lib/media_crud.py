@@ -13,6 +13,8 @@ from app.main import db
 from app.main.model.video import Video
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.similarity_helpers import drop_context_from_record
+from app.main.lib import redis
+
 def merge_dict_lists(list1, list2):
     """
     Merge two lists of dictionaries, ensuring all unique dictionaries are present in the final result.
@@ -155,6 +157,7 @@ def get_blocked_presto_response(task, model, modality):
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
+    app.logger.error(f"Object for {task} of model {model} with id of {obj.id} has requires_encoding value of {obj.requires_encoding}")
     if obj.requires_encoding:
         response = get_presto_request_response(modality, callback_url, task)
         # Warning: this is a blocking hold to wait until we get a response in 
@@ -164,17 +167,18 @@ def get_blocked_presto_response(task, model, modality):
         return obj, temporary, get_context_for_search(task), obj.canned_response
 
 def get_async_presto_response(task, model, modality):
-    _, temporary = get_object(task, model)
+    app.logger.error(f"Task at this point is {task}")
+    obj, temporary = get_object(task, model)
     context = [get_context_for_search(task)]
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
     task["final_task"] = "search"
-    response = get_presto_request_response(modality, callback_url, task)
-    if response:
-        return response
+    if obj.requires_encoding:
+        response = get_presto_request_response(modality, callback_url, task)
+        return response, True
     else:
-        return {"error": f"{model} could not be sent for fingerprinting", "task": task}
+        return {"message": "Already encoded - passing on to search"}, False
 
 def parse_task_search(task):
     # here, we have to unpack the task contents to pull out the body,

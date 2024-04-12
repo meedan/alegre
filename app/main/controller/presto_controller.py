@@ -1,11 +1,11 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace
-import redis
 import json
 
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 from app.main.lib.webhook import Webhook
+from app.main.lib import redis
 
 api = Namespace('presto', description='presto callback url')
 presto = api.model('presto', {
@@ -34,11 +34,7 @@ class PrestoResource(Resource):
             if data.get("body", {}).get("raw", {}).get("requires_callback"):
                 app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
                 Webhook.return_webhook(callback_url, action, model_type, result)
-            r = redis.Redis(
-                host=app.config['REDIS_HOST'],
-                port=app.config['REDIS_PORT'],
-                db=app.config['REDIS_DATABASE']
-            )
+            r = redis.get_client()
             item_id = data.get("body", {}).get("id")
             r.lpush(f"{model_type}_{item_id}", json.dumps(data))
             r.expire(f"{model_type}_{item_id}", 60*60*24)

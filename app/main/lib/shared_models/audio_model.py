@@ -58,6 +58,7 @@ class AudioModel(SharedModel):
         body, threshold, limit = media_crud.parse_task_search(task)
         audio, temporary = media_crud.get_object(body, Audio)
         if audio.chromaprint_fingerprint is None:
+            app.logger.error(f"Task of {task} and audio of {audio.id} has null chromaprint_fingerprint!")
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
             if task.get("doc_id") is    None:
                 task["doc_id"] = str(uuid.uuid4())

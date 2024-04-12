@@ -1,10 +1,10 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-import redis
 import hashlib
 import json
 import importlib
 import tenacity
+from app.main.lib import redis
 
 from twitter_text import extract_urls_with_indices, extract_emojis_with_indices
 
@@ -25,7 +25,7 @@ class LangidResource(Resource):
         if 'provider' in request.json: provider = request.json['provider']
 
         # Read from cache first.
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis.get_client()
         key = 'langid:' + provider + ':' + hashlib.md5(text.encode('utf-8')).hexdigest()
         try:
             result = json.loads(r.get(key))
