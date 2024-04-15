@@ -24,6 +24,10 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.json
+        r = redis.get_client()
+        item_id = data.get("body", {}).get("id")
+        r.lpush(f"{model_type}_{item_id}", json.dumps(data))
+        r.expire(f"{model_type}_{item_id}", 60*60*24)
         app.logger.info(f"PrestoResource {action}/{model_type}")
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")
@@ -34,10 +38,6 @@ class PrestoResource(Resource):
             if data.get("body", {}).get("raw", {}).get("requires_callback"):
                 app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
                 Webhook.return_webhook(callback_url, action, model_type, result)
-            r = redis.get_client()
-            item_id = data.get("body", {}).get("id")
-            r.lpush(f"{model_type}_{item_id}", json.dumps(data))
-            r.expire(f"{model_type}_{item_id}", 60*60*24)
             output = {"action": action, "model_type": model_type, "data": result}
             app.logger.info(f"PrestoResource value is {output}")
             return {"action": action, "model_type": model_type, "data": result}
