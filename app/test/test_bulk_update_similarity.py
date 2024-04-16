@@ -12,7 +12,7 @@ from app.test.base import BaseTestCase
 from app.test.test_shared_model import SharedModelStub
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller import bulk_update_similarity_controller
-from app.main.lib import redis
+from app.main.lib import redis_client
 class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
     maxDiff = None
     use_model_key = 'multi-sbert'
@@ -27,7 +27,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         body=json.load(open('./elasticsearch/alegre_similarity.json')),
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
-      r = redis.get_client()
+      r = redis_client.get_client()
       r.delete(SharedModelStub.model_key)
       r.delete('SharedModel:%s' % SharedModelStub.model_key)
       r.srem('SharedModel', SharedModelStub.model_key)

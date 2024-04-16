@@ -2,13 +2,13 @@ import pickle
 from flask import current_app as app
 import openai.embeddings_utils
 import hashlib
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 PREFIX_OPENAI = "openai-"
 EMBEDDING_CACHE_DEFAULT = 60*60*24*7 #7 days (value is in seconds)
 def retrieve_openai_embeddings(text, model_key):
     """Return the vector embeddings of text using OpenAI API """
-    r_cache = redis.get_client()
+    r_cache = redis_client.get_client()
     text = text.strip()
     textmd5 = hashlib.md5(text.encode('utf-8')).hexdigest()
     key = f"cache_{model_key}_{textmd5}"

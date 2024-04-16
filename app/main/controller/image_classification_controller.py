@@ -4,7 +4,7 @@ import hashlib
 import json
 import importlib
 import tenacity
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 api = Namespace('image_classification', description='image classification operations')
 image_classification_request = api.model('image_classification_request', {
@@ -22,7 +22,7 @@ class ImageClassificationResource(Resource):
     def post(self):
         uri=request.json['uri']
         # Read from cache first.
-        r = redis.get_client()
+        r = redis_client.get_client()
         key = 'image_classification:' + hashlib.md5(uri.encode('utf-8')).hexdigest()
         try:
             result = json.loads(r.get(key))

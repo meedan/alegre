@@ -5,7 +5,7 @@ import os
 import importlib
 from app.main import db
 from sqlalchemy_utils import database_exists
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 api = Namespace('healthcheck', description='service healthcheck')
 
@@ -36,7 +36,7 @@ class HealthcheckResource(Resource):
 
     # Redis
     try:
-      r = redis.get_client()
+      r = redis_client.get_client()
       result['REDIS'] = r.ping()
     except Exception as e:
       result['REDIS'] = str(e)

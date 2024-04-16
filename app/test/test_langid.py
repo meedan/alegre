@@ -9,7 +9,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
 from app.main.controller.langid_controller import LangidResource
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
@@ -30,7 +30,7 @@ class TestLangidBlueprint(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        r = redis.get_client()
+        r = redis_client.get_client()
         for key in r.scan_iter("langid:*"):
             r.delete(key)
 

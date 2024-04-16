@@ -8,7 +8,7 @@ from app.main.model.node import Node
 from app.main import db
 from app.main.lib.graph_writer import generate_edges_for_type, get_iterable_objects, get_matches_for_item
 from app.main.lib.error_log import ErrorLog
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 class Graph(db.Model):
   """ Model for storing graphs """
@@ -39,7 +39,7 @@ class Graph(db.Model):
     db.session.commit()
     
   def enqueue(self):
-    redis_server = redis.get_client()
+    redis_server = redis_client.get_client()
     queue = Queue(connection=redis_server, default_timeout=60*60*24)
     job = queue.enqueue(Graph.enrich, self.id)
     return job

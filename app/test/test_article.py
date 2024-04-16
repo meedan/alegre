@@ -12,12 +12,12 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.image_classification import GoogleImageClassificationProvider
 from app.main.model.article import uri_validator
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 class TestArticleBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        r = redis.get_client()
+        r = redis_client.get_client()
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 

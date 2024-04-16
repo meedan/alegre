@@ -7,7 +7,7 @@ from collections import namedtuple
 
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel, Task
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 class SharedModelStub(SharedModel):
   model_key = 'shared-model-stub-key'
@@ -24,7 +24,7 @@ class SharedModelStub(SharedModel):
 class TestSharedModel(BaseTestCase):
   def setUp(self):
     super().setUp()
-    r = redis.get_client()
+    r = redis_client.get_client()
     r.delete(SharedModelStub.model_key)
     r.delete('SharedModel:%s' % SharedModelStub.model_key)
     r.srem('SharedModel', SharedModelStub.model_key)

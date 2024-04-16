@@ -3,7 +3,7 @@ import uuid
 from flask import current_app as app
 import requests
 from app.main.lib.serializer import safe_serializer
-from app.main.lib import redis
+from app.main.lib import redis_client
 PRESTO_MODEL_MAP = {
     "audio": "audio__Model",
     "video": "video__Model",
@@ -38,7 +38,7 @@ class Presto:
 
     @staticmethod
     def blocked_response(message, model_type):
-        r = redis.get_client()
+        r = redis_client.get_client()
         item_id = message.get("body", {}).get("id")
         app.logger.info(f"Waiting for present of key with name '{model_type}_{item_id}'....")
         _, value = r.blpop(f"{model_type}_{item_id}")

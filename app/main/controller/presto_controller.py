@@ -5,7 +5,7 @@ import json
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 from app.main.lib.webhook import Webhook
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 api = Namespace('presto', description='presto callback url')
 presto = api.model('presto', {
@@ -24,7 +24,7 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.json
-        r = redis.get_client()
+        r = redis_client.get_client()
         item_id = data.get("body", {}).get("id")
         r.lpush(f"{model_type}_{item_id}", json.dumps(data))
         r.expire(f"{model_type}_{item_id}", 60*60*24)

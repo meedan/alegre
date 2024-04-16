@@ -9,12 +9,12 @@ from google.cloud import vision
 from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.image_classification import GoogleImageClassificationProvider
-from app.main.lib import redis
+from app.main.lib import redis_client
 
 class TestImageClassificationBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        r = redis.get_client()
+        r = redis_client.get_client()
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 
