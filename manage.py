@@ -18,7 +18,7 @@ from app.main.model import image
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
-from app.main.lib import redis
+from app.main.lib import redis_client
 from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
@@ -344,7 +344,7 @@ def phash(path):
 
 @manager.command
 def run_rq_worker():
-  redis_server = redis.get_client()
+  redis_server = redis_client.get_client()
   with Connection(redis_server):
       qs = ['default']
       w = Worker(qs)
