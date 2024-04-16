@@ -47,7 +47,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        with patch('app.main.lib.shared_models.video_model.download_file_from_s3', ) as mock_s3_download:
+        with patch('app.main.lib.s3_client.download_file_from_s3', ) as mock_s3_download:
             mock_s3_download.return_value = None
             result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
             self.assertIsInstance(result, dict)
@@ -73,7 +73,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        with patch('app.main.lib.shared_models.video_model.download_file_from_s3', ) as mock_s3_download:
+        with patch('app.main.lib.s3_client.download_file_from_s3', ) as mock_s3_download:
             mock_s3_download.return_value = None
             self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "abcd", "filepath": "edfg", "hash_value": [1,2,3]}, "url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
             result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
@@ -85,7 +85,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_add(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        with patch('app.main.lib.shared_models.video_model.download_file_from_s3', ) as mock_s3_download:
+        with patch('app.main.lib.s3_client.download_file_from_s3', ) as mock_s3_download:
             mock_s3_download.return_value = None
             result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "efgh"}, "url": url, "project_media_id": 1})
             self.assertIsInstance(result, dict)
