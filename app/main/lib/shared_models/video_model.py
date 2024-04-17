@@ -39,6 +39,9 @@ class VideoModel(SharedModel):
     def delete(self, task):
         return media_crud.delete(task, Video)
 
+    def download_file(self, s3_folder, s3_filepath, obj):
+        download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
+
     def add(self, task):
         hash_value = (task.get("result", {}) or {}).get("hash_value")
         s3_folder = (task.get("result", {}) or {}).get("folder")
@@ -46,7 +49,7 @@ class VideoModel(SharedModel):
         if hash_value:
             task["hash_value"] = hash_value
         added, obj = media_crud.add(task, Video, ["hash_value", "folder", "filepath"])
-        download_file_from_s3(s3_folder, s3_filepath, media_crud.tmk_file_path(obj.folder, obj.filepath))
+        self.download_file(s3_folder, s3_filepath, obj)
         return added
 
     def blocking_search(self, task, modality):
