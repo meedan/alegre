@@ -3,8 +3,6 @@ import uuid
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
-from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from app.main.lib import media_crud
 
 class Video(db.Model):
@@ -29,7 +27,7 @@ class Video(db.Model):
     super().__init__(**kwargs)
 
   @property
-  def canned_response(self):
+  def existing_response(self):
     return {"body": {"hash_value": self.hash_value, "folder": self.folder, "filepath": self.filepath}}
 
   @property

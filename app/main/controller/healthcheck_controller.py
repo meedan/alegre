@@ -3,8 +3,8 @@ from flask_restplus import Resource, Namespace
 from opensearchpy import OpenSearch
 import os
 import importlib
-from app.main import db
 from sqlalchemy_utils import database_exists
+from app.main import db
 from app.main.lib import redis_client
 
 api = Namespace('healthcheck', description='service healthcheck')

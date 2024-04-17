@@ -7,7 +7,6 @@ import numpy as np
 from flask import current_app as app
 from app.main.lib import media_crud
 from app.main import db
-from sqlalchemy.orm.attributes import flag_modified
 
 class Audio(db.Model):
   """ Model for storing video related details """
@@ -25,7 +24,7 @@ class Audio(db.Model):
   )
 
   @property
-  def canned_response(self):
+  def existing_response(self):
     return {"body": {"hash_value": self.chromaprint_fingerprint}}
 
   @property

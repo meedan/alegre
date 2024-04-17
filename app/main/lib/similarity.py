@@ -204,7 +204,10 @@ def async_get_similar_items(item, similarity_type):
     return response, waiting_for_callback
   elif similarity_type == "video":
     response, waiting_for_callback = video_model().async_search(model_response_package(item, "search"), "video")
-    audio_response, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
+    # Searching with an audio_model() call here is intentional - we need to encode the audio
+    # track for all videos to see if we can match them across modes (i.e. this MP3 matches
+    # this video's audio track, so they are able to be matched)
+    _, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response, waiting_for_callback or waiting_for_audio_callback
   elif similarity_type == "image":

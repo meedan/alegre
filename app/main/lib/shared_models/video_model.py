@@ -1,4 +1,3 @@
-import time
 import json
 import uuid
 import os
@@ -10,7 +9,6 @@ import shutil
 import numpy as np
 from scipy.spatial import distance
 from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import tenacity
 import tmkpy

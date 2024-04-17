@@ -34,12 +34,11 @@ class ImageModel(db.Model):
   )
 
   @property
-  def canned_response(self):
+  def existing_response(self):
     model = app.config['IMAGE_MODEL']
     if model == "pdq":
       return {"body": {"hash_value": self.pdq}}
-    elif model == "phash":
-      return {"body": {"hash_value": self.phash}}
+    return {"body": {"hash_value": self.phash}}
 
   @property
   def requires_encoding(self):

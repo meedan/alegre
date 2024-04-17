@@ -7,7 +7,6 @@ import urllib.error
 import urllib.request
 import shutil
 from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import sqlalchemy
 import tenacity

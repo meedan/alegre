@@ -13,7 +13,6 @@ from app.main import db
 from app.main.model.video import Video
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.similarity_helpers import drop_context_from_record
-from app.main.lib import redis_client
 
 def merge_dict_lists(list1, list2):
     """
@@ -164,7 +163,7 @@ def get_blocked_presto_response(task, model, modality):
         # a redis key that we've received something from presto.
         return obj, temporary, get_context_for_search(task), Presto.blocked_response(response, modality)
     else:
-        return obj, temporary, get_context_for_search(task), obj.canned_response
+        return obj, temporary, get_context_for_search(task), obj.existing_response
 
 def get_async_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
