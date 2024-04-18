@@ -31,8 +31,7 @@ class Audio(db.Model):
   def requires_encoding(self):
     if self.chromaprint_fingerprint:
       return False
-    else:
-      return True
+    return True
 
   @classmethod
   def from_task_data(cls, task, existing):
@@ -40,10 +39,9 @@ class Audio(db.Model):
       if not existing.chromaprint_fingerprint:
         existing.chromaprint_fingerprint = task.get("hash_value")
       return media_crud.ensure_context_appended(task, existing)
-    else:
-      return cls(
-        chromaprint_fingerprint=task.get("hash_value"),
-        doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
-        url=task.get("url"),
-        context=task.get("context", task.get("raw", {}).get("context"))
-      )
+    return cls(
+      chromaprint_fingerprint=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )
