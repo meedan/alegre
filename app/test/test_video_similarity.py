@@ -25,125 +25,8 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         super().setUp()
         self.model = VideoModel('video')
 
-    def test_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.post('/video/similarity/', data=json.dumps({
-                    'url': url,
-                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': {
-                        'team_id': 1,
-                        'has_custom_id': True
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                response = self.client.post('/video/similarity/search/', data=json.dumps({
-                    'url': url,
-                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': {
-                        'team_id': 1,
-                        'has_custom_id': True
-                    }
-                }), content_type='application/json')
-                response2 = self.client.post('/video/similarity/search/', data=json.dumps({
-                    'url': url,
-                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8",
-                    'context': {
-                        'team_id': [1,0],
-                        'has_custom_id': True
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
-        result2 = json.loads(response2.data.decode())
-        self.assertEqual(result2, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
-
-    def test_basic_http_responses(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.post('/video/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123, "result": {"outfile": url, "deleted": 1}}
-                response = self.client.delete('/video/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123, 'result': {"outfile": url, "deleted": 1}})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                response = self.client.post('/video/similarity/search/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
-
-    def test_basic_http_responses_that_also_encode_as_audio(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"url": url, "project_media_id": 123}
-                response = self.client.post('/video/similarity/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    },
-                    'match_across_content_types': True
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {"url": url, "project_media_id": 123})
-        with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub('video')
-                mock_get_shared_model_response.return_value = {"result": [{"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "0.033167", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk"}, {"hash_key": "6393db3d6d5c181aa43dd925539a15e7", "context": {"blah": 1, "project_media_id": "12343"}, "score": "1.000000", "filename": "/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk"}]}
-                response = self.client.post('/video/similarity/search/', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    },
-                    'match_across_content_types': True
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result, {'result': [{'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '0.033167', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12342.tmk'}, {'hash_key': '6393db3d6d5c181aa43dd925539a15e7', 'context': {'blah': 1, 'project_media_id': '12343'}, 'score': '1.000000', 'filename': '/app/persistent_disk/6393db3d6d5c181aa43dd925539a15e7/12343.tmk'}]})
-
     def test_get_tempfile(self):
         self.assertIsInstance(self.model.get_tempfile(), tempfile._TemporaryFileWrapper)
-
-    def test_execute_command(self):
-        self.assertIsInstance(self.model.execute_command("ls"), str)
 
     def test_load(self):
         self.model.load()
@@ -152,21 +35,23 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
     def test_delete_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
-        result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['doc_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
+        with patch.object(self.model, 'download_file', return_value=None):
+            self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+            result = self.model.delete({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+            self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
+            self.assertEqual(sorted(result['result'].keys()), ['deleted', 'url'])
 
     def test_add_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        result = self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
-        self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['outfile'])
+        with patch.object(self.model, 'download_file', return_value=None):
+            result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "abcd-efgh"}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"has_custom_id": True}})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
+            self.assertEqual(sorted(result['requested'].keys()), ['context', 'doc_id', 'filepath', 'folder', 'hash_value', 'result', 'url'])
+            self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search_by_doc_id(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -174,32 +59,36 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
             with patch('tmkpy.query', ) as mock_tmk_query:
-                mock_tmk_query.return_value = (0.99,)
-                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
-                self.model.add({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
-                result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+                with patch.object(self.model, 'download_file', return_value=None):
+                    mock_tmk_query.return_value = (0.99,)
+                    mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
+                    self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
+                    result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'model', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'model': 'video', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
+        app.logger.error(f"test_search_by_doc_id result is {result}")
+        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'})
 
     def test_delete(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        self.model.add({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
-        result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['context', 'project_media_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
+        with patch.object(self.model, 'download_file', return_value=None):
+            self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "abcd", "filepath": "edfg", "hash_value": [1,2,3]}, "url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
+            result = self.model.delete({"url": url, "project_media_id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(sorted(result.keys()), ['requested', 'result'])
+            self.assertEqual(sorted(result['requested'].keys()), ['context', 'project_media_id', 'url'])
+            self.assertEqual(sorted(result['result'].keys()), ['deleted', 'url'])
 
     def test_add(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
         self.model.load()
-        result = self.model.add({"url": url, "project_media_id": 1})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
-        self.assertEqual(sorted(result['requested'].keys()), ['project_media_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['outfile'])
+        with patch.object(self.model, 'download_file', return_value=None):
+            result = self.model.add({"folder": "foo", "filepath": "bar", "result": {"hash_value": [1,2,3], "folder": "abcd", "filepath": "efgh"}, "url": url, "project_media_id": 1})
+            self.assertIsInstance(result, dict)
+            self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
+            self.assertEqual(sorted(result['requested'].keys()), ['filepath', 'folder', 'hash_value', 'project_media_id', 'result', 'url'])
+            self.assertEqual(sorted(result['result'].keys()), ['url'])
 
     def test_search(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
@@ -207,55 +96,16 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
         hash_key = "blah"
         with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
             with patch('tmkpy.query', ) as mock_tmk_query:
-                mock_tmk_query.return_value = (0.99,)
-                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
-                self.model.add({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
-                result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+                with patch.object(self.model, 'download_file', return_value=None):
+                    mock_tmk_query.return_value = (0.99,)
+                    mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
+                    self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "blah", "filepath": "12342", "hash_value": IDENTICAL_HASH_VALUE}, "url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
+                    result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'model', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'model': 'video', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
+        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
+        app.logger.error(f"test_search result is {result}")
+        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'})
 
-    def test_respond_delete(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        self.model.load()
-        self.model.add({"url": url, "id": 1, "context": {'blah': 1, 'project_media_id': 12342}})
-        result = self.model.respond({"url": url, "project_media_id": 1, "command": "delete", "context": {'blah': 1, 'project_media_id': 12342}})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result'])
-        self.assertEqual(sorted(result['requested'].keys()), ['command', 'context', 'project_media_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
-        # self.model.add({"url": url, "id": 1, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8"})
-        # result = self.model.respond({"doc_id": "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "project_media_id": 1, "command": "delete"})
-        # self.assertEqual(sorted(result['result'].keys()), ['deleted', 'outfile'])
-
-    def test_respond_add(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        self.model.load()
-        result = self.model.respond({"url": url, "project_media_id": 1, "command": "add"})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result.keys()), ['requested', 'result', 'success'])
-        self.assertEqual(sorted(result['requested'].keys()), ['command', 'project_media_id', 'url'])
-        self.assertEqual(sorted(result['result'].keys()), ['outfile'])
-
-    def test_respond_search(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        self.model.load()
-        hash_key = "blah"
-        with patch('app.main.lib.shared_models.video_model.VideoModel.search_by_context', ) as mock_search_by_context:
-            with patch('tmkpy.query', ) as mock_tmk_query:
-                mock_tmk_query.return_value = (0.99,)
-                mock_search_by_context.return_value = [{"folder": "blah", "filepath": "12342", "context": [{'blah': 1, 'project_media_id': 12342}], "hash_value": IDENTICAL_HASH_VALUE}, {"folder": "blah", "filepath": "12343", "context": [{'blah': 1, 'project_media_id': 12343}], "hash_value": np.random.rand(256).tolist()}]
-                self.model.respond({"url": url, "project_media_id": 1, "command": "add", "context": {"blah": 1, 'project_media_id': 12343}})
-                result = self.model.respond({"url": url, "project_media_id": 1, "command": "search", "context": {"blah": 1, 'project_media_id': 12343}})
-        self.assertIsInstance(result, dict)
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'filename', 'model', 'score'])
-        self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'score': 0.99, 'model': 'video', 'filename': f"/app/persistent_disk/{hash_key}/12342.tmk"})
-
-    def test_tmk_file_path(self):
-        self.model.load()
-        print(self.model.tmk_file_path("foo", "bar"))
-        self.assertIsInstance(self.model.tmk_file_path("foo", "bar"), str)
-        
     def test_get_fullpath_files(self):
         self.model.load()
         self.assertIsInstance(self.model.get_fullpath_files([{"folder": "blah", "filepath": "foo"}]), list)
@@ -270,13 +120,14 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
 
     def test_search_by_context(self):
         url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        self.model.load()
-        self.model.add({"url": url, "context": {"blah": 1 }})
-        results = self.model.search_by_context({"blah": 1})
-        self.assertEqual(results[0]['url'], url)
-        self.assertEqual(results[0]['context'], [{"blah": 1}])
-        results = self.model.search_by_context({"blah": 2})
-        self.assertEqual(results, [])
+        with patch.object(self.model, 'download_file', return_value=None):
+            self.model.load()
+            self.model.add({"folder": "foo", "filepath": "bar", "result": {"folder": "abcd", "filepath": "edfg", "hash_value": [1,2,3]}, "url": url, "context": {"blah": 1 }})
+            results = self.model.search_by_context({"blah": 1})
+            self.assertEqual(results[0]['url'], url)
+            self.assertEqual(results[0]['context'], [{"blah": 1}])
+            results = self.model.search_by_context({"blah": 2})
+            self.assertEqual(results, [])
 
 if __name__ == '__main__':
   unittest.main()

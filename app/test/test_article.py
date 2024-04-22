@@ -1,7 +1,6 @@
 import unittest
 import json
 import os
-import redis
 
 from flask import current_app as app
 from unittest.mock import patch
@@ -13,11 +12,12 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.image_classification import GoogleImageClassificationProvider
 from app.main.model.article import uri_validator
+from app.main.lib import redis_client
 
 class TestArticleBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis_client.get_client()
         for key in r.scan_iter("image_classification:*"):
             r.delete(key)
 

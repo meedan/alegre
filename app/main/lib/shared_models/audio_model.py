@@ -3,12 +3,10 @@ import binascii
 import uuid
 import os
 import tempfile
-import pathlib
 import urllib.error
 import urllib.request
 import shutil
 from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import sqlalchemy
 import tenacity
@@ -34,13 +32,13 @@ class AudioModel(SharedModel):
         hash_value = (task.get("result", {}) or {}).get("hash_value")
         if hash_value:
             task["hash_value"] = hash_value
-        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
     def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
         audio.chromaprint_fingerprint = presto_result.get("body", {}).get("result", {}).get("hash_value")
         if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context[0])
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
                 media_crud.delete(task, Audio)
             else:
@@ -56,21 +54,7 @@ class AudioModel(SharedModel):
         return media_crud.get_async_presto_response(task, Audio, modality)
 
     def search(self, task):
-        # here, we have to unpack the task contents to pull out the body,
-        # which may be embedded in a body key in the dict if its coming from a presto callback.
-        # alternatively, the "body" is just the entire dictionary.
-        if "body" in task:
-            body = task.get("body", {})
-            threshold = task.get("raw", {}).get('threshold', 0.0)
-            limit = body.get("raw", {}).get("limit")
-            if not body.get("raw"):
-                body["raw"] = {}
-            body["hash_value"] = body.get("result", {}).get("hash_value")
-            body["context"] = body.get("context", body.get("raw", {}).get("context"))
-        else:
-            body = task
-            threshold = body.get('threshold', 0.0)
-            limit = body.get("limit")
+        body, threshold, limit = media_crud.parse_task_search(task)
         audio, temporary = media_crud.get_object(body, Audio)
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")

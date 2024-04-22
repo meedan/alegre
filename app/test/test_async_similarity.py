@@ -4,7 +4,6 @@ from opensearchpy import helpers, OpenSearch, TransportError
 from flask import current_app as app
 from unittest.mock import Mock, patch
 import numpy as np
-import redis
 
 from app.main import db
 from app.test.base import BaseTestCase
@@ -12,6 +11,7 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from unittest.mock import patch
 from app.main.model.audio import Audio
 from app.main.lib.shared_models.audio_model import AudioModel
+from app.main.lib import redis_client
 class TestAsyncSimilarityBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
@@ -25,7 +25,7 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
     def test_audio_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
-            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            r = redis_client.get_client()
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
             r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"response": {"hash_value": [1,2,3]}}))
             mock_response = Mock()
@@ -60,7 +60,7 @@ class TestAsyncSimilarityBlueprint(BaseTestCase):
     def test_audio_basic_http_responses(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
-            r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+            r = redis_client.get_client()
             r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
             r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"response": {"hash_value": [1,2,3]}}))
             mock_response = Mock()
