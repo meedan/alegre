@@ -22,7 +22,6 @@ build_qa:
     - docker push "$ECR_API_BASE_URL/qa/alegre/api:latest"
   only:
     - develop
-    - feature/CV2-4518_video-support
 
 deploy_qa:
   image: python:3-alpine
@@ -58,7 +57,6 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - feature/CV2-4518_video-support
 
 build_live:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
