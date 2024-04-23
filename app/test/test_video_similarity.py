@@ -66,7 +66,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     result = self.model.search({"url": url, 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS01NTQ1NzEtdmlkZW8", "context": {"blah": 1, "has_custom_id": True, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
-        app.logger.error(f"test_search_by_doc_id result is {result}")
         self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'})
 
     def test_delete(self):
@@ -103,7 +102,6 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                     result = self.model.search({"url": url, "project_media_id": 1, "context": {"blah": 1, 'project_media_id': 12343}})
         self.assertIsInstance(result, dict)
         self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
-        app.logger.error(f"test_search result is {result}")
         self.assertEqual(result["result"][0], {'context': [{'blah': 1, 'project_media_id': 12342}], 'folder': 'blah', 'filepath': '12342', 'doc_id': None, 'url': None, 'filename': '/app/persistent_disk/blah/12342.tmk', 'score': 0.99, 'model': 'video'})
 
     def test_get_fullpath_files(self):

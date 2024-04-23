@@ -31,7 +31,6 @@ def _after_log(retry_state):
 
 class VideoModel(SharedModel):
     def overload_context_to_denote_content_type(self, task):
-        app.logger.error(f"input to overload_context_to_denote_content_type_v2 is {task}")
         return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
 
     def delete(self, task):
