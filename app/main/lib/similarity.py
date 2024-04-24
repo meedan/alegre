@@ -150,7 +150,7 @@ def callback_search_item(item, similarity_type):
   elif similarity_type == "video":
       video_response = video_model().search(model_response_package(item.get("raw"), "search"))
       # When we search for a video, we need to also search for the audio track of the video against our audio library in case it matches other audio clips.
-      audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")))
+      audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item.get("raw"), "search")))
       response = merge_audio_and_video_responses(video_response, audio_response)
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
