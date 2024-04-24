@@ -36,7 +36,8 @@ class AsyncSimilarityResource(Resource):
         response, waiting_for_callback = similarity.async_get_similar_items(package, similarity_type)
         if not waiting_for_callback:
             package.pop("created_at", None)
-            result = similarity.callback_search_item({"raw": package, "is_shortcircuited_callback": True}, similarity_type)
+            result = similarity.callback_search_item({"raw": package}, similarity_type)
+            result["is_shortcircuited_callback"] = True
             callback_url = args.get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
             Webhook.return_webhook(callback_url, "search", similarity_type, result)
         return response
