@@ -29,8 +29,10 @@ def drop_context_from_record(record, context):
 def get_context_query(context, value_as_json=True, vars_as_hash=True):
     context_query = []
     context_hash = {}
+    #Always force no results from temporary objects
+    context["temporary_media"] = False
     for key, value in context.items():
-        if key not in ["project_media_id", "temporary_media", "content_type"]:
+        if key not in ["project_media_id", "content_type"]:
             if isinstance(value, list):
                 context_clause = "("
                 for i,v in enumerate(value):
