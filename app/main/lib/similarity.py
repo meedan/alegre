@@ -148,10 +148,10 @@ def callback_search_item(item, similarity_type):
       response = audio_model().search(model_response_package(item.get("raw"), "search"))
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
-      video_response = video_model().search(model_response_package(item.get("raw"), "search"))
+      response = video_model().search(model_response_package(item.get("raw"), "search"))
       # When we search for a video, we need to also search for the audio track of the video against our audio library in case it matches other audio clips.
-      audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item.get("raw"), "search")))
-      response = merge_audio_and_video_responses(video_response, audio_response)
+      # audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item.get("raw"), "search")))
+      # response = merge_audio_and_video_responses(video_response, audio_response)
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = async_search_image_on_callback(item)
@@ -209,9 +209,9 @@ def async_get_similar_items(item, similarity_type):
     # Searching with an audio_model() call here is intentional - we need to encode the audio
     # track for all videos to see if we can match them across modes (i.e. this MP3 matches
     # this video's audio track, so they are able to be matched)
-    _, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
+    # _, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response, waiting_for_callback or waiting_for_audio_callback
+    return response, waiting_for_callback# or waiting_for_audio_callback
   elif similarity_type == "image":
     response, waiting_for_callback = async_search_image(item, "image")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")

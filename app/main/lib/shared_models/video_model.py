@@ -14,7 +14,6 @@ import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
