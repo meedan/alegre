@@ -3,13 +3,13 @@ import json
 import uuid
 from datetime import datetime
 from collections import namedtuple
+import redis
 import time
 import importlib
 import os
 import hashlib
 import re
 from json import JSONEncoder
-from app.main.lib import redis_client
 
 class CustomEncoder(JSONEncoder):
     """Custom JSON Encoder that converts datetime objects to ISO format."""
@@ -35,7 +35,7 @@ class SharedModel(object):
     instance = class_(model_key, options)
     instance.load()
     app.logger.info('[%s] Serving model...', model_key)
-    r = redis_client.get_client()
+    r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     r.set('SharedModel:%s' % model_key, json.dumps({
       'model_class': model_class,
       'model_key': model_key,
@@ -46,12 +46,12 @@ class SharedModel(object):
 
   @staticmethod
   def get_servers():
-    r = redis_client.get_client()
+    r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     return [server.decode('utf-8') for server in r.smembers('SharedModel')]
 
   @staticmethod
   def get_client(model_key, options={}):
-    r = redis_client.get_client()
+    r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
     model_info = r.get("SharedModel:%s" % model_key)
     assert model_info is not None, f"Unable locate model info for key {model_key}"
     model_class = json.loads(model_info.decode('utf-8'))['model_class']
@@ -61,7 +61,7 @@ class SharedModel(object):
   def __init__(self, model_key, options={}):
     self.options = options
     self.queue_name = model_key
-    self.datastore = redis_client.get_client()
+    self.datastore = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
 
   def get_task(self, timeout=0):
     item = self.datastore.blpop(self.queue_name, timeout)

@@ -10,6 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.schema import DDL
 from sqlalchemy_utils import database_exists, create_database
 import json_logging
+import redis
 from rq import Connection, Worker
 
 from app import blueprint
@@ -18,7 +19,6 @@ from app.main.model import image
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from app.main.lib.image_hash import compute_phash_int
-from app.main.lib import redis_client
 from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
@@ -344,7 +344,7 @@ def phash(path):
 
 @manager.command
 def run_rq_worker():
-  redis_server = redis_client.get_client()
+  redis_server = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
   with Connection(redis_server):
       qs = ['default']
       w = Worker(qs)
