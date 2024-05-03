@@ -63,7 +63,7 @@ def add_image(save_params):
     raise e
 
 def callback_add(task):
-    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])
 
 def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
     if image:
@@ -92,7 +92,7 @@ def blocking_search_image(task):
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
     hash_value = presto_result["body"]["hash_value"]
-    return search_image(image, model, limit, threshold, task, hash_value, context, temporary)
+    return search_image(image, model, limit, threshold, task, hash_value, context[0], temporary)
 
 def async_search_image(task, modality):
     return media_crud.get_async_presto_response(task, ImageModel, modality)
