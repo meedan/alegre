@@ -29,6 +29,6 @@ class IndianSbert(SharedModel):
         """
         vectorize: Embed a text snippet in the vector space.
         """
-        if len(doc)>MAX_SBERT_LEN:
+        if len(doc) > MAX_SBERT_LEN:
             doc = doc[0:MAX_SBERT_LEN]
         return self.model.encode([doc])[0].tolist()
