@@ -5,6 +5,8 @@ from flask import current_app as app
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_measures import angular_similarity
 
+MAX_SBERT_LEN = app.config["MAX_SBERT_LEN"]
+
 class ParaphraseMultilingualMpnetBaseV2(SharedModel):
     def load(self):
         model_name = self.options.get('model_name', 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
@@ -27,4 +29,6 @@ class ParaphraseMultilingualMpnetBaseV2(SharedModel):
         """
         vectorize: Embed a text snippet in the vector space.
         """
+        if len(doc)>MAX_SBERT_LEN:
+            doc = doc[0:MAX_SBERT_LEN]
         return self.model.encode([doc])[0].tolist()
