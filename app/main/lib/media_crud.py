@@ -84,6 +84,7 @@ def delete(task, model):
                 if os.path.exists(filepath):
                     os.remove(filepath)
             deleted = db.session.query(model).filter(model.id==obj.id).delete()
+        db.session.commit()
         return {"requested": task, "result": {"url": obj.url, "deleted": deleted}}
     else:
         return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
@@ -119,7 +120,6 @@ def get_object(task, model):
         temporary = True
         if not task.get("doc_id"):
             task["doc_id"] = str(uuid.uuid4())
-        app.logger.debug("Adding temporary audio object of "+str(task))
         add(task, model)
         obj = get_by_doc_id_or_url(task, model)
     return obj, temporary

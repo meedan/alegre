@@ -110,7 +110,7 @@ def async_search_image_on_callback(task):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
       cmd = """
           SELECT id, doc_id, phash, url, context FROM images
@@ -139,7 +139,7 @@ def execute_command(cmd, params):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
         cmd = """
           SELECT * FROM (
@@ -184,7 +184,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
   #bit_count_pdq is defined in mangage.py. It returns a normalized hamming distance between 0 and 1
   #1 represents the strongest similarity possibile.
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
         cmd = """
           SELECT * FROM (

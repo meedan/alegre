@@ -89,7 +89,7 @@ class VideoModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context)
+            context_query, context_hash = get_context_query(context, False)
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
@@ -110,6 +110,7 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task):
+        import code;code.interact(local=dict(globals(), **locals()))
         body, threshold, limit = media_crud.parse_task_search(task)
         video, temporary = media_crud.get_object(body, Video)
         if video.hash_value is None:

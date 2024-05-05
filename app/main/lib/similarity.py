@@ -126,8 +126,8 @@ def callback_add_item(item, similarity_type):
   elif similarity_type == "video":
       response = video_model().add(item)
 # the video file is also sent to the audio model in order to extract the transcript
-      audio_response = audio_model().add(video_model().overload_context_to_denote_content_type(item.get("raw")))
-      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}, audio_response is {audio_response}")
+      # audio_response = audio_model().add(video_model().overload_context_to_denote_content_type(item.get("raw")))
+      app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = callback_add(item)
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
@@ -165,7 +165,7 @@ def delete_item(item, similarity_type):
   if similarity_type == "audio":
     response = audio_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "delete"))
+    response = video_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "image":
     response = delete_image(item)
   elif similarity_type == "text":
@@ -218,4 +218,3 @@ def async_get_similar_items(item, similarity_type):
     return response, waiting_for_callback
   else:
       raise Exception(f"{similarity_type} modality not implemented for async requests!")
-
