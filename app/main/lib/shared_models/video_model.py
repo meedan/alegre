@@ -110,7 +110,6 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task):
-        import code;code.interact(local=dict(globals(), **locals()))
         body, threshold, limit = media_crud.parse_task_search(task)
         video, temporary = media_crud.get_object(body, Video)
         if video.hash_value is None:
