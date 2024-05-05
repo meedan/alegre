@@ -17,7 +17,7 @@ class VideoSimilarityResource(Resource):
     @api.doc('Delete a video in the similarity database')
     @api.expect(video_similarity_request, validate=True)
     def delete(self):
-        return similarity.delete_item(request.args, "video")
+        return similarity.delete_item(request.json, "video")
 
     @api.response(200, 'video successfully stored in the similarity database.')
     @api.doc('Store a video in the similarity database')

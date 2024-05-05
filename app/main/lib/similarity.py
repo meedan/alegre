@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 import logging
 from flask import request, current_app as app
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.shared_models.audio_model import AudioModel
+from app.main.lib.shared_models.video_model import VideoModel
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.image_similarity import add_image, callback_add, delete_image, blocking_search_image, async_search_image, async_search_image_on_callback
 from app.main.lib.text_similarity import add_text, delete_text, search_text
@@ -78,7 +78,7 @@ def audio_model():
   return AudioModel(app.config['AUDIO_MODEL'])
 
 def video_model():
-  return SharedModel.get_client(app.config['VIDEO_MODEL'])
+  return VideoModel(app.config['VIDEO_MODEL'])
 
 def model_response_package(item, command):
   response_package = {
@@ -91,10 +91,13 @@ def model_response_package(item, command):
     "command": command,
     "threshold": item.get("threshold", 0.0),
     "per_model_threshold": item.get("per_model_threshold", {}),
-    "match_across_content_types": item.get("match_across_current_type", False),
+    "match_across_content_types": item.get("match_across_current_type", True),
     "confirmed": item.get("confirmed", False),
     "requires_callback": item.get("requires_callback", False)
   }
+  for optional_key in ["folder", "filepath"]:
+      if optional_key in item.keys():
+          response_package[optional_key] = item[optional_key]
   app.logger.info(f"[Alegre Similarity] [Item {item}, Command {command}] Response package looks like {response_package}")
   return response_package
 
@@ -105,7 +108,8 @@ def add_item(item, similarity_type):
     response = Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[similarity_type], callback_url, model_response_package(item, "add")).text
     response = json.loads(response)
   elif similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "add"))
+    response = Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[similarity_type], callback_url, model_response_package(item, "add")).text
+    response = json.loads(response)
   elif similarity_type == "image":
     response = add_image(item)
   elif similarity_type == "text":
@@ -121,6 +125,8 @@ def callback_add_item(item, similarity_type):
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
       response = video_model().add(item)
+# the video file is also sent to the audio model in order to extract the transcript
+      # audio_response = audio_model().add(video_model().overload_context_to_denote_content_type(item.get("raw")))
       app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = callback_add(item)
@@ -129,12 +135,23 @@ def callback_add_item(item, similarity_type):
       app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
   return response
 
+def merge_audio_and_video_responses(video_response, audio_response):
+    full_responses = []
+    for result_set in [video_response["result"], audio_response["result"]]:
+        for result in result_set:
+            full_responses.append(result)
+    full_responses.sort(key=lambda x: x['score'], reverse=True)
+    return {"result": full_responses}
+
 def callback_search_item(item, similarity_type):
   if similarity_type == "audio":
       response = audio_model().search(model_response_package(item.get("raw"), "search"))
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "video":
-      response = video_model().search(model_response_package(item, "search"))
+      response = video_model().search(model_response_package(item.get("raw"), "search"))
+      # When we search for a video, we need to also search for the audio track of the video against our audio library in case it matches other audio clips.
+      # audio_response = audio_model().search(video_model().overload_context_to_denote_content_type(model_response_package(item.get("raw"), "search")))
+      # response = merge_audio_and_video_responses(video_response, audio_response)
       app.logger.info(f"[Alegre Similarity] CallbackSearchItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
   elif similarity_type == "image":
       response = async_search_image_on_callback(item)
@@ -148,7 +165,7 @@ def delete_item(item, similarity_type):
   if similarity_type == "audio":
     response = audio_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "delete"))
+    response = video_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "image":
     response = delete_image(item)
   elif similarity_type == "text":
@@ -159,9 +176,7 @@ def delete_item(item, similarity_type):
 def get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   response = None
-  if similarity_type == "video":
-    response = video_model().get_shared_model_response(model_response_package(item, "search"))
-  elif similarity_type == "text":
+  if similarity_type == "text":
     response = search_text(item)
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
   return response
@@ -176,23 +191,30 @@ def blocking_get_similar_items(item, similarity_type):
     response = blocking_search_image(item)
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
+  elif similarity_type == "video":
+    response = video_model().blocking_search(model_response_package(item, "search"), "video")
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
   else:
       raise Exception(f"{similarity_type} modality not implemented for blocking requests!")
 
 def async_get_similar_items(item, similarity_type):
   app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] searching on item")
   if similarity_type == "audio":
-    response = audio_model().async_search(model_response_package(item, "search"), "audio")
+    response, waiting_for_callback = audio_model().async_search(model_response_package(item, "search"), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback
   elif similarity_type == "video":
-    response = video_model().async_search(model_response_package(item, "search"), "video")
+    response, waiting_for_callback = video_model().async_search(model_response_package(item, "search"), "video")
+    # Searching with an audio_model() call here is intentional - we need to encode the audio
+    # track for all videos to see if we can match them across modes (i.e. this MP3 matches
+    # this video's audio track, so they are able to be matched)
+    # _, waiting_for_audio_callback = audio_model().async_search(video_model().overload_context_to_denote_content_type(model_response_package(item, "search")), "audio")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback# or waiting_for_audio_callback
   elif similarity_type == "image":
-    response = async_search_image(item, "image")
+    response, waiting_for_callback = async_search_image(item, "image")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
-    return response
+    return response, waiting_for_callback
   else:
       raise Exception(f"{similarity_type} modality not implemented for async requests!")
-
