@@ -165,7 +165,7 @@ def delete_item(item, similarity_type):
   if similarity_type == "audio":
     response = audio_model().delete(model_response_package(item, "delete"))
   elif similarity_type == "video":
-    response = video_model().delete(model_response_package(item, "delete"))
+    response = video_model().delete(model_response_package(item, "delete")) # Changed Since 4126 PR
   elif similarity_type == "image":
     response = delete_image(item)
   elif similarity_type == "text":

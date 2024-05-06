@@ -17,7 +17,7 @@ class AudioSimilarityResource(Resource):
     @api.doc('Delete an audio in the similarity database')
     @api.expect(audio_similarity_request, validate=True)
     def delete(self):
-        return similarity.delete_item(request.json, "audio")
+        return similarity.delete_item(request.json, "audio") # Changed Since 4126 PR
 
     @api.response(200, 'audio successfully stored in the similarity database.')
     @api.doc('Store an audio in the similarity database')

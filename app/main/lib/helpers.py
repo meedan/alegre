@@ -10,16 +10,16 @@ def context_matches(query_context, item_context):
     context values, but in this small situation, we actually need to check
     against this.
   """
-  irrelevant_keys = ["project_media_id", "temporary_media"]
+  irrelevant_keys = ["project_media_id", "temporary_media"] # Changed Since 4126 PR
   for k,v in query_context.items():
     if k not in irrelevant_keys:
       if isinstance(v, list):
-        if isinstance(item_context.get(k), list):
-          if not set(item_context.get(k)) & set(v):
-            return False
-        else:
-          if item_context.get(k) != v and item_context.get(k) not in v:
-            return False
+        if isinstance(item_context.get(k), list): # Changed Since 4126 PR
+          if not set(item_context.get(k)) & set(v): # Changed Since 4126 PR
+            return False # Changed Since 4126 PR
+        else: # Changed Since 4126 PR
+          if item_context.get(k) != v and item_context.get(k) not in v: # Changed Since 4126 PR
+            return False # Changed Since 4126 PR
       else:
         if item_context.get(k) != v:
           return False

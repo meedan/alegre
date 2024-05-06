@@ -84,7 +84,7 @@ def delete(task, model):
                 if os.path.exists(filepath):
                     os.remove(filepath)
             deleted = db.session.query(model).filter(model.id==obj.id).delete()
-        db.session.commit()
+        db.session.commit() # Changed Since 4126 PR
         return {"requested": task, "result": {"url": obj.url, "deleted": deleted}}
     else:
         return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}

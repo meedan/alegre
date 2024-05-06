@@ -87,7 +87,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context, False)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, hash_value, context FROM audios
@@ -111,7 +111,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
-            context_query, context_hash = get_context_query(context, False)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT audio_similarity_functions();
