@@ -26,7 +26,7 @@ def drop_context_from_record(record, context):
     deleted = True
     return deleted
 
-def get_clause_for_list_value(key, value, value_as_json, vars_as_hash):
+def get_clause_for_list_value(key, value, value_as_json, vars_as_hash, context_hash):
     context_clause = "("
     for i,v in enumerate(value):
         if value_as_json:
@@ -40,7 +40,7 @@ def get_clause_for_list_value(key, value, value_as_json, vars_as_hash):
             context_clause += " OR "
         context_hash[f"context_{key}_{i}"] = v
     context_clause += ")"
-    return context_clause
+    return context_clause, context_hash
 
 def get_query_for_non_list_value(key, value, value_as_json, vars_as_hash):
     if value_as_json:
@@ -57,7 +57,8 @@ def get_context_query(context, value_as_json=True, vars_as_hash=True):
     for key, value in context.items():
         if key not in ["project_media_id", "temporary_media", "content_type"]:
             if isinstance(value, list):
-                context_query.append(get_clause_for_list_value(key, value, value_as_json, vars_as_hash))
+                context_clause, context_hash = get_clause_for_list_value(key, value, value_as_json, vars_as_hash, context_hash)
+                context_query.append(context_clause)
             else:
                 context_query.append(get_query_for_non_list_value(key, value, value_as_json, vars_as_hash))
                 context_hash[f"context_{key}"] = value
