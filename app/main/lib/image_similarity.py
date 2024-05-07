@@ -63,7 +63,7 @@ def add_image(save_params):
     raise e
 
 def callback_add(task):
-    return media_crud.add(task, ImageModel, ["pdq", "phash"])
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
 
 def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
     if image:
@@ -92,7 +92,7 @@ def blocking_search_image(task):
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
     hash_value = presto_result["body"]["hash_value"]
-    return search_image(image, model, limit, threshold, task, hash_value, context[0], temporary)
+    return search_image(image, model, limit, threshold, task, hash_value, context, temporary)
 
 def async_search_image(task, modality):
     return media_crud.get_async_presto_response(task, ImageModel, modality)
@@ -110,7 +110,7 @@ def async_search_image_on_callback(task):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
       cmd = """
           SELECT id, doc_id, phash, url, context FROM images
@@ -139,7 +139,7 @@ def execute_command(cmd, params):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (
@@ -184,7 +184,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
   #bit_count_pdq is defined in mangage.py. It returns a normalized hamming distance between 0 and 1
   #1 represents the strongest similarity possibile.
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (

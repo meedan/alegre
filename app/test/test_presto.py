@@ -69,6 +69,7 @@ class TestPrestoBlueprint(BaseTestCase):
         }
         response = self.client.post('/presto/receive/add_item/audio', data=json.dumps(mock_data), content_type='application/json')
         result = json.loads(response.data.decode())
+        print(f"test_audio_basic_http_responses_with_doc_id {result}")
         self.assertEqual(result["action"], "add_item")
         self.assertEqual(result["model_type"], "audio")
         self.assertEqual(result["data"]["results"]["result"][0]["score"], 1.0)

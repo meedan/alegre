@@ -1,7 +1,6 @@
 import unittest
 import json
 import math
-import redis
 import os
 from flask import current_app as app
 from unittest.mock import patch
@@ -10,6 +9,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
 from app.main.controller.langid_controller import LangidResource
+from app.main.lib import redis_client
 
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
@@ -30,7 +30,7 @@ class TestLangidBlueprint(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis_client.get_client()
         for key in r.scan_iter("langid:*"):
             r.delete(key)
 
