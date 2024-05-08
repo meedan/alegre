@@ -148,6 +148,7 @@ def ensure_context_appended(task, existing):
     elif isinstance(context, dict) and context not in existing.context:
       existing.context.append(context)
       flag_modified(existing, 'context')
+    db.session.commit()
     return existing
 
 def get_blocked_presto_response(task, model, modality):
