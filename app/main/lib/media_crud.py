@@ -107,7 +107,7 @@ def get_by_doc_id_or_url(task, model):
         objs = db.session.query(model).filter(model.doc_id==task.get("doc_id")).all()
         if objs:
             obj = objs[0]
-    elif 'url' in task:
+    if 'url' in task and obj is None:
         objs = db.session.query(model).filter(model.url==task.get("url")).all()
         if objs:
             obj = objs[0]
@@ -121,6 +121,7 @@ def get_object(task, model):
         if not task.get("doc_id"):
             task["doc_id"] = str(uuid.uuid4())
         add(task, model)
+        db.session.commit()
         obj = get_by_doc_id_or_url(task, model)
     return obj, temporary
 
