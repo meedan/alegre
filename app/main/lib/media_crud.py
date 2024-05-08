@@ -143,7 +143,7 @@ def get_presto_request_response(modality, callback_url, task):
 def ensure_context_appended(task, existing):
     context = task.get("context", task.get("raw", {}).get("context"))
     if isinstance(context, list):
-      existing.context = [dict(t) for t in set(tuple(sorted(d.items())) for d in context + existing.context)]
+      existing.context = merge_dict_lists(context, existing.context)
       flag_modified(existing, 'context')
     elif isinstance(context, dict) and context not in existing.context:
       existing.context.append(context)
