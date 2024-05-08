@@ -105,7 +105,8 @@ def async_search_image_on_callback(task):
     threshold = task.get("raw", {}).get("threshold", 0.0)
     limit = task.get("raw", {}).get("limit", 200)
     context = task.get("raw", {}).get("context", {})
-    return search_image(image, model, limit, threshold, task, task["result"]["hash_value"], context, False)
+    hash_value = task.get("result", {}).get("hash_value", getattr(image, app.config["IMAGE_MODEL"]))
+    return search_image(image, model, limit, threshold, task, hash_value, context, False)
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):

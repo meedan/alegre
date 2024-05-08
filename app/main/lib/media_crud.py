@@ -48,12 +48,12 @@ def save(obj, model, modifiable_fields=[]):
                 if getattr(obj, field) is not None  and not getattr(existing, field):
                     setattr(existing, field, getattr(obj, field))
                     flag_modified(existing, field)
-                if isinstance(obj.context, list):
-                    existing.context = merge_dict_lists(obj.context, existing.context)
-                    flag_modified(existing, 'context')
-                elif isinstance(obj.context, dict) and obj.context not in existing.context:
-                    existing.context.append(obj.context)
-                    flag_modified(existing, 'context')
+            if isinstance(obj.context, list):
+                existing.context = merge_dict_lists(obj.context, existing.context)
+                flag_modified(existing, 'context')
+            elif isinstance(obj.context, dict) and obj.context not in existing.context:
+                existing.context.append(obj.context)
+                flag_modified(existing, 'context')
             saved_obj = existing
     except NoResultFound as e:
         # Otherwise, add new audio, but with context as an array
@@ -107,7 +107,7 @@ def get_by_doc_id_or_url(task, model):
         objs = db.session.query(model).filter(model.doc_id==task.get("doc_id")).all()
         if objs:
             obj = objs[0]
-    if 'url' in task:
+    elif 'url' in task:
         objs = db.session.query(model).filter(model.url==task.get("url")).all()
         if objs:
             obj = objs[0]
@@ -143,11 +143,12 @@ def get_presto_request_response(modality, callback_url, task):
 def ensure_context_appended(task, existing):
     context = task.get("context", task.get("raw", {}).get("context"))
     if isinstance(context, list):
-      existing.context = [dict(t) for t in set(tuple(sorted(d.items())) for d in context + existing.context)]
+      existing.context = merge_dict_lists(context, existing.context)
       flag_modified(existing, 'context')
     elif isinstance(context, dict) and context not in existing.context:
       existing.context.append(context)
       flag_modified(existing, 'context')
+    db.session.commit()
     return existing
 
 def get_blocked_presto_response(task, model, modality):
@@ -167,7 +168,7 @@ def get_blocked_presto_response(task, model, modality):
 
 def get_async_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
-    context = [get_context_for_search(task)]
+    obj = ensure_context_appended(task, obj)
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
