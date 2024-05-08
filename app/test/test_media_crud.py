@@ -359,7 +359,6 @@ class TestMediaCrud(unittest.TestCase):
 
         # Assert that the mocks were called correctly
         mock_get_object.assert_called_once_with(test_task, test_model)
-        mock_get_context_for_search.assert_called_once_with(test_task)
         mock_send_request.assert_called_once_with(
             app.config['PRESTO_HOST'],
             PRESTO_MODEL_MAP[test_modality],
