@@ -98,9 +98,10 @@ def async_search_image(task, modality):
     return media_crud.get_async_presto_response(task, ImageModel, modality)
 
 def async_search_image_on_callback(task):
-    app.logger.info("async_search_image_on_callback is running")
-    app.logger.info(task)
-    image = media_crud.get_by_doc_id_or_url(task, ImageModel)
+    if list(task.keys()) == ["raw"]:
+        image = media_crud.get_by_doc_id_or_url(task["raw"], ImageModel)
+    else:
+        image = media_crud.get_by_doc_id_or_url(task, ImageModel)
     model = app.config['IMAGE_MODEL']
     threshold = task.get("raw", {}).get("threshold", 0.0)
     limit = task.get("raw", {}).get("limit", 200)
