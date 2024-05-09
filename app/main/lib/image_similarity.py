@@ -21,6 +21,7 @@ def delete_image(params):
         deleted = drop_context_from_record(image, params.get("context", {}))
       else:
         deleted = db.session.query(ImageModel).filter(ImageModel.id==image.id).delete()
+    db.session.commit()
   if deleted:
     return {'deleted': True}
   else:
@@ -62,40 +63,56 @@ def add_image(save_params):
     raise e
 
 def callback_add(task):
-    return media_crud.add(task, ImageModel, ["pdq", "phash"])
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
+
+def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
+    if image:
+        if model and model.lower() == "pdq":
+            app.logger.info(f"Searching with PDQ.")
+            image.pdq = hash_value
+            result = search_by_pdq(image.pdq, threshold, context, limit)
+        else:
+            app.logger.info(f"Searching with phash.")
+            image.phash = hash_value
+            result = search_by_phash(image.phash, threshold, context, limit)
+        if temporary:
+            media_crud.delete(task, ImageModel)
+        else:
+            media_crud.save(image, ImageModel, ["pdq", "phash"])
+        if limit:
+            return {"result": result[:limit]}
+        else:
+            return {"result": result}
+    else:
+        return {"error": "Image not found for provided task", "task": task}
 
 def blocking_search_image(task):
     image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
     threshold = task.get("threshold", 0.0)
     limit = task.get("limit", 200)
     model = app.config['IMAGE_MODEL']
-    if image:
-        if model and model.lower() == "pdq":
-            app.logger.info(f"Searching with PDQ.")
-            image.pdq = presto_result["body"]["hash_value"]
-            result = search_by_pdq(image.pdq, threshold, context[0], limit)
-        else:
-            app.logger.info(f"Searching with phash.")
-            image.phash = presto_result["body"]["hash_value"]
-            result = search_by_phash(image.phash, threshold, context[0], limit)
-        if temporary:
-            media_crud.delete(task, ImageModel)
-        else:
-            media_crud.save(image, ImageModel, ["pdq", "phash"])
-        if task.get("limit"):
-            return {"result": result[:task.get("limit")]}
-        else:
-            return {"result": result}
-    else:
-        return {"error": "Image not found for provided task", "task": task}
+    hash_value = presto_result["body"]["hash_value"]
+    return search_image(image, model, limit, threshold, task, hash_value, context, temporary)
 
 def async_search_image(task, modality):
     return media_crud.get_async_presto_response(task, ImageModel, modality)
 
+def async_search_image_on_callback(task):
+    if list(task.keys()) == ["raw"]:
+        image = media_crud.get_by_doc_id_or_url(task["raw"], ImageModel)
+    else:
+        image = media_crud.get_by_doc_id_or_url(task, ImageModel)
+    model = app.config['IMAGE_MODEL']
+    threshold = task.get("raw", {}).get("threshold", 0.0)
+    limit = task.get("raw", {}).get("limit", 200)
+    context = task.get("raw", {}).get("context", {})
+    hash_value = task.get("result", {}).get("hash_value", getattr(image, app.config["IMAGE_MODEL"]))
+    return search_image(image, model, limit, threshold, task, hash_value, context, False)
+
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
       cmd = """
           SELECT id, doc_id, phash, url, context FROM images
@@ -124,7 +141,7 @@ def execute_command(cmd, params):
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (
@@ -169,7 +186,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
   #bit_count_pdq is defined in mangage.py. It returns a normalized hamming distance between 0 and 1
   #1 represents the strongest similarity possibile.
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (

@@ -4,6 +4,7 @@ from flask_restplus import Resource, Namespace, fields
 
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
+from app.main.lib.webhook import Webhook
 
 api = Namespace('similarity_sync', description='synchronous similarity operations')
 similarity_sync_request = api.model('similarity_sync_request', {
@@ -29,9 +30,14 @@ class AsyncSimilarityResource(Resource):
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
         else:
-            app.logger.warning("Got to setting package...")
             package = similarity.get_body_for_media_document(args, 'query')
-            app.logger.warning(f"Package is: {package}")
         #Default to true for this endpoint instead of false in most other cases
         package["requires_callback"] = args.get("requires_callback", True)
-        return similarity.async_get_similar_items(package, similarity_type)
+        response, waiting_for_callback = similarity.async_get_similar_items(package, similarity_type)
+        if not waiting_for_callback:
+            package.pop("created_at", None)
+            result = similarity.callback_search_item({"raw": package}, similarity_type)
+            result["is_shortcircuited_search_result_callback"] = True
+            callback_url = args.get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
+            Webhook.return_webhook(callback_url, "search", similarity_type, result)
+        return response

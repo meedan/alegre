@@ -3,12 +3,10 @@ import binascii
 import uuid
 import os
 import tempfile
-import pathlib
 import urllib.error
 import urllib.request
 import shutil
 from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import sqlalchemy
 import tenacity
@@ -31,13 +29,16 @@ class AudioModel(SharedModel):
         return media_crud.delete(task, Audio)
 
     def add(self, task):
-        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])
+        hash_value = (task.get("result", {}) or {}).get("hash_value")
+        if hash_value:
+            task["hash_value"] = hash_value
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
     def blocking_search(self, task, modality):
         audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
-        audio.chromaprint_fingerprint = presto_result["body"]["hash_value"]
+        audio.chromaprint_fingerprint = presto_result.get("body", {}).get("result", {}).get("hash_value")
         if audio:
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context[0])
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
             if temporary:
                 media_crud.delete(task, Audio)
             else:
@@ -53,20 +54,7 @@ class AudioModel(SharedModel):
         return media_crud.get_async_presto_response(task, Audio, modality)
 
     def search(self, task):
-        # here, we have to unpack the task contents to pull out the body,
-        # which may be embedded in a body key in the dict if its coming from a presto callback.
-        # alternatively, the "body" is just the entire dictionary.
-        if "body" in task:
-            body = task.get("body", {})
-            threshold = task.get("raw", {}).get('threshold', 0.0)
-            limit = body.get("raw", {}).get("limit")
-            if not body.get("raw"):
-                body["raw"] = {}
-            body["hash_value"] = task.get("body", {}).get("hash_value")
-        else:
-            body = task
-            threshold = body.get('threshold', 0.0)
-            limit = body.get("limit")
+        body, threshold, limit = media_crud.parse_task_search(task)
         audio, temporary = media_crud.get_object(body, Audio)
         if audio.chromaprint_fingerprint is None:
             callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
@@ -76,7 +64,7 @@ class AudioModel(SharedModel):
             # Warning: this is a blocking hold to wait until we get a response in 
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "audio")
-            audio.chromaprint_fingerprint = result["body"]["hash_value"]
+            audio.chromaprint_fingerprint = result.get("body", {}).get("result", {}).get("hash_value")
         if audio:
             matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, body["context"])
             if temporary:
@@ -99,7 +87,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, hash_value, context FROM audios
@@ -123,7 +111,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
-            context_query, context_hash = get_context_query(context)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT audio_similarity_functions();

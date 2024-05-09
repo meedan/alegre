@@ -1,3 +1,4 @@
+import os
 import io
 import urllib.request
 import logging
@@ -10,6 +11,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from app.main.lib import media_crud
+from pgvector.sqlalchemy import Vector
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,11 +21,11 @@ class ImageModel(db.Model):
   __tablename__ = 'images'
 
   id = db.Column(db.Integer, primary_key=True)
-  sha256 = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True)
-  doc_id = db.Column(db.String(64, convert_unicode=True), nullable=True, index=True, unique=True)
+  sha256 = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True)
+  doc_id = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
-
+  sscd = db.Column(Vector(512), nullable=True)
   url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
@@ -30,8 +33,28 @@ class ImageModel(db.Model):
     db.Index('ix_images_context', context, postgresql_using='gin'),
   )
 
+  @property
+  def existing_response(self):
+    model = app.config['IMAGE_MODEL']
+    if model == "pdq":
+      return {"body": {"hash_value": self.pdq}}
+    return {"body": {"hash_value": self.phash}}
+
+  @property
+  def requires_encoding(self):
+    model = app.config['IMAGE_MODEL']
+    return model and ((model.lower() == "pdq" and not self.pdq) or (model.lower() == "phash" and not self.phash))
+
   @classmethod
-  def from_task_data(cls, task):
+  def from_task_data(cls, task, existing):
+    if existing:
+      if os.getenv("IMAGE_MODEL") == 'pdq':
+          if not existing.pdq:
+            existing.pdq = task.get("hash_value")
+      elif os.getenv("IMAGE_MODEL") == 'phash':
+          if not existing.phash:
+            existing.phash = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
     return cls(
       pdq=task.get("hash_value"),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
@@ -52,6 +75,7 @@ class ImageModel(db.Model):
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
     phash = compute_phash_int(im)
+    sscd = None
     try:
       pdq = compute_pdq(io.BytesIO(raw))
     except:
@@ -59,4 +83,4 @@ class ImageModel(db.Model):
       e = sys.exc_info()[0]
       app.logger.error(f"PDQ failure: {e}")
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at)
+    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)
