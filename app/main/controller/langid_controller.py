@@ -1,12 +1,12 @@
 from flask import request, current_app as app
-from flask_restplus import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields
 import hashlib
 import json
 import importlib
 import tenacity
 from app.main.lib import redis_client
 
-from twitter_text import extract_urls_with_indices, extract_emojis_with_indices
+# from twitter_text import extract_urls_with_indices, extract_emojis_with_indices
 
 api = Namespace('langid', description='langid operations')
 langid_request = api.model('langid_request', {
@@ -84,8 +84,8 @@ class LangidResource(Resource):
     @staticmethod
     def cleanup_input(text):
         clean = text
-        clean = LangidResource.slice_around(clean, extract_urls_with_indices(clean))
-        clean = LangidResource.slice_around(clean, extract_emojis_with_indices(clean))
+        # clean = LangidResource.slice_around(clean, extract_urls_with_indices(clean))
+        # clean = LangidResource.slice_around(clean, extract_emojis_with_indices(clean))
         return clean.strip()
 
     @staticmethod

@@ -16,8 +16,8 @@ class Graph(db.Model):
 
   id = db.Column(db.Integer, primary_key=True)
   threshold = db.Column(db.Float, nullable=False)
-  data_types = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
-  status = db.Column(db.String(255, convert_unicode=True), nullable=True)
+  data_types = db.Column(ARRAY(db.String(255)), nullable=True)
+  status = db.Column(db.String(255), nullable=True)
   start_time = db.Column(db.DateTime, nullable=True)
   end_time = db.Column(db.DateTime, nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)

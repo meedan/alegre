@@ -14,7 +14,7 @@ class Edge(db.Model):
   target_id = db.Column(db.Integer, db.ForeignKey('nodes.id'))
   target_context = db.Column(JSONB(), default={}, nullable=False)
   target = relationship("Node", foreign_keys=[target_id])
-  edge_type = db.Column(db.String(500, convert_unicode=True), nullable=False)
+  edge_type = db.Column(db.String(500), nullable=False)
   edge_weight = db.Column(db.Float, nullable=False)
   edge_context = db.Column(JSONB(), default={}, nullable=False)
   context = db.Column(JSONB(), default={}, nullable=False)

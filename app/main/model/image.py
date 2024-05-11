@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import BIT
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.main import db
-from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+# from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
 from app.main.lib import media_crud
 from pgvector.sqlalchemy import Vector
 
@@ -21,12 +21,12 @@ class ImageModel(db.Model):
   __tablename__ = 'images'
 
   id = db.Column(db.Integer, primary_key=True)
-  sha256 = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True)
-  doc_id = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True, unique=True)
+  sha256 = db.Column(db.String(255), nullable=True, index=True)
+  doc_id = db.Column(db.String(255), nullable=True, index=True, unique=True)
   phash = db.Column(db.BigInteger, nullable=True, index=True)
   pdq = db.Column(BIT(256), nullable=True, index=True)
   sscd = db.Column(Vector(512), nullable=True)
-  url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  url = db.Column(db.String(255), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (

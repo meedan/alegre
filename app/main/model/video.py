@@ -10,10 +10,10 @@ class Video(db.Model):
   __tablename__ = 'videos'
 
   id = db.Column(db.Integer, primary_key=True)
-  doc_id = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True, unique=True)
-  folder = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
-  filepath = db.Column(db.String(255, convert_unicode=True), nullable=False, index=False)
-  url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  doc_id = db.Column(db.String(255), nullable=True, index=True, unique=True)
+  folder = db.Column(db.String(255), nullable=False, index=False)
+  filepath = db.Column(db.String(255), nullable=False, index=False)
+  url = db.Column(db.String(255), nullable=False, index=True)
   hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)

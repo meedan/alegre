@@ -1,6 +1,6 @@
 # app/__init__.py
 
-from flask_restplus import Api
+from flask_restx import Api
 from flask import Blueprint
 
 from .main.controller.about_controller import api as about_ns

@@ -1,5 +1,5 @@
 from flask import request, current_app as app
-from flask_restplus import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
 import json
 import numpy as np
