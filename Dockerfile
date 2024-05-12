@@ -9,6 +9,7 @@ RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 # Copy necessary threatexchange folders
 COPY ./threatexchange/tmk/cpp /app/threatexchange/tmk/cpp
 COPY ./threatexchange/pdq/cpp /app/threatexchange/pdq/cpp
+COPY ./threatexchange/pdq/python /app/threatexchange/pdq/python
 RUN make -C /app/threatexchange/tmk/cpp
 
 # Other configurations
