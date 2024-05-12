@@ -6,8 +6,8 @@ class Node(db.Model):
   __tablename__ = 'nodes'
 
   id = db.Column(db.Integer, primary_key=True)
-  data_type = db.Column(db.String(500, convert_unicode=True), nullable=False)
-  data_type_id = db.Column(db.String(500, convert_unicode=True), nullable=False, index=True)
+  data_type = db.Column(db.String(500), nullable=False)
+  data_type_id = db.Column(db.String(500), nullable=False, index=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   data = db.Column(JSONB(), default=[], nullable=False)
 

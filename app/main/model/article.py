@@ -19,18 +19,18 @@ class ArticleModel(db.Model):
   __tablename__ = 'articles'
 
   id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String(500, convert_unicode=True), nullable=False)
-  authors = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
+  title = db.Column(db.String(500), nullable=False)
+  authors = db.Column(ARRAY(db.String(255)), nullable=True)
   publish_date = db.Column(db.DateTime, nullable=False)
   text = db.Column(db.Text, nullable=False)
-  top_image = db.Column(db.String(500, convert_unicode=True), nullable=False)
-  movies = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
-  keywords = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
+  top_image = db.Column(db.String(500), nullable=False)
+  movies = db.Column(ARRAY(db.String(255)), nullable=True)
+  keywords = db.Column(ARRAY(db.String(255)), nullable=True)
   summary = db.Column(db.Text, nullable=False)
-  source_url = db.Column(db.String(255, convert_unicode=True), nullable=False)
-  tags = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
-  url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
-  links = db.Column(ARRAY(db.String(255, convert_unicode=True)), nullable=True)
+  source_url = db.Column(db.String(255), nullable=False)
+  tags = db.Column(ARRAY(db.String(255)), nullable=True)
+  url = db.Column(db.String(255), nullable=False, index=True)
+  links = db.Column(ARRAY(db.String(255)), nullable=True)
 
   def to_dict(self):
     date_strftime = None

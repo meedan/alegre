@@ -1,6 +1,6 @@
 from flask import request, current_app as app
 from urllib3 import Retry
-from flask_restplus import Resource, Namespace, fields
+from flask_restx import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
 

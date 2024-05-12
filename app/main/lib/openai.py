@@ -1,6 +1,6 @@
 import pickle
 from flask import current_app as app
-import openai.embeddings_utils
+from openai import OpenAI
 import hashlib
 from app.main.lib import redis_client
 
@@ -15,11 +15,13 @@ def retrieve_openai_embeddings(text, model_key):
     val_from_cache = r_cache.get(key)
     if val_from_cache is not None:
         return pickle.loads(val_from_cache)
-    openai.api_key = app.config['OPENAI_API_KEY']
+    #openai.api_key = app.config['OPENAI_API_KEY']
+    client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
     app.logger.info(f"Calling OpenAI API")
     model_key_without_openai_prefix = model_key[len(PREFIX_OPENAI):]
     try:
-        embeddings = openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
+        #embeddings = openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
+        embeddings = client.embeddings.create(input = [text], model=model_key_without_openai_prefix).data[0].embedding
         r_cache.set(key, pickle.dumps(embeddings))
         r_cache.expire(key, EMBEDDING_CACHE_DEFAULT)
     except Exception as caught_exception:

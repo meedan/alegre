@@ -13,8 +13,8 @@ class Audio(db.Model):
   __tablename__ = 'audios'
 
   id = db.Column(db.Integer, primary_key=True)
-  doc_id = db.Column(db.String(255, convert_unicode=True), nullable=True, index=True, unique=True)
-  url = db.Column(db.String(255, convert_unicode=True), nullable=False, index=True)
+  doc_id = db.Column(db.String(255), nullable=True, index=True, unique=True)
+  url = db.Column(db.String(255), nullable=False, index=True)
   hash_value = db.Column(BIT(length=128), nullable=True, index=True)
   chromaprint_fingerprint = db.Column(ARRAY(db.Integer), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)

@@ -1,5 +1,5 @@
 from flask import request, current_app as app
-from flask_restplus import Resource, Namespace
+from flask_restx import Resource, Namespace
 from opensearchpy import OpenSearch
 import os
 import importlib
