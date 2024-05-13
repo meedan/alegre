@@ -34,6 +34,7 @@ class SharedModel(object):
     class_ = SharedModel.import_model_class(SharedModel.get_model_class(model_key))
     instance = class_(model_key, options)
     instance.load()
+    return instance
 
   @staticmethod
   def register_server(model_class, model_key, options={}):
