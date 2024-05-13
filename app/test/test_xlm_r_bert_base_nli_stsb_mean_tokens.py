@@ -6,12 +6,23 @@ from flask import current_app as app
 from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.shared_models.shared_model import SharedModel
+class SharedModelStub(SharedModel):
+  model_key = 'shared-model-stub-key'
+
+  def load(self):
+    pass
+
+  def respond(self, analysis_value):
+    return [0.0]
+
+  def similarity(self, valueA, valueB):
+    return 0.0
+
 
 class TestXLMRBertBaseNliStsbMeanTokensBlueprint(BaseTestCase):
-    use_model_key = "xlm-r-bert-base-nli-stsb-mean-tokens"
+    use_model_key = 'shared-model-stub-key'
 
     def test_xlm_r_bert_base_nli_stsb_mean_tokens_api(self):
-        SharedModel.register_server("xlm_r_bert_base_nli_stsb_mean_tokens", "XlmRBertBaseNliStsbMeanTokens", {"model_name": "meedan/xlm-r-bert-base-nli-stsb-mean-tokens"})
         with self.client:
             response = self.client.post(
                 '/model/vector',
