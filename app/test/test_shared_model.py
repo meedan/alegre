@@ -6,7 +6,7 @@ from unittest.mock import patch
 from collections import namedtuple
 
 from app.test.base import BaseTestCase
-from app.main.lib.shared_models.shared_model import SharedModel, Task
+from app.main.lib.shared_models.shared_model import SharedModel, Task, SharedModelClient
 from app.main.lib import redis_client
 
 class SharedModelStub(SharedModel):
