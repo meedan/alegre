@@ -49,14 +49,14 @@ class SharedModel(object):
     r = redis_client.get_client()
     return [server.decode('utf-8') for server in r.smembers('SharedModel')]
 
+
   @staticmethod
   def get_client(model_key, options={}):
     r = redis_client.get_client()
     model_info = r.get("SharedModel:%s" % model_key)
     assert model_info is not None, f"Unable locate model info for key {model_key}"
     model_class = json.loads(model_info.decode('utf-8'))['model_class']
-    class_ = SharedModel.import_model_class(model_class)
-    return class_(model_key, options)
+    return SharedModelClient(model_key, options)
 
   def __init__(self, model_key, options={}):
     self.options = options
@@ -161,3 +161,14 @@ class SharedModel(object):
 
   def similarity(self, vecA, vecB):
     raise NotImplementedError("[SharedModel] Subclasses must define a `similarity` function to compare values!")
+
+class SharedModelClient(SharedModel):
+  def load(self):
+    return None
+
+  def respond(self, task_package):
+    return None
+
+  def similarity(self, vecA, vecB):
+    return None
+
