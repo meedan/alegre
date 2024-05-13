@@ -10,6 +10,7 @@ class TestXLMRBertBaseNliStsbMeanTokensBlueprint(BaseTestCase):
     use_model_key = "xlm-r-bert-base-nli-stsb-mean-tokens"
 
     def test_xlm_r_bert_base_nli_stsb_mean_tokens_api(self):
+        SharedModel.register_server("xlm_r_bert_base_nli_stsb_mean_tokens", "XlmRBertBaseNliStsbMeanTokens", {"model_name": "meedan/xlm-r-bert-base-nli-stsb-mean-tokens"})
         with self.client:
             response = self.client.post(
                 '/model/vector',

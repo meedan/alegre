@@ -23,7 +23,7 @@ class ModelVectorResource(Resource):
     @api.doc('Convert a text to a vector')
     @api.expect(model_vector_request, validate=True)
     def post(self):
-        model = SharedModel.get_client(request.json['model'])
+        model = SharedModel.get_server(request.json['model'])
         vector = model.get_shared_model_response(request.json['text'])
         return {
             'vector': json.dumps(vector)
@@ -35,7 +35,7 @@ class ModelSimilarityResource(Resource):
     @api.doc('Given two vectors, compare the similarities between them')
     @api.expect(model_similarity_request, validate=True)
     def post(self):
-        model = SharedModel.get_client(request.json['model'])
+        model = SharedModel.get_server(request.json['model'])
         vec1 = np.asarray(json.loads(request.json['vector1']))
         vec2 = np.asarray(json.loads(request.json['vector2']))
         return {

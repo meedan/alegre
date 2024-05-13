@@ -30,11 +30,13 @@ class SharedModel(object):
     return getattr(importlib.import_module('app.main.lib.shared_models.%s' % class_name), model_class)
 
   @staticmethod
-  def start_server(model_class, model_key, options={}):
-    class_ = SharedModel.import_model_class(model_class)
+  def get_server(model_key, options={}):
+    class_ = SharedModel.import_model_class(SharedModel.get_model_class(model_key))
     instance = class_(model_key, options)
     instance.load()
-    app.logger.info('[%s] Serving model...', model_key)
+
+  @staticmethod
+  def register_server(model_class, model_key, options={}):
     r = redis_client.get_client()
     r.set('SharedModel:%s' % model_key, json.dumps({
       'model_class': model_class,
@@ -42,6 +44,12 @@ class SharedModel(object):
       'options': options
     }))
     r.sadd('SharedModel', model_key)
+
+  @staticmethod
+  def start_server(model_class, model_key, options={}):
+    app.logger.info('[%s] Serving model...', model_key)
+    SharedModel.register_server(model_class, model_key, options)
+    instance = SharedModel.get_server(model_key, options)
     instance.bulk_run()
 
   @staticmethod
@@ -49,6 +57,10 @@ class SharedModel(object):
     r = redis_client.get_client()
     return [server.decode('utf-8') for server in r.smembers('SharedModel')]
 
+  @staticmethod
+  def get_model_class(model_key):
+    model_info = r.get("SharedModel:%s" % model_key)
+    return json.loads(model_info.decode('utf-8'))['model_class']
 
   @staticmethod
   def get_client(model_key, options={}):

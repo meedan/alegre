@@ -35,7 +35,7 @@ class TestSharedModel(BaseTestCase):
         ModuleStub = namedtuple('ModuleStub', 'SharedModelStub')
         mock_import.return_value = ModuleStub(SharedModelStub=SharedModelStub)
         SharedModel.start_server('SharedModelStub', SharedModelStub.model_key)
-        self.assertIsInstance(SharedModel.get_client(SharedModelStub.model_key), SharedModelStub)
+        self.assertIsInstance(SharedModel.get_client(SharedModelStub.model_key), SharedModelClient)
         self.assertTrue(SharedModelStub.model_key in SharedModel.get_servers())
 
   def test_init(self):
