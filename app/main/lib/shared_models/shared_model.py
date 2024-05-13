@@ -53,21 +53,21 @@ class SharedModel(object):
     instance.bulk_run()
 
   @staticmethod
+  def get_model_info(model_key):
+    r = redis_client.get_client()
+    return r.get("SharedModel:%s" % model_key).decode('utf-8')
+
+  @staticmethod
   def get_servers():
     r = redis_client.get_client()
     return [server.decode('utf-8') for server in r.smembers('SharedModel')]
 
   @staticmethod
   def get_model_class(model_key):
-    model_info = r.get("SharedModel:%s" % model_key)
-    return json.loads(model_info.decode('utf-8'))['model_class']
+    return json.loads(SharedModel.get_model_info(model_key))['model_class']
 
   @staticmethod
   def get_client(model_key, options={}):
-    r = redis_client.get_client()
-    model_info = r.get("SharedModel:%s" % model_key)
-    assert model_info is not None, f"Unable locate model info for key {model_key}"
-    model_class = json.loads(model_info.decode('utf-8'))['model_class']
     return SharedModelClient(model_key, options)
 
   def __init__(self, model_key, options={}):

@@ -5,6 +5,7 @@ from flask import current_app as app
 
 from app.main import db
 from app.test.base import BaseTestCase
+from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestXLMRBertBaseNliStsbMeanTokensBlueprint(BaseTestCase):
     use_model_key = "xlm-r-bert-base-nli-stsb-mean-tokens"
