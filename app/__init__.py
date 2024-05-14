@@ -15,7 +15,6 @@ from .main.controller.video_similarity_controller import api as video_similarity
 from .main.controller.bulk_similarity_controller import api as bulk_similarity_ns
 from .main.controller.bulk_update_similarity_controller import api as bulk_update_similarity_ns
 from .main.controller.translation_controller import api as translation_ns
-from .main.controller.model_controller import api as model_ns
 from .main.controller.image_similarity_controller import api as image_similarity_ns
 from .main.controller.image_classification_controller import api as image_classification_ns
 from .main.controller.image_ocr_controller import api as image_ocr_ns
@@ -33,7 +32,6 @@ api = Api(blueprint,
 
 api.add_namespace(about_ns, path='/about')
 api.add_namespace(healthcheck_ns, path='/healthcheck')
-api.add_namespace(model_ns, path='/model')
 api.add_namespace(langid_ns, path='/text/langid')
 api.add_namespace(similarity_ns, path='/text/similarity')
 api.add_namespace(similarity_async_ns, path='/similarity/async')
