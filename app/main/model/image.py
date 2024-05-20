@@ -5,9 +5,8 @@ import logging
 import sys
 from flask import current_app as app
 from PIL import Image, ImageFile
-from sqlalchemy.dialects.postgresql import BIT
-
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import BIT, JSONB
 
 from app.main import db
 from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
@@ -30,7 +29,9 @@ class ImageModel(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_images_context', context, postgresql_using='gin'),
+    db.Index('ix_images_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_images_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_images_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
   @property
