@@ -1,5 +1,6 @@
 import os
 import uuid
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
@@ -19,7 +20,9 @@ class Video(db.Model):
   created_at = db.Column(db.DateTime, nullable=True)
   tmk_file_downloaded = db.Column(db.Boolean, nullable=True)
   __table_args__ = (
-    db.Index('ix_videos_context', context, postgresql_using='gin'),
+    db.Index('ix_videos_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_videos_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_videos_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
   def __init__(self, **kwargs):
