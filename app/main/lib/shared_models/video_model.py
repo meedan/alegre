@@ -122,8 +122,7 @@ class VideoModel(SharedModel):
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "video")
             video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
-        tmk_path = media_crud.tmk_file_path(video.folder, video.filepath)
-        if video and os.path.exists(tmk_path):
+        if video and self.tmk_file_exists(video):
             matches = self.search_by_context(body["context"])
             default_list = list(np.zeros(len(video.hash_value)))
             try:
@@ -137,7 +136,7 @@ class VideoModel(SharedModel):
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
-                scores = tmkpy.query(tmk_path,files,1)
+                scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
             except Exception as err:
                 ErrorLog.notify(err, {"video_folder": video.folder, "video_filepath": video.filepath, "files": files, "video_id": video.id, "task": task})
                 raise err
@@ -164,6 +163,9 @@ class VideoModel(SharedModel):
                 return {"result": results}
         else:
             return {"error": "Video not found for provided task", "task": task}
+
+    def tmk_file_exists(self, video):
+        return os.path.exists(media_crud.tmk_file_path(video.folder, video.filepath))
 
     def tmk_program_name(self):
         return "AlegreVideoEncoder"
