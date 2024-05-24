@@ -169,7 +169,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
                 with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
-                    with patch.object('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
+                    with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
                         mock_video_file_exists.return_value = True
                         mock_query.return_value = (1.0,)
                         mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
@@ -212,7 +212,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         with patch('requests.post') as mock_post_request:
             with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
                 with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
-                    with patch.object('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
+                    with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
                         mock_video_file_exists.return_value = True
                         mock_query.return_value = (1.0,)
                         mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
