@@ -9,7 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import BIT, JSONB
 
 from app.main import db
-from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from app.main.lib.image_hash import sha256_stream
 from app.main.lib import media_crud
 from pgvector.sqlalchemy import Vector
 
@@ -75,13 +75,6 @@ class ImageModel(db.Model):
     remote_response = urllib.request.urlopen(remote_request)
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
-    phash = compute_phash_int(im)
     sscd = None
-    try:
-      pdq = compute_pdq(io.BytesIO(raw))
-    except:
-      pdq=None
-      e = sys.exc_info()[0]
-      app.logger.error(f"PDQ failure: {e}")
     sha256 = sha256_stream(io.BytesIO(raw))
     return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)
