@@ -18,7 +18,6 @@ class Video(db.Model):
   hash_value = db.Column(ARRAY(db.Float), nullable=True)
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
-  tmk_file_downloaded = db.Column(db.Boolean, nullable=True)
   __table_args__ = (
     db.Index('ix_videos_context_gin', context, postgresql_using='gin'),
     db.Index('ix_videos_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
@@ -68,5 +67,4 @@ class Video(db.Model):
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
       url=task.get("url"),
       context=task.get("context", task.get("raw", {}).get("context")),
-      tmk_file_downloaded=False,
     )
