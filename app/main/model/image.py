@@ -75,6 +75,5 @@ class ImageModel(db.Model):
     remote_response = urllib.request.urlopen(remote_request)
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
-    sscd = None
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)
+    return ImageModel(sha256=sha256, phash=None, pdq=None, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=None)
