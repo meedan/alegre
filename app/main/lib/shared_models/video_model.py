@@ -46,7 +46,6 @@ class VideoModel(SharedModel):
             task["hash_value"] = hash_value
         added, obj = media_crud.add(task, Video, ["hash_value", "folder", "filepath"])
         self.download_file(s3_folder, s3_filepath, obj)
-        obj.tmk_file_downloaded = True
         db.session.commit()
         return added
 
@@ -94,15 +93,15 @@ class VideoModel(SharedModel):
             context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context, hash_value, tmk_file_downloaded FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                   WHERE 
                 """+context_query
             else:
                 cmd = """
-                  SELECT id, doc_id, url, folder, filepath, context, hash_value, tmk_file_downloaded FROM videos
+                  SELECT id, doc_id, url, folder, filepath, context, hash_value FROM videos
                 """
             matches = self.execute_command(text(cmd), context_hash)
-            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value', 'tmk_file_downloaded')
+            keys = ('id', 'doc_id', 'url', 'folder', 'filepath', 'context', 'hash_value')
             rows = [dict(zip(keys, values)) for values in matches]
             for row in rows:
                 row["context"] = [c for c in row["context"] if context_matches(context, c)]
@@ -123,7 +122,7 @@ class VideoModel(SharedModel):
             # a redis key that we've received something from presto.
             result = Presto.blocked_response(response, "video")
             video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
-        if video:
+        if video and self.tmk_file_exists(video):
             matches = self.search_by_context(body["context"])
             default_list = list(np.zeros(len(video.hash_value)))
             try:
@@ -133,7 +132,7 @@ class VideoModel(SharedModel):
                 l1_scores = [0.0 for e in matches]
             qualified_matches = []
             for i,match in enumerate(matches):
-                if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE'] and match.get("tmk_file_downloaded"):
+                if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
                     qualified_matches.append(match)
             files = self.get_fullpath_files(qualified_matches, False)
             try:
@@ -164,6 +163,9 @@ class VideoModel(SharedModel):
                 return {"result": results}
         else:
             return {"error": "Video not found for provided task", "task": task}
+
+    def tmk_file_exists(self, video):
+        return os.path.exists(media_crud.tmk_file_path(video.folder, video.filepath))
 
     def tmk_program_name(self):
         return "AlegreVideoEncoder"
