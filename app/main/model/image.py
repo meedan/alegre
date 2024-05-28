@@ -5,12 +5,11 @@ import logging
 import sys
 from flask import current_app as app
 from PIL import Image, ImageFile
-from sqlalchemy.dialects.postgresql import BIT
-
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import BIT, JSONB
 
 from app.main import db
-from app.main.lib.image_hash import compute_phash_int, sha256_stream, compute_phash_int, compute_pdq
+from app.main.lib.image_hash import sha256_stream
 from app.main.lib import media_crud
 from pgvector.sqlalchemy import Vector
 
@@ -30,7 +29,9 @@ class ImageModel(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_images_context', context, postgresql_using='gin'),
+    db.Index('ix_images_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_images_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_images_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
   @property
@@ -74,13 +75,5 @@ class ImageModel(db.Model):
     remote_response = urllib.request.urlopen(remote_request)
     raw = remote_response.read()
     im = Image.open(io.BytesIO(raw)).convert('RGB')
-    phash = compute_phash_int(im)
-    sscd = None
-    try:
-      pdq = compute_pdq(io.BytesIO(raw))
-    except:
-      pdq=None
-      e = sys.exc_info()[0]
-      app.logger.error(f"PDQ failure: {e}")
     sha256 = sha256_stream(io.BytesIO(raw))
-    return ImageModel(sha256=sha256, phash=phash, pdq=pdq, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=sscd)
+    return ImageModel(sha256=sha256, phash=None, pdq=None, url=url, context=context, doc_id=doc_id, created_at=created_at, sscd=None)

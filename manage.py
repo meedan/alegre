@@ -18,7 +18,6 @@ from app.main import create_app, db
 from app.main.model import image
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
-from app.main.lib.image_hash import compute_phash_int
 from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
@@ -334,13 +333,6 @@ def test(pattern='test*.py'):
   tests = unittest.TestLoader().discover('app/test/', pattern=pattern)
   result = unittest.TextTestRunner(verbosity=2).run(tests)
   return 0 if result.wasSuccessful() else 1
-
-@manager.command
-def phash(path):
-  """Computes the phash of a given image."""
-  im = Image.open(path).convert('RGB')
-  phash = compute_phash_int(im)
-  print(phash, "{0:b}".format(phash), sep=" ")
 
 @manager.command
 def run_rq_worker():

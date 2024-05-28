@@ -1,5 +1,6 @@
 import urllib.request
 import tempfile
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, BIT, ARRAY
 from scipy.io import wavfile
 import scipy.signal
@@ -20,7 +21,9 @@ class Audio(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_audios_context', context, postgresql_using='gin'),
+    db.Index('ix_audios_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_audios_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_audios_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
   @property

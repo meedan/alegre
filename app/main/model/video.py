@@ -1,5 +1,6 @@
 import os
 import uuid
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 
 from app.main import db
@@ -18,7 +19,9 @@ class Video(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_videos_context', context, postgresql_using='gin'),
+    db.Index('ix_videos_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_videos_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_videos_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
   def __init__(self, **kwargs):
@@ -63,5 +66,5 @@ class Video(db.Model):
       filepath=task.get("filepath", temp_uuid),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
       url=task.get("url"),
-      context=task.get("context", task.get("raw", {}).get("context"))
+      context=task.get("context", task.get("raw", {}).get("context")),
     )
