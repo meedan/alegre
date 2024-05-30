@@ -34,4 +34,4 @@ class VideoSimilaritySearchResource(Resource):
     def post(self):
         args = request.json
         app.logger.debug(f"Args are {args}")
-        return similarity.get_similar_items(args, "video")
+        return jsonify({"message": "This endpoint is not implemented."}), 501
