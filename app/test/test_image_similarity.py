@@ -19,7 +19,7 @@ class TestImageSimilarityBlueprint(BaseTestCase):
 
   def test_delete_image(self):
     url = 'file:///app/app/test/data/lenna-512.png'
-    image = ImageModel(url=url, doc_id='1-2-3', context={'team_id': 1,'project_media_id': 1})
+    image = ImageModel(url=url, doc_id='1-2-3', context=[{'team_id': 1,'project_media_id': 1}])
     db.session.add(image)
     db.session.commit()
     response = self.client.delete('/image/similarity/', data=json.dumps({
