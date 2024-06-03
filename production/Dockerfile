@@ -25,8 +25,6 @@ RUN apt-get clean
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 COPY . .
-RUN make -C /app/threatexchange/tmk/cpp
-RUN make -C /app/threatexchange/tmk/cpp clean
 
 RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
 COPY requirements.txt ./

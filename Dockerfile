@@ -7,9 +7,7 @@ RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavf
 RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 # Copy necessary threatexchange folders
-COPY ./threatexchange/tmk/cpp /app/threatexchange/tmk/cpp
 COPY ./threatexchange/pdq/cpp /app/threatexchange/pdq/cpp
-RUN make -C /app/threatexchange/tmk/cpp
 
 # Other configurations
 RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
