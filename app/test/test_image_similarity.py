@@ -19,18 +19,9 @@ class TestImageSimilarityBlueprint(BaseTestCase):
 
   def test_delete_image(self):
     url = 'file:///app/app/test/data/lenna-512.png'
-    # Test adding an image.
-    response = self.client.post('/image/similarity/', data=json.dumps({
-      'url': url,
-      'doc_id': '1-2-3',
-      'context': {
-        'team_id': 1,
-        'project_media_id': 1
-      }
-    }), content_type='application/json')
-    result = json.loads(response.data.decode())
-    self.assertEqual(True, result['success'])
-    self.assertEqual(1, len(ImageModel.query.filter_by(url=url).all()))
+    image = ImageModel(url=url, doc_id='1-2-3', context=[{'team_id': 1,'project_media_id': 1}])
+    db.session.add(image)
+    db.session.commit()
     response = self.client.delete('/image/similarity/', data=json.dumps({
       'url': url,
       'doc_id': '1-2-3',

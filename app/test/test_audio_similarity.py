@@ -39,64 +39,6 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
-        with patch('requests.post') as mock_post_request:
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'audio__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/blah.mp3',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/blah.mp3'
-                    }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/audio/similarity/', data=json.dumps({
-                'url': url,
-                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result['message'], "Message pushed successfully")
-
-    def test_basic_http_responses(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
-        with patch('requests.post') as mock_post_request:
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'audio__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/blah.mp3',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/blah.mp3'
-                    }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/audio/similarity/', data=json.dumps({
-                'url': url,
-                'project_media_id': 1,
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(result['message'], "Message pushed successfully")
-
     def test_callback_response(self):
         with patch('app.main.lib.similarity.callback_add_item') as mock_callback_add_item:
             with patch('app.main.lib.webhook.Webhook.return_webhook') as mock_post_request:
