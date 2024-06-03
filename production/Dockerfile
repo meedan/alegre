@@ -31,7 +31,6 @@ COPY requirements.txt ./
 RUN pip install --upgrade pip
 RUN pip install pact-python
 RUN pip install --no-cache-dir -r requirements.txt
-RUN cd threatexchange/pdq/python && pip install .
 RUN python3 -c 'import nltk; nltk.download("punkt")'
 RUN pip uninstall requirements.txt
 
