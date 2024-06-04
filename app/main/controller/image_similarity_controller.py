@@ -4,6 +4,7 @@ from flask_restplus import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
 
 from app.main.lib import similarity
+from flask import jsonify
 
 api = Namespace('image_similarity', description='image similarity operations')
 image_similarity_request = api.model('image_similarity_request', {
@@ -32,7 +33,7 @@ class ImageSimilarityResource(Resource):
   @api.doc('Store an image signature in the similarity database')
   @api.expect(image_similarity_request, validate=True)
   def post(self):
-    return similarity.add_item(request.json, "image")
+    return jsonify({"message": "This endpoint is not implemented."}), 501
 
 
 @api.route('/search/')
@@ -41,4 +42,4 @@ class ImageSimilaritySearchResource(Resource):
   @api.doc('Make a image similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"url":"http://some.link/video.mp4", "threshold": 0.5}\' "http://[ALEGRE_HOST]/image/similarity"')
   @api.doc(params={'url': 'image URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'})
   def post(self):
-    return similarity.get_similar_items(request_package(request), "image")
+    return jsonify({"message": "This endpoint is not implemented."}), 501
