@@ -80,7 +80,7 @@ oauthlib==3.1.0
 opensearch-py==2.2.0
 opt-einsum==3.2.0
 packaging==21.0
-pact-python==1.4.5
+# pact-python==1.4.5
 # Pillow==8.1.1
 plac==0.9.6
 preshed==2.0.1
