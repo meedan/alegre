@@ -35,10 +35,10 @@ deploy_qa:
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
     - apk add --no-cache curl python3 py3-pip git
-    - pip install botocore==1.31.58
-    - pip install boto3==1.28.58
-    - pip install ecs-deploy==1.14.0
-    - pip install awscli==1.29.59
+    - pip install botocore==1.31.58 --break-system-packages
+    - pip install boto3==1.28.58 --break-system-packages
+    - pip install ecs-deploy==1.14.0 --break-system-packages
+    - pip install awscli==1.29.59 --break-system-packages
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c PERSISTENT_DISK_PATH /mnt/models/video -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
@@ -87,10 +87,10 @@ deploy_live:
     AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
   script:
     - apk add --no-cache curl jq python3 py3-pip git
-    - pip install botocore==1.31.58
-    - pip install boto3==1.28.58
-    - pip install ecs-deploy==1.14.0
-    - pip install awscli==1.29.59
+    - pip install botocore==1.31.58 --break-system-packages
+    - pip install boto3==1.28.58 --break-system-packages
+    - pip install ecs-deploy==1.14.0 --break-system-packages
+    - pip install awscli==1.29.59 --break-system-packages
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-c APP alegre -e live-alegre-c PERSISTENT_DISK_PATH /mnt/models/video -e live-alegre-c DEPLOY_ENV live -e live-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-c.env.args`
