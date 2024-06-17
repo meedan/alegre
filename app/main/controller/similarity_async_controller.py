@@ -11,6 +11,7 @@ similarity_sync_request = api.model('similarity_sync_request', {
     'text': fields.String(required=False, description='text to be stored or queried for similarity'),
     'url': fields.String(required=False, description='url for item to be stored or queried for similarity'),
     'callback_url': fields.String(required=False, description='callback_url for final search results'),
+    'content_hash': fields.String(required=False, description='Content hash for checking for cached Presto Response'),
     'doc_id': fields.String(required=False, description='text ID to constrain uniqueness'),
     'models': fields.List(required=False, description='similarity models to use: ["elasticsearch"] (pure Elasticsearch, default) or the key name of an active model', cls_or_instance=fields.String),
     'language': fields.String(required=False, description='language code for the analyzer to use during the similarity query (defaults to standard analyzer)'),

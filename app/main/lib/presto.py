@@ -26,6 +26,7 @@ class Presto:
     def send_request(presto_host, model_key, callback_url, message, requires_callback=True):
         data = {
             "callback_url": callback_url,
+            "content_hash": message.get("content_hash", str(uuid.uuid4())),
             "id": message.get("doc_id", str(uuid.uuid4())),
             "url": message.get("url"),
             "text": message.get("text"),
