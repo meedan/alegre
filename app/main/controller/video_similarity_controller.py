@@ -4,6 +4,7 @@ from flask_restplus import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
 
 from app.main.lib import similarity
+from flask import jsonify
 
 api = Namespace('video_similarity', description='video similarity operations')
 video_similarity_request = api.model('similarity_request', {
@@ -17,13 +18,13 @@ class VideoSimilarityResource(Resource):
     @api.doc('Delete a video in the similarity database')
     @api.expect(video_similarity_request, validate=True)
     def delete(self):
-        return similarity.delete_item(request.args, "video")
+        return similarity.delete_item(request.json or request.args, "video") # Changed Since 4126 PR
 
     @api.response(200, 'video successfully stored in the similarity database.')
     @api.doc('Store a video in the similarity database')
     @api.expect(video_similarity_request, validate=True)
     def post(self):
-        return similarity.add_item(request.json, "video")
+        return jsonify({"message": "This endpoint is not implemented."}), 501
 
 @api.route('/search/')
 class VideoSimilaritySearchResource(Resource):
@@ -33,4 +34,4 @@ class VideoSimilaritySearchResource(Resource):
     def post(self):
         args = request.json
         app.logger.debug(f"Args are {args}")
-        return similarity.get_similar_items(args, "video")
+        return jsonify({"message": "This endpoint is not implemented."}), 501

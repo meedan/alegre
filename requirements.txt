@@ -56,7 +56,6 @@ h11==0.12.0
 h5py==2.10.0
 idna==2.7
 igraph==0.9.8
-ImageHash==4.0
 importlib-metadata==4.6.4
 itsdangerous==0.24
 jieba3k==0.35.1
@@ -81,7 +80,7 @@ oauthlib==3.1.0
 opensearch-py==2.2.0
 opt-einsum==3.2.0
 packaging==21.0
-pact-python==1.4.5
+# pact-python==1.4.5
 # Pillow==8.1.1
 plac==0.9.6
 preshed==2.0.1

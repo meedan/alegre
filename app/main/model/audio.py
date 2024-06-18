@@ -1,10 +1,12 @@
 import urllib.request
 import tempfile
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, BIT, ARRAY
 from scipy.io import wavfile
 import scipy.signal
 import numpy as np
-
+from flask import current_app as app
+from app.main.lib import media_crud
 from app.main import db
 
 class Audio(db.Model):
@@ -19,11 +21,27 @@ class Audio(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_audios_context', context, postgresql_using='gin'),
+    db.Index('ix_audios_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_audios_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_audios_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
+  @property
+  def existing_response(self):
+    return {"body": {"hash_value": self.chromaprint_fingerprint}}
+
+  @property
+  def requires_encoding(self):
+    if self.chromaprint_fingerprint:
+      return False
+    return True
+
   @classmethod
-  def from_task_data(cls, task):
+  def from_task_data(cls, task, existing):
+    if existing:
+      if not existing.chromaprint_fingerprint:
+        existing.chromaprint_fingerprint = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
     return cls(
       chromaprint_fingerprint=task.get("hash_value"),
       doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),

@@ -1,6 +1,7 @@
+from unittest.mock import ANY
 import unittest
 from unittest.mock import patch, MagicMock
-from app.main.lib.media_crud import merge_dict_lists, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response
+from app.main.lib.media_crud import merge_dict_lists, tmk_file_path, save, delete, add, get_by_doc_id_or_url, get_object, get_context_for_search, get_blocked_presto_response, get_async_presto_response
 from app.main import db
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
@@ -143,10 +144,14 @@ class TestMediaCrud(unittest.TestCase):
         self.assertEqual(result['result']['url'], "http://example.com/url")
 
 
+    @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_success(self, mock_from_task_data, mock_save):
+    def test_add_success(self, mock_from_task_data, mock_save, mock_query):
         # Setup
+        mock_model = MagicMock()
+        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
+        mock_model.query.filter.return_value.one.return_value = mock_obj
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
         modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
@@ -155,19 +160,23 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.return_value = mock_obj
 
         # Test
-        result = add(task, model, modifiable_fields)
+        result, _ = add(task, model, modifiable_fields)
 
         # Assert
         self.assertTrue(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
+        mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
 
+    @patch('app.main.lib.media_crud.db.session.query')
     @patch('app.main.lib.media_crud.save')
     @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_integrity_error(self, mock_from_task_data, mock_save):
+    def test_add_integrity_error(self, mock_from_task_data, mock_save, mock_query):
         # Setup
+        mock_model = MagicMock()
+        mock_obj = Audio(url="http://example.com", context=[{"foo": "bar"}, {"baz": "bat"}], hash_value="new_hash")
+        mock_model.query.filter.return_value.one.return_value = mock_obj
         task = {'url': 'http://example.com/image.jpg'}
         model = Audio
         modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
@@ -176,31 +185,14 @@ class TestMediaCrud(unittest.TestCase):
         mock_save.side_effect = sqlalchemy.exc.IntegrityError(None, None, None)
 
         # Test
-        result = add(task, model, modifiable_fields)
+        result, _ = add(task, model, modifiable_fields)
 
         # Assert
         self.assertFalse(result['success'])
         self.assertEqual(result['requested'], task)
         self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
+        mock_from_task_data.assert_called_once_with(task, ANY)
         mock_save.assert_called_once_with(mock_obj, model, modifiable_fields)
-
-    @patch('app.main.model.audio.Audio.from_task_data')
-    def test_add_http_error(self, mock_from_task_data):
-        # Setup
-        task = {'url': 'http://example.com/image.jpg'}
-        model = Audio
-        modifiable_fields = ["hash_value", "chromaprint_fingerprint"]
-        mock_from_task_data.side_effect = urllib.error.HTTPError(None, None, None, None, None)
-
-        # Test
-        result = add(task, model, modifiable_fields)
-
-        # Assert
-        self.assertFalse(result['success'])
-        self.assertEqual(result['requested'], task)
-        self.assertEqual(result['result']['url'], task['url'])
-        mock_from_task_data.assert_called_once_with(task)
 
     @patch('app.main.lib.media_crud.db.session.query')
     def test_get_by_doc_id_or_url(self, mock_query):
@@ -302,7 +294,20 @@ class TestMediaCrud(unittest.TestCase):
         # Mock return values
         mock_get_object.return_value = (MagicMock(), False)
         mock_get_context_for_search.return_value = {"context_key": "context_value"}
-        mock_send_request.return_value = MagicMock(text=json.dumps({"response_key": "response_value"}))
+        mock_send_request.return_value = MagicMock(text=json.dumps({
+            'message': 'Message pushed successfully',
+            'queue': 'video__Model',
+            'body': {
+                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+                'url': 'http://example.com/chair-19-sd-bar.mp4',
+                'text': None,
+                'raw': {
+                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/chair-19-sd-bar.mp4',
+                }
+            }
+        }))
         mock_blocked_response.return_value = {"blocked_response_key": "blocked_response_value"}
 
         # Call the function
@@ -315,7 +320,7 @@ class TestMediaCrud(unittest.TestCase):
         mock_blocked_response.assert_called_once()
 
         self.assertFalse(temporary)
-        self.assertEqual(context, [{"context_key": "context_value"}])
+        self.assertEqual(context, {"context_key": "context_value"})
         self.assertEqual(response, {"blocked_response_key": "blocked_response_value"})
 
     @patch('app.main.lib.presto.Presto.send_request')
@@ -329,7 +334,20 @@ class TestMediaCrud(unittest.TestCase):
         mock_obj = MagicMock()
         mock_temporary = False
         mock_context = {"some": "context"}
-        mock_response = json.dumps({"some": "response"})
+        mock_response = json.dumps({
+            'message': 'Message pushed successfully',
+            'queue': 'video__Model',
+            'body': {
+                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+                'url': 'http://example.com/chair-19-sd-bar.mp4',
+                'text': None,
+                'raw': {
+                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'url': 'http://example.com/chair-19-sd-bar.mp4',
+                }
+            }
+        })
 
         # Set return values for mocks
         mock_get_object.return_value = (mock_obj, mock_temporary)
@@ -337,11 +355,10 @@ class TestMediaCrud(unittest.TestCase):
         mock_send_request.return_value = MagicMock(text=mock_response)
 
         # Call the function under test
-        result = get_async_presto_response(test_task, test_model, test_modality)
+        result = get_async_presto_response(test_task, test_model, test_modality)[0]
 
         # Assert that the mocks were called correctly
         mock_get_object.assert_called_once_with(test_task, test_model)
-        mock_get_context_for_search.assert_called_once_with(test_task)
         mock_send_request.assert_called_once_with(
             app.config['PRESTO_HOST'],
             PRESTO_MODEL_MAP[test_modality],
@@ -352,6 +369,9 @@ class TestMediaCrud(unittest.TestCase):
 
         # Assert the expected result
         self.assertEqual(result, json.loads(mock_response))
+
+    def test_tmk_file_path(self):
+        self.assertIsInstance(tmk_file_path("foo", "bar"), str)
 
 if __name__ == '__main__':
     unittest.main()

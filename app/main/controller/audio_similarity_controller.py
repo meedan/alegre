@@ -4,6 +4,7 @@ from flask_restplus import Resource, Namespace, fields
 from app.main.lib.fields import JsonObject
 
 from app.main.lib import similarity
+from flask import jsonify
 
 api = Namespace('audio_similarity', description='audio similarity operations')
 audio_similarity_request = api.model('similarity_request', {
@@ -17,13 +18,13 @@ class AudioSimilarityResource(Resource):
     @api.doc('Delete an audio in the similarity database')
     @api.expect(audio_similarity_request, validate=True)
     def delete(self):
-        return similarity.delete_item(request.args, "audio")
+        return similarity.delete_item(request.json or request.args, "audio") # Changed Since 4126 PR
 
     @api.response(200, 'audio successfully stored in the similarity database.')
     @api.doc('Store an audio in the similarity database')
     @api.expect(audio_similarity_request, validate=True)
     def post(self):
-        return similarity.add_item(request.json, "audio")
+        return jsonify({"message": "This endpoint is not implemented."}), 501
 
 @api.route('/search/')
 class AudioSimilaritySearchResource(Resource):
@@ -33,4 +34,4 @@ class AudioSimilaritySearchResource(Resource):
     def post(self):
         args = request.json
         app.logger.debug(f"Args are {args}")
-        return similarity.get_similar_items(args, "audio")
+        return jsonify({"message": "This endpoint is not implemented."}), 501

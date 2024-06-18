@@ -1,11 +1,11 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace
 from opensearchpy import OpenSearch
-import redis
 import os
 import importlib
-from app.main import db
 from sqlalchemy_utils import database_exists
+from app.main import db
+from app.main.lib import redis_client
 
 api = Namespace('healthcheck', description='service healthcheck')
 
@@ -36,7 +36,7 @@ class HealthcheckResource(Resource):
 
     # Redis
     try:
-      r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+      r = redis_client.get_client()
       result['REDIS'] = r.ping()
     except Exception as e:
       result['REDIS'] = str(e)

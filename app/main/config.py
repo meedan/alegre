@@ -41,6 +41,10 @@ class Config:
   PRESTO_HOST = os.getenv('PRESTO_HOST', default="http://presto:8000")
   CHECK_API_HOST = os.getenv('CHECK_API_HOST', default="http://api:3000")
   WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN', default="dev")
+  S3_ENDPOINT = os.getenv("S3_ENDPOINT")
+  AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+  AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+  AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
 
 class DevelopmentConfig(Config):
   DEBUG = True
