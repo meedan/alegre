@@ -1,4 +1,4 @@
-from app.main.lib.elasticsearch import get_all_documents_matching_context
+from app.main.lib.opensearch import get_all_documents_matching_context
 from app.main.lib import text_similarity
 from app.main.lib import image_similarity
 from flask import current_app as app

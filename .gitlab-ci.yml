@@ -40,6 +40,12 @@ deploy_qa:
     - pip install ecs-deploy==1.14.0
     - pip install awscli==1.29.59
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /qa/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/qa/alegre/##' > env.qa.names
+    - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-migration $NAME /qa/alegre/$NAME " >> qa-alegre-migration.env.args; done
+    - ecs update qa-alegre-migration --image qa-alegre-migration $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e qa-alegre-migration APP alegre -e qa-alegre-migration DEPLOY_ENV qa -e qa-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e qa-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-migration.env.args`
+    - taskArn=$(aws ecs run-task --cluster ecs-qa --task-definition qa-alegre-migration --query 'tasks[].taskArn' --output text)
+    - echo "Migration task started - $taskArn"
+    - aws ecs wait tasks-stopped --cluster ecs-qa --tasks $taskArn
+    - echo "Migration task finished."
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-c $NAME /qa/alegre/$NAME " >> qa-alegre-c.env.args; done
     - ecs deploy ecs-qa  qa-alegre --diff --image qa-alegre-c $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e qa-alegre-c APP alegre -e qa-alegre-c PERSISTENT_DISK_PATH /mnt/models/video -e qa-alegre-c DEPLOY_ENV qa -e qa-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat qa-alegre-c.env.args`
     - for NAME in `cat env.qa.names`; do echo -n "-s qa-alegre-indiansbert $NAME /qa/alegre/$NAME " >> qa-alegre-indiansbert.env.args; done
@@ -92,6 +98,12 @@ deploy_live:
     - pip install ecs-deploy==1.14.0
     - pip install awscli==1.29.59
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
+    - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-migration $NAME /live/alegre/$NAME " >> live-alegre-migration.env.args; done
+    - ecs update live-alegre-migration --image live-alegre-migration $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --exclusive-env -e live-alegre-migration APP alegre -e live-alegre-migration DEPLOY_ENV live -e live-alegre-migration AWS_REGION $AWS_DEFAULT_REGION -e live-alegre-migration ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-migration.env.args`
+    - taskArn=$(aws ecs run-task --cluster ecs-live --task-definition live-alegre-migration --query 'tasks[].taskArn' --output text)
+    - echo "Migration task started - $taskArn"
+    - aws ecs wait tasks-stopped --cluster ecs-live --tasks $taskArn
+    - echo "Migration task finished."
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-c APP alegre -e live-alegre-c PERSISTENT_DISK_PATH /mnt/models/video -e live-alegre-c DEPLOY_ENV live -e live-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-c.env.args`
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-indiansbert $NAME /live/alegre/$NAME " >> live-alegre-indiansbert.env.args; done
