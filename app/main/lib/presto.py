@@ -26,13 +26,16 @@ class Presto:
     def send_request(presto_host, model_key, callback_url, message, requires_callback=True):
         data = {
             "callback_url": callback_url,
-            "content_hash": message.get("content_hash", str(uuid.uuid4())),
-            "id": message.get("doc_id", str(uuid.uuid4())),
+            "content_hash": message.get("content_hash"),
             "url": message.get("url"),
             "text": message.get("text"),
             "raw": message,
             "requires_callback": requires_callback
         }
+        if message.get("doc_id"):
+            data["id"] = message.get("doc_id")
+        else:
+            data["id"] = str(uuid.uuid4())
         headers = {"Content-Type": "application/json"}
         json_data = json.dumps(data, default=safe_serializer)
         return requests.post(f"{presto_host}/process_item/{model_key}", data=json_data, headers=headers)
