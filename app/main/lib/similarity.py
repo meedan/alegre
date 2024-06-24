@@ -64,7 +64,7 @@ def get_body_for_text_document(params, mode):
       params['content'] = None
 
     if mode == 'store':
-      allow_list = set(['language', 'content', 'created_at', 'models', 'context', 'callback_url'])
+      allow_list = set(['language', 'content', 'created_at', 'models', 'context', 'callback_url', 'content_hash'])
       keys_to_remove = params.keys() - allow_list
       app.logger.info(
         f"[Alegre Similarity] get_body_for_text_document:running in `store' mode. Removing {keys_to_remove}")
@@ -85,6 +85,7 @@ def model_response_package(item, command):
     "limit": item.get("limit", DEFAULT_SEARCH_LIMIT) or DEFAULT_SEARCH_LIMIT,
     "url": item.get("url"),
     "callback_url": item.get("callback_url"),
+    "content_hash": item.get("content_hash"),
     "doc_id": item.get("doc_id"),
     "context": item.get("context", {}),
     "created_at": item.get("created_at"),
