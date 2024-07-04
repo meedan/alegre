@@ -108,23 +108,15 @@ def get_vector_model_base_conditions(search_params, model_key, threshold):
                     'bool': {
                         'must': [
                             {
-                                'match': {
-                                    'model_' + str(model_key): {
-                                        'query': "1",
-                                    }
+                                'exists': {
+                                    'field': 'vector_'+str(model_key)
                                 }
                             }
                         ]
                     }
                 },
                 'script': {
-                    'source': """
-                        if (!doc.containsKey('vector_""" + str(model_key) + """') || doc['vector_""" + str(model_key) + """'].size() == 0) { 
-                            return 0; 
-                        } else { 
-                            return cosineSimilarity(params.query_vector, doc[params.field]) + 1.0; 
-                        }
-                    """,
+                    'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
                     'params': {
                         'field': "vector_" + str(model_key),
                         'query_vector': vector
