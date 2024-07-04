@@ -90,42 +90,41 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
     return conditions
 
 def get_vector_model_base_conditions(search_params, model_key, threshold):
-  if "vector" in search_params:
-    vector = search_params["vector"]
-  elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
-    vector = retrieve_openai_embeddings(search_params['content'], model_key)
-    if vector == None:
-       return None
-  else:
-    model = SharedModel.get_client(model_key)
-    vector = model.get_shared_model_response(search_params['content'])
-  return {
-      'query': {
-          'script_score': {
-              'min_score': float(threshold)+1,
-              'query': {
-                  'bool': {
-                      'must': [
-                          {
-                              'match': {
-                                  'model_'+str(model_key): {
-                                    'query': "1",
-                                  }
-                              }
-                          }
-                      ]
-                  }
-              },
-              'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
-                  'params': {
-                      'field': "vector_"+str(model_key),
-                      'query_vector': vector
-                  }
-              }
-          }
-      }
-  }
+    if "vector" in search_params:
+        vector = search_params["vector"]
+    elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+        vector = retrieve_openai_embeddings(search_params['content'], model_key)
+        if vector is None:
+            return None
+    else:
+        model = SharedModel.get_client(model_key)
+        vector = model.get_shared_model_response(search_params['content'])
+
+    return {
+        'query': {
+            'script_score': {
+                'min_score': float(threshold) + 1,
+                'query': {
+                    'bool': {
+                        'must': [
+                            {
+                                'exists': {
+                                    'field': 'vector_'+str(model_key)
+                                }
+                            }
+                        ]
+                    }
+                },
+                'script': {
+                    'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
+                    'params': {
+                        'field': "vector_" + str(model_key),
+                        'query_vector': vector
+                    }
+                }
+            }
+        }
+    }
 
 def insert_model_into_response(hits, model_key):
     for hit in hits:
