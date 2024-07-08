@@ -163,7 +163,7 @@ class VideoModel(SharedModel):
                 else:
                     return {"result": results}
             else:
-                ErrorLog.notify(Exception("Failed to locate needle for a video!"), {"video_folder": video.folder, "video_filepath": video.filepath, "files": files, "video_id": video.id, "task": task})
+                ErrorLog.notify(Exception("Failed to locate needle for a video!"), {"video_folder": video.folder, "video_filepath": video.filepath, "video_id": video.id, "task": task})
                 return {"error": "Video not found for provided task", "task": task}
         else:
             return {"error": "Video not found for provided task", "task": task}
