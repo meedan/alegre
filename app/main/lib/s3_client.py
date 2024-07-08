@@ -3,6 +3,8 @@ from botocore.client import Config
 
 from flask import current_app as app
 
+from app.main.lib.error_log import ErrorLog
+
 MINIO_HOST = "minio:9000"
 def download_file_from_s3(bucket: str, filename: str, local_path: str):
     """
@@ -32,6 +34,7 @@ def download_file_from_s3(bucket: str, filename: str, local_path: str):
         s3_client.download_file(bucket, tmk_file, local_path)
         app.logger.info(f'Successfully downloaded file {tmk_file} from S3 bucket.')
     except Exception as e:
+        ErrorLog.notify(e, {"bucket": bucket, "filename": filename, "local_path": local_path, "tmk_file": tmk_file})
         app.logger.error(f'Failed to download file {tmk_file} from S3 bucket: {e}')
         raise e
 
