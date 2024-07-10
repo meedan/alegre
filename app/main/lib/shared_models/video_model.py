@@ -166,7 +166,7 @@ class VideoModel(SharedModel):
             else:
                 return {"result": results}
         except Exception as err:
-            ErrorLog.notify(err, {"video_folder": video.folder, "video_filepath": video.filepath, "video_id": video.id, "task": task})
+            ErrorLog.notify(err, {"task": task})
             raise err
         finally:
             if temporary:
