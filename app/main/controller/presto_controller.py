@@ -24,11 +24,9 @@ class PrestoResource(Resource):
     @api.doc('Receive a presto callback for a given `model_type`')
     def post(self, action, model_type):
         data = request.json
-        r = redis_client.get_client()
         item_id = data.get("body", {}).get("id")
-        r.lpush(f"{model_type}_{item_id}", json.dumps(data))
-        r.expire(f"{model_type}_{item_id}", 60*60*24)
         app.logger.info(f"PrestoResource {action}/{model_type}")
+        return_value = None
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")
             result = similarity.callback_add_item(data.get("body"), model_type)
@@ -41,8 +39,14 @@ class PrestoResource(Resource):
                 Webhook.return_webhook(callback_url, action, model_type, result)
             output = {"action": action, "model_type": model_type, "data": result}
             app.logger.info(f"PrestoResource value is {output}")
-            return {"action": action, "model_type": model_type, "data": result}
-        abort(
-            404,
-            description=f"Action type of {action} was not found. Currently available action types are add_item, search_item."
-        )
+            return_value = {"action": action, "model_type": model_type, "data": result}
+        r = redis_client.get_client()
+        r.lpush(f"{model_type}_{item_id}", json.dumps(data))
+        r.expire(f"{model_type}_{item_id}", 60*60*24)
+        if return_value:
+            return return_value
+        else:
+            abort(
+                404,
+                description=f"Action type of {action} was not found. Currently available action types are add_item, search_item."
+            )

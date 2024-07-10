@@ -111,62 +111,67 @@ class VideoModel(SharedModel):
             raise e
 
     def search(self, task):
-        body, threshold, limit = media_crud.parse_task_search(task)
-        video, temporary = media_crud.get_object(body, Video)
-        if video.hash_value is None:
-            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "video")
-            if task.get("doc_id") is    None:
-                task["doc_id"] = str(uuid.uuid4())
-            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "video__Model", callback_url, task, False).text)
-            # Warning: this is a blocking hold to wait until we get a response in 
-            # a redis key that we've received something from presto.
-            result = Presto.blocked_response(response, "video")
-            video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
-        if video:
-            matches = self.search_by_context(body["context"])
-            default_list = list(np.zeros(len(video.hash_value)))
-            try:
-                l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value", default_list) or default_list for r in matches], [video.hash_value], 'cosine'))).tolist()
-            except:
-                app.logger.info('L1 scoring failed while running search for video id of '+str(video.id)+' match ids of : '+str([e.get("id") for e in matches]))
-                l1_scores = [0.0 for e in matches]
-            qualified_matches = []
-            for i,match in enumerate(matches):
-                if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
-                    qualified_matches.append(match)
-            files = self.get_fullpath_files(qualified_matches, False)
-            try:
-                if self.tmk_file_exists(video):
-                    scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
+        temporary = False
+        try:
+            body, threshold, limit = media_crud.parse_task_search(task)
+            video, temporary = media_crud.get_object(body, Video)
+            if video.hash_value is None:
+                callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "video")
+                if task.get("doc_id") is    None:
+                    task["doc_id"] = str(uuid.uuid4())
+                response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "video__Model", callback_url, task, False).text)
+                # Warning: this is a blocking hold to wait until we get a response in 
+                # a redis key that we've received something from presto.
+                result = Presto.blocked_response(response, "video")
+                video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
+            if video:
+                matches = self.search_by_context(body["context"])
+                default_list = list(np.zeros(len(video.hash_value)))
+                try:
+                    l1_scores = np.ndarray.flatten((1-distance.cdist([r.get("hash_value", default_list) or default_list for r in matches], [video.hash_value], 'cosine'))).tolist()
+                except:
+                    app.logger.info('L1 scoring failed while running search for video id of '+str(video.id)+' match ids of : '+str([e.get("id") for e in matches]))
+                    l1_scores = [0.0 for e in matches]
+                qualified_matches = []
+                for i,match in enumerate(matches):
+                    if l1_scores[i] > app.config['VIDEO_MODEL_L1_SCORE']:
+                        qualified_matches.append(match)
+                files = self.get_fullpath_files(qualified_matches, False)
+                try:
+                    if self.tmk_file_exists(video):
+                        scores = tmkpy.query(media_crud.tmk_file_path(video.folder, video.filepath),files,1)
+                    else:
+                        ErrorLog.notify(Exception("Failed to locate needle for a video!"), {"video_folder": video.folder, "video_filepath": video.filepath, "video_id": video.id, "task": task})
+                        return {"error": "Video not found for provided task", "task": task}
+                except Exception as err:
+                    ErrorLog.notify(err, {"video_folder": video.folder, "video_filepath": video.filepath, "files": files, "video_id": video.id, "task": task})
+                    raise err
+                threshold = float(task.get("threshold", 0.0) or 0.0)
+                results = []
+                for i,score in enumerate(scores):
+                    if score > threshold:
+                        results.append({
+                            "context": qualified_matches[i].get("context", {}),
+                            "folder": qualified_matches[i].get("folder"),
+                            "filepath": qualified_matches[i].get("filepath"),
+                            "doc_id": qualified_matches[i].get("doc_id"),
+                            "url": qualified_matches[i].get("url"),
+                            "filename": files[i],
+                            "score": score,
+                            "model": "video"
+                        })
+                limit = task.get("limit")
+                if limit:
+                    return {"result": results[:limit]}
                 else:
-                    ErrorLog.notify(Exception("Failed to locate needle for a video!"), {"video_folder": video.folder, "video_filepath": video.filepath, "video_id": video.id, "task": task})
-                    return {"error": "Video not found for provided task", "task": task}
-            except Exception as err:
-                ErrorLog.notify(err, {"video_folder": video.folder, "video_filepath": video.filepath, "files": files, "video_id": video.id, "task": task})
-                raise err
-            threshold = float(task.get("threshold", 0.0) or 0.0)
-            results = []
-            for i,score in enumerate(scores):
-                if score > threshold:
-                    results.append({
-                        "context": qualified_matches[i].get("context", {}),
-                        "folder": qualified_matches[i].get("folder"),
-                        "filepath": qualified_matches[i].get("filepath"),
-                        "doc_id": qualified_matches[i].get("doc_id"),
-                        "url": qualified_matches[i].get("url"),
-                        "filename": files[i],
-                        "score": score,
-                        "model": "video"
-                    })
+                    return {"result": results}
+            else:
+                return {"error": "Video not found for provided task", "task": task}
+        except Exception as err:
+            raise err
+        finally:
             if temporary:
                 self.delete(task)
-            limit = task.get("limit")
-            if limit:
-                return {"result": results[:limit]}
-            else:
-                return {"result": results}
-        else:
-            return {"error": "Video not found for provided task", "task": task}
 
     def tmk_file_exists(self, video):
         file_path = media_crud.tmk_file_path(video.folder, video.filepath)
