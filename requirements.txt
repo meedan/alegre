@@ -139,7 +139,7 @@ tmkpy==0.1.1
 tokenizers
 toolz==0.9.0
 torch==1.9.0
-tqdm==4.27.0
+tqdm==4.66.3
 transformers==4.6.0
 twitter-text-parser==1.0.0
 typing-extensions==3.10.0.0
