@@ -3,12 +3,10 @@ import binascii
 import uuid
 import os
 import tempfile
-import pathlib
 import urllib.error
 import urllib.request
 import shutil
 from flask import current_app as app
-from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy import text
 import sqlalchemy
 import tenacity
@@ -18,57 +16,65 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
+from app.main.lib import media_crud
 from app.main import db
 from app.main.model.audio import Audio
+from app.main.lib.presto import Presto
 
 def _after_log(retry_state):
   app.logger.debug("Retrying audio similarity...")
 
 class AudioModel(SharedModel):
-    @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
-    def save(self, audio):
-        saved_audio = None
-        try:
-            # First locate existing audio and append new context
-            existing = db.session.query(Audio).filter(Audio.url==audio.url).one()
-            if existing:
-                if audio.hash_value is not None  and not existing.hash_value:
-                    existing.hash_value = audio.hash_value
-                    flag_modified(existing, 'hash_value')
-                if audio.chromaprint_fingerprint is not None and not existing.chromaprint_fingerprint:
-                    existing.chromaprint_fingerprint = audio.chromaprint_fingerprint
-                    flag_modified(existing, 'chromaprint_fingerprint')
-                if audio.context not in existing.context:
-                    existing.context.append(audio.context)
-                    flag_modified(existing, 'context')
-                saved_audio = existing
-        except NoResultFound as e:
-            # Otherwise, add new audio, but with context as an array
-            if audio.context and not isinstance(audio.context, list):
-                audio.context = [audio.context]
-            db.session.add(audio)
-            saved_audio = audio
-        except Exception as e:
-            db.session.rollback()
-            raise e
-        try:
-            db.session.commit()
-            return saved_audio
-        except Exception as e:
-            db.session.rollback()
-            raise e
-        return saved_audio
+    def delete(self, task):
+        return media_crud.delete(task, Audio)
 
-    def get_tempfile(self):
-        return tempfile.NamedTemporaryFile()
+    def add(self, task):
+        hash_value = (task.get("result", {}) or {}).get("hash_value")
+        if hash_value:
+            task["hash_value"] = hash_value
+        return media_crud.add(task, Audio, ["hash_value", "chromaprint_fingerprint"])[0]
 
-    def execute_command(self, command):
-        return os.popen(command).read()
+    def blocking_search(self, task, modality):
+        audio, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, Audio, modality)
+        audio.chromaprint_fingerprint = presto_result.get("body", {}).get("result", {}).get("hash_value")
+        if audio:
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, task.get("threshold", 0.0), context)
+            if temporary:
+                media_crud.delete(task, Audio)
+            else:
+                media_crud.save(audio, Audio, ["hash_value", "chromaprint_fingerprint"])
+            if task.get("limit"):
+                return {"result": matches[:task.get("limit")]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Audio not found for provided task", "task": task}
 
-    def load(self):
-        self.directory = app.config['PERSISTENT_DISK_PATH']
-        self.ffmpeg_dir = "/usr/local/bin/ffmpeg"
-        pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
+    def async_search(self, task, modality):
+        return media_crud.get_async_presto_response(task, Audio, modality)
+
+    def search(self, task):
+        body, threshold, limit = media_crud.parse_task_search(task)
+        audio, temporary = media_crud.get_object(body, Audio)
+        if audio.chromaprint_fingerprint is None:
+            callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], "audio")
+            if task.get("doc_id") is    None:
+                task["doc_id"] = str(uuid.uuid4())
+            response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], "audio__Model", callback_url, task, False).text)
+            # Warning: this is a blocking hold to wait until we get a response in 
+            # a redis key that we've received something from presto.
+            result = Presto.blocked_response(response, "audio")
+            audio.chromaprint_fingerprint = result.get("body", {}).get("result", {}).get("hash_value")
+        if audio:
+            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, body["context"])
+            if temporary:
+                media_crud.delete(body, Audio)
+            if limit:
+                return {"result": matches[:limit]}
+            else:
+                return {"result": matches}
+        else:
+            return {"error": "Audio not found for provided task", "task": task}
 
     def respond(self, task):
         if task["command"] == "delete":
@@ -78,44 +84,10 @@ class AudioModel(SharedModel):
         elif task["command"] == "search":
             return self.search(task)
 
-    def delete(self, task):
-        deleted = False
-        audio = None
-        if 'doc_id' in task:
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios:
-                audio = audios[0]
-        elif 'url' in task:
-            audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
-            if audios:
-                audio = audios[0]
-        if audio:
-            if task.get("context", {}) in audio.context and len(audio.context) > 1:
-                deleted = drop_context_from_record(audio, task.get("context", {}))
-            else:
-                deleted = db.session.query(Audio).filter(Audio.id==audio.id).delete()
-            return {"requested": task, "result": {"url": audio.url, "deleted": deleted}}
-        else:
-            return {"requested": task, "result": {"url": task.get("url"), "deleted": False}}
-
-    def add(self, task):
-        try:
-            audio = Audio.from_url(task.get("url"), task.get("doc_id"), task.get("context", {}))
-            try:
-              audio = self.save(audio)
-            except sqlalchemy.exc.IntegrityError:
-              audio = None
-            if audio:
-              return {"requested": task, "result": {"url": audio.url}, "success": True}
-            else:
-              return {"requested": task, "result": {"url": task.get("url")}, "success": False}
-        except urllib.error.HTTPError:
-            return {"requested": task, "result": {"url": task.get("url")}, "success": False}
-
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_context(self, context):
         try:
-            context_query, context_hash = get_context_query(context, True)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT id, doc_id, url, hash_value, context FROM audios
@@ -139,7 +111,7 @@ class AudioModel(SharedModel):
     @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
     def search_by_hash_value(self, chromaprint_fingerprint, threshold, context):
         try:
-            context_query, context_hash = get_context_query(context, True)
+            context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
             if context_query:
                 cmd = """
                   SELECT audio_similarity_functions();
@@ -170,60 +142,10 @@ class AudioModel(SharedModel):
             rows = []
             for values in matches:
                 row = dict(zip(keys, values))
-                # row["score"] = get_score(row["chromaprint_fingerprint"], chromaprint_fingerprint, threshold)
                 row["model"] = "audio"
+                row["score"] = row["score"]
                 rows.append(row)
             return rows
         except Exception as e:
             db.session.rollback()
             raise e
-
-    def get_by_doc_id_or_url(self, task):
-        audio = None
-        if task.get('doc_id'):
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios and not audio:
-                audio = audios[0]
-        elif task.get('url'):
-            audios = db.session.query(Audio).filter(Audio.url==task.get("url")).all()
-            if audios and not audio:
-                audio = audios[0]
-        return audio
-
-    def get_audio(self, task):
-        temporary = False
-        audio = self.get_by_doc_id_or_url(task)
-        if audio is None:
-            temporary = True
-            if not task.get("doc_id"):
-                task["doc_id"] = str(uuid.uuid4())
-            self.add(task)
-            audios = db.session.query(Audio).filter(Audio.doc_id==task.get("doc_id")).all()
-            if audios and not audio:
-                audio = audios[0]
-        return audio, temporary
-
-    def get_context_for_search(self, task):
-        context = {}
-        if task.get('context'):
-            context = task.get('context')
-        if task.get("match_across_content_types"):
-            context.pop("content_type", None)
-        return context
-
-    def search(self, task):
-        audio, temporary = self.get_audio(task)
-        context = self.get_context_for_search(task)
-        if audio:
-            threshold = task.get('threshold', 0.0)
-            matches = self.search_by_hash_value(audio.chromaprint_fingerprint, threshold, context)
-            limit = task.get("limit")
-            if temporary:
-                self.delete(task)
-            if limit:
-                return {"result": matches[:limit]}
-            else:
-                return {"result": matches}
-        else:
-            return {"error": "Audio not found for provided task", "task": task}
-    

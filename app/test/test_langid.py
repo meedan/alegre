@@ -1,7 +1,6 @@
 import unittest
 import json
 import math
-import redis
 import os
 from flask import current_app as app
 from unittest.mock import patch
@@ -10,6 +9,7 @@ from app.main import db
 from app.test.base import BaseTestCase
 from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
 from app.main.controller.langid_controller import LangidResource
+from app.main.lib import redis_client
 
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
@@ -30,7 +30,7 @@ class TestLangidBlueprint(BaseTestCase):
 
     def setUp(self):
         super().setUp()
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis_client.get_client()
         for key in r.scan_iter("langid:*"):
             r.delete(key)
 
@@ -78,7 +78,7 @@ class TestLangidBlueprint(BaseTestCase):
             self.assertEqual(test['cld3'], result['result']['language'], test['text'])
 
     def test_langid_api_get(self):
-        response = self.client.get(
+        response = self.client.post(
             '/text/langid/',
             data=json.dumps(dict(
                 text='Hello this is a test'
@@ -91,18 +91,8 @@ class TestLangidBlueprint(BaseTestCase):
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
 
-    def test_langid_api_get_with_query_request(self):
-        response = self.client.get(
-            '/text/langid/?text=Hello',
-        )
-        result = json.loads(response.data.decode())
-        self.assertEqual('en', result['result']['language'])
-        self.assertEqual(app.config['PROVIDER_LANGID'], result['provider'])
-        self.assertEqual('application/json', response.content_type)
-        self.assertEqual(200, response.status_code)
-
     def test_langid_api_get_without_text(self):
-        response = self.client.get(
+        response = self.client.post(
             '/text/langid/',
             data=json.dumps(dict(
                 text=''
@@ -136,7 +126,7 @@ class TestLangidBlueprint(BaseTestCase):
                     'confidence': 1.0
                 }
             }
-            response = self.client.get(
+            response = self.client.post(
                 '/text/langid/',
                 data=json.dumps(dict(
                     text='Hello this is a test',
@@ -144,7 +134,7 @@ class TestLangidBlueprint(BaseTestCase):
                 )),
                 content_type='application/json'
             )
-            response = self.client.get(
+            response = self.client.post(
                 '/text/langid/',
                 data=json.dumps(dict(
                     text='Hello this is a test',
@@ -152,7 +142,7 @@ class TestLangidBlueprint(BaseTestCase):
                 )),
                 content_type='application/json'
             )
-            response = self.client.get(
+            response = self.client.post(
                 '/text/langid/',
                 data=json.dumps(dict(
                     text='Hello this is a test',
@@ -166,7 +156,7 @@ class TestLangidBlueprint(BaseTestCase):
         with patch.dict(app.config, { 'PROVIDER_LANGID': 'google' }):
             with patch('app.main.lib.langid.GoogleLangidProvider.langid', ) as mock_langid:
                 mock_langid.side_effect = Exception("Simulated langid error")
-                response = self.client.get(
+                response = self.client.post(
                     '/text/langid/',
                     data=json.dumps(dict(
                         text='Hello this is a test'

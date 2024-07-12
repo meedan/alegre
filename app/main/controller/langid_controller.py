@@ -1,10 +1,10 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-import redis
 import hashlib
 import json
 import importlib
 import tenacity
+from app.main.lib import redis_client
 
 from twitter_text import extract_urls_with_indices, extract_emojis_with_indices
 
@@ -21,15 +21,11 @@ def _after_log(retry_state):
 class LangidResource(Resource):
     def respond(self):
         provider = app.config['PROVIDER_LANGID']
-        if(request.args):
-            text=request.args.get('text')
-            if 'provider' in request.args: provider = request.args.get('provider')
-        else:
-            text=request.json['text']
-            if 'provider' in request.json: provider = request.json['provider']
+        text=request.json['text']
+        if 'provider' in request.json: provider = request.json['provider']
 
         # Read from cache first.
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis_client.get_client()
         key = 'langid:' + provider + ':' + hashlib.md5(text.encode('utf-8')).hexdigest()
         try:
             result = json.loads(r.get(key))
@@ -43,13 +39,6 @@ class LangidResource(Resource):
 
         return result
         
-    @api.response(200, 'langid successfully queried.')
-    @api.doc('Identify the language of a text document')
-    @api.doc(params={'text': 'text to identify', 'provider': 'langid provider to use'})
-    # @api.expect(langid_request, validate=False)
-    def get(self):
-        return self.respond()
-
     @api.response(200, 'langid successfully queried.')
     @api.doc('Identify the language of a text document')
     @api.expect(langid_request, validate=False)

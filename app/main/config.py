@@ -11,13 +11,6 @@ class Config:
   REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
   REDIS_PORT = os.getenv('REDIS_PORT', 6379)
   REDIS_DATABASE = os.getenv('REDIS_DATABASE', 0)
-  PYBRAKE = {
-    'project_id': 1,
-    'project_key': os.getenv('AIRBRAKE_PROJECT_KEY'),
-    'host': os.getenv('AIRBRAKE_URL'),
-    'environment': os.getenv('AIRBRAKE_ENVIRONMENT', os.getenv('BOILERPLATE_ENV')),
-    'apm_disabled': True
-  }
   PROVIDER_LANGID = os.getenv('PROVIDER_LANGID', 'google')
   PROVIDER_IMAGE_CLASSIFICATION = os.getenv('PROVIDER_IMAGE_CLASSIFICATION', 'google')
   MS_TEXT_ANALYTICS_KEY = os.getenv('MS_TEXT_ANALYTICS_KEY')
@@ -44,6 +37,14 @@ class Config:
   AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   IMAGE_MODEL = os.getenv('IMAGE_MODEL', default='phash')
   OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
+  ALEGRE_HOST = os.getenv('ALEGRE_HOST', default="http://alegre:3100")
+  PRESTO_HOST = os.getenv('PRESTO_HOST', default="http://presto:8000")
+  CHECK_API_HOST = os.getenv('CHECK_API_HOST', default="http://api:3000")
+  WEBHOOK_TOKEN = os.getenv('WEBHOOK_TOKEN', default="dev")
+  S3_ENDPOINT = os.getenv("S3_ENDPOINT")
+  AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+  AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+  AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
 
 class DevelopmentConfig(Config):
   DEBUG = True

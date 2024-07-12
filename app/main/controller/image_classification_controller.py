@@ -1,10 +1,10 @@
 from flask import request, current_app as app
 from flask_restplus import Resource, Namespace, fields
-import redis
 import hashlib
 import json
 import importlib
 import tenacity
+from app.main.lib import redis_client
 
 api = Namespace('image_classification', description='image classification operations')
 image_classification_request = api.model('image_classification_request', {
@@ -19,13 +19,10 @@ class ImageClassificationResource(Resource):
     @api.response(200, 'image classification successfully queried.')
     @api.doc('Classify and label an image')
     @api.doc(params={'uri': 'image URL to be queried for classification'})
-    def get(self):
-        if(request.args.get('uri')):
-            uri=request.args.get('uri')
-        else:
-            uri=request.json['uri']
+    def post(self):
+        uri=request.json['uri']
         # Read from cache first.
-        r = redis.Redis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DATABASE'])
+        r = redis_client.get_client()
         key = 'image_classification:' + hashlib.md5(uri.encode('utf-8')).hexdigest()
         try:
             result = json.loads(r.get(key))

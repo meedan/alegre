@@ -3,6 +3,7 @@ from app.main import db
 from app.main.model.image import ImageModel
 from app.main.lib.helpers import context_matches
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
+from app.main.lib import media_crud
 from sqlalchemy import text
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
@@ -20,6 +21,7 @@ def delete_image(params):
         deleted = drop_context_from_record(image, params.get("context", {}))
       else:
         deleted = db.session.query(ImageModel).filter(ImageModel.id==image.id).delete()
+    db.session.commit()
   if deleted:
     return {'deleted': True}
   else:
@@ -60,47 +62,70 @@ def add_image(save_params):
     db.session.rollback()
     raise e
 
-def search_image(params):
-  url = params.get("url")
-  context = params.get("context")
-  threshold = params.get("threshold")
-  limit = params.get("limit")
-  if not context:
-    context = {}
-  if not threshold:
-    threshold = 0.9
-  if url:
-    image = ImageModel.from_url(url, None)
-    model=app.config['IMAGE_MODEL']
-    if model and model.lower()=="pdq":
-      app.logger.info(f"Searching with PDQ.")
-      result = search_by_pdq(image.pdq, threshold, context, limit)
+def callback_add(task):
+    return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
+
+def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
+    if image:
+        if model and model.lower() == "pdq":
+            app.logger.info(f"Searching with PDQ.")
+            image.pdq = hash_value
+            result = search_by_pdq(image.pdq, threshold, context, limit)
+        else:
+            app.logger.info(f"Searching with phash.")
+            image.phash = hash_value
+            result = search_by_phash(image.phash, threshold, context, limit)
+        if temporary:
+            media_crud.delete(task, ImageModel)
+        else:
+            media_crud.save(image, ImageModel, ["pdq", "phash"])
+        if limit:
+            return {"result": result[:limit]}
+        else:
+            return {"result": result}
     else:
-      app.logger.info(f"Searching with phash.")
-      result = search_by_phash(image.phash, threshold, context, limit)
-  else:
-    result = search_by_context(context, limit)
-  return {
-    'result': result
-  }
+        return {"error": "Image not found for provided task", "task": task}
+
+def blocking_search_image(task):
+    image, temporary, context, presto_result = media_crud.get_blocked_presto_response(task, ImageModel, "image")
+    threshold = task.get("threshold", 0.0)
+    limit = task.get("limit", 200)
+    model = app.config['IMAGE_MODEL']
+    hash_value = presto_result["body"]["hash_value"]
+    return search_image(image, model, limit, threshold, task, hash_value, context, temporary)
+
+def async_search_image(task, modality):
+    return media_crud.get_async_presto_response(task, ImageModel, modality)
+
+def async_search_image_on_callback(task):
+    if list(task.keys()) == ["raw"]:
+        image = media_crud.get_by_doc_id_or_url(task["raw"], ImageModel)
+    else:
+        image = media_crud.get_by_doc_id_or_url(task, ImageModel)
+    model = app.config['IMAGE_MODEL']
+    threshold = task.get("raw", {}).get("threshold", 0.0)
+    limit = task.get("raw", {}).get("limit", 200)
+    context = task.get("raw", {}).get("context", {})
+    hash_value = task.get("result", {}).get("hash_value", getattr(image, app.config["IMAGE_MODEL"]))
+    return search_image(image, model, limit, threshold, task, hash_value, context, False)
 
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_context(context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False)
     if context_query:
       cmd = """
-          SELECT id, sha256, phash, url, context FROM images
+          SELECT id, doc_id, phash, url, context FROM images
           WHERE 
         """+context_query
     else:
       cmd = """
-          SELECT id, sha256, phash, url, context FROM images
+          SELECT id, doc_id, phash, url, context FROM images
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**context_hash, **{'limit': limit})).fetchall()
-    keys = ('id', 'sha256', 'phash', 'url', 'context')
+    matches = execute_command(text(cmd), dict(**context_hash, **{'limit': limit}))
+    keys = ('id', 'doc_id', 'phash', 'url', 'context')
     rows = [dict(zip(keys, values)) for values in matches]
     for row in rows:
       row["context"] = [c for c in row["context"] if context_matches(context, c)]
@@ -109,15 +134,18 @@ def search_by_context(context, limit=None):
   except Exception as e:
     db.session.rollback()
     raise e  
-  
+
+def execute_command(cmd, params):
+  return db.session.execute(cmd, params).fetchall()
+
 @tenacity.retry(wait=tenacity.wait_fixed(0.5), stop=tenacity.stop_after_delay(5), after=_after_log)
 def search_by_phash(phash, threshold, context, limit=None):
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, doc_id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -128,7 +156,7 @@ def search_by_phash(phash, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, phash, url, context, bit_count_image(phash # :phash)
+            SELECT id, doc_id, phash, url, context, bit_count_image(phash # :phash)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -136,12 +164,12 @@ def search_by_phash(phash, threshold, context, limit=None):
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**{
+    matches = execute_command(text(cmd), dict(**{
       'phash': phash,
       'threshold': threshold,
       'limit': limit,
-    }, **context_hash)).fetchall()
-    keys = ('id', 'sha256', 'phash', 'url', 'context', 'score')
+    }, **context_hash))
+    keys = ('id', 'doc_id', 'phash', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))
@@ -158,11 +186,11 @@ def search_by_pdq(pdq, threshold, context, limit=None):
   #bit_count_pdq is defined in mangage.py. It returns a normalized hamming distance between 0 and 1
   #1 represents the strongest similarity possibile.
   try:
-    context_query, context_hash = get_context_query(context)
+    context_query, context_hash = get_context_query(context, False) # Changed Since 4126 PR
     if context_query:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, doc_id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -173,7 +201,7 @@ def search_by_pdq(pdq, threshold, context, limit=None):
     else:
         cmd = """
           SELECT * FROM (
-            SELECT id, sha256, pdq, url, context, bit_count_pdq(pdq # :pdq)
+            SELECT id, doc_id, pdq, url, context, bit_count_pdq(pdq # :pdq)
             AS score FROM images
           ) f
           WHERE score >= :threshold
@@ -181,12 +209,12 @@ def search_by_pdq(pdq, threshold, context, limit=None):
         """
     if limit:
         cmd = cmd+" LIMIT :limit"
-    matches = db.session.execute(text(cmd), dict(**{
+    matches = execute_command(text(cmd), dict(**{
       'pdq': pdq,
       'threshold': threshold,
       'limit': limit,
-    }, **context_hash)).fetchall()
-    keys = ('id', 'sha256', 'pdq', 'url', 'context', 'score')
+    }, **context_hash))
+    keys = ('id', 'doc_id', 'pdq', 'url', 'context', 'score')
     rows = []
     for values in matches:
       row = dict(zip(keys, values))

@@ -16,6 +16,10 @@
       "type": "dense_vector",
       "dims": 768
     },
+    "vector_paraphrase-multilingual-mpnet-base-v2": {
+      "type": "dense_vector",
+      "dims": 768
+    },
     "vector_openai-text-embedding-ada-002": {
       "type": "dense_vector",
       "dims": 1536

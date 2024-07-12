@@ -1,23 +1,13 @@
 import urllib.request
 import tempfile
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, BIT, ARRAY
 from scipy.io import wavfile
 import scipy.signal
 import numpy as np
-from pydub import AudioSegment #requires ffmpeg and ffprobe to be on the PATH
-import timeout_decorator
-import acoustid
-
+from flask import current_app as app
+from app.main.lib import media_crud
 from app.main import db
-
-# @timeout_decorator.timeout(15)
-def audio_hasher(filename):
-  try:
-    return acoustid.chromaprint.decode_fingerprint(
-      acoustid.fingerprint_file(filename)[1]
-    )[0]
-  except acoustid.FingerprintGenerationError:
-    return []
 
 class Audio(db.Model):
   """ Model for storing video related details """
@@ -31,18 +21,30 @@ class Audio(db.Model):
   context = db.Column(JSONB(), default=[], nullable=False)
   created_at = db.Column(db.DateTime, nullable=True)
   __table_args__ = (
-    db.Index('ix_audios_context', context, postgresql_using='gin'),
+    db.Index('ix_audios_context_gin', context, postgresql_using='gin'),
+    db.Index('ix_audios_team_id_partial', text("(context->>'team_id')"), postgresql_where=text("context->>'team_id' IS NOT NULL")),
+    db.Index('ix_audios_has_custom_id_partial', text("(context->>'has_custom_id')"), postgresql_where=text("context->>'has_custom_id' IS NOT NULL")),
   )
 
-  @staticmethod
-  def from_url(url, doc_id, context={}):
-    """Fetch an audio from a URL and load it
-      :param url: Audio URL
-      :returns: Audio object
-    """
-    remote_request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    remote_response = urllib.request.urlopen(remote_request)
-    temp_file = tempfile.NamedTemporaryFile()
-    with open(temp_file.name, 'wb') as out_file:
-      out_file.write(remote_response.read())
-    return Audio(chromaprint_fingerprint=audio_hasher(temp_file.name), doc_id=doc_id, url=url, context=context)
+  @property
+  def existing_response(self):
+    return {"body": {"hash_value": self.chromaprint_fingerprint}}
+
+  @property
+  def requires_encoding(self):
+    if self.chromaprint_fingerprint:
+      return False
+    return True
+
+  @classmethod
+  def from_task_data(cls, task, existing):
+    if existing:
+      if not existing.chromaprint_fingerprint:
+        existing.chromaprint_fingerprint = task.get("hash_value")
+      return media_crud.ensure_context_appended(task, existing)
+    return cls(
+      chromaprint_fingerprint=task.get("hash_value"),
+      doc_id=task.get("doc_id", task.get("raw", {}).get("doc_id")),
+      url=task.get("url"),
+      context=task.get("context", task.get("raw", {}).get("context"))
+    )

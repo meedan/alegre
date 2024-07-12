@@ -1,6 +1,7 @@
 from flask import current_app as app
 from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.error_log import ErrorLog
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
@@ -40,7 +41,7 @@ def search_text(search_params):
   for model_key in search_params.pop("models", []):
     result = search_text_by_model(dict(**search_params, **{'model': model_key}))
     if 'error' in result:
-      app.extensions['pybrake'].notify(Exception('Model search failed when using '+model_key))
+      ErrorLog.notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
       results["result"].append(search_result)
   return results
@@ -89,42 +90,41 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
     return conditions
 
 def get_vector_model_base_conditions(search_params, model_key, threshold):
-  if "vector" in search_params:
-    vector = search_params["vector"]
-  elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
-    vector = retrieve_openai_embeddings(search_params['content'], model_key)
-    if vector == None:
-       return None
-  else:
-    model = SharedModel.get_client(model_key)
-    vector = model.get_shared_model_response(search_params['content'])
-  return {
-      'query': {
-          'script_score': {
-              'min_score': float(threshold)+1,
-              'query': {
-                  'bool': {
-                      'must': [
-                          {
-                              'match': {
-                                  'model_'+str(model_key): {
-                                    'query': "1",
-                                  }
-                              }
-                          }
-                      ]
-                  }
-              },
-              'script': {
-                  'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
-                  'params': {
-                      'field': "vector_"+str(model_key),
-                      'query_vector': vector
-                  }
-              }
-          }
-      }
-  }
+    if "vector" in search_params:
+        vector = search_params["vector"]
+    elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+        vector = retrieve_openai_embeddings(search_params['content'], model_key)
+        if vector is None:
+            return None
+    else:
+        model = SharedModel.get_client(model_key)
+        vector = model.get_shared_model_response(search_params['content'])
+
+    return {
+        'query': {
+            'script_score': {
+                'min_score': float(threshold) + 1,
+                'query': {
+                    'bool': {
+                        'must': [
+                            {
+                                'exists': {
+                                    'field': 'vector_'+str(model_key)
+                                }
+                            }
+                        ]
+                    }
+                },
+                'script': {
+                    'source': "cosineSimilarity(params.query_vector, doc[params.field]) + 1.0",
+                    'params': {
+                        'field': "vector_" + str(model_key),
+                        'query_vector': vector
+                    }
+                }
+            }
+        }
+    }
 
 def insert_model_into_response(hits, model_key):
     for hit in hits:
@@ -141,9 +141,14 @@ def strip_vectors(results):
 
 def restrict_results(results, search_params, model_key):
     out_results = []
-    if search_params.get("min_es_score") and model_key == "elasticsearch":
+    try:
+        min_es_score = float(search_params.get("min_es_score"))
+    except (ValueError, TypeError) as e:
+        app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
+        min_es_score = None
+    if min_es_score is not None and model_key == "elasticsearch":
         for result in results:
-            if "_score" in result and search_params.get("min_es_score", 0) < result["_score"]:
+            if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
         return out_results
     return results
@@ -169,6 +174,8 @@ def search_text_by_model(search_params):
     if model_key.lower() == 'elasticsearch':
         conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
+        if language == 'None':
+            language = None
         # 'auto' indicates we should try to guess the appropriate language
         if language == 'auto':
             text = search_params.get("content")

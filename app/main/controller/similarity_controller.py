@@ -1,8 +1,7 @@
+import json
 from flask import request, current_app as app
-from flask import abort, jsonify
+from flask import abort
 from flask_restplus import Resource, Namespace, fields
-from opensearchpy import OpenSearch
-from app.main.lib.shared_models.shared_model import SharedModel
 
 from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
@@ -40,8 +39,12 @@ class SimilarityResource(Resource):
         item["doc_id"] = doc_id
         return similarity.add_item(item, "text")
 
+@api.route('/search/')
+class SimilaritySearchResource(Resource):
     @api.response(200, 'text similarity successfully queried.')
     @api.doc('Make a text similarity query. Note that we currently require GET requests with a JSON body rather than embedded params in the URL. You can achieve this via curl -X GET -H "Content-type: application/json" -H "Accept: application/json" -d \'{"text":"Some Text", "threshold": 0.5, "model": "elasticsearch"}\' "http://[ALEGRE_HOST]/text/similarity"')
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
-    def get(self):
-      return similarity.get_similar_items(similarity.get_body_for_text_document(request.args or request.json, mode='query'), "text")
+    def post(self):
+      args = request.json
+      app.logger.debug(f"Args are {args}")
+      return similarity.get_similar_items(similarity.get_body_for_text_document(args, mode='query'), "text")
