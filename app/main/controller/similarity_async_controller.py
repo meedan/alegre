@@ -6,7 +6,7 @@ from app.main.lib.fields import JsonObject
 from app.main.lib import similarity
 from app.main.lib.webhook import Webhook
 
-api = Namespace('similarity_async', description='synchronous similarity operations')
+api = Namespace('similarity_async', description='asynchronous similarity operations')
 similarity_async_request = api.model('similarity_async_request', {
     'text': fields.String(required=False, description='text to be stored or queried for similarity'),
     'url': fields.String(required=False, description='url for item to be stored or queried for similarity'),
