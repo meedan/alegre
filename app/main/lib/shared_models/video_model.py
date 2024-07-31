@@ -140,7 +140,7 @@ class VideoModel(SharedModel):
             if video.hash_value is None:
                 result = self.get_blocked_response(task)
                 video.hash_value = result.get("body", {}).get("result", {}).get("hash_value")
-
+                ErrorLog.notify(Exception("Hash value found to be none for a video!"), {"task": task, "video_id": video.id})
             matches = self.search_by_context(body["context"])
             default_list = list(np.zeros(len(video.hash_value)))
             try:
