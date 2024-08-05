@@ -61,6 +61,7 @@ def add_text(body, doc_id, language=None):
   return document
 
 def search_text(search_params, use_document_vectors=False):
+  vector_for_search = None
   app.logger.info(f"[Alegre Similarity]search_params are {search_params}")
   results = {"result": []}
   for model_key in search_params.pop("models", []):
@@ -122,17 +123,19 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
             conditions[0]['match']['content']['fuzziness'] = 'AUTO'
     return conditions
 
-def get_vector_model_base_conditions(search_params, model_key, threshold):
-    if "vector" in search_params:
-        vector = search_params["vector"]
-    elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
-        vector = retrieve_openai_embeddings(search_params['content'], model_key)
-        if vector is None:
-            return None
+def get_vector_model_base_conditions(search_params, model_key, threshold, vector_for_search=None):
+    if vector_for_search:
+        vector = vector_for_search
     else:
-        model = SharedModel.get_client(model_key)
-        vector = model.get_shared_model_response(search_params['content'])
-
+        if "vector" in search_params:
+            vector = search_params["vector"]
+        elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+            vector = retrieve_openai_embeddings(search_params['content'], model_key)
+            if vector is None:
+                return None
+        else:
+            model = SharedModel.get_client(model_key)
+            vector = model.get_shared_model_response(search_params['content'])
     return {
         'query': {
             'script_score': {
