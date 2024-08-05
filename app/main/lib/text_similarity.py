@@ -123,19 +123,16 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
             conditions[0]['match']['content']['fuzziness'] = 'AUTO'
     return conditions
 
-def get_vector_model_base_conditions(search_params, model_key, threshold, vector_for_search=None):
-    if vector_for_search:
-        vector = vector_for_search
-    else:
-        if "vector" in search_params:
-            vector = search_params["vector"]
-        elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
-            vector = retrieve_openai_embeddings(search_params['content'], model_key)
-            if vector is None:
-                return None
-        else:
-            model = SharedModel.get_client(model_key)
-            vector = model.get_shared_model_response(search_params['content'])
+def get_vector_model_base_conditions(search_params, model_key, threshold, vector=None):
+    if "vector" in search_params:
+        vector = search_params["vector"]
+    elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+        vector = retrieve_openai_embeddings(search_params['content'], model_key)
+        if vector is None:
+            return None
+    elif not vector:
+        model = SharedModel.get_client(model_key)
+        vector = model.get_shared_model_response(search_params['content'])
     return {
         'query': {
             'script_score': {
