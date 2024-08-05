@@ -62,7 +62,7 @@ def add_image(save_params):
     db.session.rollback()
     raise e
 
-def callback_add(task):
+def callback_add_image(task):
     return media_crud.add(task, ImageModel, ["pdq", "phash"])[0]
 
 def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
