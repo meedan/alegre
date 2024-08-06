@@ -58,7 +58,7 @@ class TestElasticCrud(unittest.TestCase):
         }))
 
         task = {'doc_id': '123', 'content': 'test content'}
-        modality = 'test_modality'
+        modality = 'meantokens'
         callback_url = 'http://example.com/callback'
 
         result = get_presto_request_response(modality, callback_url, task)
@@ -84,7 +84,7 @@ class TestElasticCrud(unittest.TestCase):
         
         task = {'url': 'http://example.com', 'context': {'foo': 'bar'}}
         model = MagicMock()
-        modality = 'test_modality'
+        modality = 'meantokens'
         
         result = get_blocked_presto_response(task, model, modality)
         self.assertIsNotNone(result)
