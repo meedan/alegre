@@ -78,7 +78,7 @@ class TestElasticCrud(unittest.TestCase):
     def test_get_blocked_presto_response(self, mock_store_document, mock_send_request):
         mock_send_request.return_value = MagicMock(text=json.dumps({
             'message': 'Message pushed successfully',
-            'queue': 'some_queue',
+            'queue': 'mean_tokens__Model',
             'body': {'doc_id': '123'}
         }))
         
@@ -97,13 +97,13 @@ class TestElasticCrud(unittest.TestCase):
     def test_get_async_presto_response(self, mock_store_document, mock_send_request):
         mock_send_request.return_value = MagicMock(text=json.dumps({
             'message': 'Message pushed successfully',
-            'queue': 'some_queue',
+            'queue': 'mean_tokens__Model',
             'body': {'doc_id': '123'}
         }))
 
         task = {'url': 'http://example.com', 'context': {'foo': 'bar'}}
         model = MagicMock()
-        modality = 'test_modality'
+        modality = 'meantokens'
 
         result = get_async_presto_response(task, model, modality)
         self.assertIsNotNone(result)
