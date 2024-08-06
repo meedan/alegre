@@ -1,26 +1,12 @@
-import pathlib
-import os
 import copy
 import uuid
-import urllib.error
 import json
-import tenacity
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
-from app.main.lib.similarity_helpers import drop_context_from_record
-from app.main.lib.helpers import merge_dict_lists
-from app.main.lib import media_crud
-from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document, update_or_create_document, get_by_doc_id
+from app.main.lib.elasticsearch import store_document, delete_document, get_by_doc_id
 
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
-
-def delete(task, model):
-    if task.get("doc_id"):
-        deleted = delete_document(task.get("doc_id"), task.get("context"), quiet)
-        return {"requested": task, "result": {"deleted": deleted}}
-    else:
-        return {"requested": task, "result": {"deleted": False}}
 
 def get_object_by_doc_id(doc_id):
     return get_by_doc_id(doc_id)
