@@ -20,7 +20,7 @@ class TestElasticCrud(unittest.TestCase):
     @patch('app.main.lib.elastic_crud.get_by_doc_id')
     def test_get_object_by_doc_id(self, mock_get_by_doc_id):
         mock_get_by_doc_id.return_value = {'doc_id': '123', 'content': 'test content'}
-        
+
         result = get_object_by_doc_id('123')
         self.assertEqual(result, {'doc_id': '123', 'content': 'test content'})
         mock_get_by_doc_id.assert_called_once_with('123')
@@ -29,7 +29,7 @@ class TestElasticCrud(unittest.TestCase):
     def test_get_object(self, mock_store_document):
         task = {'doc_id': '123', 'content': 'test content'}
         model = MagicMock()
-        
+
         result, temporary = get_object(task, model)
         self.assertFalse(temporary)
         self.assertEqual(result['doc_id'], '123')
@@ -53,7 +53,7 @@ class TestElasticCrud(unittest.TestCase):
     def test_get_presto_request_response(self, mock_send_request):
         mock_send_request.return_value = MagicMock(text=json.dumps({
             'message': 'Message pushed successfully',
-            'queue': 'some_queue',
+            'queue': 'mean_tokens__Model',
             'body': {'doc_id': '123'}
         }))
 
@@ -63,7 +63,7 @@ class TestElasticCrud(unittest.TestCase):
 
         result = get_presto_request_response(modality, callback_url, task)
         self.assertEqual(result['message'], 'Message pushed successfully')
-        self.assertEqual(result['queue'], 'some_queue')
+        self.assertEqual(result['queue'], 'mean_tokens__Model')
         self.assertEqual(result['body']['doc_id'], '123')
 
     def test_requires_encoding(self):
@@ -73,19 +73,20 @@ class TestElasticCrud(unittest.TestCase):
         obj = {'models': ['model1'], 'model_model1': 'encoded_data'}
         self.assertFalse(requires_encoding(obj))
 
+    @patch('app.main.lib.elastic_crud.Presto.blocked_response')
     @patch('app.main.lib.elastic_crud.Presto.send_request')
     @patch('app.main.lib.elastic_crud.store_document')
-    def test_get_blocked_presto_response(self, mock_store_document, mock_send_request):
+    def test_get_blocked_presto_response(self, mock_store_document, mock_send_request, mock_blocked_response):
         mock_send_request.return_value = MagicMock(text=json.dumps({
             'message': 'Message pushed successfully',
             'queue': 'mean_tokens__Model',
             'body': {'doc_id': '123'}
         }))
-        
-        task = {'url': 'http://example.com', 'context': {'foo': 'bar'}}
+
+        task = {'url': 'http://example.com', 'models': ['elasticsearch', 'xlm-r-bert-base-nli-stsb-mean-tokens'], 'context': {'foo': 'bar'}}
         model = MagicMock()
         modality = 'meantokens'
-        
+        mock_blocked_response.return_value = task
         result = get_blocked_presto_response(task, model, modality)
         self.assertIsNotNone(result)
         self.assertEqual(result[0]['doc_id'], task['doc_id'])
@@ -115,7 +116,7 @@ class TestElasticCrud(unittest.TestCase):
         self.assertEqual(threshold, 0.5)
         self.assertEqual(limit, 10)
 
-        task = {'raw': {'threshold': 0.3}, 'limit': 5, 'context': {'key1': 'value1'}}
+        task = {'raw': {}, 'threshold': 0.3, 'limit': 5, 'context': {'key1': 'value1'}}
         body, threshold, limit = parse_task_search(task)
         self.assertEqual(threshold, 0.3)
         self.assertEqual(limit, 5)

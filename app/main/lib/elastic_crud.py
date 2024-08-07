@@ -86,7 +86,7 @@ def parse_task_search(task):
     # alternatively, the "body" is just the entire dictionary.
     if "body" in task:
         body = task.get("body", {})
-        threshold = task.get("raw", {}).get('threshold', 0.0)
+        threshold = body.get("raw", {}).get('threshold', 0.0)
         limit = body.get("raw", {}).get("limit")
         if not body.get("raw"):
             body["raw"] = {}
