@@ -9,9 +9,13 @@ PRESTO_MODEL_MAP = {
     "video": "video__Model",
     "image": "image__Model",
     "meantokens": "mean_tokens__Model",
-    "indiansbert": "indian_sbert__Mode",
+    "indiansbert": "indian_sbert__Model",
     "mdebertav3filipino": "fptg__Model",
+    "xlm-r-bert-base-nli-stsb-mean-tokens": "mean_tokens__Model",
+    "indian-sbert": "indian_sbert__Model",
+    "paraphrase-filipino-mpnet-base-v2": "fptg__Model",
 }
+
 
 class Presto:
     @staticmethod

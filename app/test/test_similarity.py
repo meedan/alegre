@@ -590,14 +590,14 @@ class TestSimilarityBlueprint(BaseTestCase):
 
             es = OpenSearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            
+
             response = self.client.post(
                 '/text/similarity/search/',
                 data=json.dumps(data),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            
+
             self.assertEqual(1, len(result['result']))
             data['min_es_score']=10+result['result'][0]['_score']
 
