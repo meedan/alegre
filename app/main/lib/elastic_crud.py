@@ -47,7 +47,7 @@ def requires_encoding(obj):
 def get_blocked_presto_response(task, model, modality):
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
-    obj, _ = get_object(task, model)
+    obj, temporary = get_object(task, model)
     doc_id = obj["doc_id"]
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     app.logger.info(f"Object for {task} of model {model} with id of {doc_id} has requires_encoding value of {requires_encoding(obj)}")
@@ -65,7 +65,7 @@ def get_blocked_presto_response(task, model, modality):
 
 def get_async_presto_response(task, model, modality):
     app.logger.error(f"get_async_presto_response: {task} {model} {modality}")
-    obj, temporary = get_object(task, model)
+    obj, _ = get_object(task, model)
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
