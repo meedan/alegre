@@ -3,10 +3,10 @@ import uuid
 import json
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
-from app.main.lib.elasticsearch import store_document, delete_document, get_by_doc_id
+from app.main.lib.elasticsearch import store_document, get_by_doc_id
 
 def _after_log(retry_state):
-  app.logger.debug("Retrying image similarity...")
+    app.logger.debug("Retrying image similarity...")
 
 def get_object_by_doc_id(doc_id):
     return get_by_doc_id(doc_id)
@@ -16,7 +16,7 @@ def get_object(task, model):
     language = task.get("language", None)
     context = task.get("context", {})
     if context:
-      task["contexts"] = [context]
+        task["contexts"] = [context]
     store_document(task, doc_id, language)
     if task.get("content") and not task.get("text"):
         task["text"] = task["content"]
@@ -47,7 +47,7 @@ def requires_encoding(obj):
 def get_blocked_presto_response(task, model, modality):
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
-    obj, temporary = get_object(task, model)
+    obj, _ = get_object(task, model)
     doc_id = obj["doc_id"]
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     app.logger.info(f"Object for {task} of model {model} with id of {doc_id} has requires_encoding value of {requires_encoding(obj)}")
