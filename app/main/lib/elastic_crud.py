@@ -57,7 +57,7 @@ def get_blocked_presto_response(task, model, modality):
             if model_key != "elasticsearch" and not obj.get('model_'+model_key):
                 response = get_presto_request_response(model_key, callback_url, obj)
                 blocked_results.append(Presto.blocked_response(response, modality))
-        # Warning: this is a blocking hold to wait until we get a response in 
+        # Warning: this is a blocking hold to wait until we get a response in
         # a redis key that we've received something from presto.
         return obj, temporary, get_context_for_search(task), blocked_results[-1]
     else:
@@ -66,7 +66,7 @@ def get_blocked_presto_response(task, model, modality):
 def get_async_presto_response(task, model, modality):
     app.logger.error(f"get_async_presto_response: {task} {model} {modality}")
     obj, _ = get_object(task, model)
-    callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
+    callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
     task["final_task"] = "search"
