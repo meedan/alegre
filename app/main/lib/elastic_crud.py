@@ -11,7 +11,7 @@ def _after_log(retry_state):
 def get_object_by_doc_id(doc_id):
     return get_by_doc_id(doc_id)
 
-def get_object(task, model):
+def get_object(task, _):
     doc_id = task.get("doc_id", None)
     language = task.get("language", None)
     context = task.get("context", {})
@@ -49,7 +49,7 @@ def get_blocked_presto_response(task, model, modality):
         task["doc_id"] = str(uuid.uuid4())
     obj, temporary = get_object(task, model)
     doc_id = obj["doc_id"]
-    callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
+    callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     app.logger.info(f"Object for {task} of model {model} with id of {doc_id} has requires_encoding value of {requires_encoding(obj)}")
     if requires_encoding(obj):
         blocked_results = []
