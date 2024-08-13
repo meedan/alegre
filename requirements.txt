@@ -149,5 +149,5 @@ uvicorn==0.15.0
 wasabi==0.8.2
 Werkzeug==0.16.0
 wrapt==1.11.1
-zipp==3.5.0
+zipp==3.19.1
 sentry-sdk[flask]==1.5.12
