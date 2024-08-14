@@ -15,8 +15,13 @@ def get_object(task, _):
     doc_id = task.get("doc_id", None)
     language = task.get("language", None)
     context = task.get("context", {})
+    if not task.get("contexts"):
+        if not isinstance(task.get("contexts"), list):
+            task["contexts"] = [task["contexts"]]
+        else:
+            task["contexts"] = []
     if context:
-        task["contexts"] = [context]
+        task["contexts"].append(context)
     store_document(task, doc_id, language)
     if task.get("content") and not task.get("text"):
         task["text"] = task["content"]
