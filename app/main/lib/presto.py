@@ -1,3 +1,4 @@
+import os
 import json
 import uuid
 from flask import current_app as app
@@ -15,7 +16,7 @@ PRESTO_MODEL_MAP = {
     "indian-sbert": "indian_sbert__Model",
     "paraphrase-filipino-mpnet-base-v2": "fptg__Model",
 }
-
+PRESTO_RESPONSE_TIMEOUT = os.getenv('PRESTO_RESPONSE_TIMEOUT', 120)
 
 class Presto:
     @staticmethod
@@ -44,10 +45,14 @@ class Presto:
         json_data = json.dumps(data, default=safe_serializer)
         return requests.post(f"{presto_host}/process_item/{model_key}", data=json_data, headers=headers)
 
-    @staticmethod
     def blocked_response(message, model_type):
         r = redis_client.get_client()
         item_id = message.get("body", {}).get("id")
-        app.logger.info(f"Waiting for present of key with name '{model_type}_{item_id}'....")
-        _, value = r.blpop(f"{model_type}_{item_id}")
-        return json.loads(value)
+        app.logger.info(f"Waiting for presence of key with name '{model_type}_{item_id}'....")
+        response = r.blpop(f"{model_type}_{item_id}", timeout=PRESTO_RESPONSE_TIMEOUT)
+        if response:
+            _, value = response
+            return json.loads(value)
+        else:
+            app.logger.warning(f"Timeout reached while waiting for key '{model_type}_{item_id}'")
+            return None

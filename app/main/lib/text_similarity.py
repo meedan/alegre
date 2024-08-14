@@ -35,9 +35,17 @@ def get_document_body(body):
 def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
+def fill_in_openai_embeddings(document):
+    for model_key in document.pop("models", []):
+        if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+            document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
+            document['model_'+model_key] = 1
+    store_document(document, document["id"], document["language"])
+
 def async_search_text_on_callback(task):
     app.logger.info(f"async_search_text_on_callback(task) is {task}")
     document = elastic_crud.get_object_by_doc_id(task["id"])
+    fill_in_openai_embeddings(document)
     app.logger.info(f"async_search_text_on_callback(task) document is {document}")
     if not elastic_crud.requires_encoding(document):
         return search_text(document, True)
