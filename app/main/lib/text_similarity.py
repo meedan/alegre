@@ -1,13 +1,13 @@
 from flask import current_app as app
 from opensearchpy import OpenSearch
-from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.opensearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.error_log import ErrorLog
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 #from app.main.lib.langid import Cld3LangidProvider as LangidProvider
 from app.main.lib.langid import GoogleLangidProvider as LangidProvider
 from app.main.lib.openai import retrieve_openai_embeddings, PREFIX_OPENAI
-ELASTICSEARCH_DEFAULT_LIMIT = 10000
+OPENSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
@@ -73,7 +73,7 @@ def get_body_from_conditions(conditions):
         body = conditions
     return body
 
-def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
+def get_opensearch_base_conditions(search_params, clause_count, threshold):
     conditions = [
         {
             'match': {
@@ -162,17 +162,17 @@ def search_text_by_model(search_params):
     model_key, threshold = get_model_and_threshold(search_params)
     app.logger.info(
         f"[Alegre Similarity] search_text_by_model:model_key {model_key}, threshold:{threshold}")
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
     clause_count = 0
-    search_indices = [app.config['ELASTICSEARCH_SIMILARITY']]
+    search_indices = [app.config['OPENSEARCH_SIMILARITY']]
     if 'context' in search_params:
         matches, clause_count = generate_matches(search_params['context'])
     if clause_count >= app.config['MAX_CLAUSE_COUNT']:
         return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
     if model_key.lower() == 'elasticsearch':
-        conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
+        conditions = get_opensearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
         if language == 'None':
             language = None
@@ -184,7 +184,7 @@ def search_text_by_model(search_params):
                 app.logger.warning('Detected language in query text {} is not explicitly supported for indexing, defaulting to "none"'.format(language))
                 language = None
         if language in SUPPORTED_LANGUAGES:
-            search_indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+            search_indices.append(app.config['OPENSEARCH_SIMILARITY']+"_"+language)
         elif language:
             error_text = f"[Alegre Similarity] [Similarity type: text] Language parameter value of {language} for text similarity search asserted, but not in SUPPORTED_LANGUAGES"
             app.logger.info(error_text)
@@ -213,7 +213,7 @@ def search_text_by_model(search_params):
     body = get_body_from_conditions(conditions)
     app.logger.info(f"Sending OpenSearch query: {body}")
     result = es.search(
-        size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
+        size=limit or OPENSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
         body=body,
         index=search_indices
     )
