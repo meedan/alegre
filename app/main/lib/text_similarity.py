@@ -40,7 +40,7 @@ def fill_in_openai_embeddings(document):
         if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
             document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
             document['model_'+model_key] = 1
-    store_document(document, document["id"], document["language"])
+    store_document(document, document["doc_id"], document["language"])
 
 def async_search_text_on_callback(task):
     app.logger.info(f"async_search_text_on_callback(task) is {task}")
