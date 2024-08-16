@@ -1,3 +1,19 @@
+def merge_dict_lists(list1, list2):
+    """
+    Merge two lists of dictionaries, ensuring all unique dictionaries are present in the final result.
+    
+    :param list1: First list of dictionaries.
+    :param list2: Second list of dictionaries.
+    :return: Merged list of unique dictionaries.
+    """
+    def to_hashable(d):
+        return tuple((k, tuple(v) if isinstance(v, list) else v) for k, v in sorted(d.items()))
+    def to_dict(t):
+        return {k: list(v) if isinstance(v, tuple) else v for k, v in t}
+    unique = set(to_hashable(d) for d in list1 + list2)
+    return [to_dict(d) for d in unique]
+
+
 def context_matches(query_context, item_context):
   """
     Check a pair of contexts to determine if they match - first pass is

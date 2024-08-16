@@ -106,7 +106,14 @@ def update_or_create_document(body, doc_id, index):
       )
   return result
 
+def get_by_doc_id(doc_id):
+    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+    response = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+    return response['_source']
+
 def store_document(body, doc_id, language=None):
+    for field in ["per_model_threshold", "threshold", "model", "confirmed", "limit", "requires_callback"]:
+        body.pop(field, None)
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
     # 'auto' indicates we should try to guess the appropriate language
     if language == 'auto':
@@ -124,7 +131,7 @@ def store_document(body, doc_id, language=None):
     for index in indices:
       index_result = update_or_create_document(body, doc_id, index)
       results.append(index_result)
-      if index_result['result'] not in ['created', 'updated']:
+      if index_result['result'] not in ['created', 'updated', 'noop']:
           app.logger.warning('Problem adding document to ES index for language {0}: {1}'.format(language, index_result))
     result = results[0]
     success = False

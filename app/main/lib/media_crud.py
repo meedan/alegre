@@ -12,22 +12,8 @@ from flask import current_app as app
 from app.main import db
 from app.main.model.video import Video
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
+from app.main.lib.helpers import merge_dict_lists
 from app.main.lib.similarity_helpers import drop_context_from_record
-
-def merge_dict_lists(list1, list2):
-    """
-    Merge two lists of dictionaries, ensuring all unique dictionaries are present in the final result.
-    
-    :param list1: First list of dictionaries.
-    :param list2: Second list of dictionaries.
-    :return: Merged list of unique dictionaries.
-    """
-    def to_hashable(d):
-        return tuple((k, tuple(v) if isinstance(v, list) else v) for k, v in sorted(d.items()))
-    def to_dict(t):
-        return {k: list(v) if isinstance(v, tuple) else v for k, v in t}
-    unique = set(to_hashable(d) for d in list1 + list2)
-    return [to_dict(d) for d in unique]
 
 def _after_log(retry_state):
   app.logger.debug("Retrying image similarity...")
