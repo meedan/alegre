@@ -33,6 +33,7 @@ class AsyncSimilarityResource(Resource):
         else:
             package = similarity.get_body_for_media_document(args, 'query')
         #Default to true for this endpoint instead of false in most other cases
+        package["suppress_response"] = args.get("suppress_response", False)
         package["requires_callback"] = args.get("requires_callback", True)
         response, waiting_for_callback = similarity.async_get_similar_items(package, similarity_type)
         if not waiting_for_callback:

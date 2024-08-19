@@ -30,17 +30,20 @@ class PrestoResource(Resource):
         if action == "add_item":
             app.logger.info(f"Data looks like {data}")
             result = similarity.callback_add_item(data.get("body"), model_type)
-            if data.get("body", {}).get("raw", {}).get("final_task") == "search":
-                result = similarity.callback_search_item(data.get("body"), model_type)
-                if result:
-                    result["is_search_result_callback"] = True
-            callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
-            if result and data.get("body", {}).get("raw", {}).get("requires_callback"):
-                app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
-                Webhook.return_webhook(callback_url, action, model_type, result)
-            output = {"action": action, "model_type": model_type, "data": result}
-            app.logger.info(f"PrestoResource value is {output}")
-            return_value = {"action": action, "model_type": model_type, "data": result}
+            if data.get("body", {}).get("raw", {}).get("suppress_response"):
+                return_value = {"action": action, "model_type": model_type, "data": result}
+            else:
+                if data.get("body", {}).get("raw", {}).get("final_task") == "search":
+                    result = similarity.callback_search_item(data.get("body"), model_type)
+                    if result:
+                        result["is_search_result_callback"] = True
+                callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
+                if result and data.get("body", {}).get("raw", {}).get("requires_callback"):
+                    app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
+                    Webhook.return_webhook(callback_url, action, model_type, result)
+                output = {"action": action, "model_type": model_type, "data": result}
+                app.logger.info(f"PrestoResource value is {output}")
+                return_value = {"action": action, "model_type": model_type, "data": result}
         r = redis_client.get_client()
         r.lpush(f"{model_type}_{item_id}", json.dumps(data))
         r.expire(f"{model_type}_{item_id}", 60*60*24)
