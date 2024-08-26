@@ -31,6 +31,9 @@ class ImageOcrResource(Resource):
         if response.error.message:
             raise Exception(response.error.message)
 
+        app.logger.info(
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {response}")
+
         texts = response.text_annotations
 
         if not texts:
