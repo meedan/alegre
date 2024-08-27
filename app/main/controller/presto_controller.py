@@ -35,6 +35,7 @@ class PrestoResource(Resource):
                 return_value = {"action": action, "model_type": model_type, "data": result}
             else:
                 if data.get("body", {}).get("raw", {}).get("final_task") == "search":
+                # compute a set of items that are similar to the just-stored item and respond to caller with them
                     result = similarity.callback_search_item(data.get("body"), model_type)
                     if result:
                         result["is_search_result_callback"] = True
