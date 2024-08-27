@@ -31,6 +31,7 @@ class PrestoResource(Resource):
             app.logger.info(f"Data looks like {data}")
             result = similarity.callback_add_item(data.get("body"), model_type)
             if data.get("body", {}).get("raw", {}).get("suppress_response"):
+                # requested not to reply to caller with similarity response, so suppress it
                 return_value = {"action": action, "model_type": model_type, "data": result}
             else:
                 if data.get("body", {}).get("raw", {}).get("final_task") == "search":
