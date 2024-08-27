@@ -43,9 +43,8 @@ class PrestoResource(Resource):
                 if result and data.get("body", {}).get("raw", {}).get("requires_callback"):
                     app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
                     Webhook.return_webhook(callback_url, action, model_type, result)
-                output = {"action": action, "model_type": model_type, "data": result}
-                app.logger.info(f"PrestoResource value is {output}")
                 return_value = {"action": action, "model_type": model_type, "data": result}
+                app.logger.info(f"PrestoResource value is {return_value}")
         r = redis_client.get_client()
         r.lpush(f"{model_type}_{item_id}", json.dumps(data))
         r.expire(f"{model_type}_{item_id}", 60*60*24)
