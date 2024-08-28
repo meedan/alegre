@@ -3,7 +3,6 @@ from urllib3 import Retry
 from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
-import json
 
 from app.main.lib.google_client import get_credentialed_google_client
 
@@ -38,7 +37,7 @@ class ImageOcrResource(Resource):
             return
 
         app.logger.info(
-            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {json.dumps(response)}")
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {str(response)}")
 
         return {
             'text': texts[0].description
