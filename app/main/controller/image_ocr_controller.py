@@ -4,6 +4,8 @@ from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
 import json
+from google.protobuf.json_format import MessageToJson
+
 
 from app.main.lib.google_client import get_credentialed_google_client
 
@@ -37,8 +39,9 @@ class ImageOcrResource(Resource):
         if not texts:
             return
 
+        res_dict = MessageToDict(response, preserving_proto_field_name=True)
         app.logger.info(
-            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {json.dumps(texts)}")
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {json.dumps(res_dict)}")
 
         return {
             'text': texts[0].description
