@@ -30,10 +30,10 @@ class ImageOcrResource(Resource):
             text_json['bounding_poly'] += [vertice_json]
         text_json = json.dumps(text_json)
         return text_json
+    
     @api.response(200, 'text successfully extracted.')
     @api.doc('Perform text extraction from an image')
     @api.doc(params={'url': 'url of image to extract text from'})
-
     @tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=2, max=5), stop=(tenacity.stop_after_attempt(3) | tenacity.stop_after_delay(10)), after=_after_log, reraise=True)
     def post(self):
         image = vision.types.Image()
