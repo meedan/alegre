@@ -30,7 +30,7 @@ class ImageOcrResource(Resource):
             text_json['bounding_poly'] += [vertice_json]
         text_json = json.dumps(text_json)
         return text_json
-    
+
     @api.response(200, 'text successfully extracted.')
     @api.doc('Perform text extraction from an image')
     @api.doc(params={'url': 'url of image to extract text from'})
