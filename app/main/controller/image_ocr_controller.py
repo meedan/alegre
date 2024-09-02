@@ -37,7 +37,7 @@ class ImageOcrResource(Resource):
             return
 
         app.logger.info(
-            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {str(response)}")
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {response}")
 
         return {
             'text': texts[0].description
