@@ -1,9 +1,9 @@
+import json
 from flask import request, current_app as app
 from urllib3 import Retry
 from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
-import json
 
 from app.main.lib.google_client import get_credentialed_google_client
 from app.main.lib.google_client import convert_text_annotation_to_json

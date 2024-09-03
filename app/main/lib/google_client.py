@@ -40,5 +40,5 @@ def convert_text_annotation_to_json(text_annotation):
             text_json['bounding_poly'] += [vertice_json]
         text_json = json.dumps(text_json)
         return text_json
-    except Exception as e:
-        app.logger.exception(e)
+    except:
+        pass
