@@ -5,8 +5,7 @@ from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
 
-from app.main.lib.google_client import get_credentialed_google_client
-from app.main.lib.google_client import convert_text_annotation_to_json
+from app.main.lib.google_client import get_credentialed_google_client, convert_text_annotation_to_json
 
 api = Namespace('ocr', description='ocr operations')
 ocr_request = api.model('ocr_request', {
