@@ -1,10 +1,11 @@
+import json
 from flask import request, current_app as app
 from urllib3 import Retry
 from flask_restplus import Resource, Namespace, fields
 from google.cloud import vision
 import tenacity
 
-from app.main.lib.google_client import get_credentialed_google_client
+from app.main.lib.google_client import get_credentialed_google_client, convert_text_annotation_to_json
 
 api = Namespace('ocr', description='ocr operations')
 ocr_request = api.model('ocr_request', {
@@ -35,6 +36,9 @@ class ImageOcrResource(Resource):
 
         if not texts:
             return
+
+        app.logger.info(
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {convert_text_annotation_to_json(texts[0])}")
 
         return {
             'text': texts[0].description
