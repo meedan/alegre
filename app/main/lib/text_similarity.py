@@ -36,7 +36,7 @@ def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
 def fill_in_openai_embeddings(document):
-    for model_key in document.pop("models", []):
+    for model_key in document.get("models", []):
         if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
             document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
             document['model_'+model_key] = 1
@@ -76,7 +76,7 @@ def search_text(search_params, use_document_vectors=False):
     if model_key != "elasticsearch":
       search_params.pop("model", None)
       if use_document_vectors:
-          vector_for_search = search_params[model_key+"-tokens"]
+          vector_for_search = search_params["vector_"+model_key]
       else:
           vector_for_search = None
     result = search_text_by_model(dict(**search_params, **{'model': model_key}), vector_for_search)

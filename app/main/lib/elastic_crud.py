@@ -42,7 +42,7 @@ def get_presto_request_response(modality, callback_url, task):
 
 def requires_encoding(obj):
     for model_key in obj.get("models", []):
-        if not obj.get('model_'+model_key):
+        if model_key != "elasticsearch" and not obj.get('model_'+model_key):
             return True
     return False
 
