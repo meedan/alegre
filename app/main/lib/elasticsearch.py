@@ -48,16 +48,17 @@ def generate_matches(context):
     matches = []
     clause_count = 0
     for key in context:
-        if isinstance(context[key], list):
-            clause_count += len(context[key])
-            matches.append({
-                'query_string': { 'query': str.join(" OR ", [f"context.{key}: {v}" for v in context[key]])}
-            })
-        else:
-            clause_count += 1
-            matches.append({
-                'match': { 'context.' + key: context[key] }
-            })
+        if key not in ["project_media_id", "has_custom_id", "field"]:
+            if isinstance(context[key], list):
+                clause_count += len(context[key])
+                matches.append({
+                    'query_string': { 'query': str.join(" OR ", [f"context.{key}: {v}" for v in context[key]])}
+                })
+            else:
+                clause_count += 1
+                matches.append({
+                    'match': { 'context.' + key: context[key] }
+                })
     return matches, clause_count
 
 def truncate_query(query, clause_count):
@@ -112,12 +113,14 @@ def get_by_doc_id(doc_id):
     return response['_source']
 
 def store_document(body, doc_id, language=None):
-    for field in ["per_model_threshold", "threshold", "model", "confirmed", "limit", "requires_callback"]:
-        body.pop(field, None)
+    storable_doc = {}
+    for k,v in body.items():
+        if k not in ["per_model_threshold", "threshold", "model", "confirmed", "limit", "requires_callback"]:
+            storable_doc[k] = v
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
     # 'auto' indicates we should try to guess the appropriate language
     if language == 'auto':
-        text = body['content']
+        text = storable_doc['content']
         language = LangidProvider.langid(text)['result']['language']
         if language not in SUPPORTED_LANGUAGES:
             app.logger.warning('Detected language {} is not supported'.format(language))
@@ -129,7 +132,7 @@ def store_document(body, doc_id, language=None):
     
     results = []
     for index in indices:
-      index_result = update_or_create_document(body, doc_id, index)
+      index_result = update_or_create_document(storable_doc, doc_id, index)
       results.append(index_result)
       if index_result['result'] not in ['created', 'updated', 'noop']:
           app.logger.warning('Problem adding document to ES index for language {0}: {1}'.format(language, index_result))

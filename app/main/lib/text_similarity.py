@@ -175,6 +175,9 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
+def return_sources(results):
+    return [dict(**r["_source"], **{"score": r["_score"]}) for r in results]
+
 def strip_vectors(results):
     for result in results:
         vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
@@ -197,6 +200,7 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params, vector_for_search):
+    import code;code.interact(local=dict(globals(), **locals())) 
     app.logger.info(
         f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
@@ -260,11 +264,13 @@ def search_text_by_model(search_params, vector_for_search):
         body=body,
         index=search_indices
     )
-    response = strip_vectors(
-        restrict_results(
-            insert_model_into_response(result['hits']['hits'], model_key),
-            search_params,
-            model_key
+    response = return_sources(
+        strip_vectors(
+            restrict_results(
+                insert_model_into_response(result['hits']['hits'], model_key),
+                search_params,
+                model_key
+            )
         )
     )
     return {
