@@ -48,7 +48,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     content_type='application/json'
                 )
                 result = json.loads(response.data.decode())
-                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['_index'] for e in result['result']])
+                self.assertTrue(app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'] in [e['index'] for e in result['result']])
 
     def test_auto_language_id(self):
         # language examples as input to language classifier
@@ -86,7 +86,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 index_alias = app.config['ELASTICSEARCH_SIMILARITY']
                 if expected_lang is not None:
                     index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
-                self.assertTrue(index_alias in [e['_index'] for e in result['result']])
+                self.assertTrue(index_alias in [e['index'] for e in result['result']])
 
     def test_auto_language_query(self):
       # language examples as input to language classifier
@@ -124,7 +124,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               index_alias = app.config['ELASTICSEARCH_SIMILARITY']
               if expected_lang is not None:
                   index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
-              self.assertTrue(index_alias in [e['_index'] for e in result['result']])
+              self.assertTrue(index_alias in [e['index'] for e in result['result']])
     
 
 if __name__ == '__main__':

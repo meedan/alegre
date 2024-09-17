@@ -176,7 +176,7 @@ def insert_model_into_response(hits, model_key):
     return hits
 
 def return_sources(results):
-    return [dict(**r["_source"], **{"score": r["_score"]}) for r in results]
+    return [dict(**r["_source"], **{"index": r["_index"], "score": r["_score"]}) for r in results]
 
 def strip_vectors(results):
     for result in results:
