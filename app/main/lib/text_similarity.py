@@ -200,7 +200,6 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params, vector_for_search):
-    import code;code.interact(local=dict(globals(), **locals())) 
     app.logger.info(
         f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
