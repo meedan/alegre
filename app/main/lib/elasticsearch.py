@@ -114,7 +114,7 @@ def get_by_doc_id(doc_id):
 
 def store_document(body, doc_id, language=None):
     storable_doc = {}
-    for k,v in body.items():
+    for k, v in body.items():
         if k not in ["per_model_threshold", "threshold", "model", "confirmed", "limit", "requires_callback"]:
             storable_doc[k] = v
     indices = [app.config['ELASTICSEARCH_SIMILARITY']]
