@@ -44,7 +44,8 @@ def fill_in_openai_embeddings(document):
 
 def async_search_text_on_callback(task):
     app.logger.info(f"async_search_text_on_callback(task) is {task}")
-    document = elastic_crud.get_object_by_doc_id(task["id"])
+    doc_id = task.get("raw", {}).get("doc_id")
+    document = elastic_crud.get_object_by_doc_id(doc_id)
     fill_in_openai_embeddings(document)
     app.logger.info(f"async_search_text_on_callback(task) document is {document}")
     if not elastic_crud.requires_encoding(document):
