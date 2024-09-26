@@ -1,16 +1,11 @@
-FROM postgres:13-buster
+FROM postgres:13
 
-MAINTAINER Alexey Kovrizhkin <lekovr+dopos@gmail.com>
+MAINTAINER Martin Peck <martin@meedan.com>
 
 ENV DOCKERFILE_VERSION 190701
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates gnupg2 && \
-    echo 'deb http://deb.debian.org/debian/ buster main contrib non-free' > /etc/apt/sources.list && \
-    echo 'deb http://security.debian.org/debian-security buster/updates main contrib non-free' >> /etc/apt/sources.list && \
-    echo 'deb https://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >> /etc/apt/sources.list && \
-    apt-key adv --fetch-keys https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
-    apt-get update && \
     apt-get install -y \
     apt-transport-https \
     libcurl3-gnutls \
