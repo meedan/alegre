@@ -85,6 +85,7 @@ class SharedModel(object):
 
   def send_response(self, task, response):
     self.datastore.set(task.task_id, json.dumps({"response": response}))
+    self.datastore.expire(task.task_id, 60*60*24)
 
   def run(self):
     while True:
