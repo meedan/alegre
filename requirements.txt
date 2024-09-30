@@ -31,6 +31,7 @@ cytoolz==0.9.0.1
 dill==0.2.8.2
 docutils==0.14
 fastapi==0.68.0
+fasttext==0.9.3
 feedfinder2==0.0.4
 feedparser==6.0.8
 filelock==3.0.12
