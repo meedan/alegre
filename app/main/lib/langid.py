@@ -149,4 +149,3 @@ class HybridLangidProvider:
   def test():
     HybridLangidProvider.langid("Some text to check")
     return True
-
