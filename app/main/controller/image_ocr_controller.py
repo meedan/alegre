@@ -68,9 +68,6 @@ class ImageOcrResource(Resource):
         except Exception as caught_exception:
             app.logger.error(f"[image_uri {image.source.image_uri}] Error calculating percentage of image area covered by text. Error was {caught_exception}. Image OCR response package looks like {convert_text_annotation_to_json(texts[0])}")
 
-        # Assuming the image has a known width and height (you'll need to replace this with your actual image dimensions)
-        image_width = response.full_text_annotation.pages[0].width
-        image_height = response.full_text_annotation.pages[0].height
         return {
             'text': texts[0].description
         }
