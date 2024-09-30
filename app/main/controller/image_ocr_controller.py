@@ -18,6 +18,14 @@ def _after_log(retry_state):
 CLIENT = get_credentialed_google_client(vision.ImageAnnotatorClient)
 @api.route('/')
 class ImageOcrResource(Resource):
+    def polygon_area(self, vertices):
+        area = 0
+        for i in range(len(vertices)):
+            x1, y1 = vertices[i]
+            x2, y2 = vertices[(i + 1) % len(vertices)]
+            area += (x1 * y2 - x2 * y1)
+        return abs(area) / 2
+    
     @api.response(200, 'text successfully extracted.')
     @api.doc('Perform text extraction from an image')
     @api.doc(params={'url': 'url of image to extract text from'})
@@ -37,9 +45,27 @@ class ImageOcrResource(Resource):
         if not texts:
             return
 
-        app.logger.info(
-            f"[Alegre OCR] [image_uri {image.source.image_uri}] Image OCR response package looks like {convert_text_annotation_to_json(texts[0])}")
+        #### calculate bounding boxes areas.
+        bounds = []
+        for page in response.full_text_annotation.pages:
+            for block in page.blocks:
+                    bounds.append(block.bounding_box)
+        total_area = 0
+        for annotation in bounds:
+            vertices = [(v.x, v.y) for v in annotation.vertices]
+            area = self.polygon_area(vertices)
+            total_area += area
+        image_width = response.full_text_annotation.pages[0].width
+        image_height = response.full_text_annotation.pages[0].height
+        image_area = image_width * image_height
+        percentage = (total_area / image_area) * 100
 
+        app.logger.info(
+            f"[Alegre OCR] [image_uri {image.source.image_uri}] [percentage of image area covered by text {percentage}%] Image OCR response package looks like {convert_text_annotation_to_json(texts[0])}")
+
+        # Assuming the image has a known width and height (you'll need to replace this with your actual image dimensions)
+        image_width = response.full_text_annotation.pages[0].width
+        image_height = response.full_text_annotation.pages[0].height
         return {
             'text': texts[0].description
         }
