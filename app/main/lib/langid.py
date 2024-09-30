@@ -126,7 +126,7 @@ class HybridLangidProvider:
       # Return the higher confidence result
       # if fasttext_result['result']['language'] != cld_result['result']['language']:
       #   # Log when there is disagreement
-      #   app.logger.debug(json.dumps({
+      #   app.logger.info(json.dumps({
       #     'service':'LangId',
       #     'message': 'Disagreement between fasttext and cld. Returning higher confidence model',
       #     'parameters':{'text':text, 'fasttext':fasttext_result, 'cld':cld_result,},
@@ -138,7 +138,7 @@ class HybridLangidProvider:
     else:
       # Fallback to Google when models disagree and neither has a high-confidence result
       google_result = GoogleLangidProvider.langid(text)
-      app.logger.debug(json.dumps({
+      app.logger.info(json.dumps({
         'service':'LangId',
         'message': 'Called Google after inconclusive local results',
         'parameters':{'text':text, 'fasttext':fasttext_result, 'cld':cld_result, 'google':google_result},
