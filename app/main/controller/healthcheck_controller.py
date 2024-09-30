@@ -19,7 +19,7 @@ class HealthcheckResource(Resource):
       'ELASTICSEARCH_SIMILARITY': False,
       'REDIS': False,
       'DATABASE': False,
-      'LANGID': False
+      # 'LANGID': False
     }
 
     # Elasticsearch
@@ -50,11 +50,11 @@ class HealthcheckResource(Resource):
     except Exception as e:
       result['DATABASE'] = str(e)
 
-    # Langid
-    try:
-      class_ = getattr(importlib.import_module('app.main.lib.langid'), app.config['PROVIDER_LANGID'].title() + 'LangidProvider')
-      result['LANGID'] = class_.test()
-    except Exception as e:
-      result['LANGID'] = '%s: %s' % (app.config['PROVIDER_LANGID'].title() + 'LangidProvider', str(e))
+    # # Langid
+    # try:
+    #   class_ = getattr(importlib.import_module('app.main.lib.langid'), app.config['PROVIDER_LANGID'].title() + 'LangidProvider')
+    #   result['LANGID'] = class_.test()
+    # except Exception as e:
+    #   result['LANGID'] = '%s: %s' % (app.config['PROVIDER_LANGID'].title() + 'LangidProvider', str(e))
 
     return { 'result': result }, 200 if all(x and type(x) == type(True) for x in result.values()) else 500
