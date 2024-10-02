@@ -1,6 +1,7 @@
 # 3rd party langid providers
 from flask import current_app as app
 import json
+import re
 
 from google.cloud import translate_v2 as translate
 # import requests # Used for MicrosoftLangidProvider
@@ -87,7 +88,7 @@ class FastTextLangidProvider:
   fasttext_model = fasttext.load_model("extra/fasttext_language_id/lid.176.ftz")
   @staticmethod
   def langid(text):
-    prediction = list(FastTextLangidProvider.fasttext_model.predict(text))
+    prediction = list(FastTextLangidProvider.fasttext_model.predict(re.sub("[\n\r]"," ",text,re.MULTILINE)))
     # prediction is a list of tuples, e.g., [('__label__en',), array([0.22517213])]
 
     language = prediction[0][0].split("__")[-1]
