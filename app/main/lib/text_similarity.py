@@ -1,18 +1,19 @@
+import copy
 from flask import current_app as app
 from opensearchpy import OpenSearch
 from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.error_log import ErrorLog
+from app.main.lib import elastic_crud
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-#from app.main.lib.langid import Cld3LangidProvider as LangidProvider
-from app.main.lib.langid import GoogleLangidProvider as LangidProvider
+from app.main.lib.langid import HybridLangidProvider as LangidProvider
 from app.main.lib.openai import retrieve_openai_embeddings, PREFIX_OPENAI
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
 def get_document_body(body):
-  for model_key in body.pop("models", []):
+  for model_key in body.get("models", []):
     context = body.get("context", {})
     if context:
       body["contexts"] = [context]
@@ -30,16 +31,54 @@ def get_document_body(body):
     body['model_'+model_key] = 1
   return body
 
+def async_search_text(task, modality):
+    return elastic_crud.get_async_presto_response(task, "text", modality)
+
+def fill_in_openai_embeddings(document):
+    for model_key in document.pop("models", []):
+        if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+            document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
+            document['model_'+model_key] = 1
+    store_document(document, document["doc_id"], document["language"])
+
+def async_search_text_on_callback(task):
+    app.logger.info(f"async_search_text_on_callback(task) is {task}")
+    document = elastic_crud.get_object_by_doc_id(task["id"])
+    fill_in_openai_embeddings(document)
+    app.logger.info(f"async_search_text_on_callback(task) document is {document}")
+    if not elastic_crud.requires_encoding(document):
+        return search_text(document, True)
+    return None
+
+def callback_add_text(task):
+    obj = copy.deepcopy(task)
+    model_key = obj.get("raw", {}).get("model")
+    if model_key:
+        obj['raw']['vector_'+model_key] = obj['result']
+        obj['raw']['model_'+model_key] = 1
+    obj.pop("model", None)
+    for key in ["final_task", "limit", "requires_callback", "confirmed"]:
+        obj["raw"].pop(key, None)
+    return elastic_crud.get_object(obj["raw"], "text")[0]
+
 def add_text(body, doc_id, language=None):
   document = store_document(get_document_body(body), doc_id, language)
   if 'error' in document:
     return document, 500
   return document
 
-def search_text(search_params):
+def search_text(search_params, use_document_vectors=False):
+  vector_for_search = None
+  app.logger.info(f"[Alegre Similarity]search_params are {search_params}")
   results = {"result": []}
   for model_key in search_params.pop("models", []):
-    result = search_text_by_model(dict(**search_params, **{'model': model_key}))
+    if model_key != "elasticsearch":
+      search_params.pop("model", None)
+      if use_document_vectors:
+          vector_for_search = search_params[model_key+"-tokens"]
+      else:
+          vector_for_search = None
+    result = search_text_by_model(dict(**search_params, **{'model': model_key}), vector_for_search)
     if 'error' in result:
       ErrorLog.notify(Exception('Model search failed when using '+model_key))
     for search_result in result["result"]:
@@ -53,9 +92,13 @@ def get_model_and_threshold(search_params):
       model_key = search_params['model']
   if 'threshold' in search_params:
       threshold = search_params['threshold']
-  if 'per_model_threshold' in search_params and search_params['per_model_threshold'].get(model_key):
+  if 'per_model_threshold' in search_params and isinstance(search_params['per_model_threshold'], dict) and search_params['per_model_threshold'].get(model_key):
       threshold = search_params['per_model_threshold'].get(model_key)
+  if 'per_model_threshold' in search_params and isinstance(search_params['per_model_threshold'], list) and [e for e in search_params['per_model_threshold'] if e["model"] == model_key]:
+      threshold = [e for e in search_params['per_model_threshold'] if e["model"] == model_key][0]["value"]
   if threshold is None:
+      app.logger.error(
+          f"[Alegre Similarity] get_model_and_threshold - no threshold was specified, backing down to default of 0.9 - search_params is {search_params}")
       threshold = 0.9
   return model_key, threshold
 
@@ -89,17 +132,16 @@ def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
             conditions[0]['match']['content']['fuzziness'] = 'AUTO'
     return conditions
 
-def get_vector_model_base_conditions(search_params, model_key, threshold):
+def get_vector_model_base_conditions(search_params, model_key, threshold, vector=None):
     if "vector" in search_params:
         vector = search_params["vector"]
     elif model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
         vector = retrieve_openai_embeddings(search_params['content'], model_key)
         if vector is None:
             return None
-    else:
+    elif not vector:
         model = SharedModel.get_client(model_key)
         vector = model.get_shared_model_response(search_params['content'])
-
     return {
         'query': {
             'script_score': {
@@ -153,7 +195,7 @@ def restrict_results(results, search_params, model_key):
         return out_results
     return results
 
-def search_text_by_model(search_params):
+def search_text_by_model(search_params, vector_for_search):
     app.logger.info(
         f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
@@ -190,7 +232,7 @@ def search_text_by_model(search_params):
             app.logger.info(error_text)
             raise Exception(error_text)
     else:
-        conditions = get_vector_model_base_conditions(search_params, model_key, threshold)
+        conditions = get_vector_model_base_conditions(search_params, model_key, threshold, vector_for_search)
         if conditions==None:
            return {'result': []}
     if 'context' in search_params:

@@ -1,6 +1,7 @@
 import os
 import json
 from google.oauth2 import service_account
+from flask import current_app as app
 
 def get_credentialed_google_client(client):
     default_values = {}
@@ -26,3 +27,18 @@ def get_credentialed_google_client(client):
     except ValueError as e:
       print(f"Couldn't authenticate to google client: {str(e)}")
       return None
+def convert_text_annotation_to_json(text_annotation):
+    try:
+        text_json = {}
+        text_json['description'] = text_annotation.description
+        text_json['locale'] = text_annotation.locale
+        text_json['bounding_poly'] = []
+        for a_vertice in text_annotation.bounding_poly.vertices:
+            vertice_json = {}
+            vertice_json['x'] = a_vertice.x
+            vertice_json['y'] = a_vertice.y
+            text_json['bounding_poly'] += [vertice_json]
+        text_json = json.dumps(text_json)
+        return text_json
+    except Exception as e:
+        app.logger.exception(e)
