@@ -35,6 +35,15 @@ def get_document_body(body):
 def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
+def sync_search_text(task, modality):
+    obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
+    if isinstance(presto_result, list):
+        for presto_vector_result in presto_result:
+            obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
+            obj['model_'+presto_vector_result["model"]] = 1
+    document, _ = elastic_crud.get_object(obj, "text")
+    return search_text(document, True)
+
 def fill_in_openai_embeddings(document):
     for model_key in document.get("models", []):
         if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:

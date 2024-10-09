@@ -58,10 +58,10 @@ def get_blocked_presto_response(task, model, modality):
         for model_key in obj.pop("models", []):
             if model_key != "elasticsearch" and not obj.get('model_'+model_key):
                 response = get_presto_request_response(model_key, callback_url, obj)
-                blocked_results.append(Presto.blocked_response(response, modality))
+                blocked_results.append({"model": model_key, "response": Presto.blocked_response(response, modality)})
         # Warning: this is a blocking hold to wait until we get a response in
         # a redis key that we've received something from presto.
-        return obj, temporary, get_context_for_search(task), blocked_results[-1]
+        return obj, temporary, get_context_for_search(task), blocked_results
     else:
         return obj, temporary, get_context_for_search(task), {"body": obj}
 
