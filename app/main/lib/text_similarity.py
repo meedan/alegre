@@ -36,11 +36,14 @@ def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
 def sync_search_text(task, modality):
+    import code;code.interact(local=dict(globals(), **locals()))
     obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
+    obj["models"] = ["elasticsearch"]
     if isinstance(presto_result, list):
         for presto_vector_result in presto_result:
             obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
             obj['model_'+presto_vector_result["model"]] = 1
+            obj["models"].append(presto_vector_result["model"])
     document, _ = elastic_crud.get_object(obj, "text")
     return search_text(document, True)
 
