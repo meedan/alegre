@@ -34,8 +34,20 @@ def get_document_body(body):
 def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
+def sync_search_text(task, modality):
+    import code;code.interact(local=dict(globals(), **locals()))
+    obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
+    obj["models"] = ["elasticsearch"]
+    if isinstance(presto_result, list):
+        for presto_vector_result in presto_result:
+            obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
+            obj['model_'+presto_vector_result["model"]] = 1
+            obj["models"].append(presto_vector_result["model"])
+    document, _ = elastic_crud.get_object(obj, "text")
+    return search_text(document, True)
+
 def fill_in_openai_embeddings(document):
-    for model_key in document.pop("models", []):
+    for model_key in document.get("models", []):
         if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
             document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
             document['model_'+model_key] = 1
@@ -43,7 +55,8 @@ def fill_in_openai_embeddings(document):
 
 def async_search_text_on_callback(task):
     app.logger.info(f"async_search_text_on_callback(task) is {task}")
-    document = elastic_crud.get_object_by_doc_id(task["id"])
+    doc_id = task.get("raw", {}).get("doc_id")
+    document = elastic_crud.get_object_by_doc_id(doc_id)
     fill_in_openai_embeddings(document)
     app.logger.info(f"async_search_text_on_callback(task) document is {document}")
     if not elastic_crud.requires_encoding(document):
@@ -75,7 +88,7 @@ def search_text(search_params, use_document_vectors=False):
     if model_key != "elasticsearch":
       search_params.pop("model", None)
       if use_document_vectors:
-          vector_for_search = search_params[model_key+"-tokens"]
+          vector_for_search = search_params["vector_"+model_key]
       else:
           vector_for_search = None
     result = search_text_by_model(dict(**search_params, **{'model': model_key}), vector_for_search)
@@ -174,6 +187,9 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
+def return_sources(results):
+    return [dict(**r["_source"], **{"index": r["_index"], "score": r["_score"]}) for r in results]
+
 def strip_vectors(results):
     for result in results:
         vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
@@ -259,11 +275,13 @@ def search_text_by_model(search_params, vector_for_search):
         body=body,
         index=search_indices
     )
-    response = strip_vectors(
-        restrict_results(
-            insert_model_into_response(result['hits']['hits'], model_key),
-            search_params,
-            model_key
+    response = return_sources(
+        strip_vectors(
+            restrict_results(
+                insert_model_into_response(result['hits']['hits'], model_key),
+                search_params,
+                model_key
+            )
         )
     )
     return {

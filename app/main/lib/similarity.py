@@ -6,7 +6,7 @@ from app.main.lib.shared_models.audio_model import AudioModel
 from app.main.lib.shared_models.video_model import VideoModel
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
 from app.main.lib.image_similarity import add_image, callback_add_image, delete_image, blocking_search_image, async_search_image, async_search_image_on_callback
-from app.main.lib.text_similarity import add_text, async_search_text, async_search_text_on_callback, callback_add_text, delete_text, search_text
+from app.main.lib.text_similarity import add_text, async_search_text, async_search_text_on_callback, callback_add_text, delete_text, search_text, sync_search_text
 DEFAULT_SEARCH_LIMIT = 200
 logging.basicConfig(level=logging.INFO)
 def get_body_for_media_document(params, mode):
@@ -198,6 +198,10 @@ def blocking_get_similar_items(item, similarity_type):
     return response
   elif similarity_type == "video":
     response = video_model().blocking_search(model_response_package(item, "search"), "video")
+    app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
+    return response
+  elif similarity_type == "text":
+    response = sync_search_text(item, "text")
     app.logger.info(f"[Alegre Similarity] [Item {item}, Similarity type: {similarity_type}] response for search was {response}")
     return response
   else:

@@ -306,10 +306,10 @@ class TestSimilarityBlueprint(BaseTestCase):
             post_response = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
-            self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
+            self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["score"], json.loads(post_response.data.decode())["result"][0]["score"])
             lookup["fuzzy"] = False
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
-            self.assertEqual(json.loads(post_response_fuzzy.data.decode())["result"][0]["_score"], json.loads(post_response.data.decode())["result"][0]["_score"])
+            self.assertEqual(json.loads(post_response_fuzzy.data.decode())["result"][0]["score"], json.loads(post_response.data.decode())["result"][0]["score"])
 
     def test_elasticsearch_update_text(self):
         with self.client:
@@ -455,7 +455,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
+        similarity = result['result'][0]['score']
         self.assertGreater(similarity, 0.7)
 
         response = self.client.post(
@@ -487,7 +487,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
+        similarity = result['result'][0]['score']
         self.assertGreater(similarity, 0.7)
 
         response = self.client.post(
@@ -501,7 +501,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertEqual(1, len(result['result']))
-        similarity = result['result'][0]['_score']
+        similarity = result['result'][0]['score']
         self.assertGreater(similarity, 0.7)
 
     def test_wrong_model_key(self):
@@ -599,7 +599,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
 
             self.assertEqual(1, len(result['result']))
-            data['min_es_score']=10+result['result'][0]['_score']
+            data['min_es_score']=10+result['result'][0]['score']
 
             response = self.client.post(
                 '/text/similarity/search/',
