@@ -36,7 +36,6 @@ def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
 def sync_search_text(task, modality):
-    import code;code.interact(local=dict(globals(), **locals()))
     obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
     obj["models"] = ["elasticsearch"]
     if isinstance(presto_result, list):
@@ -189,6 +188,12 @@ def insert_model_into_response(hits, model_key):
     return hits
 
 def return_sources(results):
+    """
+        Results come back as embedded responses raw from elasticsearch - Other services expect the
+        _source value to be the root dict, and also needs index and score to be persisted as well.
+        May throw an error if source has index and score keys some day, but easy to fix for that,
+        and should noisily break since it would have other downstream consequences.
+    """
     return [dict(**r["_source"], **{"index": r["_index"], "score": r["_score"]}) for r in results]
 
 def strip_vectors(results):
