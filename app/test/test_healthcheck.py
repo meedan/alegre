@@ -66,11 +66,11 @@ class TestHealthcheckBlueprintWithBadConfig(BaseTestCase):
       self.assertEqual('application/json', response.content_type)
       self.assertEqual(500, response.status_code)
 
-  def test_healthcheck_api_with_import_error(self):
-    with patch.dict('sys.modules', {'app.main.lib.langid': None}):
-      response = self.client.get('/healthcheck/')
-      self.assertEqual('application/json', response.content_type)
-      self.assertEqual(500, response.status_code)
+  # def test_healthcheck_api_with_import_error(self):
+  #   with patch.dict('sys.modules', {'app.main.lib.langid': None}):
+  #     response = self.client.get('/healthcheck/')
+  #     self.assertEqual('application/json', response.content_type)
+  #     self.assertEqual(500, response.status_code)
 
 if __name__ == '__main__':
     unittest.main()

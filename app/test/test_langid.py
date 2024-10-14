@@ -7,25 +7,26 @@ from unittest.mock import patch
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider#, MicrosoftLangidProvider
+from app.main.lib.langid import GoogleLangidProvider, Cld3LangidProvider, FastTextLangidProvider, HybridLangidProvider
 from app.main.controller.langid_controller import LangidResource
 from app.main.lib import redis_client
 
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
-        { 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
-        { 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': ['hi', 'hi-Latn'], 'text': 'namaste mera naam Karim hai' },
-        { 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
-        { 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
-        { 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': ['bn', 'bn-Latn'], 'text': 'hyalo amara nama Karim' },
-        { 'cld3': 'gu', 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
-        { 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': ['gu', 'gu-Latn'], 'text': 'helo, marum nama Karim che' },
-        { 'cld3': 'ml', 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
-        { 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
-        { 'cld3': 'id', 'microsoft': 'fr', 'google': ['ta', 'ta-Latn'], 'text': 'vanakkam en peyar Karim' },
-        { 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
-        { 'cld3': 'fil', 'microsoft': 'tl', 'google': ['fil', 'tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
-        { 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
+        { 'fasttext': 'hi', 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
+        { 'fasttext': 'hi', 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम\n\n करीम है' },
+        { 'fasttext': None, 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': ['hi', 'hi-Latn'], 'text': 'namaste mera naam Karim hai' },
+        { 'fasttext': 'mr', 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
+        { 'fasttext': 'bn', 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },
+        { 'fasttext': None, 'cld3': 'hi-Latn', 'microsoft': 'id', 'google': ['bn', 'bn-Latn'], 'text': 'hyalo amara nama Karim' },
+        { 'fasttext': 'gu', 'cld3': 'gu', 'microsoft': 'gu', 'google': 'gu', 'text': 'હેલો, મારું નામ કરીમ છે' },
+        { 'fasttext': None, 'cld3': 'ja-Latn', 'microsoft': 'ms', 'google': ['gu', 'gu-Latn'], 'text': 'helo, marum nama Karim che' },
+        { 'fasttext': 'ml', 'cld3': 'ml', 'microsoft': 'ml', 'google': 'ml', 'text': 'ഹലോ എന്റെ പേര് കരീം ആണ്' },
+        { 'fasttext': 'ta', 'cld3': 'ta', 'microsoft': 'ta', 'google': 'ta', 'text': 'வணக்கம் என் பெயர் கரிம்' },
+        { 'fasttext': None, 'cld3': 'id', 'microsoft': 'fr', 'google': ['ta', 'ta-Latn'], 'text': 'vanakkam en peyar Karim' },
+        { 'fasttext': 'te', 'cld3': 'te', 'microsoft': 'te', 'google': 'te', 'text': 'హలో నా పేరు కరీం' },
+        { 'fasttext': 'fil', 'cld3': 'fil', 'microsoft': 'tl', 'google': ['fil', 'tl', 'tl-Latn'], 'text': 'kamusta ang aking pangalan ay Karim' },
+        { 'fasttext': None, 'cld3': 'ja', 'microsoft': 'und', 'google': 'und', 'text': '🙋🏽👨‍🎤' }
     ]
 
     def setUp(self):
@@ -51,10 +52,19 @@ class TestLangidBlueprint(BaseTestCase):
         for test in RESULTS:
             self.assertEqual(test['expected'], LangidResource.cleanup_result(test['test']))
 
+    # @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
+    # def test_langid_google(self):
+    #     for test in TestLangidBlueprint.TESTS:
+    #         result = GoogleLangidProvider.langid(test['text'])
+    #         if type(test['google']) == str:
+    #             self.assertEqual(test['google'], result['result']['language'], test['text'])
+    #         else:
+    #             self.assertTrue(result['result']['language'] in test['google'])
+
     @unittest.skipIf(os.path.isfile('../../google_credentials.json'), "Google credentials file is missing")
-    def test_langid_google(self):
+    def test_langid_hybrid(self):
         for test in TestLangidBlueprint.TESTS:
-            result = GoogleLangidProvider.langid(test['text'])
+            result = HybridLangidProvider.langid(test['text'])
             if type(test['google']) == str:
                 self.assertEqual(test['google'], result['result']['language'], test['text'])
             else:
@@ -76,6 +86,12 @@ class TestLangidBlueprint(BaseTestCase):
         for test in TestLangidBlueprint.TESTS:
             result = Cld3LangidProvider.langid(test['text'])
             self.assertEqual(test['cld3'], result['result']['language'], test['text'])
+
+    def test_langid_fasttext(self):
+        for test in TestLangidBlueprint.TESTS:
+            if test['fasttext']!=None:
+                result = FastTextLangidProvider.langid(test['text'])
+                self.assertEqual(test['fasttext'], result['result']['language'], test['text'])
 
     def test_langid_api_get(self):
         response = self.client.post(

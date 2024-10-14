@@ -6,8 +6,7 @@ from app.main.lib.error_log import ErrorLog
 from app.main.lib import elastic_crud
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
-#from app.main.lib.langid import Cld3LangidProvider as LangidProvider
-from app.main.lib.langid import GoogleLangidProvider as LangidProvider
+from app.main.lib.langid import HybridLangidProvider as LangidProvider
 from app.main.lib.openai import retrieve_openai_embeddings, PREFIX_OPENAI
 ELASTICSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
@@ -37,10 +36,12 @@ def async_search_text(task, modality):
 
 def sync_search_text(task, modality):
     obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
+    obj["models"] = ["elasticsearch"]
     if isinstance(presto_result, list):
         for presto_vector_result in presto_result:
             obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
             obj['model_'+presto_vector_result["model"]] = 1
+            obj["models"].append(presto_vector_result["model"])
     document, _ = elastic_crud.get_object(obj, "text")
     return search_text(document, True)
 
@@ -186,6 +187,12 @@ def insert_model_into_response(hits, model_key):
     return hits
 
 def return_sources(results):
+    """
+        Results come back as embedded responses raw from elasticsearch - Other services expect the
+        _source value to be the root dict, and also needs index and score to be persisted as well.
+        May throw an error if source has index and score keys some day, but easy to fix for that,
+        and should noisily break since it would have other downstream consequences.
+    """
     return [dict(**r["_source"], **{"index": r["_index"], "score": r["_score"]}) for r in results]
 
 def strip_vectors(results):

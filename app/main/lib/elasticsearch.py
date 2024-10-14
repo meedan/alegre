@@ -8,8 +8,7 @@ from flask import current_app as app
 
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 from app.main.lib.error_log import ErrorLog
-#from app.main.lib.langid import Cld3LangidProvider as LangidProvider
-from app.main.lib.langid import GoogleLangidProvider as LangidProvider
+from app.main.lib.langid import HybridLangidProvider as LangidProvider
 
 def get_all_documents_matching_context(context):
   matches, clause_count = generate_matches(context)
@@ -45,6 +44,10 @@ def get_all_documents_matching_context(context):
     return []
 
 def generate_matches(context):
+    """
+        If the keys are not project_media_id, has_custom_id, or field, return ANDs for each field,
+        with ORs for intra-key values (e.g. foo = bar AND baz = (blah|bat))
+    """
     matches = []
     clause_count = 0
     for key in context:
