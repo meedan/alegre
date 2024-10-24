@@ -193,7 +193,8 @@ def return_sources(results):
         May throw an error if source has index and score keys some day, but easy to fix for that,
         and should noisily break since it would have other downstream consequences.
     """
-    return [dict(**r["_source"], **{"index": r["_index"], "score": r["_score"]}) for r in results]
+    #TODO: remove underscore version after dependencies updated https://meedan.atlassian.net/browse/CV2-5546
+    return [dict(**r["_source"], **{"_id": r["_id"], "id": r["_id"], "index": r["_index"], "_score": r["_score"],"score": r["_score"]}) for r in results]
 
 def strip_vectors(results):
     for result in results:
