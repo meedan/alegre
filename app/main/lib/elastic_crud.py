@@ -52,7 +52,6 @@ def get_blocked_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
     doc_id = obj["doc_id"]
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
-    app.logger.info(f"Object for {task} of model {model} with id of {doc_id} has requires_encoding value of {requires_encoding(obj)}")
     if requires_encoding(obj):
         blocked_results = []
         for model_key in obj.pop("models", []):
