@@ -15,6 +15,7 @@ PRESTO_MODEL_MAP = {
     "xlm-r-bert-base-nli-stsb-mean-tokens": "mean_tokens__Model",
     "indian-sbert": "indian_sbert__Model",
     "paraphrase-filipino-mpnet-base-v2": "fptg__Model",
+    "paraphrase-multilingual-mpnet-base-v2": "paraphrase_multilingual__Model"
 }
 PRESTO_RESPONSE_TIMEOUT = os.getenv('PRESTO_RESPONSE_TIMEOUT', 120)
 

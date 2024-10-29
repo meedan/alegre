@@ -14,6 +14,7 @@ from app.main.lib import redis_client
 class TestLangidBlueprint(BaseTestCase):
     TESTS = [
         { 'fasttext': 'hi', 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम करीम है' },
+        { 'fasttext': 'hi', 'cld3': 'hi', 'microsoft': 'hi', 'google': 'hi', 'text': 'नमस्ते मेरा नाम\n\n करीम है' },
         { 'fasttext': None, 'cld3': 'hi-Latn', 'microsoft': 'en', 'google': ['hi', 'hi-Latn'], 'text': 'namaste mera naam Karim hai' },
         { 'fasttext': 'mr', 'cld3': 'mr', 'microsoft': 'hi', 'google': 'mr', 'text': 'हॅलो माझे नाव करीम आहे' },
         { 'fasttext': 'bn', 'cld3': 'bn', 'microsoft': 'bn', 'google': 'bn', 'text': 'হ্যালো আমার নাম কারিম' },

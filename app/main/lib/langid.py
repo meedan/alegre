@@ -87,7 +87,7 @@ class FastTextLangidProvider:
   fasttext_model = fasttext.load_model("extra/fasttext_language_id/lid.176.ftz")
   @staticmethod
   def langid(text):
-    prediction = list(FastTextLangidProvider.fasttext_model.predict(text))
+    prediction = list(FastTextLangidProvider.fasttext_model.predict(text.replace("\n"," ")))
     # prediction is a list of tuples, e.g., [('__label__en',), array([0.22517213])]
 
     language = prediction[0][0].split("__")[-1]
