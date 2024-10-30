@@ -133,7 +133,7 @@ def callback_add_item(item, similarity_type):
     if function:
         response = function(item)
         app.logger.info(f"[Alegre Similarity] CallbackAddItem: [Item {item}, Similarity type: {similarity_type}] Response looks like {response}")
-        return response
+        return {"item": response}
     else:
         app.logger.warning(f"[Alegre Similarity] InvalidCallbackAddItem: [Item {item}, Similarity type: {similarity_type}] No response")
 
