@@ -10,7 +10,7 @@ before_install:
 before_script:
 - ./cc-test-reporter before-build
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker compose build --pull
+- docker compose build
 - docker compose -f docker-compose.yml -f docker-test.yml up -d
 - docker compose logs -t -f &
 - echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
