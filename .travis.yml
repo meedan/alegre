@@ -10,24 +10,24 @@ before_install:
 before_script:
 - ./cc-test-reporter before-build
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker-compose build --pull
-- docker-compose -f docker-compose.yml -f docker-test.yml up -d
-- docker-compose logs -t -f &
+- docker compose build --pull
+- docker compose -f docker compose.yml -f docker-test.yml up -d
+- docker compose logs -t -f &
 - echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
 - until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
 - echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
 #comment until fix timeout curl: (28) Operation timed out
-# - docker-compose exec alegre bash -c "curl --max-time 600.0 -OL https://raw.githubusercontent.com/meedan/check-api/develop/spec/pacts/check_api-alegre.json"
+# - docker compose exec alegre bash -c "curl --max-time 600.0 -OL https://raw.githubusercontent.com/meedan/check-api/develop/spec/pacts/check_api-alegre.json"
 jobs:
   include:
     - stage: tests
       name: unit-tests
-      script: docker-compose exec alegre make test
+      script: docker compose exec alegre make test
     - stage: tests
       name: contract-testing
-      script: docker-compose exec alegre make contract_testing
+      script: docker compose exec alegre make contract_testing
 after_script:
-- docker-compose exec alegre coverage xml
+- docker compose exec alegre coverage xml
 - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $TRAVIS_TEST_RESULT; fi
 notifications:
   slack:
