@@ -30,7 +30,7 @@ services:
       - "redis:/data"
   postgres:
     build: ./postgres
-    platform: linux/x86_64
+    # platform: linux/x86_64
     ports:
       - "5432:5432"
     volumes:
@@ -124,7 +124,7 @@ services:
   #     MODEL_NAME: audio
   queue_worker:
     build: .
-    platform: linux/x86_64
+    # platform: linux/x86_64
     command: ["make", "run_rq_worker"]
     volumes:
       - ".:/app"
@@ -134,7 +134,7 @@ services:
       - .env_file
   alegre:
     build: .
-    platform: linux/x86_64
+    # platform: linux/x86_64
     ports:
       - "3100:3100"
     volumes:
