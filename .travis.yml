@@ -1,7 +1,7 @@
 dist: jammy
 install:
 - sudo apt-get install -y ccrypt
-- echo $encrypted_e34ab48306dd_key > info.txt
+- echo $CC_TEST_REPORTER_ID > info.txt
 - ccencrypt info.txt -K 12345
 - cat info.txt.cpt | base64
 before_install:
