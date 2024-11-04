@@ -131,7 +131,7 @@ class TestLangidBlueprint(BaseTestCase):
               'raw': None,
               'model': 'CLD3',
             }
-            self.assertEqual(Cld3LangidProvider.langid(text), {})
+            self.assertEqual(Cld3LangidProvider.langid("foo bar"), {})
 
     def test_langid_api_post(self):
         response = self.client.post(
