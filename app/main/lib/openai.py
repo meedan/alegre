@@ -16,8 +16,8 @@ def retrieve_openai_embeddings(text, model_key):
     if val_from_cache is not None:
         return pickle.loads(val_from_cache)
     openai.api_key = app.config['OPENAI_API_KEY']
-    app.logger.info(f"Calling OpenAI API")
     model_key_without_openai_prefix = model_key[len(PREFIX_OPENAI):]
+    app.logger.info(f"Calling OpenAI API with '{text}' and engine of {model_key_without_openai_prefix}")
     try:
         embeddings = openai.embeddings_utils.get_embedding(text, engine=model_key_without_openai_prefix)
         r_cache.set(key, pickle.dumps(embeddings))

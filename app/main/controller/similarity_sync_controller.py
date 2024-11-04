@@ -23,10 +23,12 @@ class SyncSimilarityResource(Resource):
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def post(self, similarity_type):
         args = request.json
-        app.logger.debug(f"Args are {args}")
+        app.logger.info(f"[SyncSimilarityResource] Starting Request - args are {args}, similarity_type is {similarity_type}")
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
-            return similarity.blocking_get_similar_items(package, similarity_type)
+            response = similarity.blocking_get_similar_items(package, similarity_type)
         else:
             package = similarity.get_body_for_media_document(args, 'query')
-            return similarity.blocking_get_similar_items(package, similarity_type)
+            response = similarity.blocking_get_similar_items(package, similarity_type)
+        app.logger.info(f"[SyncSimilarityResource] Completing Request - args are {args}, similarity_type is {similarity_type}, reponse is {response}")
+        return response

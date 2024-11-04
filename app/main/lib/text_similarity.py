@@ -53,11 +53,9 @@ def fill_in_openai_embeddings(document):
     store_document(document, document["doc_id"], document["language"])
 
 def async_search_text_on_callback(task):
-    app.logger.info(f"async_search_text_on_callback(task) is {task}")
     doc_id = task.get("raw", {}).get("doc_id")
     document = elastic_crud.get_object_by_doc_id(doc_id)
     fill_in_openai_embeddings(document)
-    app.logger.info(f"async_search_text_on_callback(task) document is {document}")
     if not elastic_crud.requires_encoding(document):
         return search_text(document, True)
     return None
@@ -81,7 +79,6 @@ def add_text(body, doc_id, language=None):
 
 def search_text(search_params, use_document_vectors=False):
   vector_for_search = None
-  app.logger.info(f"[Alegre Similarity]search_params are {search_params}")
   results = {"result": []}
   for model_key in search_params.pop("models", []):
     if model_key != "elasticsearch":
@@ -218,14 +215,10 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params, vector_for_search):
-    app.logger.info(
-        f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
     if not search_params.get("content"):
         return {"result": []}
     model_key, threshold = get_model_and_threshold(search_params)
-    app.logger.info(
-        f"[Alegre Similarity] search_text_by_model:model_key {model_key}, threshold:{threshold}")
     es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
@@ -275,7 +268,6 @@ def search_text_by_model(search_params, vector_for_search):
             conditions['query']['script_score']['query']['bool']['must'].append(context)
     limit = search_params.get("limit")
     body = get_body_from_conditions(conditions)
-    app.logger.info(f"Sending OpenSearch query: {body}")
     result = es.search(
         size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
         body=body,

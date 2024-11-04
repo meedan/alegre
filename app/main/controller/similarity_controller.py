@@ -46,5 +46,7 @@ class SimilaritySearchResource(Resource):
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def post(self):
       args = request.json
-      app.logger.debug(f"Args are {args}")
-      return similarity.get_similar_items(similarity.get_body_for_text_document(args, mode='query'), "text")
+      app.logger.info(f"[SimilaritySearchResource] Args are {args}")
+      response = similarity.get_similar_items(similarity.get_body_for_text_document(args, mode='query'), "text")
+      app.logger.info(f"[SimilaritySearchResource] Args are {args}, response is {response}")
+      return response
