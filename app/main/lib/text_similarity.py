@@ -109,7 +109,7 @@ def get_model_and_threshold(search_params):
   if 'per_model_threshold' in search_params and isinstance(search_params['per_model_threshold'], list) and [e for e in search_params['per_model_threshold'] if e["model"] == model_key]:
       threshold = [e for e in search_params['per_model_threshold'] if e["model"] == model_key][0]["value"]
   if threshold is None:
-      app.logger.error(
+      app.logger.warn(
           f"[Alegre Similarity] get_model_and_threshold - no threshold was specified, backing down to default of 0.9 - search_params is {search_params}")
       threshold = 0.9
   return model_key, threshold
@@ -194,7 +194,7 @@ def return_sources(results):
         and should noisily break since it would have other downstream consequences.
     """
     #TODO: remove underscore version after dependencies updated https://meedan.atlassian.net/browse/CV2-5546
-    return [dict(**r["_source"], **{"_id": r["_id"], "id": r["_id"], "index": r["_index"], "_score": r["_score"],"score": r["_score"]}) for r in results]
+    return [dict(**r["_source"], **{"_id": r["_id"], "id": r["_id"], "index": r["_index"], "_score": r["_score"], "score": r["_score"]}) for r in results]
 
 def strip_vectors(results):
     for result in results:
