@@ -93,15 +93,15 @@ jobs:
       run: |
         docker compose exec alegre make test
    
-    - name: After Unit Test
-      env:
-        GITHUB_JOB_NAME: ${{ github.job }}
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        GITHUB_PULL_REQUEST: ${{ github.event_name}}
-        GITHUB_TEST_RESULT: ${{ steps.unit-tests.outcome}}
-      run:  |
-       docker compose exec alegre coverage xml
-       if [[ "GITHUB_PULL_REQUEST" != 'pull_request'  && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
+    # - name: After Unit Test
+    #   env:
+    #     GITHUB_JOB_NAME: ${{ github.job }}
+    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+    #     GITHUB_PULL_REQUEST: ${{ github.event_name}}
+    #     GITHUB_TEST_RESULT: ${{ steps.unit-tests.outcome}}
+    #   run:  |
+    #    docker compose exec alegre coverage xml
+    #    if [[ "GITHUB_PULL_REQUEST" != 'pull_request'  && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
 
     - name: Cleanup Docker Resources
       run: |
