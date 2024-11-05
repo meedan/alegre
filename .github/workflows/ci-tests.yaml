@@ -1,0 +1,182 @@
+name: Build and Run Tests
+
+on:
+  # schedule:
+  #   - cron: '0 5 * * *'  #Runs  daily at 5 AM UTC
+  push:
+    branches:
+    # - master
+    # - develop
+    - cv2-alegre-ci
+  
+  # pull_request:
+  #   branches:
+  #   - develop
+    
+
+env:
+  CC_TEST_REPORTER_ID: "${{ secrets.CC_TEST_REPORTER_ID }}"
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Decrypt env
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl enc -aes-256-cbc -d -in .env_file.enc -out .env_file -k $DECRYPTION_PASSWORD
+  
+    - name: Decrypt Alegre credentials
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl aes-256-cbc -d  -in google_credentials.json.enc -out google_credentials.json -k $DECRYPTION_PASSWORD
+   
+    - name: Install redis tools
+      run: |
+        sudo apt-get -y install redis-tools
+
+    - name: Set up reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+    
+    # - name: Build Docker Container
+    #   run: |
+    #     docker compose build
+    # - name: Run syntax checks
+    #   run: |
+    #     docker compose run api bash -c 'touch /tmp/no-syntax-errors && find app lib config -name *.rb -exec bash -c "ruby -c {} >/dev/null || rm /tmp/no-syntax-errors" ";" && ls /tmp/no-syntax-errors'
+    # - name: Run Container
+    #   run: docker compose -f docker-compose.yml -f docker-test.yml up -d
+    
+    - name: Before script
+      run: |
+        mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
+        ./cc-test-reporter before-build
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        docker compose build
+        docker compose -f docker-compose.yml -f docker-test.yml up -d
+        docker compose logs -t -f &
+        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
+        echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+
+      
+    - name: Run Unit Tests
+      id: unit-tests
+      run: |
+        docker compose exec alegre make test
+   
+    - name: After Unit Test
+      env:
+        GITHUB_JOB_NAME: ${{ github.job }}
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        GITHUB_PULL_REQUEST: ${{ github.event_name}}
+        AWS_REGION: eu-west-1
+      run:  |
+       docker compose exec alegre coverage xml
+       if [[ "GITHUB_PULL_REQUEST" != 'pull_request'  && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
+
+  
+  contract-testing:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Decrypt env
+      run: |
+        openssl aes-256-cbc -K $encrypted_e34ab48306dd_key -iv $encrypted_e34ab48306dd_iv
+        -in .env_file.enc -out .env_file -d
+  
+    - name: Decrypt Alegre credentials
+      run: |
+        openssl aes-256-cbc -K $encrypted_126f44c7828e_key -iv $encrypted_126f44c7828e_iv
+        -in google_credentials.json.enc -out google_credentials.json -d
+   
+    - name: Install redis tools
+      run: |
+        sudo apt-get -y install redis-tools
+
+    - name: Set up reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+    
+    # - name: Build Docker Container
+    #   run: |
+    #     docker compose build
+    # - name: Run syntax checks
+    #   run: |
+    #     docker compose run api bash -c 'touch /tmp/no-syntax-errors && find app lib config -name *.rb -exec bash -c "ruby -c {} >/dev/null || rm /tmp/no-syntax-errors" ";" && ls /tmp/no-syntax-errors'
+    # - name: Run Container
+    #   run: docker compose -f docker-compose.yml -f docker-test.yml up -d
+    
+    - name: Before script
+      run: |
+        mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
+        ./cc-test-reporter before-build
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        docker compose build
+        docker compose -f docker-compose.yml -f docker-test.yml up -d
+        docker compose logs -t -f &
+        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
+        echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+
+      
+    - name: Run contract Tests
+      run: |
+        docker compose exec alegre make contract_testing
+   
+    - name: After contract Test
+      env:
+        GITHUB_E: ${{ github.event_name}}
+        GITHUB_COMMIT_SHA: ${{ github.sha }}
+        GITHUB_JOB_NAME: ${{ github.job }}
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        AWS_REGION: eu-west-1
+      run:  |
+       docker compose exec alegre coverage xml
+       if [[ "GITHUB_PULL_REQUEST" == "false" && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
