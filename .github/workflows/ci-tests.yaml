@@ -7,7 +7,7 @@ on:
     branches:
     # - master
     # - develop
-    - cv2-alegre-ci
+    - CV2-5605-run-alegre-unit-tests-github-actions
   
   # pull_request:
   #   branches:
