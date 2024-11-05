@@ -85,7 +85,7 @@ jobs:
         docker compose logs -t -f &
         echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
         until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
-        echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
+        echo "Waiting for model servers..." 
 
       
     - name: Run Unit Tests
@@ -178,8 +178,7 @@ jobs:
         docker compose logs -t -f &
         echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
         until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
-        echo "Waiting for model servers..." && while [[ ! '2' =~ $(redis-cli -n 1 SCARD 'SharedModel') ]]; do sleep 1; done
-
+        echo "Waiting for model servers..." 
       
     - name: Run contract Tests
       id: contract-tests
