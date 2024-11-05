@@ -22,6 +22,10 @@ jobs:
     runs-on: 
       labels: alegre
     steps:
+    - name: Set permissions for _work directory
+      run: |
+        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+        sudo chmod 755 $GITHUB_WORKSPACE
     - uses: actions/checkout@v4
 
     - name: Configure AWS Credentials
@@ -99,12 +103,22 @@ jobs:
        docker compose exec alegre coverage xml
        if [[ "GITHUB_PULL_REQUEST" != 'pull_request'  && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
 
-  
+    - name: Cleanup Docker Resources
+      run: |
+           echo "Cleaning up Docker resources..."
+           docker stop $(docker ps -q) 
+           docker rm $(docker ps -aq) 
+           docker rmi $(docker images -q) 
+           docker volume rm $(docker volume ls -q) 
   contract-testing:
     needs: unit-tests
     runs-on: 
       labels: alegre
     steps:
+    - name: Set permissions for _work directory
+      run: |
+        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+        sudo chmod 755 $GITHUB_WORKSPACE
     - uses: actions/checkout@v4
 
     - name: Configure AWS Credentials
@@ -182,3 +196,11 @@ jobs:
       run:  |
        docker compose exec alegre coverage xml
        if [[ "GITHUB_PULL_REQUEST" == "false" && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
+    
+    - name: Cleanup Docker Resources
+      run: |
+           echo "Cleaning up Docker resources..."
+           docker stop $(docker ps -q) 
+           docker rm $(docker ps -aq) 
+           docker rmi $(docker images -q) 
+           docker volume rm $(docker volume ls -q) 
