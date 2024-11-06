@@ -27,7 +27,7 @@ class AsyncSimilarityResource(Resource):
     @api.doc(params={'text': 'text to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'model': 'similarity model to use: "elasticsearch" (pure Elasticsearch, default) or the key name of an active model'})
     def post(self, similarity_type):
         args = request.json
-        app.logger.debug(f"Args are {args}")
+        app.logger.info(f"[AsyncSimilarityResource] Starting Request - args are {args}, similarity_type is {similarity_type}")
         if similarity_type == "text":
             package = similarity.get_body_for_text_document(args, 'query')
         else:
@@ -42,4 +42,5 @@ class AsyncSimilarityResource(Resource):
             result["is_shortcircuited_search_result_callback"] = True
             callback_url = args.get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
             Webhook.return_webhook(callback_url, "search", similarity_type, result)
+        app.logger.info(f"[AsyncSimilarityResource] Completing Request - args are {args}, similarity_type is {similarity_type}, reponse is {response}")
         return response

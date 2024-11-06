@@ -68,11 +68,9 @@ def callback_add_image(task):
 def search_image(image, model, limit, threshold, task, hash_value, context, temporary):
     if image:
         if model and model.lower() == "pdq":
-            app.logger.info(f"Searching with PDQ.")
             image.pdq = hash_value
             result = search_by_pdq(image.pdq, threshold, context, limit)
         else:
-            app.logger.info(f"Searching with phash.")
             image.phash = hash_value
             result = search_by_phash(image.phash, threshold, context, limit)
         if temporary:

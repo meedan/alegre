@@ -65,7 +65,6 @@ def get_blocked_presto_response(task, model, modality):
         return obj, temporary, get_context_for_search(task), {"body": obj}
 
 def get_async_presto_response(task, model, modality):
-    app.logger.info(f"get_async_presto_response: {task} {model} {modality}")
     obj, _ = get_object(task, model)
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:

@@ -33,5 +33,4 @@ class VideoSimilaritySearchResource(Resource):
     @api.doc(params={'url': 'video URL to be stored or queried for similarity', 'threshold': 'minimum score to consider, between 0.0 and 1.0 (defaults to 0.9)', 'context': 'context'} )
     def post(self):
         args = request.json
-        app.logger.debug(f"Args are {args}")
         return jsonify({"message": "This endpoint is not implemented."}), 501
