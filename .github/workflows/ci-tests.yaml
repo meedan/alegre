@@ -1,4 +1,4 @@
-name: Build and Run Tests
+name: Build and Run Alegre Tests
 
 on:
   # schedule:
@@ -194,7 +194,17 @@ jobs:
         GITHUB_TEST_RESULT: ${{ steps.contract-tests.outcome}}
       run:  |
        docker compose exec alegre coverage xml
-       if [[ "GITHUB_PULL_REQUEST" == "false" && "$GITHUB_JOB_NAME" != "contract-testing" ]]; then ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
+      
+    - name: Generat code coverage
+      env:
+        GITHUB_PULL_REQUEST: ${{ github.event_name}}
+        GITHUB_COMMIT_SHA: ${{ github.sha }}
+        GITHUB_JOB_NAME: ${{ github.job }}
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        GITHUB_TEST_RESULT: ${{ steps.contract-tests.outcome}}
+      if: github.event_name != 'pull_request' 
+      run:  |
+       ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
     
     - name: Cleanup Docker Resources
       run: |
