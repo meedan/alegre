@@ -66,16 +66,7 @@ jobs:
       run: |
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod +x ./cc-test-reporter
-    
-    # - name: Build Docker Container
-    #   run: |
-    #     docker compose build
-    # - name: Run syntax checks
-    #   run: |
-    #     docker compose run api bash -c 'touch /tmp/no-syntax-errors && find app lib config -name *.rb -exec bash -c "ruby -c {} >/dev/null || rm /tmp/no-syntax-errors" ";" && ls /tmp/no-syntax-errors'
-    # - name: Run Container
-    #   run: docker compose -f docker-compose.yml -f docker-test.yml up -d
-    
+
     - name: Before script
       run: |
         mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
@@ -86,7 +77,6 @@ jobs:
         echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
         until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
         echo "Waiting for model servers..." 
-
       
     - name: Run Unit Tests
       id: unit-tests
@@ -104,18 +94,6 @@ jobs:
          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       run: ./cc-test-reporter after-build -t coverage.py --exit-code $?
 
-    # - name: Generat code coverage
-    #   env:
-    #     GITHUB_PULL_REQUEST: ${{ github.event_name}}
-    #     GITHUB_COMMIT_SHA: ${{ github.sha }}
-    #     GITHUB_JOB_NAME: ${{ github.job }}
-    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-    #     GITHUB_TEST_RESULT: ${{ steps.unit-tests.outcome}}
-    #   if: github.event_name != 'pull_request' 
-    #   run:  |
-    #    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter && chmod +x ./cc-test-reporter
-    #    ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT 
-    
     - name: Cleanup Docker Resources
       run: |
            echo "Cleaning up Docker resources..."
@@ -123,6 +101,7 @@ jobs:
            docker rm $(docker ps -aq) 
            docker rmi $(docker images -q) 
            docker volume rm $(docker volume ls -q) 
+
   contract-testing:
     needs: unit-tests
     runs-on: 
@@ -179,38 +158,33 @@ jobs:
         ./cc-test-reporter before-build
         docker compose build
         docker compose -f docker-compose.yml -f docker-test.yml up -d
-        docker compose logs -t -f &
-        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
-        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
-        echo "Waiting for model servers..." 
-      
+
+    - name: Wait for Elasticsearch indexes
+      run: |
+          echo "Waiting for Elasticsearch indexes..."
+          until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do
+            sleep 1
+          done
+
+    - name: Wait for another service on port 3100
+      run: |
+          echo "Waiting for service on port 3100..."
+          until curl --silent --fail -I "http://localhost:3100"; do
+            sleep 1
+          done
+
+    - name: Wait for model servers
+      run: |
+          echo "Waiting for model servers..."
+          while [[ $(redis-cli -n 1 SCARD 'SharedModel') -ne 2 ]]; do
+            sleep 1
+          done
+    
     - name: Run contract Tests
       id: contract-tests
       run: |
         docker compose exec alegre make contract_testing
-   
-    # - name: After contract Test
-    #   env:
-    #     GITHUB_PULL_REQUEST: ${{ github.event_name}}
-    #     GITHUB_COMMIT_SHA: ${{ github.sha }}
-    #     GITHUB_JOB_NAME: ${{ github.job }}
-    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-    #     GITHUB_TEST_RESULT: ${{ steps.contract-tests.outcome}}
-    #   run:  |
-    #    docker compose exec alegre coverage xml
-      
-    # - name: Generat code coverage
-    #   env:
-    #     GITHUB_PULL_REQUEST: ${{ github.event_name}}
-    #     GITHUB_COMMIT_SHA: ${{ github.sha }}
-    #     GITHUB_JOB_NAME: ${{ github.job }}
-    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-    #     GITHUB_TEST_RESULT: ${{ steps.contract-tests.outcome}}
-    #   if: github.event_name != 'pull_request' 
-    #   run:  |
-    #    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter && chmod +x ./cc-test-reporter
-    #    ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $GITHUB_TEST_RESULT; fi
-    
+
     - name: Cleanup Docker Resources
       run: |
            echo "Cleaning up Docker resources..."
