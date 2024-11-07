@@ -1,12 +1,11 @@
 name: Build and Run Alegre Tests
 
 on:
-
   push:
     branches:
     - master
     - develop
-    - CV2-5605-run-alegre-unit-tests-github-actions
+    - "**"
 
   pull_request:
     branches:
