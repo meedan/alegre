@@ -1,17 +1,16 @@
 name: Build and Run Alegre Tests
 
 on:
-  # schedule:
-  #   - cron: '0 5 * * *'  #Runs  daily at 5 AM UTC
+
   push:
     branches:
-    # - master
-    # - develop
+    - master
+    - develop
     - CV2-5605-run-alegre-unit-tests-github-actions
-  
-  # pull_request:
-  #   branches:
-  #   - develop
+
+  pull_request:
+    branches:
+    - develop
     
 
 env:
@@ -158,27 +157,10 @@ jobs:
         ./cc-test-reporter before-build
         docker compose build
         docker compose -f docker-compose.yml -f docker-test.yml up -d
-
-    - name: Wait for Elasticsearch indexes
-      run: |
-          echo "Waiting for Elasticsearch indexes..."
-          until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do
-            sleep 1
-          done
-
-    - name: Wait for another service on port 3100
-      run: |
-          echo "Waiting for service on port 3100..."
-          until curl --silent --fail -I "http://localhost:3100"; do
-            sleep 1
-          done
-
-    - name: Wait for model servers
-      run: |
-          echo "Waiting for model servers..."
-          while [[ $(redis-cli -n 1 SCARD 'SharedModel') -ne 2 ]]; do
-            sleep 1
-          done
+        docker compose logs -t -f &
+        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
+        echo "Waiting for model servers..." 
     
     - name: Run contract Tests
       id: contract-tests
@@ -187,8 +169,8 @@ jobs:
 
     - name: Cleanup Docker Resources
       run: |
-           echo "Cleaning up Docker resources..."
-           docker stop $(docker ps -q) 
-           docker rm $(docker ps -aq) 
-           docker rmi $(docker images -q) 
-           docker volume rm $(docker volume ls -q) 
+        echo "Cleaning up Docker resources..."
+        docker stop $(docker ps -q) 
+        docker rm $(docker ps -aq) 
+        docker rmi $(docker images -q) 
+        docker volume rm $(docker volume ls -q) 
