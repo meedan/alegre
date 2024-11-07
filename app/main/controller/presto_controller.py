@@ -39,7 +39,7 @@ class PrestoResource(Resource):
                     if result:
                         result["is_search_result_callback"] = True
                 callback_url = data.get("body", {}).get("raw", {}).get("callback_url", app.config['CHECK_API_HOST']) or app.config['CHECK_API_HOST']
-                if result and data.get("body", {}).get("raw", {}).get("requires_callback"):
+                if result and result.get("results") is not None and data.get("body", {}).get("raw", {}).get("requires_callback"):
                     app.logger.info(f"Sending callback to {callback_url} for {action} for model of {model_type} with body of {result}")
                     Webhook.return_webhook(callback_url, action, model_type, result)
                 return_value = {"action": action, "model_type": model_type, "data": result}

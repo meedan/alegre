@@ -54,7 +54,7 @@ def get_blocked_presto_response(task, model, modality):
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if requires_encoding(obj):
         blocked_results = []
-        for model_key in obj.pop("models", []):
+        for model_key in obj.get("models", []):
             if model_key != "elasticsearch" and not obj.get('model_'+model_key):
                 response = get_presto_request_response(model_key, callback_url, obj)
                 blocked_results.append({"model": model_key, "response": Presto.blocked_response(response, modality)})
