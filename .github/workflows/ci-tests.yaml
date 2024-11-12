@@ -1,6 +1,8 @@
 name: Build and Run Alegre Tests
 
 on:
+  schedule:
+    - cron: '0 9 * * *'  #Run daily at 9 UTC
   push:
     branches:
     - master
@@ -10,7 +12,6 @@ on:
   pull_request:
     branches:
     - develop
-    
 
 env:
   CC_TEST_REPORTER_ID: "${{ secrets.CC_TEST_REPORTER_ID }}"
@@ -93,6 +94,7 @@ jobs:
       run: ./cc-test-reporter after-build -t coverage.py --exit-code $?
 
     - name: Cleanup Docker Resources
+      if: always()
       run: |
            echo "Cleaning up Docker resources..."
            docker stop $(docker ps -q) 
@@ -167,6 +169,7 @@ jobs:
         docker compose exec alegre make contract_testing
 
     - name: Cleanup Docker Resources
+      if: always()
       run: |
         echo "Cleaning up Docker resources..."
         docker stop $(docker ps -q) 
