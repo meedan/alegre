@@ -144,7 +144,6 @@ def get_blocked_presto_response(task, model, modality):
     callback_url =  Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
-    app.logger.error(f"Object for {task} of model {model} with id of {obj.id} has requires_encoding value of {obj.requires_encoding}")
     if obj.requires_encoding:
         response = get_presto_request_response(modality, callback_url, task)
         # Warning: this is a blocking hold to wait until we get a response in 

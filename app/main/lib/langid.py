@@ -70,8 +70,8 @@ class Cld3LangidProvider:
     prediction = cld3.get_language(text)
     return {
       'result': {
-        'language': prediction.language,
-        'confidence': prediction.probability
+        'language': prediction and prediction.language,
+        'confidence': prediction and prediction.probability
       },
       'raw': prediction,
       'model': 'CLD3',

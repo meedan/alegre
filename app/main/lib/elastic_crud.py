@@ -42,7 +42,7 @@ def get_presto_request_response(modality, callback_url, task):
 
 def requires_encoding(obj):
     for model_key in obj.get("models", []):
-        if not obj.get('model_'+model_key):
+        if model_key != "elasticsearch" and not obj.get('model_'+model_key):
             return True
     return False
 
@@ -52,21 +52,19 @@ def get_blocked_presto_response(task, model, modality):
     obj, temporary = get_object(task, model)
     doc_id = obj["doc_id"]
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
-    app.logger.info(f"Object for {task} of model {model} with id of {doc_id} has requires_encoding value of {requires_encoding(obj)}")
     if requires_encoding(obj):
         blocked_results = []
-        for model_key in obj.pop("models", []):
+        for model_key in obj.get("models", []):
             if model_key != "elasticsearch" and not obj.get('model_'+model_key):
                 response = get_presto_request_response(model_key, callback_url, obj)
-                blocked_results.append(Presto.blocked_response(response, modality))
+                blocked_results.append({"model": model_key, "response": Presto.blocked_response(response, modality)})
         # Warning: this is a blocking hold to wait until we get a response in
         # a redis key that we've received something from presto.
-        return obj, temporary, get_context_for_search(task), blocked_results[-1]
+        return obj, temporary, get_context_for_search(task), blocked_results
     else:
         return obj, temporary, get_context_for_search(task), {"body": obj}
 
 def get_async_presto_response(task, model, modality):
-    app.logger.error(f"get_async_presto_response: {task} {model} {modality}")
     obj, _ = get_object(task, model)
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:

@@ -34,18 +34,28 @@ def get_document_body(body):
 def async_search_text(task, modality):
     return elastic_crud.get_async_presto_response(task, "text", modality)
 
+def sync_search_text(task, modality):
+    obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
+    obj["models"] = ["elasticsearch"]
+    if isinstance(presto_result, list):
+        for presto_vector_result in presto_result:
+            obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
+            obj['model_'+presto_vector_result["model"]] = 1
+            obj["models"].append(presto_vector_result["model"])
+    document, _ = elastic_crud.get_object(obj, "text")
+    return search_text(document, True)
+
 def fill_in_openai_embeddings(document):
-    for model_key in document.pop("models", []):
+    for model_key in document.get("models", []):
         if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
             document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
             document['model_'+model_key] = 1
     store_document(document, document["doc_id"], document["language"])
 
 def async_search_text_on_callback(task):
-    app.logger.info(f"async_search_text_on_callback(task) is {task}")
-    document = elastic_crud.get_object_by_doc_id(task["id"])
+    doc_id = task.get("raw", {}).get("doc_id")
+    document = elastic_crud.get_object_by_doc_id(doc_id)
     fill_in_openai_embeddings(document)
-    app.logger.info(f"async_search_text_on_callback(task) document is {document}")
     if not elastic_crud.requires_encoding(document):
         return search_text(document, True)
     return None
@@ -69,13 +79,12 @@ def add_text(body, doc_id, language=None):
 
 def search_text(search_params, use_document_vectors=False):
   vector_for_search = None
-  app.logger.info(f"[Alegre Similarity]search_params are {search_params}")
   results = {"result": []}
   for model_key in search_params.pop("models", []):
     if model_key != "elasticsearch":
       search_params.pop("model", None)
       if use_document_vectors:
-          vector_for_search = search_params[model_key+"-tokens"]
+          vector_for_search = search_params["vector_"+model_key]
       else:
           vector_for_search = None
     result = search_text_by_model(dict(**search_params, **{'model': model_key}), vector_for_search)
@@ -97,7 +106,7 @@ def get_model_and_threshold(search_params):
   if 'per_model_threshold' in search_params and isinstance(search_params['per_model_threshold'], list) and [e for e in search_params['per_model_threshold'] if e["model"] == model_key]:
       threshold = [e for e in search_params['per_model_threshold'] if e["model"] == model_key][0]["value"]
   if threshold is None:
-      app.logger.error(
+      app.logger.warn(
           f"[Alegre Similarity] get_model_and_threshold - no threshold was specified, backing down to default of 0.9 - search_params is {search_params}")
       threshold = 0.9
   return model_key, threshold
@@ -174,6 +183,16 @@ def insert_model_into_response(hits, model_key):
             hit["_source"]["model"] = model_key
     return hits
 
+def return_sources(results):
+    """
+        Results come back as embedded responses raw from elasticsearch - Other services expect the
+        _source value to be the root dict, and also needs index and score to be persisted as well.
+        May throw an error if source has index and score keys some day, but easy to fix for that,
+        and should noisily break since it would have other downstream consequences.
+    """
+    #TODO: remove underscore version after dependencies updated https://meedan.atlassian.net/browse/CV2-5546
+    return [dict(**r["_source"], **{"_id": r["_id"], "id": r["_id"], "index": r["_index"], "_score": r["_score"], "score": r["_score"]}) for r in results]
+
 def strip_vectors(results):
     for result in results:
         vector_keys = [key for key in result["_source"].keys() if key[:7] == "vector_"]
@@ -196,14 +215,10 @@ def restrict_results(results, search_params, model_key):
     return results
 
 def search_text_by_model(search_params, vector_for_search):
-    app.logger.info(
-        f"[Alegre Similarity] search_text_by_model:search_params {search_params}")
     language = None
     if not search_params.get("content"):
         return {"result": []}
     model_key, threshold = get_model_and_threshold(search_params)
-    app.logger.info(
-        f"[Alegre Similarity] search_text_by_model:model_key {model_key}, threshold:{threshold}")
     es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
@@ -253,17 +268,18 @@ def search_text_by_model(search_params, vector_for_search):
             conditions['query']['script_score']['query']['bool']['must'].append(context)
     limit = search_params.get("limit")
     body = get_body_from_conditions(conditions)
-    app.logger.info(f"Sending OpenSearch query: {body}")
     result = es.search(
         size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
         body=body,
         index=search_indices
     )
-    response = strip_vectors(
-        restrict_results(
-            insert_model_into_response(result['hits']['hits'], model_key),
-            search_params,
-            model_key
+    response = return_sources(
+        strip_vectors(
+            restrict_results(
+                insert_model_into_response(result['hits']['hits'], model_key),
+                search_params,
+                model_key
+            )
         )
     )
     return {

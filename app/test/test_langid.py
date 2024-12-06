@@ -120,6 +120,19 @@ class TestLangidBlueprint(BaseTestCase):
         self.assertEqual('application/json', response.content_type)
         self.assertEqual(200, response.status_code)
 
+    def test_null_prediction_cld(self):
+        with patch('cld3.get_language', ) as mock_cld3_get_language:
+            mock_cld3_get_language.return_value = None
+            expected = {
+              'result': {
+                'language': None,
+                'confidence': None
+              },
+              'raw': None,
+              'model': 'CLD3',
+            }
+            self.assertEqual(Cld3LangidProvider.langid("foo bar"), {'model': 'CLD3', 'raw': None, 'result': {'confidence': None, 'language': None}})
+
     def test_langid_api_post(self):
         response = self.client.post(
             '/text/langid/',

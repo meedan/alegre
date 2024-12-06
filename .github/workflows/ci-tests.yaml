@@ -1,0 +1,177 @@
+name: Build and Run Alegre Tests
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  #Run daily at 9 UTC
+  push:
+    branches:
+    - master
+    - develop
+
+  pull_request:
+    branches:
+    - develop
+
+env:
+  CC_TEST_REPORTER_ID: "${{ secrets.CC_TEST_REPORTER_ID }}"
+
+jobs:
+  unit-tests:
+    runs-on: 
+      labels: alegre
+    steps:
+    - name: Set permissions for _work directory
+      run: |
+        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+        sudo chmod 755 $GITHUB_WORKSPACE
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Decrypt env
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl enc -aes-256-cbc -d -in .env_file.enc -out .env_file -k $DECRYPTION_PASSWORD
+  
+    - name: Decrypt Alegre credentials
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl aes-256-cbc -d  -in google_credentials.json.enc -out google_credentials.json -k $DECRYPTION_PASSWORD
+   
+    - name: Install redis tools
+      run: |
+        sudo apt-get -y install redis-tools
+
+    - name: Set up reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+
+    - name: Before script
+      run: |
+        mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
+        ./cc-test-reporter before-build
+        docker compose build
+        docker compose -f docker-compose.yml -f docker-test.yml up -d
+        docker compose logs -t -f &
+        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
+        echo "Waiting for model servers..." 
+      
+    - name: Run Unit Tests
+      id: unit-tests
+      run: |
+        docker compose exec alegre make test
+   
+    - name: Generate Coverage Report
+      if: ${{ github.event_name != 'pull_request' }}
+      run: |
+       docker compose exec alegre coverage xml
+
+    - name: Upload Coverage Report
+      if: ${{ github.event_name != 'pull_request' }}
+      env:
+         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      run: ./cc-test-reporter after-build -t coverage.py --exit-code $?
+
+    - name: Cleanup Docker Resources
+      if: always()
+      run: |
+           echo "Cleaning up Docker resources..."
+           docker stop $(docker ps -q) 
+           docker rm $(docker ps -aq) 
+           docker rmi $(docker images -q) 
+           docker volume rm $(docker volume ls -q) 
+
+  contract-testing:
+    needs: unit-tests
+    runs-on: 
+      labels: alegre
+    steps:
+    - name: Set permissions for _work directory
+      run: |
+        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+        sudo chmod 755 $GITHUB_WORKSPACE
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Decrypt env
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl enc -aes-256-cbc -d -in .env_file.enc -out .env_file -k $DECRYPTION_PASSWORD
+  
+    - name: Decrypt Alegre credentials
+      env:
+        DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
+      run: |
+        openssl aes-256-cbc -d  -in google_credentials.json.enc -out google_credentials.json -k $DECRYPTION_PASSWORD
+  
+    - name: Install redis tools
+      run: |
+        sudo apt-get -y install redis-tools
+
+    - name: Set up reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+
+    - name: Before script
+      run: |
+        mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
+        ./cc-test-reporter before-build
+        docker compose build
+        docker compose -f docker-compose.yml -f docker-test.yml up -d
+        docker compose logs -t -f &
+        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
+        echo "Waiting for model servers..." 
+    
+    - name: Run contract Tests
+      id: contract-tests
+      run: |
+        docker compose exec alegre make contract_testing
+
+    - name: Cleanup Docker Resources
+      if: always()
+      run: |
+        echo "Cleaning up Docker resources..."
+        docker stop $(docker ps -q) 
+        docker rm $(docker ps -aq) 
+        docker rmi $(docker images -q) 
+        docker volume rm $(docker volume ls -q) 

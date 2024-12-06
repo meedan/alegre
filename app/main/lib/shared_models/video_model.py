@@ -79,7 +79,6 @@ class VideoModel(SharedModel):
         pathlib.Path(self.directory).mkdir(parents=True, exist_ok=True)
 
     def respond(self, task):
-        app.logger.info('Received task that looks like: '+str(json.dumps(task)))
         if task["command"] == "delete":
             return self.delete(task)
         elif task["command"] == "add":
