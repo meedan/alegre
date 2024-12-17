@@ -73,6 +73,10 @@ class TestElasticCrud(unittest.TestCase):
         obj = {'models': ['model1'], 'model_model1': 'encoded_data'}
         self.assertFalse(requires_encoding(obj))
 
+        obj = {'models': ['openai-text-embedding-ada-002']}
+        self.assertFalse(requires_encoding(obj))
+
+
     @patch('app.main.lib.elastic_crud.Presto.blocked_response')
     @patch('app.main.lib.elastic_crud.Presto.send_request')
     @patch('app.main.lib.elastic_crud.store_document')
