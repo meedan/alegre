@@ -40,9 +40,12 @@ def get_presto_request_response(modality, callback_url, task):
     assert isinstance(response["body"], dict), f"Bad body for {modality}, {callback_url}, {task} - response was {response}"
     return response
 
+def encodable_model(model_key, obj):
+    return model_key != "elasticsearch" and not obj.get('model_'+model_key) and model_key[:len(PREFIX_OPENAI)] != PREFIX_OPENAI
+
 def requires_encoding(obj):
     for model_key in obj.get("models", []):
-        if model_key != "elasticsearch" and not obj.get('model_'+model_key) and model_key[:len(PREFIX_OPENAI)] != PREFIX_OPENAI:
+        if encodable_model(model_key, obj):
             return True
     return False
 
@@ -55,7 +58,7 @@ def get_blocked_presto_response(task, model, modality):
     if requires_encoding(obj):
         blocked_results = []
         for model_key in obj.get("models", []):
-            if model_key != "elasticsearch" and not obj.get('model_'+model_key):
+            if encodable_model(model_key, obj):
                 response = get_presto_request_response(model_key, callback_url, obj)
                 blocked_results.append({"model": model_key, "response": Presto.blocked_response(response, modality)})
         # Warning: this is a blocking hold to wait until we get a response in
@@ -73,7 +76,7 @@ def get_async_presto_response(task, model, modality):
     if requires_encoding(obj):
         responses = []
         for model_key in obj.get("models", []):
-            if model_key != "elasticsearch" and not obj.get('model_'+model_key):
+            if encodable_model(model_key, obj):
                 task["model"] = model_key
                 responses.append(get_presto_request_response(model_key, callback_url, task))
         return responses, True
