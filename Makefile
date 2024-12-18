@@ -28,7 +28,7 @@ test: wait
 	coverage run --source=app/main/ manage.py test
 
 wait:
-	until curl --silent -XGET --fail $(ELASTICSEARCH_URL); do printf '.'; sleep 1; done
+	until curl --silent -XGET --fail $(OPENSEARCH_URL); do printf '.'; sleep 1; done
 
 contract_testing: wait
 	curl -vvv -X POST "http://alegre:3100/image/similarity/" -H "Content-Type: application/json" -d '{"url":"https://i.pinimg.com/564x/0f/73/57/0f7357637b2b203e9f32e73c24d126d7.jpg","threshold":0.9,"context":{}}'

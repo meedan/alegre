@@ -270,11 +270,11 @@ def run_video_matcher():
 def init():
   """Initializes the service."""
   # Create ES indexes.
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+  es = OpenSearch(app.config['OPENSEARCH_URL'])
   try:
     if config_name == 'test':
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-    es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+    es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
   except TransportError as e:
     # ignore already existing index
     if e.error == 'resource_already_exists_exception':
@@ -282,9 +282,9 @@ def init():
     else:
       raise
   es.indices.put_mapping(
-    body=json.load(open('./elasticsearch/alegre_similarity.json')),
+    body=json.load(open('./opensearch/alegre_similarity.json')),
     # include_type_name=True,
-    index=app.config['ELASTICSEARCH_SIMILARITY']
+    index=app.config['OPENSEARCH_SIMILARITY']
   )
   init_indices()
   # Create database.

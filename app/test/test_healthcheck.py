@@ -43,9 +43,9 @@ class TestHealthcheckBlueprintWithBadConfig(BaseTestCase):
       self.assertEqual('application/json', response.content_type)
       self.assertEqual(500, response.status_code)
 
-  def test_healthcheck_api_elasticsearch_exception(self):
+  def test_healthcheck_api_opensearch_exception(self):
     with app.app_context():
-      app.config['ELASTICSEARCH_URL']= ''
+      app.config['OPENSEARCH_URL']= ''
       response = self.client.get('/healthcheck/')
       self.assertEqual('application/json', response.content_type)
       self.assertEqual(500, response.status_code)
@@ -59,7 +59,7 @@ class TestHealthcheckBlueprintWithBadConfig(BaseTestCase):
 
   def test_healthcheck_api_with_bad_config(self):
     with app.app_context():
-      app.config['ELASTICSEARCH_URL']= 'bad'
+      app.config['OPENSEARCH_URL']= 'bad'
       app.config['REDIS_HOST']= 'bad'
       app.config['SQLALCHEMY_DATABASE_URI']= 'bad'
       response = self.client.get('/healthcheck/')

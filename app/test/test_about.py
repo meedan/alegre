@@ -11,5 +11,5 @@ class TestAboutBlueprint(BaseTestCase):
         with self.client:
             response = self.client.get('/about/')
             result = json.loads(response.data.decode())
-            self.assertTrue('elasticsearch' in result['text/similarity'])
+            self.assertTrue('opensearch' in result['text/similarity'])
             self.assertTrue('xlm-r-bert-base-nli-stsb-mean-tokens' in result['text/similarity'])

@@ -1,10 +1,10 @@
 volumes:
-  elasticsearch:
+  opensearch:
   redis:
   postgres:
 services:
-  elasticsearch:
-    build: ./elasticsearch
+  opensearch:
+    build: ./opensearch
     ports:
       - "9200:9200"
     environment:
@@ -12,15 +12,15 @@ services:
       transport.host: 127.0.0.1
       xpack.security.enabled: "false"
     volumes:
-      - "elasticsearch:/usr/share/elasticsearch/data"
+      - "opensearch:/usr/share/opensearch/data"
   kibana:
     image: docker.elastic.co/kibana/kibana:7.9.2
     ports:
       - "5601:5601"
     depends_on:
-      - elasticsearch
+      - opensearch
     environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      OPENSEARCH_URL: http://opensearch:9200
   redis:
     image: redis:6.2
     ports:

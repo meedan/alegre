@@ -51,7 +51,7 @@ services:
   alegre:
     depends_on:
       - postgres
-      - elasticsearch
+      - opensearch
       - redis
       - model_test
       - other_model_test

@@ -1,14 +1,14 @@
 import copy
 from flask import current_app as app
 from opensearchpy import OpenSearch
-from app.main.lib.elasticsearch import generate_matches, truncate_query, store_document, delete_document
+from app.main.lib.opensearch import generate_matches, truncate_query, store_document, delete_document
 from app.main.lib.error_log import ErrorLog
 from app.main.lib import elastic_crud
 from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import SUPPORTED_LANGUAGES
 from app.main.lib.langid import HybridLangidProvider as LangidProvider
 from app.main.lib.openai import retrieve_openai_embeddings, PREFIX_OPENAI
-ELASTICSEARCH_DEFAULT_LIMIT = 10000
+OPENSEARCH_DEFAULT_LIMIT = 10000
 def delete_text(doc_id, context, quiet):
   return delete_document(doc_id, context, quiet)
 
@@ -17,7 +17,7 @@ def get_document_body(body):
     context = body.get("context", {})
     if context:
       body["contexts"] = [context]
-    if model_key != 'elasticsearch':
+    if model_key != 'opensearch':
       if model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
           vector = retrieve_openai_embeddings(body['content'], model_key)
           if vector == None:
@@ -36,7 +36,7 @@ def async_search_text(task, modality):
 
 def sync_search_text(task, modality):
     obj, temporary, context, presto_result = elastic_crud.get_blocked_presto_response(task, "text", modality)
-    obj["models"] = ["elasticsearch"]
+    obj["models"] = ["opensearch"]
     if isinstance(presto_result, list):
         for presto_vector_result in presto_result:
             obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
@@ -47,7 +47,7 @@ def sync_search_text(task, modality):
 
 def fill_in_openai_embeddings(document):
     for model_key in document.get("models", []):
-        if model_key != "elasticsearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
+        if model_key != "opensearch" and model_key[:len(PREFIX_OPENAI)] == PREFIX_OPENAI:
             document['vector_'+model_key] = retrieve_openai_embeddings(document['content'], model_key)
             document['model_'+model_key] = 1
     store_document(document, document["doc_id"], document["language"])
@@ -81,7 +81,7 @@ def search_text(search_params, use_document_vectors=False):
   vector_for_search = None
   results = {"result": []}
   for model_key in search_params.pop("models", []):
-    if model_key != "elasticsearch":
+    if model_key != "opensearch":
       search_params.pop("model", None)
       if use_document_vectors:
           vector_for_search = search_params["vector_"+model_key]
@@ -95,7 +95,7 @@ def search_text(search_params, use_document_vectors=False):
   return results
 
 def get_model_and_threshold(search_params):
-  model_key = 'elasticsearch'
+  model_key = 'opensearch'
   threshold = 0.9
   if 'model' in search_params:
       model_key = search_params['model']
@@ -125,7 +125,7 @@ def get_body_from_conditions(conditions):
         body = conditions
     return body
 
-def get_elasticsearch_base_conditions(search_params, clause_count, threshold):
+def get_opensearch_base_conditions(search_params, clause_count, threshold):
     conditions = [
         {
             'match': {
@@ -185,7 +185,7 @@ def insert_model_into_response(hits, model_key):
 
 def return_sources(results):
     """
-        Results come back as embedded responses raw from elasticsearch - Other services expect the
+        Results come back as embedded responses raw from opensearch - Other services expect the
         _source value to be the root dict, and also needs index and score to be persisted as well.
         May throw an error if source has index and score keys some day, but easy to fix for that,
         and should noisily break since it would have other downstream consequences.
@@ -207,7 +207,7 @@ def restrict_results(results, search_params, model_key):
     except (ValueError, TypeError) as e:
         app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
         min_es_score = None
-    if min_es_score is not None and model_key == "elasticsearch":
+    if min_es_score is not None and model_key == "opensearch":
         for result in results:
             if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
@@ -219,17 +219,17 @@ def search_text_by_model(search_params, vector_for_search):
     if not search_params.get("content"):
         return {"result": []}
     model_key, threshold = get_model_and_threshold(search_params)
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+    es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
     conditions = []
     matches = []
     clause_count = 0
-    search_indices = [app.config['ELASTICSEARCH_SIMILARITY']]
+    search_indices = [app.config['OPENSEARCH_SIMILARITY']]
     if 'context' in search_params:
         matches, clause_count = generate_matches(search_params['context'])
     if clause_count >= app.config['MAX_CLAUSE_COUNT']:
         return {'error': "Too many clauses specified! Text search will fail if another clause is added. Current clause count: "+str(clause_count)}
-    if model_key.lower() == 'elasticsearch':
-        conditions = get_elasticsearch_base_conditions(search_params, clause_count, threshold)
+    if model_key.lower() == 'opensearch':
+        conditions = get_opensearch_base_conditions(search_params, clause_count, threshold)
         language = search_params.get("language")
         if language == 'None':
             language = None
@@ -241,7 +241,7 @@ def search_text_by_model(search_params, vector_for_search):
                 app.logger.warning('Detected language in query text {} is not explicitly supported for indexing, defaulting to "none"'.format(language))
                 language = None
         if language in SUPPORTED_LANGUAGES:
-            search_indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+            search_indices.append(app.config['OPENSEARCH_SIMILARITY']+"_"+language)
         elif language:
             error_text = f"[Alegre Similarity] [Similarity type: text] Language parameter value of {language} for text similarity search asserted, but not in SUPPORTED_LANGUAGES"
             app.logger.info(error_text)
@@ -269,7 +269,7 @@ def search_text_by_model(search_params, vector_for_search):
     limit = search_params.get("limit")
     body = get_body_from_conditions(conditions)
     result = es.search(
-        size=limit or ELASTICSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
+        size=limit or OPENSEARCH_DEFAULT_LIMIT, #NOTE a default limit is given in similarity.py
         body=body,
         index=search_indices
     )

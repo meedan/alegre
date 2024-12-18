@@ -87,7 +87,7 @@ class TestElasticCrud(unittest.TestCase):
             'body': {'doc_id': '123'}
         }))
 
-        task = {'url': 'http://example.com', 'models': ['elasticsearch', 'xlm-r-bert-base-nli-stsb-mean-tokens'], 'context': {'foo': 'bar'}}
+        task = {'url': 'http://example.com', 'models': ['opensearch', 'xlm-r-bert-base-nli-stsb-mean-tokens'], 'context': {'foo': 'bar'}}
         model = MagicMock()
         modality = 'meantokens'
         mock_blocked_response.return_value = task

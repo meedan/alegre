@@ -15,27 +15,27 @@ class TestBulkSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-      es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+      es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
       es.indices.put_mapping(
-        body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        body=json.load(open('./opensearch/alegre_similarity.json')),
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
 
     def test_similarity_mapping(self):
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
       mapping = es.indices.get_mapping(
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
       self.assertDictEqual(
-        json.load(open('./elasticsearch/alegre_similarity.json')),
-        mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']
+        json.load(open('./opensearch/alegre_similarity.json')),
+        mapping[app.config['OPENSEARCH_SIMILARITY']]['mappings']
       )
 
-    def test_elasticsearch_insert_text_with_doc_id(self):
+    def test_opensearch_insert_text_with_doc_id(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+            term = { 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
             response = self.client.post('/text/bulk_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertTrue(result)

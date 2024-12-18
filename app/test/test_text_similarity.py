@@ -11,12 +11,12 @@ class TestTextSimilarity(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-      es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+      es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
       es.indices.put_mapping(
-        body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        body=json.load(open('./opensearch/alegre_similarity.json')),
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
 
     def test_get_vector_model_base_conditions(self):
@@ -40,7 +40,7 @@ class TestTextSimilarity(BaseTestCase):
     def test_get_document_body(self):
         test_content = {
                   'text': 'this is a test',
-                  'models': [self.test_model_key],  # e.g. indian-sbert, not elasticsearch
+                  'models': [self.test_model_key],  # e.g. indian-sbert, not opensearch
                   'min_es_score': 0.1,
                   'content': 'let there be content',
                 }

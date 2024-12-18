@@ -16,25 +16,25 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-      es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+      es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
       es.indices.put_mapping(
-        body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        body=json.load(open('./opensearch/alegre_similarity.json')),
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
 
     def test_similarity_mapping(self):
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
       mapping = es.indices.get_mapping(
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
       self.assertDictEqual(
-        json.load(open('./elasticsearch/alegre_similarity.json')),
-        mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']
+        json.load(open('./opensearch/alegre_similarity.json')),
+        mapping[app.config['OPENSEARCH_SIMILARITY']]['mappings']
       )
 
-    def test_elasticsearch_similarity_english(self):
+    def test_opensearch_similarity_english(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
@@ -43,8 +43,8 @@ class TestSimilarityBlueprint(BaseTestCase):
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
 
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
             response = self.client.post(
                 '/text/similarity/search/',
@@ -147,24 +147,24 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-    def test_elasticsearch_similarity_english_models_specified(self):
+    def test_opensearch_similarity_english_models_specified(self):
         with self.client:
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
-                term["models"] = ["elasticsearch"]
+                term["models"] = ["opensearch"]
                 del term['content']
                 response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
 
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
             response = self.client.post(
                 '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                   'min_es_score': 0.1,
                 }),
                 content_type='application/json'
@@ -176,7 +176,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'this is a test',
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -187,7 +187,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 '/text/similarity/search/',
                 data=json.dumps({
                   'text': 'something different',
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -202,7 +202,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     'dbid': 12,
                     'app': 'check'
                   },
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -217,7 +217,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     'dbid': [12, 13],
                     'app': 'check'
                   },
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -232,7 +232,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     'dbid': [13],
                     'app': 'check'
                   },
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -247,7 +247,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     'dbid': [15],
                     'app': 'check'
                   },
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -262,7 +262,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                     'dbid': 15,
                     'app': 'check'
                   },
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
@@ -274,35 +274,35 @@ class TestSimilarityBlueprint(BaseTestCase):
                 data=json.dumps({
                   'text': 'Magnitude 4.5 quake strikes near Fort St. John',
                   'threshold': 0.7,
-                  'models': ["elasticsearch"],
+                  'models': ["opensearch"],
                 }),
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
             self.assertEqual(2, len(result['result']))
 
-    def test_elasticsearch_update_text_listed_context(self):
+    def test_opensearch_update_text_listed_context(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }
+            term = { 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': [54, 55] } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] }, 'doc_id': doc["_id"]}
+            term2 = { 'text': 'how to slice a pizza', 'model': 'opensearch', 'context': { 'dbid': [54, 55] }, 'doc_id': doc["_id"]}
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
             self.assertEqual(term2['text'], doc['_source']['content'])
 
-    def test_elasticsearch_performs_correct_fuzzy_search(self):
+    def test_opensearch_performs_correct_fuzzy_search(self):
         with self.client:
-            term = { 'text': 'what even is a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = { 'text': 'what even is a banana', 'model': 'opensearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            lookup = { 'text': 'what even is a bananna', 'model': 'opensearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
@@ -311,37 +311,37 @@ class TestSimilarityBlueprint(BaseTestCase):
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             self.assertEqual(json.loads(post_response_fuzzy.data.decode())["result"][0]["score"], json.loads(post_response.data.decode())["result"][0]["score"])
 
-    def test_elasticsearch_update_text(self):
+    def test_opensearch_update_text(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': doc["_id"]}
+            term2 = { 'text': 'how to slice a pizza', 'model': 'opensearch', 'context': { 'dbid': 54 }, 'doc_id': doc["_id"]}
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
             self.assertEqual(term2['text'], doc['_source']['content'])
 
-    def test_elasticsearch_update_text_with_doc_id(self):
+    def test_opensearch_update_text_with_doc_id(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+            term = { 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
-            term2 = { 'text': 'how to slice a pizza', 'model': 'elasticsearch', 'context': { 'dbid': 54 }, 'doc_id': "123456"}
+            term2 = { 'text': 'how to slice a pizza', 'model': 'opensearch', 'context': { 'dbid': 54 }, 'doc_id': "123456"}
             post_response2 = self.client.post('/text/similarity/', data=json.dumps(term2), content_type='application/json')
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if doc["_id"] == e["_id"]][0]
             self.assertEqual(term2['text'], doc['_source']['content'])
 
-    def test_elasticsearch_delete_404(self):
+    def test_opensearch_delete_404(self):
         with self.client:
             delete_response = self.client.delete(
                 '/text/similarity/',
@@ -350,7 +350,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             )
             self.assertEqual(404, delete_response.status_code)
 
-    def test_elasticsearch_delete_200(self):
+    def test_opensearch_delete_200(self):
         with self.client:
             delete_response = self.client.delete(
                 '/text/similarity/',
@@ -360,16 +360,16 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual(200, delete_response.status_code)
 
-    def test_elasticsearch_delete_text(self):
+    def test_opensearch_delete_text(self):
         with self.client:
-            term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = { 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
             result = json.loads(post_response.data.decode())
             self.assertEqual(True, result['success'])
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
             delete_response = self.client.delete(
                 '/text/similarity/',
@@ -379,16 +379,16 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual('deleted', result['result'])
         with self.client:
-            term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
+            term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 54 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 55 } }
+            term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'opensearch', 'context': { 'dbid': 55 } }
             post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
             result = json.loads(post_response.data.decode())
             self.assertEqual(True, result['success'])
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            results = es.search(body={"query": {"match_all": {}}},index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            results = es.search(body={"query": {"match_all": {}}},index=app.config['OPENSEARCH_SIMILARITY'])
             doc = [e for e in results["hits"]["hits"] if e["_source"]['content'] == term['text']][0]
             delete_response = self.client.delete(
                 '/text/similarity/',
@@ -398,7 +398,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(delete_response.data.decode())
             self.assertEqual('deleted', result['result'])
 
-    def test_elasticsearch_similarity_hindi(self):
+    def test_opensearch_similarity_hindi(self):
         with self.client:
             for term in [
               { 'text': 'नमस्ते मेरा नाम करीम है' },
@@ -408,8 +408,8 @@ class TestSimilarityBlueprint(BaseTestCase):
               result = json.loads(response.data.decode())
               self.assertEqual(True, result['success'])
 
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
             response = self.client.post(
                 '/text/similarity/search/',
                 data=json.dumps({
@@ -440,8 +440,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
-        es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-        es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+        es = OpenSearch(app.config['OPENSEARCH_URL'])
+        es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
         response = self.client.post(
             '/text/similarity/search/',
             data=json.dumps({
@@ -514,8 +514,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
-        es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-        es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+        es = OpenSearch(app.config['OPENSEARCH_URL'])
+        es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
         response = self.client.post(
             '/text/similarity/search/',
@@ -533,7 +533,7 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_model_similarity_without_text(self):
       with self.client:
-        term = { 'text': 'how to delete an invoice', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
+        term = { 'text': 'how to delete an invoice', 'model': 'opensearch', 'context': { 'dbid': 54 }}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
@@ -559,8 +559,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
 
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
       model = SharedModel.get_client(TestSimilarityBlueprint.use_model_key)
       vector = model.get_shared_model_response('how to delete an invoice')
@@ -582,14 +582,14 @@ class TestSimilarityBlueprint(BaseTestCase):
         with self.client:
             data={
                 'text':'min_es_score',
-                'models':['elasticsearch'],
+                'models':['opensearch'],
             }
             response = self.client.post('/text/similarity/', data=json.dumps(data), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
-            es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-            es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
+            es = OpenSearch(app.config['OPENSEARCH_URL'])
+            es.indices.refresh(index=app.config['OPENSEARCH_SIMILARITY'])
 
             response = self.client.post(
                 '/text/similarity/search/',

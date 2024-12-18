@@ -1,4 +1,4 @@
-# Elasticsearch helpers
+# Opensearch helpers
 import opensearchpy
 from opensearchpy import OpenSearch
 
@@ -12,7 +12,7 @@ from app.main.lib.langid import HybridLangidProvider as LangidProvider
 
 def get_all_documents_matching_context(context):
   matches, clause_count = generate_matches(context)
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
   conditions = [{
       'nested': {
           'score_mode': 'none',
@@ -35,7 +35,7 @@ def get_all_documents_matching_context(context):
     docs = scan(es,
       size=10000,
       query=body,
-      index=app.config['ELASTICSEARCH_SIMILARITY'],
+      index=app.config['OPENSEARCH_SIMILARITY'],
     )
     for hit in docs:
       yield hit
@@ -79,7 +79,7 @@ def merge_contexts(body, found_doc):
     return body
 
 def update_or_create_document(body, doc_id, index):
-  es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=30)
+  es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=30)
   result = None
   if doc_id:
       try:
@@ -108,8 +108,8 @@ def update_or_create_document(body, doc_id, index):
   return result
 
 def get_by_doc_id(doc_id):
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-    response = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+    es = OpenSearch(app.config['OPENSEARCH_URL'])
+    response = es.get(index=app.config['OPENSEARCH_SIMILARITY'], id=doc_id)
     return response['_source']
 
 def store_document(body, doc_id, language=None):
@@ -117,7 +117,7 @@ def store_document(body, doc_id, language=None):
     for k, v in body.items():
         if k not in ["per_model_threshold", "threshold", "model", "confirmed", "limit", "requires_callback"]:
             storable_doc[k] = v
-    indices = [app.config['ELASTICSEARCH_SIMILARITY']]
+    indices = [app.config['OPENSEARCH_SIMILARITY']]
     # 'auto' indicates we should try to guess the appropriate language
     if language == 'auto':
         text = storable_doc['content']
@@ -128,7 +128,7 @@ def store_document(body, doc_id, language=None):
 
     if (language is not None) and (language in SUPPORTED_LANGUAGES):
       # also cache in the language-specific index
-      indices.append(app.config['ELASTICSEARCH_SIMILARITY']+"_"+language)
+      indices.append(app.config['OPENSEARCH_SIMILARITY']+"_"+language)
     
     results = []
     for index in indices:
@@ -148,25 +148,25 @@ def store_document(body, doc_id, language=None):
 
 def delete_context_from_found_doc(context, found_doc, doc_id):
     found_doc["contexts"] = [row for row in found_doc.get("contexts", []) if context != row]
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+    es = OpenSearch(app.config['OPENSEARCH_URL'])
     result = es.update(
         id=doc_id,
         body={"doc": found_doc},
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=app.config['OPENSEARCH_SIMILARITY']
     )
     return result
 
 def delete_document(doc_id, context, quiet):
-    es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+    es = OpenSearch(app.config['OPENSEARCH_URL'])
     try:
-        found_doc = es.get(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+        found_doc = es.get(index=app.config['OPENSEARCH_SIMILARITY'], id=doc_id)
     except opensearchpy.exceptions.NotFoundError:
         found_doc = None
     try:
         if found_doc and context in found_doc.get("contexts", []) and len(found_doc.get("contexts", [])) > 1:
             return delete_context_from_found_doc(context, found_doc, doc_id)
         else:
-            return es.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], id=doc_id)
+            return es.delete(index=app.config['OPENSEARCH_SIMILARITY'], id=doc_id)
     except:
         if quiet:
             return {

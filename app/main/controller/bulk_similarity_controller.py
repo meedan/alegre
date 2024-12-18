@@ -26,7 +26,7 @@ class BulkSimilarityResource(Resource):
     def get_bulk_write_object(self, doc_id, body, op_type="index"):
         return {
             "_op_type": op_type,
-            '_index': app.config['ELASTICSEARCH_SIMILARITY'],
+            '_index': app.config['OPENSEARCH_SIMILARITY'],
             '_id': doc_id,
             '_source': body
         }
@@ -46,7 +46,7 @@ class BulkSimilarityResource(Resource):
         return doc_ids, bodies
 
     def submit_bulk_request(self, doc_ids, bodies, op_type="index"):
-        es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+        es = OpenSearch(app.config['OPENSEARCH_URL'])
         writables = []
         for doc_body_set in each_slice(list(zip(doc_ids, bodies)), 8000):
             to_write = []

@@ -3,7 +3,7 @@ import uuid
 import json
 from flask import current_app as app
 from app.main.lib.presto import Presto, PRESTO_MODEL_MAP
-from app.main.lib.elasticsearch import store_document, get_by_doc_id
+from app.main.lib.opensearch import store_document, get_by_doc_id
 from app.main.lib.openai import PREFIX_OPENAI
 def _after_log(retry_state):
     app.logger.debug("Retrying image similarity...")
@@ -41,7 +41,7 @@ def get_presto_request_response(modality, callback_url, task):
     return response
 
 def encodable_model(model_key, obj):
-    return model_key != "elasticsearch" and not obj.get('model_'+model_key) and model_key[:len(PREFIX_OPENAI)] != PREFIX_OPENAI
+    return model_key != "opensearch" and not obj.get('model_'+model_key) and model_key[:len(PREFIX_OPENAI)] != PREFIX_OPENAI
 
 def requires_encoding(obj):
     for model_key in obj.get("models", []):

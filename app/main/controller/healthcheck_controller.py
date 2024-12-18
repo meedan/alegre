@@ -15,24 +15,24 @@ class HealthcheckResource(Resource):
   @api.doc('Make a healthcheck query')
   def get(self):
     result = {
-      'ELASTICSEARCH': False,
-      'ELASTICSEARCH_SIMILARITY': False,
+      'OPENSEARCH': False,
+      'OPENSEARCH_SIMILARITY': False,
       'REDIS': False,
       'DATABASE': False,
       # 'LANGID': False
     }
 
-    # Elasticsearch
+    # Opensearch
     try:
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'], timeout=10, max_retries=3, retry_on_timeout=True)
+      es = OpenSearch(app.config['OPENSEARCH_URL'], timeout=10, max_retries=3, retry_on_timeout=True)
 
     except Exception as e:
-      result['ELASTICSEARCH'] = str(e)
+      result['OPENSEARCH'] = str(e)
     else:
-      result['ELASTICSEARCH'] = True
-      result['ELASTICSEARCH_SIMILARITY'] = True if es.indices.exists(
-        index=[app.config['ELASTICSEARCH_SIMILARITY']]
-      ) else 'Index not found `%s`' % app.config['ELASTICSEARCH_SIMILARITY']
+      result['OPENSEARCH'] = True
+      result['OPENSEARCH_SIMILARITY'] = True if es.indices.exists(
+        index=[app.config['OPENSEARCH_SIMILARITY']]
+      ) else 'Index not found `%s`' % app.config['OPENSEARCH_SIMILARITY']
 
     # Redis
     try:

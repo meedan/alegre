@@ -20,12 +20,12 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
 
     def setUp(self):
       super().setUp()
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
-      es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
-      es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
+      es.indices.delete(index=app.config['OPENSEARCH_SIMILARITY'], ignore=[400, 404])
+      es.indices.create(index=app.config['OPENSEARCH_SIMILARITY'])
       es.indices.put_mapping(
-        body=json.load(open('./elasticsearch/alegre_similarity.json')),
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        body=json.load(open('./opensearch/alegre_similarity.json')),
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
       r = redis_client.get_client()
       r.delete(SharedModelStub.model_key)
@@ -33,16 +33,16 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
       r.srem('SharedModel', SharedModelStub.model_key)
 
     def test_similarity_mapping(self):
-      es = OpenSearch(app.config['ELASTICSEARCH_URL'])
+      es = OpenSearch(app.config['OPENSEARCH_URL'])
       mapping = es.indices.get_mapping(
-        index=app.config['ELASTICSEARCH_SIMILARITY']
+        index=app.config['OPENSEARCH_SIMILARITY']
       )
       self.assertDictEqual(
-        json.load(open('./elasticsearch/alegre_similarity.json')),
-        mapping[app.config['ELASTICSEARCH_SIMILARITY']]['mappings']
+        json.load(open('./opensearch/alegre_similarity.json')),
+        mapping[app.config['OPENSEARCH_SIMILARITY']]['mappings']
       )
 
-    def test_elasticsearch_insert_text_with_doc_id(self):
+    def test_opensearch_insert_text_with_doc_id(self):
         with self.client:
           with patch('importlib.import_module', ) as mock_import:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
@@ -127,7 +127,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(response[1][0]['language'], None)
         self.assertEqual(response[1][0]['content'], None)
         self.assertEqual(response[1][0]['context'], {'a': 1})
-        self.assertEqual(response[1][0]['model_elasticsearch'], 1)
+        self.assertEqual(response[1][0]['model_opensearch'], 1)
 
     def test_get_documents_by_ids_no_documents(self):
         es = MagicMock()
@@ -184,7 +184,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(response[1][0]['language'], None)
         self.assertEqual(response[1][0]['content'], None)
         self.assertEqual(response[1][0]['context'], {'a': 1})
-        self.assertEqual(response[1][0]['model_elasticsearch'], 1)
+        self.assertEqual(response[1][0]['model_opensearch'], 1)
 
 if __name__ == '__main__':
     unittest.main()

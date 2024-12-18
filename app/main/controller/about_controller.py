@@ -18,8 +18,8 @@ class AboutResource(Resource):
         return {
             'text/langid': AboutResource.list_providers('app.main.lib.langid', 'LangidProvider'),
             'text/translation': ['google'],
-            'text/similarity': ['elasticsearch'] + SharedModel.get_servers(),
-            'text/bulk_similarity': ['elasticsearch'],
+            'text/similarity': ['opensearch'] + SharedModel.get_servers(),
+            'text/bulk_similarity': ['opensearch'],
             'text/bulk_upload_similarity': SharedModel.get_servers(),
             'image/classification': AboutResource.list_providers('app.main.lib.image_classification', 'ImageClassificationProvider'),
             'image/similarity': ['phash'],

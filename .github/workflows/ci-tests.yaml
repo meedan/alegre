@@ -72,7 +72,7 @@ jobs:
         docker compose build
         docker compose -f docker-compose.yml -f docker-test.yml up -d
         docker compose logs -t -f &
-        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        echo "Waiting for Opensearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
         until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
         echo "Waiting for model servers..." 
       
@@ -158,7 +158,7 @@ jobs:
         docker compose build
         docker compose -f docker-compose.yml -f docker-test.yml up -d
         docker compose logs -t -f &
-        echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
+        echo "Waiting for Opensearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
         until curl --silent --fail -I "http://localhost:3100"; do sleep 1; done
         echo "Waiting for model servers..." 
     
