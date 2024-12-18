@@ -1,0 +1,13 @@
+{
+  "similarity": {
+    "scripted_tfidf": {
+      "type": "scripted",
+      "script": {
+        "source": "double tf = Math.sqrt(doc.freq); double idf = Math.log((field.docCount+1.0)/(term.docFreq+1.0)) + 1.0; double norm = 1/Math.sqrt(doc.length); return query.boost * tf * idf * norm;"
+      }
+    },
+    "lm_jelinek_mercer" : {
+      "type" : "LMJelinekMercer"
+    }
+  }
+}
