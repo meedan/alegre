@@ -113,7 +113,6 @@ s3transfer==0.5.0
 sacremoses==0.0.45
 scikit-learn==1.0.2
 scipy==1.2.1
-sentence-transformers==2.2.0
 sentencepiece==0.1.96
 sgmllib3k==1.0.0
 six==1.12.0
@@ -127,10 +126,6 @@ tdigest==0.5.2.2
 tenacity==8.0.1
 tensorboard==2.3.0
 tensorboard-plugin-wit==1.8.0
-tensorflow==2.3.1
-tensorflow-estimator==2.3.0
-tensorflow-hub==0.8.0
-tensorflow-text==2.3.0
 termcolor==1.1.0
 thinc==7.3.1
 threadpoolctl==2.2.0
@@ -141,7 +136,6 @@ tokenizers==0.10.3
 toolz==0.9.0
 torch==1.9.0
 tqdm==4.66.3
-transformers==4.6.0
 twitter-text-parser==1.0.0
 typing-extensions==3.10.0.0
 ujson==5.4.0

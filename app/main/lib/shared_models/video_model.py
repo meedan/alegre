@@ -14,7 +14,6 @@ import tenacity
 import tmkpy
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.similarity_helpers import get_context_query, drop_context_from_record
 from app.main.lib.helpers import context_matches
 from app.main.lib import media_crud
@@ -28,7 +27,7 @@ from app.main.lib.s3_client import download_file_from_s3
 def _after_log(retry_state):
   app.logger.debug("Retrying video similarity...")
 
-class VideoModel(SharedModel):
+class VideoModel():
     def overload_context_to_denote_content_type(self, task):
         return {**task, **{"context": {**task.get("context", {}), **{"content_type": "video"}}}}
 
