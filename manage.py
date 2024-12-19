@@ -248,25 +248,6 @@ def run():
   app.run(host='0.0.0.0', port=port, threaded=True)
 
 @manager.command
-def run_model():
-  """Runs the model server."""
-  if config_name == "test":
-      model_config = json.load(open('./model_config_test.json')).get(app.config["MODEL_NAME"], {})
-  else:
-      model_config = json.load(open('./model_config.json')).get(app.config["MODEL_NAME"], {})
-  SharedModel.start_server(
-    model_config['class'],
-    model_config['key'],
-    model_config['options']
-  )
-
-
-@manager.command
-def run_video_matcher():
-  """Runs the video matcher."""
-  VideoMatcher.start_server()
-
-@manager.command
 def init():
   """Initializes the service."""
   # Create ES indexes.

@@ -22,13 +22,9 @@ def get_document_body(body):
           vector = retrieve_openai_embeddings(body['content'], model_key)
           if vector == None:
              continue
-      else:
-          model = SharedModel.get_client(model_key)
-          vector = model.get_shared_model_response(body['content'])
-      body['model'] = model_key
-      body['vector_'+model_key] = vector
-    # Model key must be outside of the if statement
-    body['model_'+model_key] = 1
+          body['model'] = model_key
+          body['vector_'+model_key] = vector
+          body['model_'+model_key] = 1
   return body
 
 def async_search_text(task, modality):
@@ -148,9 +144,6 @@ def get_vector_model_base_conditions(search_params, model_key, threshold, vector
         vector = retrieve_openai_embeddings(search_params['content'], model_key)
         if vector is None:
             return None
-    elif not vector:
-        model = SharedModel.get_client(model_key)
-        vector = model.get_shared_model_response(search_params['content'])
     return {
         'query': {
             'script_score': {
