@@ -9,7 +9,6 @@ import numpy as np
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.test.test_shared_model import SharedModelStub
 from app.main.controller import bulk_update_similarity_controller
 from app.main.lib import redis_client
 class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
@@ -81,18 +80,14 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         document = {"models": ["model_1"], "context": {"a": 1}}
         existing_doc = {"contexts": [{"a": 1}]}
         with patch('importlib.import_module', ) as mock_import:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-                with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                    mock_get_shared_model_client.return_value = SharedModelStub(TestBulkUpdateSimilarityBlueprint.test_model_key)
-                    mock_get_shared_model_response.return_value = [0.0]
-                    result = bulk_update_similarity_controller.update_existing_doc_values(document, existing_doc)
-                    self.assertEqual(result['contexts'], [{'a': 1}])
-                    self.assertEqual(result['language'], None)
-                    self.assertEqual(result['content'], None)
-                    self.assertEqual(result['context'], {'a': 1})
-                    self.assertEqual(result['model_model_1'], 1)
-                    self.assertEqual(result['vector_model_1'], [0.0])
-                    self.assertEqual(result['model'], 'model_1')
+            result = bulk_update_similarity_controller.update_existing_doc_values(document, existing_doc)
+            self.assertEqual(result['contexts'], [{'a': 1}])
+            self.assertEqual(result['language'], None)
+            self.assertEqual(result['content'], None)
+            self.assertEqual(result['context'], {'a': 1})
+            self.assertEqual(result['model_model_1'], 1)
+            self.assertEqual(result['vector_model_1'], [0.0])
+            self.assertEqual(result['model'], 'model_1')
 
     def test_sorted_values(self):
         cases = {'1': {'a': 1}, '2': {'b': 2}}
