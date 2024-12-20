@@ -15,7 +15,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
         first_print = 49805440634311326
-        self.model = AudioModel('audio')
+        self.model = AudioModel()
 
     def tearDown(self): # done in our pytest fixture after yield
         db.session.remove()
