@@ -6,7 +6,6 @@ import numpy as np
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.shared_models.shared_model import SharedModel
 
 class TestBulkSimilarityBlueprint(BaseTestCase):
     maxDiff = None

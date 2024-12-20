@@ -16,7 +16,6 @@ from rq import Connection, Worker
 from app import blueprint
 from app.main import create_app, db
 from app.main.model import image
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.language_analyzers import init_indices
 from PIL import Image
 

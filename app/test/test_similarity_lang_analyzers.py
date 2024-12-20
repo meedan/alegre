@@ -6,7 +6,6 @@ import numpy as np
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.shared_models.shared_model import SharedModel
 from unittest.mock import patch
 from  app.main.lib import language_analyzers
 

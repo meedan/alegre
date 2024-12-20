@@ -3,7 +3,6 @@ from flask_restplus import Resource, Namespace, fields
 from opensearchpy import OpenSearch
 from opensearchpy import helpers
 from app.main.lib.fields import JsonObject
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.lib.text_similarity import get_document_body
 from app.main.lib import similarity
 

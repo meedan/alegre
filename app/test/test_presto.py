@@ -8,7 +8,6 @@ import redis
 
 from app.main import db
 from app.test.base import BaseTestCase
-from app.main.lib.shared_models.shared_model import SharedModel
 from unittest.mock import patch
 from app.main.model.audio import Audio
 from app.main.lib.shared_models.audio_model import AudioModel

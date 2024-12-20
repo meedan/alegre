@@ -4,7 +4,6 @@ import json
 import numpy as np
 import sys
 import inspect
-from app.main.lib.shared_models.shared_model import SharedModel
 import app.main.lib.langid
 import app.main.lib.image_classification
 
@@ -18,9 +17,7 @@ class AboutResource(Resource):
         return {
             'text/langid': AboutResource.list_providers('app.main.lib.langid', 'LangidProvider'),
             'text/translation': ['google'],
-            'text/similarity': ['elasticsearch'] + SharedModel.get_servers(),
             'text/bulk_similarity': ['elasticsearch'],
-            'text/bulk_upload_similarity': SharedModel.get_servers(),
             'image/classification': AboutResource.list_providers('app.main.lib.image_classification', 'ImageClassificationProvider'),
             'image/similarity': ['phash'],
             'image/ocr': ['google'],

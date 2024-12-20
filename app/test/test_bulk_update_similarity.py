@@ -10,7 +10,6 @@ import numpy as np
 from app.main import db
 from app.test.base import BaseTestCase
 from app.test.test_shared_model import SharedModelStub
-from app.main.lib.shared_models.shared_model import SharedModel
 from app.main.controller import bulk_update_similarity_controller
 from app.main.lib import redis_client
 class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
@@ -27,10 +26,6 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         body=json.load(open('./elasticsearch/alegre_similarity.json')),
         index=app.config['ELASTICSEARCH_SIMILARITY']
       )
-      r = redis_client.get_client()
-      r.delete(SharedModelStub.model_key)
-      r.delete('SharedModel:%s' % SharedModelStub.model_key)
-      r.srem('SharedModel', SharedModelStub.model_key)
 
     def test_similarity_mapping(self):
       es = OpenSearch(app.config['ELASTICSEARCH_URL'])
@@ -45,16 +40,12 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
     def test_elasticsearch_insert_text_with_doc_id(self):
         with self.client:
           with patch('importlib.import_module', ) as mock_import:
-            with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
-              with patch('app.main.lib.shared_models.shared_model.SharedModel.get_shared_model_response', ) as mock_get_shared_model_response:
-                mock_get_shared_model_client.return_value = SharedModelStub(TestBulkUpdateSimilarityBlueprint.test_model_key)
-                mock_get_shared_model_response.return_value = [0.0]
-                term = { 'text': 'how to slice a banana', 'model': 'multi-sbert', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
-                response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
-                result = json.loads(response.data.decode())
-                print(result)
-                self.assertTrue(result)
-                self.assertTrue(result[0]['_id'], "123456")
+            term = { 'text': 'how to slice a banana', 'model': 'multi-sbert', 'context': { 'dbid': 54 }, 'doc_id': "123456" }
+            response = self.client.post('/text/bulk_update_similarity/', data=json.dumps({"documents": [term]}), content_type='application/json')
+            result = json.loads(response.data.decode())
+            print(result)
+            self.assertTrue(result)
+            self.assertTrue(result[0]['_id'], "123456")
 
     def test_get_documents_by_ids(self):
         es = MagicMock()
