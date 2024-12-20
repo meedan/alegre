@@ -21,7 +21,6 @@ from PIL import Image
 
 # Don't remove this line until https://github.com/tensorflow/tensorflow/issues/34607 is fixed
 # (by upgrading to tensorflow 2.2 or higher)
-import tensorflow as tf
 
 config_name = os.getenv('BOILERPLATE_ENV', 'dev')
 app = create_app(config_name)
