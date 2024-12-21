@@ -119,10 +119,7 @@ class HybridLangidProvider:
     # max_confidence = max(fasttext_result['result']['confidence'], cld_result['result']['confidence'])
 
     # if fasttext_result['result']['language'] == cld_result['result']['language'] or max_confidence >= 0.8:
-    if fasttext_result['result']['language'] is not None \
-            and cld_result['result']['language']  is not None \
-            and fasttext_result['result']['language'] == cld_result['result']['language'] \
-            and min(fasttext_result['result']['confidence'], cld_result['result']['confidence']) >= 0.7:
+    if fasttext_result['result']['language'] is not None and cld_result['result']['language']  is not None and fasttext_result['result']['language'] == cld_result['result']['language'] and min(fasttext_result['result']['confidence'], cld_result['result']['confidence']) >= 0.7:
       # OLD - FastText and CLD agree or one of them is more than 80% confident.
       # Now - FastText and CLD agree AND BOTH are more than 90% confident
       # Return the higher confidence result
