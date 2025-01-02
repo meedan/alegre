@@ -20,9 +20,6 @@ run_model:
 run_rq_worker:
 	while true; do python manage.py run_rq_worker; done
 
-run_video_matcher:
-	while true; do python manage.py run_video_matcher; done
-
 test: wait
 	python manage.py init_perl_functions
 	coverage run --source=app/main/ manage.py test
