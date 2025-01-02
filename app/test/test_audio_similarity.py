@@ -33,7 +33,7 @@ class TestAudioSimilarityBlueprint(BaseTestCase):
         audio = Audio(chromaprint_fingerprint=first_print, doc_id="blah", url="http://blah.com", context=[{"blah": 1}])
         db.session.add(audio)
         db.session.commit()
-        self.model = AudioModel('audio')
+        self.model = AudioModel()
 
     def tearDown(self): # done in our pytest fixture after yield
         db.session.remove()
