@@ -75,7 +75,7 @@ def get_body_for_text_document(params, mode):
     return params
 
 def audio_model():
-  return AudioModel(app.config['AUDIO_MODEL'])
+  return AudioModel()
 
 def video_model():
   return VideoModel(app.config['VIDEO_MODEL'])
