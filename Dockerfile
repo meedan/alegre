@@ -3,8 +3,7 @@ WORKDIR /app
 
 # Install dependencies
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
-RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
+RUN apt-get update && apt-get install -y cmake swig
 
 
 # Other configurations

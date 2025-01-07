@@ -19,10 +19,8 @@ RUN chmod 755 /opt/bin/*.sh
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ffmpeg cmake swig libavcodec-dev libavformat-dev
-RUN apt-get update && apt-get install -y ffmpeg swig
+RUN apt-get update && apt-get install -y cmake swig
 RUN apt-get clean
-RUN ln -s /usr/bin/ffmpeg /usr/local/bin/ffmpeg
 
 COPY . .
 

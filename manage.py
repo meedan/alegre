@@ -260,12 +260,6 @@ def run_model():
     model_config['options']
   )
 
-
-@manager.command
-def run_video_matcher():
-  """Runs the video matcher."""
-  VideoMatcher.start_server()
-
 @manager.command
 def init():
   """Initializes the service."""
