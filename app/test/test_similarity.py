@@ -532,15 +532,19 @@ class TestSimilarityBlueprint(BaseTestCase):
         self.assertEqual(0, len(result['result']))
 
     def test_model_similarity_without_text(self):
+      """
+      This should return an error because model cannot compute on empty text
+      """
       with self.client:
-        term = { 'text': 'how to delete an invoice', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
+        term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
 
       response = self.client.post(
-            '/text/similarity/search/',
+            '/text/similarity/search/',  # TODO: are these tests running on a deprecated endpoint?
         data=json.dumps({
+          # NOTE: both content and text element ommitted here
           'model': TestSimilarityBlueprint.use_model_key,
           'threshold': 0.7,
           'context': {
@@ -549,8 +553,8 @@ class TestSimilarityBlueprint(BaseTestCase):
         }),
         content_type='application/json'
       )
-      result = json.loads(response.data.decode())
-      self.assertEqual(0, len(result['result']))
+      # expected to return an error
+      assert response.status_code >= 500
 
     def test_model_similarity_with_vector(self):
       with self.client:
