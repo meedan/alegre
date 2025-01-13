@@ -122,9 +122,9 @@ class VideoModel(SharedModel):
         result = self.get_blocked_response(task).get("body")
         s3_folder = (result.get("result", {}) or {}).get("folder")
         s3_filepath = (result.get("result", {}) or {}).get("filepath")
-        tempfile = self.get_tempfile()
-        folder = str.join("/", tempfile.name.split("/")[0:-1])
-        filepath = tempfile.name.split("/")[-1]
+        temp_file = self.get_tempfile()
+        folder = str.join("/", temp_file.name.split("/")[0:-1])
+        filepath = temp_file.name.split("/")[-1]
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             folder = os.path.dirname(tmp.name)
             filepath = os.path.basename(tmp.name)
