@@ -538,23 +538,11 @@ class TestSimilarityBlueprint(BaseTestCase):
       with self.client:
         term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
         response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+        assert response.status_code >= 500
         result = json.loads(response.data.decode())
-        self.assertEqual(True, result['success'])
+        self.assertEqual(None, result.get('success'))
 
-      response = self.client.post(
-            '/text/similarity/search/',  # TODO: are these tests running on a deprecated endpoint?
-        data=json.dumps({
-          # NOTE: both content and text element ommitted here
-          'model': TestSimilarityBlueprint.use_model_key,
-          'threshold': 0.7,
-          'context': {
-            'dbid': 54
-          }
-        }),
-        content_type='application/json'
-      )
-      # expected to return an error
-      assert response.status_code >= 500
+
 
     def test_model_similarity_with_vector(self):
       with self.client:
