@@ -272,6 +272,7 @@ def init():
   except (TransportError, RequestError) as e:
     # ignore already existing index
     if e.error in ['resource_already_exists_exception', 'invalid_index_name_exception']:
+      app.logger.debug(f"Bypassing attempt to create index as it already exists! Error was {e.error}.")
       pass
     else:
       raise
