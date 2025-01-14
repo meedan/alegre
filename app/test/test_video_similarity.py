@@ -23,7 +23,7 @@ class SharedModelStub(SharedModel):
 class TestVideoSimilarityBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.model = VideoModel('video')
+        self.model = VideoModel('blah')
 
     def test_get_tempfile(self):
         self.assertIsInstance(self.model.get_tempfile(), tempfile._TemporaryFileWrapper)
@@ -130,6 +130,22 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
             self.assertEqual(results[0]['context'], [{"blah": 1}])
             results = self.model.search_by_context({"blah": 2})
             self.assertEqual(results, [])
+
+    def test_download_temp_file(self):
+        task = {"task_id": "123"}
+        mocked_response = {
+            "body": {
+                "result": {
+                    "folder": "mocked_folder",
+                    "filepath": "mocked_filepath"
+                }
+            }
+        }
+        with patch('app.main.lib.shared_models.video_model.download_file_from_s3', return_value=True) as mock_download, \
+             patch.object(VideoModel, 'get_blocked_response', return_value=mocked_response) as mock_get_response:
+            folder, filepath = self.model.download_temp_file(task)
+            mock_get_response.assert_called_once_with(task)
+            mock_download.assert_called_once()
 
 if __name__ == '__main__':
   unittest.main()
