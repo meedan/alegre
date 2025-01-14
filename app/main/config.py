@@ -29,12 +29,10 @@ class Config:
   MODEL_NAME = os.getenv('MODEL_NAME')
   MAX_CLAUSE_COUNT = 1000
   PERSISTENT_DISK_PATH = os.getenv('PERSISTENT_DISK_PATH', '/app/persistent_disk')
-  VIDEO_MODEL = os.getenv('VIDEO_MODEL', 'video-model')
   try:
     VIDEO_MODEL_L1_SCORE = float(os.getenv('video_model_l1_score', '0.7'))
   except:
     VIDEO_MODEL_L1_SCORE = 0.7
-  AUDIO_MODEL = os.getenv('AUDIO_MODEL', 'audio-model')
   IMAGE_MODEL = os.getenv('IMAGE_MODEL', default='phash')
   OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', default=None)
   ALEGRE_HOST = os.getenv('ALEGRE_HOST', default="http://alegre:3100")

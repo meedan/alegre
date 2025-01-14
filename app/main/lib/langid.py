@@ -116,21 +116,11 @@ class HybridLangidProvider:
   def langid(text):
     fasttext_result = FastTextLangidProvider.langid(text)
     cld_result = Cld3LangidProvider.langid(text)
-    # max_confidence = max(fasttext_result['result']['confidence'], cld_result['result']['confidence'])
-    min_confidence = min(fasttext_result['result']['confidence'], cld_result['result']['confidence'])
+    #current strategy: Both CLD3 and FastText must be have non-null confidence scores, agree on language tag, and BOTH of them is more than "Threshold" confident. Reference ticket CV2-5367
+    if fasttext_result['result']['confidence'] is not None and cld_result['result']['confidence'] is not None \
+            and fasttext_result['result']['language'] == cld_result['result']['language'] \
+            and  min(fasttext_result['result']['confidence'], cld_result['result']['confidence']) >= 0.7:
 
-    # if fasttext_result['result']['language'] == cld_result['result']['language'] or max_confidence >= 0.8:
-    if fasttext_result['result']['language'] == cld_result['result']['language'] and min_confidence >= 0.9:
-      # OLD - FastText and CLD agree or one of them is more than 80% confident.
-      # Now - FastText and CLD agree AND BOTH are more than 90% confident
-      # Return the higher confidence result
-      # if fasttext_result['result']['language'] != cld_result['result']['language']:
-      #   # Log when there is disagreement
-      #   app.logger.info(json.dumps({
-      #     'service':'LangId',
-      #     'message': 'Disagreement between fasttext and cld. Returning higher confidence model',
-      #     'parameters':{'text':text, 'fasttext':fasttext_result, 'cld':cld_result,},
-      #     }))
       if fasttext_result['result']['confidence'] > cld_result['result']['confidence']:
         return fasttext_result
       else:

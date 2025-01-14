@@ -23,7 +23,7 @@ class SharedModelStub(SharedModel):
 class TestVideoSimilarityBlueprint(BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.model = VideoModel('video')
+        self.model = VideoModel()
 
     def test_get_tempfile(self):
         self.assertIsInstance(self.model.get_tempfile(), tempfile._TemporaryFileWrapper)

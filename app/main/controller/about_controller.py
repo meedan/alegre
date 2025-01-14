@@ -25,7 +25,6 @@ class AboutResource(Resource):
             'image/similarity': ['phash'],
             'image/ocr': ['google'],
             'audio/transcription': ['aws'],
-            'audio/similarity': ['hash'],
             'video/similarity': ['tmk'],
             'graph/cluster': [],
         }

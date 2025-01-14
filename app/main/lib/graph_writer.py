@@ -27,10 +27,10 @@ def model_response_package(graph, url, doc_id):
   }
 
 def audio_model():
-  return SharedModel.get_client(app.config['AUDIO_MODEL'])
+  return SharedModel.get_client()
 
 def video_model():
-  return SharedModel.get_client(app.config['VIDEO_MODEL'])
+  return SharedModel.get_client()
 
 def get_iterable_objects(graph, data_type):
   try:
