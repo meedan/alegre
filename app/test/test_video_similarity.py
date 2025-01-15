@@ -141,6 +141,7 @@ class TestVideoSimilarityBlueprint(BaseTestCase):
                 }
             }
         }
+        
         with patch('app.main.lib.shared_models.video_model.download_file_from_s3', return_value=True) as mock_download, \
              patch.object(VideoModel, 'get_blocked_response', return_value=mocked_response) as mock_get_response:
             folder, filepath = self.model.download_temp_file(task)
