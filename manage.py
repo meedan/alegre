@@ -4,7 +4,7 @@ import json
 
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
-from opensearchpy import OpenSearch, TransportError
+from opensearchpy import OpenSearch, TransportError, RequestError
 import sqlalchemy
 from sqlalchemy import text
 from sqlalchemy.schema import DDL
@@ -269,9 +269,10 @@ def init():
     if config_name == 'test':
       es.indices.delete(index=app.config['ELASTICSEARCH_SIMILARITY'], ignore=[400, 404])
     es.indices.create(index=app.config['ELASTICSEARCH_SIMILARITY'])
-  except TransportError as e:
+  except (TransportError, RequestError) as e:
     # ignore already existing index
-    if e.error == 'resource_already_exists_exception':
+    if e.error in ['resource_already_exists_exception', 'invalid_index_name_exception']:
+      app.logger.debug(f"Bypassing attempt to create index as it already exists! Error was {e.error}.")
       pass
     else:
       raise
