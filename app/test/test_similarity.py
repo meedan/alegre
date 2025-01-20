@@ -543,7 +543,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         """
         with self.client:
             term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
-            response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            response = self.client.post('/similarity/sync/text', data=json.dumps(term), content_type='application/json')
             assert response.status_code >= 500, f"response status code was {response.status_code}"
             result = json.loads(response.data.decode())
             self.assertEqual(None, result.get('success'))
