@@ -304,7 +304,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             es = OpenSearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.post('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
+            post_response = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["score"], json.loads(post_response.data.decode())["result"][0]["score"])
@@ -442,7 +442,7 @@ class TestSimilarityBlueprint(BaseTestCase):
     def test_model_similarity(self):
         with self.client:
             term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 } }
-            response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 

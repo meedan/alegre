@@ -102,7 +102,7 @@ class TestSimilarityBlueprint(BaseTestCase):
           for n in range(len(examples)):
               example = examples[n]
               expected_lang = expected_lang_ids[n]
-              response = self.client.post('/similarity/sync/text/', data=json.dumps(example), content_type='application/json')
+              response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
               result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
               self.assertEqual(True, result['success'])
               es = OpenSearch(app.config['ELASTICSEARCH_URL'])
