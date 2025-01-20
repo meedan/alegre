@@ -548,7 +548,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(None, result.get('success'))
 
-    def test_model_similarity_without_text(self):
+    def test_model_similarity_without_text_deprecated(self):
         """
         This should return an error because model cannot compute on empty text
         NOTE: this is using the deprecated text endpoint expected to be removed
