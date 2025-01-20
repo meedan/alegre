@@ -33,7 +33,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         examples = [{ 'text': 'केले को कैसे काटें', 'language': 'hi'}, {'text': 'how to slice a banana', 'language': 'en'}, {'text': 'como rebanar un plátano', 'language': 'es'}, {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn'}]
         with self.client:
             for example in examples:
-                response = self.client.post('/similarity/sync/text/', data=json.dumps(example), content_type='application/json')
+                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
@@ -64,7 +64,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             for n in range(len(examples)):
                 example = examples[n]
                 expected_lang = expected_lang_ids[n]
-                response = self.client.post('/similarity/sync/text/', data=json.dumps(example), content_type='application/json')
+                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
                 self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])

@@ -53,8 +53,8 @@ def get_body_for_text_document(params, mode):
       params['content'] = params.get('text')
       del params["text"]
 
-    # Confirm that content is not empty or missing
-    assert (params.get('content') is not None and params['content'] != ""), "Similarity cannot be computed for null or missing content text"
+    # Confirm that content is not empty, missing, or whitespace
+    assert (params.get('content') is not None and params['content'].strip() != ""), "Similarity cannot be computed for null or missing content text"
 
     # Set defaults
     if 'created_at' not in params:

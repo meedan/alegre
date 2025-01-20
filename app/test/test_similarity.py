@@ -39,7 +39,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             for term in json.load(open('./app/test/data/similarity.json')):
                 term['text'] = term['content']
                 del term['content']
-                response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+                response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
 
@@ -153,7 +153,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 term['text'] = term['content']
                 term["models"] = ["elasticsearch"]
                 del term['content']
-                response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+                response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
                 result = json.loads(response.data.decode())
                 self.assertEqual(True, result['success'])
 
@@ -300,11 +300,11 @@ class TestSimilarityBlueprint(BaseTestCase):
     def test_elasticsearch_performs_correct_fuzzy_search(self):
         with self.client:
             term = { 'text': 'what even is a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = OpenSearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             lookup = { 'text': 'what even is a bananna', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.post('/similarity/sync/text/', data=json.dumps(lookup), content_type='application/json')
+            post_response = self.client.post('/text/similarity/', data=json.dumps(lookup), content_type='application/json')
             lookup["fuzzy"] = True
             post_response_fuzzy = self.client.post('/text/similarity/search/', data=json.dumps(lookup), content_type='application/json')
             self.assertGreater(json.loads(post_response_fuzzy.data.decode())["result"][0]["score"], json.loads(post_response.data.decode())["result"][0]["score"])
@@ -386,9 +386,9 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertEqual('deleted', result['result'])
         with self.client:
             term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 54 } }
-            post_response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             term = { 'doc_id': '123', 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': 55 } }
-            post_response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            post_response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             es = OpenSearch(app.config['ELASTICSEARCH_URL'])
             es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
             result = json.loads(post_response.data.decode())
@@ -410,7 +410,7 @@ class TestSimilarityBlueprint(BaseTestCase):
               { 'text': 'नमस्ते मेरा नाम करीम है' },
               { 'text': 'हॅलो माझे नाव करीम आहे' }
             ]:
-              response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+              response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
               result = json.loads(response.data.decode())
               self.assertEqual(True, result['success'])
 
@@ -516,7 +516,7 @@ class TestSimilarityBlueprint(BaseTestCase):
         """
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
-            response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
@@ -538,22 +538,34 @@ class TestSimilarityBlueprint(BaseTestCase):
         self.assertEqual(0, len(result['result']))
 
     def test_model_similarity_without_text(self):
-      """
-      This should return an error because model cannot compute on empty text
-      """
-      with self.client:
-        term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
-        response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
-        assert response.status_code >= 500, f"response status code was {response.status_code}"
-        result = json.loads(response.data.decode())
-        self.assertEqual(None, result.get('success'))
+        """
+        This should return an error because model cannot compute on empty text
+        """
+        with self.client:
+            term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
+            response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+            assert response.status_code >= 500, f"response status code was {response.status_code}"
+            result = json.loads(response.data.decode())
+            self.assertEqual(None, result.get('success'))
+
+    def test_model_similarity_without_text(self):
+        """
+        This should return an error because model cannot compute on empty text
+        NOTE: this is using the deprecated text endpoint expected to be removed
+        """
+        with self.client:
+            term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
+            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
+            assert response.status_code >= 500, f"response status code was {response.status_code}"
+            result = json.loads(response.data.decode())
+            self.assertEqual(None, result.get('success'))
 
 
 
     def test_model_similarity_with_vector(self):
       with self.client:
         term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
-        response = self.client.post('/similarity/sync/text/', data=json.dumps(term), content_type='application/json')
+        response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(True, result['success'])
 
@@ -582,7 +594,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 'text':'min_es_score',
                 'models':['elasticsearch'],
             }
-            response = self.client.post('/similarity/sync/text/', data=json.dumps(data), content_type='application/json')
+            response = self.client.post('/text/similarity/', data=json.dumps(data), content_type='application/json')
             result = json.loads(response.data.decode())
             self.assertEqual(True, result['success'])
 
