@@ -87,7 +87,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result, expected)
 
     def test_update_existing_doc_values(self):
-        document = {"models": ["model_1"], "context": {"a": 1}}
+        document = {"models": ["model_1"],"text":"dummy text",  "context": {"a": 1}}
         existing_doc = {"contexts": [{"a": 1}]}
         with patch('importlib.import_module', ) as mock_import:
             with patch('app.main.lib.shared_models.shared_model.SharedModel.get_client', ) as mock_get_shared_model_client:
@@ -97,7 +97,7 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
                     result = bulk_update_similarity_controller.update_existing_doc_values(document, existing_doc)
                     self.assertEqual(result['contexts'], [{'a': 1}])
                     self.assertEqual(result['language'], None)
-                    self.assertEqual(result['content'], None)
+                    self.assertEqual(result['content'], "dummy text")
                     self.assertEqual(result['context'], {'a': 1})
                     self.assertEqual(result['model_model_1'], 1)
                     self.assertEqual(result['vector_model_1'], [0.0])
@@ -118,14 +118,14 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertTrue(result)
 
     def test_get_cases(self):
-        params = {"documents": [{"doc_id": "1", "context": {"a": 1}}, {"doc_id": "2", "context": {"b": 1}}]}
+        params = {"documents": [{"doc_id": "1","text":"dummy text", "context": {"a": 1}}, {"doc_id": "2","text":"dummy text", "context": {"b": 1}}]}
         existing_docs = {"1": {"_source": {"contexts": [{"a": 1}]}}}
         updateable = True
         response = bulk_update_similarity_controller.get_cases(params, existing_docs, updateable)
         self.assertEqual(response[0], ['1'])
         self.assertEqual(response[1][0]['contexts'], [{'a': 1}])
         self.assertEqual(response[1][0]['language'], None)
-        self.assertEqual(response[1][0]['content'], None)
+        self.assertEqual(response[1][0]['content'], "dummy text")
         self.assertEqual(response[1][0]['context'], {'a': 1})
         self.assertEqual(response[1][0]['model_elasticsearch'], 1)
 
@@ -175,14 +175,14 @@ class TestBulkUpdateSimilarityBlueprint(BaseTestCase):
         self.assertEqual(result_values, expected_values)
 
     def test_get_cases_not_updateable(self):
-        params = {"documents": [{"doc_id": "1", "context": {"a": 1}}, {"doc_id": "2", "context": {"a": 1}}]}
+        params = {"documents": [{"doc_id": "1", "text":"dummy text", "context": {"a": 1}}, {"doc_id": "2", "text":"dummy text", "context": {"a": 1}}]}
         existing_docs = {"1": {"_source": {"contexts": [{"a": 1}]}}}
         updateable = False
         response = bulk_update_similarity_controller.get_cases(params, existing_docs, updateable)
         self.assertEqual(response[0], ['2'])
         self.assertEqual(response[1][0]['contexts'], [{'a': 1}])
         self.assertEqual(response[1][0]['language'], None)
-        self.assertEqual(response[1][0]['content'], None)
+        self.assertEqual(response[1][0]['content'], "dummy text")
         self.assertEqual(response[1][0]['context'], {'a': 1})
         self.assertEqual(response[1][0]['model_elasticsearch'], 1)
 
