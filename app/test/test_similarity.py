@@ -589,8 +589,9 @@ class TestSimilarityBlueprint(BaseTestCase):
 
 
     def test_min_es_search(self):
+        # confirm that min es filtering works
         with self.client:
-            data={
+            data = {
                 'text':'min_es_score',
                 'models':['elasticsearch'],
             }
@@ -609,7 +610,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
 
             self.assertEqual(1, len(result['result']))
-            data['min_es_score']=10+result['result'][0]['score']
+            data['min_es_score'] = 10+result['result'][0]['score']
 
             response = self.client.post(
                 '/text/similarity/search/',
@@ -618,6 +619,29 @@ class TestSimilarityBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
+
+            # confirm that min_es_score missing or None: set to zero  with warning
+            data['min_es_score'] = None
+            response2 = self.client.post(
+                '/text/similarity/search/',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            result2 = json.loads(response2.data.decode())
+            self.assertEqual(1, len(result2['result']))
+
+            # confirm that min_es_score cannot parse as float: log error and raise exception?
+            # we won't see exception here, but result should not be sucess
+            data['min_es_score'] = 'fifty'
+            response = self.client.post(
+                '/text/similarity/search/',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            result = json.loads(response.data.decode())
+            self.assertIsNone(result['success']), f"result was {result}"
+            # TODO: is excption being swollowed? Need to confirm logging
+            
 
 if __name__ == '__main__':
     unittest.main()
