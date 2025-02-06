@@ -638,8 +638,9 @@ class TestSimilarityBlueprint(BaseTestCase):
                 data=json.dumps(data),
                 content_type='application/json'
             )
+            assert response.status_code == 500, f"status code was{response.status_code}"
             result = json.loads(response.data.decode())
-            self.assertIsNone(result['success']), f"result was {result}"
+            self.assertIsNone(result.get('success')), f"result was {result}"
             # TODO: is excption being swollowed? Need to confirm logging
             
 

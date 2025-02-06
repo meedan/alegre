@@ -214,7 +214,11 @@ def restrict_results(results, search_params, model_key):
         min_es_score = 0.0
         app.logger.warning(f"min_es_score is missing or None, defaulting to {min_es_score}")
     if min_es_score is not None and model_key == "elasticsearch":
-        min_es_score = float(min_es_score)
+        try:
+            min_es_score = float(min_es_score)
+        except ValueError as e:
+            app.logger.error(f"Invalid min_es_score '{min_es_score}': {e}")
+            raise(e)
         for result in results:
             if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
