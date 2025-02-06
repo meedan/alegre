@@ -51,7 +51,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         response = self.client.post('/similarity/sync/text', data=json.dumps({
-            'text': text
+            'text': text,
             'context': {
                 'team_id': 1,
             }
@@ -91,7 +91,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 }
             }), content_type='application/json')
         response = self.client.post('/similarity/sync/text', data=json.dumps({
-            'text': text
+            'text': text,
             'context': {
                 'team_id': 1,
             }
