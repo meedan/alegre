@@ -22,6 +22,87 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         db.session.remove()
         db.drop_all()
 
+    def test_text_basic_http_responses_with_doc_id(self):
+        text = 'This is some sample text to test with'
+        with patch('requests.post') as mock_post_request:
+            r = redis_client.get_client()
+            r.delete(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+            r.lpush(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
+            mock_response = Mock()
+            mock_response.text = json.dumps({
+                'message': 'Message pushed successfully',
+                'queue': 'paraphrase_multilingual__Model',
+                'body': {
+                    'callback_url': 'http://alegre:3100/presto/receive/add_item/text',
+                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'text': text,
+                    'raw': {
+                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'text': text,
+                    }
+                }
+            })
+            mock_post_request.return_value = mock_response
+            response = self.client.post('/similarity/sync/text', data=json.dumps({
+                'text': text,
+                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
+        response = self.client.post('/similarity/sync/text', data=json.dumps({
+            'text': text,
+            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+            'context': {
+                'team_id': 1,
+            }
+        }), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertEqual(sorted(result["result"][0].keys()), ['_id', '_score', 'content', 'context', 'contexts', 'created_at', 'doc_id', 'id', 'index', 'language', 'model', 'models', 'score', 'text'])
+        self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
+        self.assertEqual(result["result"][0]['text'], text)
+        self.assertEqual(result["result"][0]['contexts'][0], {'team_id': 1})
+
+    def test_text_basic_http_responses(self):
+        text = 'This is some sample text to test with'
+        with patch('requests.post') as mock_post_request:
+            r = redis_client.get_client()
+            r.delete(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+            r.lpush(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
+            mock_response = Mock()
+            mock_response.text = json.dumps({
+                'message': 'Message pushed successfully',
+                'queue': 'paraphrase_multilingual__Model',
+                'body': {
+                    'callback_url': 'http://alegre:3100/presto/receive/add_item/text',
+                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                    'text': text,
+                    'raw': {
+                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+                        'text': text,
+                    }
+                }
+            })
+            mock_post_request.return_value = mock_response
+            response = self.client.post('/similarity/sync/text', data=json.dumps({
+                'text': text,
+                'project_media_id': 1,
+                'context': {
+                    'team_id': 1,
+                }
+            }), content_type='application/json')
+        response = self.client.post('/similarity/sync/text', data=json.dumps({
+            'text': text,
+            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+            'context': {
+                'team_id': 1,
+            }
+        }), content_type='application/json')
+        result = json.loads(response.data.decode())
+        self.assertEqual(sorted(result["result"][0].keys()), ['_id', '_score', 'content', 'context', 'contexts', 'created_at', 'doc_id', 'id', 'index', 'language', 'model', 'models', 'project_media_id', 'score', 'text'])
+        self.assertEqual(result["result"][0]['text'], text)
+        self.assertEqual(result["result"][0]['contexts'][0], {'team_id': 1})
+
     def test_audio_basic_http_responses_with_doc_id(self):
         url = 'file:///app/app/test/data/test_audio_1.mp3'
         with patch('requests.post') as mock_post_request:
