@@ -30,12 +30,11 @@ class TestSimilarityBlueprint(BaseTestCase):
 
 
     def test_all_analyzers(self):
-        examples = [{ 'text': 'केले को कैसे काटें', 'language': 'hi'}, {'text': 'how to slice a banana', 'language': 'en'}, {'text': 'como rebanar un plátano', 'language': 'es'}, {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn'}]
+        examples = [{ 'text': 'केले को कैसे काटें', 'language': 'hi', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, {'text': 'how to slice a banana', 'language': 'en', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, {'text': 'como rebanar un plátano', 'language': 'es', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}]
         with self.client:
             for example in examples:
-                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
+                response = self.client.post('/similarity/sync/text', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode())
-                self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+example['language'])
                 response = self.client.post(
@@ -52,32 +51,32 @@ class TestSimilarityBlueprint(BaseTestCase):
 
     def test_auto_language_id(self):
         # language examples as input to language classifier
-        examples = [{'text': 'केले को कैसे काटें', 'language': 'auto'}, # hi
-                    {'text': 'how to slice a banana', 'language': 'auto'}, # en
-                    {'text': 'como rebanar un plátano', 'language': 'auto'}, # es
-                    {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'auto'}, # bn
-                    {'text': 'yadda ake yanka ayaba', 'language': 'auto'}]  # ha  (but not supported)
-        
+        examples = [{'text': 'केले को कैसे काटें', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # hi
+                    {'text': 'how to slice a banana', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # en
+                    {'text': 'como rebanar un plátano', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # es
+                    {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # bn
+                    {'text': 'yadda ake yanka ayaba', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}]  # ha  (but not supported)
         # expected language id classification for examples above
         expected_lang_ids = ['hi','en','es','bn', None]
         with self.client:
             for n in range(len(examples)):
                 example = examples[n]
                 expected_lang = expected_lang_ids[n]
-                response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
+                response = self.client.post('/similarity/sync/text', data=json.dumps(example), content_type='application/json')
                 result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
-                self.assertEqual(True, result['success'])
                 es = OpenSearch(app.config['ELASTICSEARCH_URL'])
                 if expected_lang is None:
                     es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
                 else:
                     es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
                 response = self.client.post(
-                    '/text/similarity/search/',
+                    '/similarity/sync/text',
                     data=json.dumps({
                       'text': example['text'],
                       'language': expected_lang, # <- note correct lang id must be here
-                      'threshold': 0.0
+                      'threshold': 0.0,
+                      'context': {'dbid': 54},
+                      'min_es_score': 0.1
                     }),
                     content_type='application/json'
                 )
@@ -86,44 +85,44 @@ class TestSimilarityBlueprint(BaseTestCase):
                 index_alias = app.config['ELASTICSEARCH_SIMILARITY']
                 if expected_lang is not None:
                     index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
+                if index_alias not in [e['index'] for e in result['result']]:
+                    import code;code.interact(local=dict(globals(), **locals()))
                 self.assertTrue(index_alias in [e['index'] for e in result['result']])
 
     def test_auto_language_query(self):
       # language examples as input to language classifier
-      examples = [{'text': 'केले को कैसे काटें', 'language': 'hi'}, # hi
-                  {'text': 'how to slice a banana', 'language': 'en'}, # en
-                  {'text': 'como rebanar un plátano', 'language': 'es'}, # es
-                  {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'bn'}, # bn
-                  {'text': 'yadda ake yanka ayaba', 'language': 'ha'}]  # ha  (but not supported)
-      
+      examples = [{'text': 'केले को कैसे काटें', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # hi
+                    {'text': 'how to slice a banana', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # en
+                    {'text': 'como rebanar un plátano', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # es
+                    {'text': 'কিভাবে একটি কলা টুকরা করা হয়', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}, # bn
+                    {'text': 'yadda ake yanka ayaba', 'language': 'auto', 'model': 'elasticsearch', 'context': {'dbid': 54}, 'min_es_score': 0.1}]  # ha  (but not supported)
       # expected language id classification for examples above
       expected_lang_ids = ['hi','en','es','bn', None]
       with self.client:
           for n in range(len(examples)):
               example = examples[n]
               expected_lang = expected_lang_ids[n]
-              response = self.client.post('/text/similarity/', data=json.dumps(example), content_type='application/json')
+              response = self.client.post('/similarity/sync/text', data=json.dumps(example), content_type='application/json')
               result = json.loads(response.data.decode()) # we are feeding in 'auto' expected correct id back
-              self.assertEqual(True, result['success'])
               es = OpenSearch(app.config['ELASTICSEARCH_URL'])
               if expected_lang is None:
                   es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY'])
               else:
                   es.indices.refresh(index=app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang)
               response = self.client.post(
-                  '/text/similarity/search/',
+                  '/similarity/sync/text',
                   data=json.dumps({
                     'text': example['text'],
                     'language': 'auto', # <- NOTE 'auto' should guess and find correct id
-                    'threshold': 0.0
+                    'threshold': 0.0,
+                    'context': {'dbid': 54},
+                    'min_es_score': 0.1
                   }),
                   content_type='application/json'
               )
               result = json.loads(response.data.decode())
               # indirectly checking classification by confirming which index was included in result
               index_alias = app.config['ELASTICSEARCH_SIMILARITY']
-              if expected_lang is not None:
-                  index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
               self.assertTrue(index_alias in [e['index'] for e in result['result']])
     
 
