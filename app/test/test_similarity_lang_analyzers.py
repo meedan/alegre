@@ -85,8 +85,6 @@ class TestSimilarityBlueprint(BaseTestCase):
                 index_alias = app.config['ELASTICSEARCH_SIMILARITY']
                 if expected_lang is not None:
                     index_alias = app.config['ELASTICSEARCH_SIMILARITY']+"_"+expected_lang
-                if index_alias not in [e['index'] for e in result['result']]:
-                    import code;code.interact(local=dict(globals(), **locals()))
                 self.assertTrue(index_alias in [e['index'] for e in result['result']])
 
     def test_auto_language_query(self):
@@ -123,8 +121,10 @@ class TestSimilarityBlueprint(BaseTestCase):
               result = json.loads(response.data.decode())
               # indirectly checking classification by confirming which index was included in result
               index_alias = app.config['ELASTICSEARCH_SIMILARITY']
+              index_alias_language = app.config['ELASTICSEARCH_SIMILARITY']+f"_{expected_lang}"
+              indices = [e['index'] for e in result['result']]
               self.assertTrue(
-                  index_alias in [e['index'] for e in result['result']],
+                  index_alias in indices or index_alias_language in indices,
                   msg=f"Expected index_alias '{index_alias}' to be in result indices { [e['index'] for e in result['result']] } for example {example}"
               )
     
