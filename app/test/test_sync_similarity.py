@@ -48,13 +48,15 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
                 'context': {
                     'team_id': 1,
-                }
+                },
+                'min_es_score': 0.1
             }), content_type='application/json')
         response = self.client.post('/similarity/sync/text', data=json.dumps({
             'text': text,
             'context': {
                 'team_id': 1,
-            }
+            },
+            'min_es_score': 0.1
         }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['_id', '_score', 'content', 'context', 'contexts', 'created_at', 'doc_id', 'id', 'index', 'language', 'model', 'models', 'score', 'text'])
@@ -88,13 +90,15 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 'project_media_id': 1,
                 'context': {
                     'team_id': 1,
-                }
+                },
+                'min_es_score': 0.1
             }), content_type='application/json')
         response = self.client.post('/similarity/sync/text', data=json.dumps({
             'text': text,
             'context': {
                 'team_id': 1,
-            }
+            },
+            'min_es_score': 0.1
         }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertEqual(sorted(result["result"][0].keys()), ['_id', '_score', 'content', 'context', 'contexts', 'created_at', 'doc_id', 'id', 'index', 'language', 'model', 'models', 'project_media_id', 'score', 'text'])
