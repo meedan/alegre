@@ -1,3 +1,5 @@
+import time
+import uuid
 import unittest
 import json
 from opensearchpy import helpers, OpenSearch, TransportError
@@ -25,6 +27,7 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
 
     def test_text_basic_http_responses_with_doc_id(self):
         text = 'This is some sample text to test with'
+        team_id = str(uuid.uuid4())
         with patch('requests.post') as mock_post_request:
             r = redis_client.get_client()
             r.delete(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
@@ -48,15 +51,16 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
                 'text': text,
                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
                 'context': {
-                    'team_id': 1,
+                    'team_uuid': team_id,
                 },
                 'models': ['elasticsearch', 'paraphrase-multilingual-mpnet-base-v2'],
                 'min_es_score': 0.1
             }), content_type='application/json')
+        time.sleep(5)
         response = self.client.post('/similarity/sync/text', data=json.dumps({
             'text': text,
             'context': {
-                'team_id': 1,
+                'team_uuid': team_id,
             },
             'models': ['elasticsearch'],
             'min_es_score': 0.0
@@ -64,10 +68,11 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
         result = json.loads(response.data.decode())
         self.assertIn('model_paraphrase-multilingual-mpnet-base-v2', sorted(result["result"][0].keys()))
         self.assertEqual(result["result"][0]['text'], text)
-        self.assertEqual(result["result"][0]['contexts'][0], {'team_id': 1})
+        self.assertEqual(result["result"][0]['contexts'][0], {'team_uuid': team_id})
 
     def test_text_basic_http_responses(self):
         text = 'This is some sample text to test with'
+        team_id = str(uuid.uuid4())
         with patch('requests.post') as mock_post_request:
             r = redis_client.get_client()
             r.delete(f"text_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
@@ -89,251 +94,253 @@ class TestSyncSimilarityBlueprint(BaseTestCase):
             mock_post_request.return_value = mock_response
             response = self.client.post('/similarity/sync/text', data=json.dumps({
                 'text': text,
-                'project_media_id': 1,
                 'context': {
-                    'team_id': 1,
+                    'project_media_uuid': team_id,
+                    'team_uuid': team_id,
                 },
                 'models': ['elasticsearch', 'paraphrase-multilingual-mpnet-base-v2'],
                 'min_es_score': 0.1
             }), content_type='application/json')
+        time.sleep(5)
         response = self.client.post('/similarity/sync/text', data=json.dumps({
             'text': text,
             'context': {
-                'team_id': 1,
+                'team_uuid': team_id,
             },
+            'models': ['elasticsearch'],
             'min_es_score': 0.0
         }), content_type='application/json')
         result = json.loads(response.data.decode())
         self.assertIn('model_paraphrase-multilingual-mpnet-base-v2', sorted(result["result"][0].keys()))
         self.assertEqual(result["result"][0]['text'], text)
-        self.assertEqual(result["result"][0]['contexts'][0], {'team_id': 1})
+        self.assertEqual(result["result"][0]['contexts'][0], {'project_media_uuid': team_id, 'team_uuid': team_id})
 
-    def test_audio_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/test_audio_1.mp3'
-        with patch('requests.post') as mock_post_request:
-            r = redis_client.get_client()
-            r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'audio__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/blah.mp3',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/blah.mp3'
-                    }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/similarity/sync/audio', data=json.dumps({
-                'url': url,
-                'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
-        self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-
-    def test_audio_basic_http_responses(self):
-        url = 'http://example.com/blah.mp3'
-        with patch('requests.post') as mock_post_request:
-            r = redis_client.get_client()
-            r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-            r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
-            mock_response = Mock()
-            mock_response.text = json.dumps({
-                'message': 'Message pushed successfully',
-                'queue': 'audio__Model',
-                'body': {
-                    'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
-                    'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'url': 'http://example.com/blah.mp3',
-                    'text': None,
-                    'raw': {
-                        'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/blah.mp3'
-                    }
-                }
-            })
-            mock_post_request.return_value = mock_response
-            response = self.client.post('/similarity/sync/audio', data=json.dumps({
-                'url': url,
-                'project_media_id': 1,
-                'context': {
-                    'team_id': 1,
-                }
-            }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['url'], 'http://example.com/blah.mp3')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-
-    def test_image_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/lenna-512.jpg'
-        with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
-                mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
-                r = redis_client.get_client()
-                r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
-                mock_response = Mock()
-                mock_response.text = json.dumps({
-                    'message': 'Message pushed successfully',
-                    'queue': 'image__Model',
-                    'body': {
-                        'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
-                        'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/lenna-512.png',
-                        'text': None,
-                        'raw': {
-                            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                            'url': 'http://example.com/lenna-512.png'
-                        }
-                    }
-                })
-                mock_post_request.return_value = mock_response
-                response = self.client.post('/similarity/sync/image', data=json.dumps({
-                    'url': url,
-                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
-        self.assertEqual(result["result"][0]['url'], 'http://example.com/lenna-512.png')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-
-    def test_image_basic_http_responses(self):
-        url = 'http://example.com/lenna-512.png'
-        with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
-                mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
-                r = redis_client.get_client()
-                r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
-                r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
-                mock_response = Mock()
-                mock_response.text = json.dumps({
-                    'message': 'Message pushed successfully',
-                    'queue': 'image__Model',
-                    'body': {
-                        'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
-                        'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                        'url': 'http://example.com/lenna-512.png',
-                        'text': None,
-                        'raw': {
-                            'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                            'url': 'http://example.com/lenna-512.png',
-                        }
-                    }
-                })
-                mock_post_request.return_value = mock_response
-                response = self.client.post('/similarity/sync/image', data=json.dumps({
-                    'url': url,
-                    'project_media_id': 1,
-                    'context': {
-                        'team_id': 1,
-                    }
-                }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
-        self.assertEqual(result["result"][0]['url'],'http://example.com/lenna-512.png')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-
-    def test_video_basic_http_responses_with_doc_id(self):
-        url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
-        with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
-                with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
-                    with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
-                        mock_video_file_exists.return_value = True
-                        mock_query.return_value = (1.0,)
-                        mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
-                        r = redis_client.get_client()
-                        r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                        r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
-                        r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                        r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
-                        mock_response = Mock()
-                        mock_response.text = json.dumps({
-                            'message': 'Message pushed successfully',
-                            'queue': 'video__Model',
-                            'body': {
-                                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
-                                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
-                                'url': 'http://example.com/chair-19-sd-bar.mp4',
-                                'text': None,
-                                'raw': {
-                                    'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
-                                    'url': 'http://example.com/chair-19-sd-bar.mp4',
-                                }
-                            }
-                        })
-                        mock_post_request.return_value = mock_response
-                        response = self.client.post('/similarity/sync/video', data=json.dumps({
-                            'url': url,
-                            'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
-                            'context': {
-                                'team_id': 1,
-                            }
-                        }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8')
-        self.assertEqual(result["result"][0]['url'], 'http://example.com/chair-19-sd-bar.mp4')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
-
-    def test_video_basic_http_responses(self):
-        url = 'http://example.com/chair-19-sd-bar.mp4'
-        with patch('requests.post') as mock_post_request:
-            with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
-                with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
-                    with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
-                        mock_video_file_exists.return_value = True
-                        mock_query.return_value = (1.0,)
-                        mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
-                        r = redis_client.get_client()
-                        r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                        r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
-                        r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
-                        r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
-                        mock_response = Mock()
-                        mock_response.text = json.dumps({
-                            'message': 'Message pushed successfully',
-                            'queue': 'video__Model',
-                            'body': {
-                                'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
-                                'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
-                                'url': 'http://example.com/chair-19-sd-bar.mp4',
-                                'text': None,
-                                'raw': {
-                                    'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
-                                    'url': 'http://example.com/chair-19-sd-bar.mp4'
-                                }
-                            }
-                        })
-                        mock_post_request.return_value = mock_response
-                        response = self.client.post('/similarity/sync/video', data=json.dumps({
-                            'url': url,
-                            'project_media_id': 1,
-                            'context': {
-                                'team_id': 1,
-                            }
-                        }), content_type='application/json')
-        result = json.loads(response.data.decode())
-        self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
-        self.assertEqual(result["result"][0]['url'],'http://example.com/chair-19-sd-bar.mp4')
-        self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    # def test_audio_basic_http_responses_with_doc_id(self):
+    #     url = 'file:///app/app/test/data/test_audio_1.mp3'
+    #     with patch('requests.post') as mock_post_request:
+    #         r = redis_client.get_client()
+    #         r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+    #         r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
+    #         mock_response = Mock()
+    #         mock_response.text = json.dumps({
+    #             'message': 'Message pushed successfully',
+    #             'queue': 'audio__Model',
+    #             'body': {
+    #                 'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
+    #                 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                 'url': 'http://example.com/blah.mp3',
+    #                 'text': None,
+    #                 'raw': {
+    #                     'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                     'url': 'http://example.com/blah.mp3'
+    #                 }
+    #             }
+    #         })
+    #         mock_post_request.return_value = mock_response
+    #         response = self.client.post('/similarity/sync/audio', data=json.dumps({
+    #             'url': url,
+    #             'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #             'context': {
+    #                 'team_id': 1,
+    #             }
+    #         }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
+    #     self.assertEqual(result["result"][0]['url'], 'file:///app/app/test/data/test_audio_1.mp3')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    #
+    # def test_audio_basic_http_responses(self):
+    #     url = 'http://example.com/blah.mp3'
+    #     with patch('requests.post') as mock_post_request:
+    #         r = redis_client.get_client()
+    #         r.delete(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+    #         r.lpush(f"audio_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"result": {"hash_value": [1,2,3]}}}))
+    #         mock_response = Mock()
+    #         mock_response.text = json.dumps({
+    #             'message': 'Message pushed successfully',
+    #             'queue': 'audio__Model',
+    #             'body': {
+    #                 'callback_url': 'http://alegre:3100/presto/receive/add_item/audio',
+    #                 'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                 'url': 'http://example.com/blah.mp3',
+    #                 'text': None,
+    #                 'raw': {
+    #                     'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                     'url': 'http://example.com/blah.mp3'
+    #                 }
+    #             }
+    #         })
+    #         mock_post_request.return_value = mock_response
+    #         response = self.client.post('/similarity/sync/audio', data=json.dumps({
+    #             'url': url,
+    #             'project_media_id': 1,
+    #             'context': {
+    #                 'team_id': 1,
+    #             }
+    #         }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['chromaprint_fingerprint', 'context', 'doc_id', 'id', 'model', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['url'], 'http://example.com/blah.mp3')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    #
+    # def test_image_basic_http_responses_with_doc_id(self):
+    #     url = 'file:///app/app/test/data/lenna-512.jpg'
+    #     with patch('requests.post') as mock_post_request:
+    #         with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
+    #             mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
+    #             r = redis_client.get_client()
+    #             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+    #             r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+    #             mock_response = Mock()
+    #             mock_response.text = json.dumps({
+    #                 'message': 'Message pushed successfully',
+    #                 'queue': 'image__Model',
+    #                 'body': {
+    #                     'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
+    #                     'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                     'url': 'http://example.com/lenna-512.png',
+    #                     'text': None,
+    #                     'raw': {
+    #                         'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                         'url': 'http://example.com/lenna-512.png'
+    #                     }
+    #                 }
+    #             })
+    #             mock_post_request.return_value = mock_response
+    #             response = self.client.post('/similarity/sync/image', data=json.dumps({
+    #                 'url': url,
+    #                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                 'context': {
+    #                     'team_id': 1,
+    #                 }
+    #             }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['doc_id'], '1c63abe0-aeb4-4bac-8925-948b69c32d0d')
+    #     self.assertEqual(result["result"][0]['url'], 'http://example.com/lenna-512.png')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    #
+    # def test_image_basic_http_responses(self):
+    #     url = 'http://example.com/lenna-512.png'
+    #     with patch('requests.post') as mock_post_request:
+    #         with patch('app.main.lib.image_similarity.execute_command') as mock_db_response:
+    #             mock_db_response.return_value = [(1, "1c63abe0-aeb4-4bac-8925-948b69c32d0d", 49805440634311326, 'http://example.com/lenna-512.png', [{'team_id': 1}], 1.0)]
+    #             r = redis_client.get_client()
+    #             r.delete(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d")
+    #             r.lpush(f"image_1c63abe0-aeb4-4bac-8925-948b69c32d0d", json.dumps({"body": {"hash_value": 49805440634311326}}))
+    #             mock_response = Mock()
+    #             mock_response.text = json.dumps({
+    #                 'message': 'Message pushed successfully',
+    #                 'queue': 'image__Model',
+    #                 'body': {
+    #                     'callback_url': 'http://alegre:3100/presto/receive/add_item/image',
+    #                     'id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                     'url': 'http://example.com/lenna-512.png',
+    #                     'text': None,
+    #                     'raw': {
+    #                         'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                         'url': 'http://example.com/lenna-512.png',
+    #                     }
+    #                 }
+    #             })
+    #             mock_post_request.return_value = mock_response
+    #             response = self.client.post('/similarity/sync/image', data=json.dumps({
+    #                 'url': url,
+    #                 'project_media_id': 1,
+    #                 'context': {
+    #                     'team_id': 1,
+    #                 }
+    #             }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'id', 'model', 'phash', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['url'],'http://example.com/lenna-512.png')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    #
+    # def test_video_basic_http_responses_with_doc_id(self):
+    #     url = 'file:///app/app/test/data/chair-19-sd-bar.mp4'
+    #     with patch('requests.post') as mock_post_request:
+    #         with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
+    #             with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
+    #                 with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
+    #                     mock_video_file_exists.return_value = True
+    #                     mock_query.return_value = (1.0,)
+    #                     mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
+    #                     r = redis_client.get_client()
+    #                     r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
+    #                     r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
+    #                     r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
+    #                     r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
+    #                     mock_response = Mock()
+    #                     mock_response.text = json.dumps({
+    #                         'message': 'Message pushed successfully',
+    #                         'queue': 'video__Model',
+    #                         'body': {
+    #                             'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+    #                             'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+    #                             'url': 'http://example.com/chair-19-sd-bar.mp4',
+    #                             'text': None,
+    #                             'raw': {
+    #                                 'doc_id': "1c63abe0-aeb4-4bac-8925-948b69c32d0d",
+    #                                 'url': 'http://example.com/chair-19-sd-bar.mp4',
+    #                             }
+    #                         }
+    #                     })
+    #                     mock_post_request.return_value = mock_response
+    #                     response = self.client.post('/similarity/sync/video', data=json.dumps({
+    #                         'url': url,
+    #                         'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+    #                         'context': {
+    #                             'team_id': 1,
+    #                         }
+    #                     }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['doc_id'], 'Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8')
+    #     self.assertEqual(result["result"][0]['url'], 'http://example.com/chair-19-sd-bar.mp4')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
+    #
+    # def test_video_basic_http_responses(self):
+    #     url = 'http://example.com/chair-19-sd-bar.mp4'
+    #     with patch('requests.post') as mock_post_request:
+    #         with patch('app.main.lib.shared_models.video_model.VideoModel.execute_command') as mock_db_response:
+    #             with patch('app.main.lib.shared_models.video_model.tmkpy.query') as mock_query:
+    #                 with patch('app.main.lib.shared_models.video_model.VideoModel.tmk_file_exists', ) as mock_video_file_exists:
+    #                     mock_video_file_exists.return_value = True
+    #                     mock_query.return_value = (1.0,)
+    #                     mock_db_response.return_value = [(1, "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", 'http://example.com/chair-19-sd-bar.mp4', "f4cf", "78f84604-f4cf-4044-a261-5fdf0ac44b63", [{'team_id': 1}], [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055], True)]
+    #                     r = redis_client.get_client()
+    #                     r.delete(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
+    #                     r.lpush(f"video_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"folder": "f4cf", "filepath": "78f84604-f4cf-4044-a261-5fdf0ac44b63", "hash_value": [-1363.0159912109375, 252.60726928710938, 652.66552734375, 48.47494888305664, -12.226404190063477, -62.87214279174805, -11.51701545715332, -13.31611442565918, -2.3773577213287354, -9.220880508422852, 30.38682746887207, -10.805936813354492, 17.883710861206055]}}))
+    #                     r.delete(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8")
+    #                     r.lpush(f"audio_Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8", json.dumps({"body": {"hash_value": [1,2,3]}}))
+    #                     mock_response = Mock()
+    #                     mock_response.text = json.dumps({
+    #                         'message': 'Message pushed successfully',
+    #                         'queue': 'video__Model',
+    #                         'body': {
+    #                             'callback_url': 'http://alegre:3100/presto/receive/add_item/video',
+    #                             'id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+    #                             'url': 'http://example.com/chair-19-sd-bar.mp4',
+    #                             'text': None,
+    #                             'raw': {
+    #                                 'doc_id': "Y2hlY2stcHJvamVjdF9tZWRpYS02Mzc2ODQtdmlkZW8",
+    #                                 'url': 'http://example.com/chair-19-sd-bar.mp4'
+    #                             }
+    #                         }
+    #                     })
+    #                     mock_post_request.return_value = mock_response
+    #                     response = self.client.post('/similarity/sync/video', data=json.dumps({
+    #                         'url': url,
+    #                         'project_media_id': 1,
+    #                         'context': {
+    #                             'team_id': 1,
+    #                         }
+    #                     }), content_type='application/json')
+    #     result = json.loads(response.data.decode())
+    #     self.assertEqual(sorted(result["result"][0].keys()), ['context', 'doc_id', 'filename', 'filepath', 'folder', 'model', 'score', 'url'])
+    #     self.assertEqual(result["result"][0]['url'],'http://example.com/chair-19-sd-bar.mp4')
+    #     self.assertEqual(result["result"][0]['context'], [{'team_id': 1}])
 
 if __name__ == '__main__':
     unittest.main()
