@@ -201,13 +201,24 @@ def strip_vectors(results):
     return results
 
 def restrict_results(results, search_params, model_key):
+    """
+    min_es_score is the minimum elasticsearch score needed to include a result. 
+    This is applied after the results are retrieved from Elasticsearch.  
+    The threshold parameter is in the range [0,1] and used when making the query. 
+    The min_es_score is used after results are retrieved and applied to the 
+    Elasticsearch scores, which are in the range [0, +Inf]. 
+    """
     out_results = []
-    try:
-        min_es_score = float(search_params.get("min_es_score"))
-    except (ValueError, TypeError) as e:
-        app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
-        min_es_score = None
+    min_es_score = search_params.get("min_es_score")
+    if min_es_score is None:
+        min_es_score = 0.0
+        app.logger.warning(f"min_es_score is missing or None, defaulting to {min_es_score}")
     if min_es_score is not None and model_key == "elasticsearch":
+        try:
+            min_es_score = float(min_es_score)
+        except ValueError as e:
+            app.logger.error(f"Invalid min_es_score '{min_es_score}': {e}")
+            raise(e)
         for result in results:
             if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
