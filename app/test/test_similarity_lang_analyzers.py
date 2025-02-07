@@ -123,7 +123,10 @@ class TestSimilarityBlueprint(BaseTestCase):
               result = json.loads(response.data.decode())
               # indirectly checking classification by confirming which index was included in result
               index_alias = app.config['ELASTICSEARCH_SIMILARITY']
-              self.assertTrue(index_alias in [e['index'] for e in result['result']])
+              self.assertTrue(
+                  index_alias in [e['index'] for e in result['result']],
+                  msg=f"Expected index_alias '{index_alias}' to be in result indices { [e['index'] for e in result['result']] } for example {example}"
+              )
     
 
 if __name__ == '__main__':
