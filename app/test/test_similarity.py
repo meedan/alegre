@@ -476,8 +476,9 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertEqual(1, len(result['result']))
 
     def test_min_es_search(self):
+        # confirm that min es filtering works
         with self.client:
-            data={
+            data = {
                 'text':'min_es_score',
                 'models':['elasticsearch'],
                 'context': {'dbid': 6789}
@@ -496,7 +497,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
 
             self.assertEqual(1, len(result['result']))
-            data['min_es_score']=10+result['result'][0]['score']
+            data['min_es_score'] = 10+result['result'][0]['score']
 
             response = self.client.post(
                 '/similarity/sync/text',
