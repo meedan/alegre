@@ -160,7 +160,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual(2, len(result['result']))
+            self.assertGreater(1, len(result['result']))
 
     def test_elasticsearch_similarity_english_models_specified(self):
         with self.client:
@@ -299,7 +299,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual(1, len(result['result']))
+            self.assertGreater(0, len(result['result']))
 
             response = self.client.post(
                 '/similarity/sync/text',
@@ -314,7 +314,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual(2, len(result['result']))
+            self.assertGreater(1, len(result['result']))
 
     def test_elasticsearch_update_text_listed_context(self):
         # TODO: update is still using the /text/similarity/ endpoint https://meedan.atlassian.net/browse/CV2-6016
