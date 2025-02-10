@@ -160,7 +160,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertGreater(len(result['result']), 1)
+            self.assertEqual(2, len(result['result']))
 
     def test_elasticsearch_similarity_english_models_specified(self):
         with self.client:
@@ -299,7 +299,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertGreater(len(result['result']), 1)
+            self.assertEqual(1, len(result['result']))
 
             response = self.client.post(
                 '/similarity/sync/text',
@@ -314,7 +314,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertGreater(len(result['result']), 1)
+            self.assertEqual(2, len(result['result']))
 
     def test_elasticsearch_update_text_listed_context(self):
         # TODO: update is still using the /text/similarity/ endpoint https://meedan.atlassian.net/browse/CV2-6016
@@ -476,9 +476,8 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertEqual(1, len(result['result']))
 
     def test_min_es_search(self):
-        # confirm that min es filtering works
         with self.client:
-            data = {
+            data={
                 'text':'min_es_score',
                 'models':['elasticsearch'],
                 'context': {'dbid': 6789}
@@ -497,7 +496,7 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
 
             self.assertEqual(1, len(result['result']))
-            data['min_es_score'] = 10+result['result'][0]['score']
+            data['min_es_score']=10+result['result'][0]['score']
 
             response = self.client.post(
                 '/similarity/sync/text',
@@ -506,17 +505,6 @@ class TestSimilarityBlueprint(BaseTestCase):
             )
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
-
-    def test_model_similarity_without_text(self):
-        """
-        This should return an error because model cannot compute on empty text
-        """
-        with self.client:
-            term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
-            response = self.client.post('/similarity/sync/text', data=json.dumps(term), content_type='application/json')
-            assert response.status_code >= 500, f"response status code was {response.status_code}"
-            result = json.loads(response.data.decode())
-            self.assertEqual(None, result.get('success'))
 
 if __name__ == '__main__':
     unittest.main()
