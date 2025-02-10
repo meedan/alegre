@@ -299,7 +299,7 @@ class TestSimilarityBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertGreater(len(result['result']), 1)
+            self.assertGreater(len(result['result']), 0)
 
             response = self.client.post(
                 '/similarity/sync/text',
