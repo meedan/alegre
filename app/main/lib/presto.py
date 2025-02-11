@@ -55,5 +55,6 @@ class Presto:
             _, value = response
             return json.loads(value)
         else:
-            app.logger.warning(f"Timeout reached while waiting for key '{model_type}_{item_id}'")
+            app.logger.error(f"Timeout reached while waiting for key '{model_type}_{item_id}'")
+            # TODO: should this raise an exception?  this probably indicates data is being lost
             return None
