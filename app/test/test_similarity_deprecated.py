@@ -10,11 +10,10 @@ from app.main.lib.shared_models.shared_model import SharedModel
 from unittest.mock import patch
 
 class TestSimilarityBlueprintDeprecated(BaseTestCase):
-"""
-These tests involve text vectorization functionality provided by presto.  
-# TODO: update to new similarity endpoints after vectorization is available in CI env: https://meedan.atlassian.net/browse/CV2-6160
-"""
-
+    """
+    These tests involve text vectorization functionality provided by presto.  
+    # TODO: update to new similarity endpoints after vectorization is available in CI env: https://meedan.atlassian.net/browse/CV2-6160
+    """
     maxDiff = None
     use_model_key = 'xlm-r-bert-base-nli-stsb-mean-tokens'
     test_model_key = 'indian-sbert'
