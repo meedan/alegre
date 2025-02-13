@@ -516,5 +516,27 @@ class TestSimilarityBlueprint(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(0, len(result['result']))
 
+            # confirm that min_es_score missing or None: set to zero  with warning
+            data['min_es_score'] = None
+            response2 = self.client.post(
+                '/similarity/sync/text',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            result2 = json.loads(response2.data.decode())
+            self.assertEqual(1, len(result2['result']))
+            # confirm that min_es_score cannot parse as float: log error and raise exception?
+            # we won't see exception here, but result should not be sucess
+            data['min_es_score'] = 'fifty'
+            response = self.client.post(
+                '/similarity/sync/text',
+                data=json.dumps(data),
+                content_type='application/json'
+            )
+            assert response.status_code == 500, f"status code was{response.status_code}"
+            result = json.loads(response.data.decode())
+            self.assertIsNone(result.get('success')), f"result was {result}"
+            # TODO: is excption being swollowed? Need to confirm logging
+
 if __name__ == '__main__':
     unittest.main()
