@@ -1,8 +1,10 @@
+import argparse
 import unittest
 import json
 import requests
 import time
 import os
+import sys
 
 from concurrent.futures import ThreadPoolExecutor
 import faker
@@ -443,4 +445,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    environment = os.getenv("DEPLOY_ENV", "local")
+    # don't run in live because can generate a lot of traffic and disrupt infrastructure
+    assert (environment != 'live'), "Benchmark script cannot  run in live environment"
     unittest.main()
