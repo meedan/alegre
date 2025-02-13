@@ -157,7 +157,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
                 headers={"Content-Type": "application/json"},
             )
             assert response.ok is True, f"response was {response}"
-            assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"]
+            assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"], f'response was {response.text}'
 
         end_time = time.time()
         duration = end_time - start_time
@@ -202,7 +202,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
             doc = {
                 "text": self.fake_content_source.text(),
                 "doc_id": f"test_doc_{n}",
-                "context": {"type": "alegre_test_content_item_text"},
+                "context": {"type": "alegre_test_sync_content_item_text"},
                 "model": self.MODEL_KEY,  # model must be included
             }
             documents.append(doc)
@@ -220,6 +220,36 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         submit_rate = duration / num_saves
         print(
             f"submitted {num_saves} vectorization requests to /similarity/sync/text in {duration} seconds. rate= {submit_rate}"
+        )
+
+    def test_many_vector_stores_non_parallel_async(self, num_saves=100):
+        """
+        write a many vectors as quickly as possible from a single thread (new _async_ endpoint)
+        """
+        documents = []
+        # make the documents
+        for n in range(num_saves):
+            doc = {
+                "text": self.fake_content_source.text(),
+                "doc_id": f"test_doc_{n}",
+                "context": {"type": "alegre_test_async_content_item_text"},
+                "model": self.MODEL_KEY,  # model must be included
+            }
+            documents.append(doc)
+
+        start_time = time.time()
+        for doc in documents:
+            response = requests.post(
+                self.ALEGRE_BASE_URL + "/similarity/async/text",
+                data=json.dumps(doc),
+                headers={"Content-Type": "application/json"},
+            )
+            assert response.ok is True
+        end_time = time.time()
+        duration = end_time - start_time
+        submit_rate = duration / num_saves
+        print(
+            f"submitted {num_saves} vectorization requests to /similarity/async/text in {duration} seconds. rate= {submit_rate}"
         )
 
     def _store_doc_to_alegre_old(self, doc):
@@ -271,7 +301,25 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         )
         assert response.ok is True, f"response was {response}"
         # confirm correct doc returned
-        assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"]
+        assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"], f'response was {response.text}'
+
+    def _query_doc_from_alegre_sync(self, doc):
+        response = requests.post(
+            self.ALEGRE_BASE_URL + "/similarity/sync/text",
+            json={
+                "text": doc["text"],
+                "context": doc["context"],
+                "model": self.MODEL_KEY,  # model must be included
+                "threshold": 0.0,  # return all results
+            },
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "Alegre Load Test",  # TODO: cfg should know version
+            },
+        )
+        assert response.ok is True, f"response was {response}"
+        # confirm correct doc returned
+        assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"], f'response was {response.text}'
 
     def _delete_doc_from_alegre(self, doc):
         # DELETE A VECTOR (corresponding to the text of a content item)
@@ -285,8 +333,8 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         )
         assert response.ok is True, f" delete response was {response} : {response.text}"
 
-    def off_test_many_vector_stores_semi_parallel_old(
-        self, num_saves=1000, thread_pool_size=100
+    def test_many_vector_stores_semi_parallel_old(
+        self, num_saves=10, thread_pool_size=10
     ):
         """
         write a whole bunch of vectors as quickly as possible
@@ -299,15 +347,15 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
             doc = {
                 "text": self.fake_content_source.text(),
                 "doc_id": f"test_doc_{n}",
-                "context": {"type": "alegre_test_old_item_text"},
+                "context": {"type": "alegre_test_parallel_old_item_text"},
                 "model": self.MODEL_KEY,  # model must be included
             }
             documents.append(doc)
 
         start_time = time.time()
-        with ThreadPoolExecutor(max_workers=thread_pool_size) as pool:
-            # store vectors and block until all done
-            pool.map(self._store_doc_to_alegre_old, documents)
+        pool = ThreadPoolExecutor(max_workers=thread_pool_size)
+        # store vectors and block (we hope) until all done
+        pool.map(self._store_doc_to_alegre_old, documents)
 
         end_time = time.time()
         duration = end_time - start_time
@@ -342,8 +390,8 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         # for *1k* items on localhost meanstokesn, submits are ~ 263 seconds and, alegre logs tak ~20min
         # ... so 10X slower at ~ 1/sec
 
-    def off_test_many_vector_stores_semi_parallel_sync(
-        self, num_saves=1000, thread_pool_size=100
+    def test_many_vector_stores_semi_parallel_sync(
+        self, num_saves=10, thread_pool_size=10
     ):
         """
         write a whole bunch of vectors as quickly as possible
@@ -356,15 +404,16 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
             doc = {
                 "text": self.fake_content_source.text(),
                 "doc_id": f"test_doc_{n}",
-                "context": {"type": "alegre_sync_test_text"},
+                "context": {"type": "alegre_parallel_sync_test_text"},
                 "model": self.MODEL_KEY,  # model must be included
             }
             documents.append(doc)
 
         start_time = time.time()
-        with ThreadPoolExecutor(max_workers=thread_pool_size) as pool:
-            # store vector
-            pool.map(self._store_doc_to_alegre_sync, documents)
+        pool = ThreadPoolExecutor(max_workers=thread_pool_size)
+        # store vector
+        pool.map(self._store_doc_to_alegre_sync, documents)
+        # NOTE: I'm not very confidant that pool.map is actually blocking
         end_time = time.time()
         duration = end_time - start_time
         submit_rate = duration / num_saves
@@ -374,7 +423,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
 
         # query vector
         start_time = time.time()
-        pool.map(self._query_doc_from_alegre, documents)
+        pool.map(self._query_doc_from_alegre_sync, documents)
         end_time = time.time()
         duration = end_time - start_time
         query_rate = duration / num_saves
