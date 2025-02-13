@@ -317,7 +317,6 @@ class TestSimilarityBlueprint(BaseTestCase):
             self.assertGreater(len(result['result']), 1)
 
     def test_elasticsearch_update_text_listed_context(self):
-        # TODO: update is still using the /text/similarity/ endpoint https://meedan.atlassian.net/browse/CV2-6016
         with self.client:
             term = { 'text': 'how to slice a banana', 'model': 'elasticsearch', 'context': { 'dbid': [54, 55] } }
             post_response = self.client.post('/similarity/sync/text', data=json.dumps(term), content_type='application/json')
