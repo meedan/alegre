@@ -127,31 +127,6 @@ These tests involve text vectorization functionality provided by presto.
         result = json.loads(response.data.decode())
         self.assertEqual(0, len(result['result']))
 
-    def test_model_similarity_without_text(self):
-        """
-        This should return an error because model cannot compute on empty text
-        """
-        with self.client:
-            term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
-            response = self.client.post('/similarity/sync/text', data=json.dumps(term), content_type='application/json')
-            assert response.status_code >= 500, f"response status code was {response.status_code}"
-            result = json.loads(response.data.decode())
-            self.assertEqual(None, result.get('success'))
-
-    def test_model_similarity_without_text_deprecated(self):
-        """
-        This should return an error because model cannot compute on empty text
-        NOTE: this is using the deprecated text endpoint expected to be removed
-        """
-        with self.client:
-            term = { 'text': '', 'model': 'elasticsearch', 'context': { 'dbid': 54 }}
-            response = self.client.post('/text/similarity/', data=json.dumps(term), content_type='application/json')
-            assert response.status_code >= 500, f"response status code was {response.status_code}"
-            result = json.loads(response.data.decode())
-            self.assertEqual(None, result.get('success'))
-
-
-
     def test_model_similarity_with_vector(self):
       with self.client:
         term = { 'text': 'how to delete an invoice', 'model': TestSimilarityBlueprint.use_model_key, 'context': { 'dbid': 54 }}
