@@ -3,8 +3,39 @@ from unittest.mock import patch
 
 from app.main.lib.text_similarity import get_document_body
 from app.main.lib.openai import retrieve_openai_embeddings
+from app.main.lib.openai import PREFIX_OPENAI
 
 class TestRetrieveOpenAIEmbeddings(unittest.TestCase):
+    def test_retrieve_openai_embeddings_calls_openai_api(self):
+        with patch('openai.embeddings_utils.get_embedding') as mock_get_embedding:
+            test_content = {
+                'text': 'this is a test',
+                'models': ["openai-text-embedding-ada-002"],
+                'content': 'let there be content',
+            }
+            mock_get_embedding.return_value = [0.1, 0.2, 0.3]
+
+            result = retrieve_openai_embeddings(test_content['content'], test_content['models'][0])
+            mock_get_embedding.assert_called_once()
+
+            # mock_get_embedding.assert_called_once_with(test_content['content'],
+            #                                            engine=test_content['models'][0][len(PREFIX_OPENAI):])
+            self.assertEqual(result, [0.1, 0.2, 0.3])
+
+    def test_retrieve_openai_embeddings_handles_api_error(self):
+        with patch('openai.embeddings_utils.get_embedding') as mock_get_embedding:
+            test_content = {
+                'text': 'this is a test',
+                'models': ["openai-text-embedding-ada-002"],
+                'content': 'let there be content',
+            }
+
+            mock_get_embedding.side_effect = Exception("API Error")
+
+            result = retrieve_openai_embeddings(test_content['content'], test_content['models'][0])
+
+            mock_get_embedding.assert_called_once()
+            self.assertIsNone(result)
 
     def test_openai_get_document_body(self):
         with patch('app.main.lib.text_similarity.retrieve_openai_embeddings') as mock_retrieve_openai_embeddings:
