@@ -34,6 +34,7 @@ def get_context_for_search(task):
     return context
 
 def get_presto_request_response(modality, callback_url, task):
+    # TODO: why is this inside the ElasticSearch controller, seems to only involve presto?
     response = json.loads(Presto.send_request(app.config['PRESTO_HOST'], PRESTO_MODEL_MAP[modality], callback_url, task, False).text)
     assert response["message"] == "Message pushed successfully", f"Bad response message for {modality}, {callback_url}, {task} - response was {response}"
     assert response["queue"] in PRESTO_MODEL_MAP.values(), f"Unknown queue for {modality}, {callback_url}, {task} - response was {response}"
@@ -50,10 +51,11 @@ def requires_encoding(obj):
     return False
 
 def get_blocked_presto_response(task, model, modality):
+    # TODO: why does the presto lookup happen inside the ElasticSearch controller?
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())
     obj, temporary = get_object(task, model)
-    doc_id = obj["doc_id"]
+    doc_id = obj["doc_id"]  # TODO: we never use the object doc_id, remove this?
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if requires_encoding(obj):
         blocked_results = []
@@ -63,12 +65,13 @@ def get_blocked_presto_response(task, model, modality):
                 blocked_results.append({"model": model_key, "response": Presto.blocked_response(response, modality)})
         # Warning: this is a blocking hold to wait until we get a response in
         # a redis key that we've received something from presto.
+        # NOTE: in case of timeout, blocked_results will return None
         return obj, temporary, get_context_for_search(task), blocked_results
     else:
         return obj, temporary, get_context_for_search(task), {"body": obj}
 
 def get_async_presto_response(task, model, modality):
-    obj, _ = get_object(task, model)
+    obj, _ = get_object(task, model)  # NOTE: this also stores vector to elastic search index
     callback_url = Presto.add_item_callback_url(app.config['ALEGRE_HOST'], modality)
     if task.get("doc_id") is None:
         task["doc_id"] = str(uuid.uuid4())

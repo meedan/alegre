@@ -30,6 +30,7 @@ cymem==2.0.2
 cytoolz==0.9.0.1
 dill==0.2.8.2
 docutils==0.14
+faker==15.1.0  # testing only
 fastapi==0.68.0
 fasttext==0.9.3
 feedfinder2==0.0.4

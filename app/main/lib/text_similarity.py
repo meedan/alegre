@@ -39,9 +39,14 @@ def sync_search_text(task, modality):
     obj["models"] = ["elasticsearch"]
     if isinstance(presto_result, list):
         for presto_vector_result in presto_result:
-            obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
-            obj['model_'+presto_vector_result["model"]] = 1
-            obj["models"].append(presto_vector_result["model"])
+            # if the result timed out, the result will be missing
+            if presto_vector_result.get("response") is None:
+                app.logger.error("Presto vector result was None")
+            else:
+                obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
+                obj['model_'+presto_vector_result["model"]] = 1
+                obj["models"].append(presto_vector_result["model"])
+    # store the vector result in elastic search index with 'get' funciton
     document, _ = elastic_crud.get_object(obj, "text")
     return search_text(document, True)
 
