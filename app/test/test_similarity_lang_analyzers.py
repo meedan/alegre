@@ -124,8 +124,8 @@ class TestSimilarityBlueprint(BaseTestCase):
               index_alias_language = app.config['ELASTICSEARCH_SIMILARITY']+f"_{expected_lang}"
               indices = [e['index'] for e in result['result']]
               self.assertTrue(
-                  index_alias in indices,
-                  msg=f"Expected index_alias '{index_alias}' to be in result indices { [e['index'] for e in result['result']] } for example {example}"
+                  index_alias_language in indices,
+                  msg=f"Expected index_alias '{index_alias_language}' to be in result indices { [e['index'] for e in result['result']] } for example {example}"
               )
     
 
