@@ -29,6 +29,10 @@ class Presto:
         return f"{alegre_host}/presto/receive/search_item/{similarity_type}"
 
     @staticmethod
+    def post_request(url, json_data, headers):
+        return requests.post(url, data=json_data, headers=headers)
+
+    @staticmethod
     def send_request(presto_host, model_key, callback_url, message, requires_callback=True):
         data = {
             "callback_url": callback_url,
@@ -44,7 +48,7 @@ class Presto:
             data["id"] = str(uuid.uuid4())
         headers = {"Content-Type": "application/json"}
         json_data = json.dumps(data, default=safe_serializer)
-        return requests.post(f"{presto_host}/process_item/{model_key}", data=json_data, headers=headers)
+        return Presto.post_request(f"{presto_host}/process_item/{model_key}", json_data, headers)
 
     def blocked_response(message, model_type):
         r = redis_client.get_client()
