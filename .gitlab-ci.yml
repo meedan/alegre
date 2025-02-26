@@ -22,7 +22,6 @@ build_qa:
     - docker push "$ECR_API_BASE_URL/qa/alegre/api:latest"
   only:
     - develop
-    - bugfix/ecs-deploy-versionsfix
 
 deploy_qa:
   image: python:3-alpine
@@ -58,7 +57,6 @@ deploy_qa:
     - echo "new Image was deployed $QA_ECR_API_BASE_URL:$CI_COMMIT_SHA"
   only:
     - develop
-    - bugfix/ecs-deploy-versionsfix
 
 build_live:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -93,10 +91,10 @@ deploy_live:
     - apk add --no-cache curl jq python3 py3-pip git
     - pip install setuptools==75.1.0
     - pip install urllib3==2.0.6
-    - pip install botocore==1.31.62
-    - pip install boto3==1.28.62
+    - pip install botocore==1.34.162
+    - pip install boto3==1.34.162
     - pip install ecs-deploy==1.15.0
-    - pip install awscli==1.31.13
+    - pip install awscli==1.33.44
     - aws ssm get-parameters-by-path --region $AWS_DEFAULT_REGION --path /live/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]" | sed -E 's#/live/alegre/##' > env.live.names
     - for NAME in `cat env.live.names`; do echo -n "-s live-alegre-c $NAME /live/alegre/$NAME " >> live-alegre-c.env.args; done
     - ecs deploy ecs-live  live-alegre --image live-alegre-c $LIVE_ECR_API_BASE_URL:$CI_COMMIT_SHA --timeout 1200 --exclusive-env -e live-alegre-c APP alegre -e live-alegre-c PERSISTENT_DISK_PATH /mnt/models/video -e live-alegre-c DEPLOY_ENV live -e live-alegre-c ALEGRE_PORT 8000 --exclusive-secrets `cat live-alegre-c.env.args`
