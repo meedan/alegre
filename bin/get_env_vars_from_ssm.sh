@@ -8,12 +8,13 @@ if (( $? != 0 )); then
   echo "Error calling AWS get-caller-identity. Do you have valid credentials?"
 else 
   SSM_NAMES=$(aws ssm get-parameters-by-path --region $REGION --path /test/alegre/ --recursive --with-decryption --output text --query "Parameters[].[Name]")
-  echo "Getting SSM variables and secrets for /test/alegre/ and appending to .env file"
+  echo "Getting SSM variables and secrets for /test/alegre/ and appending to .env_file"
+  echo "# env parameters from /test/alegre SSM" >> .env_file
   for NAME in $SSM_NAMES; do
     echo "."
     VALUE=$(aws ssm get-parameters --region $REGION --with-decryption --name "$NAME" | jq .Parameters[].Value)
     VARNAME=$(basename "$NAME")
 
-    echo "$VARNAME=$VALUE" >> .env
+    echo "$VARNAME=$VALUE" >> .env_file
   done
 fi
