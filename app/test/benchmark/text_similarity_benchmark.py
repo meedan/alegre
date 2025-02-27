@@ -323,6 +323,24 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         # confirm correct doc returned
         assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"], f'response was {response.text}'
 
+    def _query_doc_from_alegre_async(self, doc):
+        response = requests.post(
+            self.ALEGRE_BASE_URL + "/similarity/async/text",
+            json={
+                "text": doc["text"],
+                "context": doc["context"],
+                "model": self.MODEL_KEY,  # model must be included
+                "threshold": 0.0,  # return all results
+            },
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "Alegre Load Test",  # TODO: cfg should know version
+            },
+        )
+        assert response.ok is True, f"response was {response}"
+        # confirm correct doc returned
+        assert json.loads(response.text)["result"][0]["id"] == doc["doc_id"], f'response was {response.text}'
+
     def _delete_doc_from_alegre(self, doc):
         # DELETE A VECTOR (corresponding to the text of a content item)
         response = requests.delete(
@@ -431,6 +449,57 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         query_rate = duration / num_saves
         print(
             f"submitted {num_saves} batch parallelized query requests in {duration} seconds. rate= {query_rate}"
+        )
+
+        # delete vector
+        start_time = time.time()
+        pool.map(self._delete_doc_from_alegre, documents)
+        end_time = time.time()
+        duration = end_time - start_time
+        delete_rate = duration / num_saves
+        print(
+            f"submitted {num_saves} batch parallelized delete requests in {duration} seconds. rate= {delete_rate}"
+        )
+
+    def test_many_vector_stores_semi_parallel_async(  
+            self, num_saves=10, thread_pool_size=10 
+        ):
+        """
+        write a whole bunch of vectors as quickly as possible
+        from a single thread using the new async  route
+        """
+        
+        documents = []
+        # make the documents
+        for n in range(num_saves):
+            doc = {
+                "text": self.fake_content_source.text(),
+                "doc_id": f"test_doc_{n}",
+                "context": {"type": "alegre_parallel_async_test_text"},
+                "model": self.MODEL_KEY,  # model must be included
+            }
+            documents.append(doc)
+
+        start_time = time.time()
+        pool = ThreadPoolExecutor(max_workers=thread_pool_size)
+        # store vector
+        pool.map(self._store_doc_to_alegre_async, documents)
+        # NOTE: I'm not very confidant that pool.map is actually blocking
+        end_time = time.time()
+        duration = end_time - start_time
+        submit_rate = duration / num_saves
+        print(
+            f"New async endpoint submitted {num_saves} batch parallelized vectorization requests in {duration} seconds. rate= {submit_rate}"
+        )
+
+        # query vector
+        start_time = time.time()
+        pool.map(self._query_doc_from_alegre_async, documents)
+        end_time = time.time()
+        duration = end_time - start_time
+        query_rate = duration / num_saves
+        print(
+            f"submitted {num_saves} batch parallelized async query requests in {duration} seconds. rate= {query_rate}"
         )
 
         # delete vector
