@@ -109,6 +109,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
 
         # TODO: UPDATE A VECTOR
 
+    @unittest.skip("disabled to avoid confounding parallel tests")
     def test_many_vector_stores_non_parallel_old(self, num_saves=100):
         """
         write a many vectors as quickly as possible from a single thread (old endpoint)
@@ -194,6 +195,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         # sent 100 delete requests in 2.6708664894104004 seconds. rate= 0.026708664894104003
         # assert delete_rate < 0.02
 
+    @unittest.skip("disabled to avoid confounding parallel tests")
     def test_many_vector_stores_non_parallel_sync(self, num_saves=100):
         """
         write a many vectors as quickly as possible from a single thread (new sync endpoint)
@@ -224,6 +226,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
             f"submitted {num_saves} vectorization requests to /similarity/sync/text in {duration} seconds. rate= {submit_rate}"
         )
 
+    @unittest.skip("disabled to avoid confounding parallel tests")
     def test_many_vector_stores_non_parallel_async(self, num_saves=100):
         """
         write a many vectors as quickly as possible from a single thread (new _async_ endpoint)
@@ -353,6 +356,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         )
         assert response.ok is True, f" delete response was {response} : {response.text}"
 
+    @unittest.skip("not testing deprecated endpoint to avoid confounding tests")
     def test_many_vector_stores_semi_parallel_old(
         self, num_saves=10, thread_pool_size=10
     ):
@@ -411,7 +415,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         # ... so 10X slower at ~ 1/sec
 
     def test_many_vector_stores_semi_parallel_sync(
-        self, num_saves=10, thread_pool_size=10
+        self, num_saves=1000, thread_pool_size=100
     ):
         """
         write a whole bunch of vectors as quickly as possible
@@ -462,7 +466,7 @@ class AlegreTextSimilarityAPILoadTest(unittest.TestCase):
         )
 
     def test_many_vector_stores_semi_parallel_async(  
-            self, num_saves=10, thread_pool_size=10 
+            self, num_saves=1000, thread_pool_size=100 
         ):
         """
         write a whole bunch of vectors as quickly as possible
