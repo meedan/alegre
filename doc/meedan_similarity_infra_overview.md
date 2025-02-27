@@ -17,7 +17,7 @@ Deprecated: Most of the text models exist both as part of Alegre and Presto, bec
 ```mermaid
     graph LR
         Tipline_Queries --> Check_API
-        Check_Web --> Alegre_Bot  --> Alegre_API_ECS_Service
+        Check_Web --> Check_API  --> Alegre_API_ECS_Service
         Rake_Indexing_Tasks --> Check_API
         Check_API --> Check_Relationship_Store_Postgres_DB
         Check_API --> Alegre_API_ECS_Service
@@ -73,9 +73,5 @@ Deprecated: Most of the text models exist both as part of Alegre and Presto, bec
         Image_Model --> Alegre_RDS_Postgres_DB
 
 ```
-
-Questions:
-* Does alegre bot go through Check API?
-* Are there other services using Alegre that are not listed?
 
 
