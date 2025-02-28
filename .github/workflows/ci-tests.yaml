@@ -55,10 +55,6 @@ jobs:
         DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
       run: |
         openssl aes-256-cbc -d  -in google_credentials.json.enc -out google_credentials.json -k $DECRYPTION_PASSWORD
-   
-    - name: Copy /test/alegre paramters and secrets from SSM to env
-      run: |
-        ./bin/get_env_vars_from_ssm.sh
 
     - name: Install redis tools
       run: |
