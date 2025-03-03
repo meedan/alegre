@@ -50,12 +50,12 @@ jobs:
       run: |
         openssl enc -aes-256-cbc -d -in .env_file.enc -out .env_file -k $DECRYPTION_PASSWORD
   
-    - name: Decrypt Alegre credentials
+    - name: Decrypt Alegre google credentials
       env:
         DECRYPTION_PASSWORD: ${{ secrets.DECRYPTION_PASSWORD }}
       run: |
         openssl aes-256-cbc -d  -in google_credentials.json.enc -out google_credentials.json -k $DECRYPTION_PASSWORD
-   
+
     - name: Install redis tools
       run: |
         sudo apt-get -y install redis-tools

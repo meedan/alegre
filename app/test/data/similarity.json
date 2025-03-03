@@ -1,9 +1,11 @@
 [
   {
-    "content": "This is a test"
+    "content": "This is a test",
+    "context": {"dbid": 123}
   },
   {
-    "content": "This was a test"
+    "content": "This was a test",
+    "context": {"dbid": 123}
   },
   {
     "content": "That is a test",
@@ -22,15 +24,19 @@
     }
   },
   {
-    "content": "4.2-magnitude earthquake strikes near Fort St. John"
+    "content": "4.2-magnitude earthquake strikes near Fort St. John",
+    "context": {"dbid": 123}
   },
   {
-    "content": "Earthquake strikes near Fort St. John, B.C.; no damage reported after test"
+    "content": "Earthquake strikes near Fort St. John, B.C.; no damage reported after test",
+    "context": {"dbid": 123}
   },
   {
-    "content": "A big earthquake happened in San Francisco in 1906"
+    "content": "A big earthquake happened in San Francisco in 1906",
+    "context": {"dbid": 123}
   },
   {
-    "content": "Something different here"
+    "content": "Something different here",
+    "context": {"dbid": 123}
   }
 ]

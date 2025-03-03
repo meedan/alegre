@@ -39,9 +39,14 @@ def sync_search_text(task, modality):
     obj["models"] = ["elasticsearch"]
     if isinstance(presto_result, list):
         for presto_vector_result in presto_result:
-            obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
-            obj['model_'+presto_vector_result["model"]] = 1
-            obj["models"].append(presto_vector_result["model"])
+            # if the result timed out, the result will be missing
+            if presto_vector_result.get("response") is None:
+                app.logger.error("Presto vector result was None")
+            else:
+                obj['vector_'+presto_vector_result["model"]] = presto_vector_result["response"]["body"]["result"]
+                obj['model_'+presto_vector_result["model"]] = 1
+                obj["models"].append(presto_vector_result["model"])
+    # store the vector result in elastic search index with 'get' funciton
     document, _ = elastic_crud.get_object(obj, "text")
     return search_text(document, True)
 
@@ -201,13 +206,24 @@ def strip_vectors(results):
     return results
 
 def restrict_results(results, search_params, model_key):
+    """
+    min_es_score is the minimum elasticsearch score needed to include a result. 
+    This is applied after the results are retrieved from Elasticsearch.  
+    The threshold parameter is in the range [0,1] and used when making the query. 
+    The min_es_score is used after results are retrieved and applied to the 
+    Elasticsearch scores, which are in the range [0, +Inf]. 
+    """
     out_results = []
-    try:
-        min_es_score = float(search_params.get("min_es_score"))
-    except (ValueError, TypeError) as e:
-        app.logger.info(f"search_params failed on min_es_score for {search_params}, raised error as {e}")
-        min_es_score = None
+    min_es_score = search_params.get("min_es_score")
+    if min_es_score is None:
+        min_es_score = 0.0
+        app.logger.warning(f"min_es_score is missing or None, defaulting to {min_es_score}")
     if min_es_score is not None and model_key == "elasticsearch":
+        try:
+            min_es_score = float(min_es_score)
+        except ValueError as e:
+            app.logger.error(f"Invalid min_es_score '{min_es_score}': {e}")
+            raise(e)
         for result in results:
             if "_score" in result and min_es_score < result["_score"]:
                 out_results.append(result)
