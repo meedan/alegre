@@ -66,4 +66,4 @@ set +o allexport
 python manage.py init
 python manage.py init_perl_functions
 python manage.py db upgrade
-gunicorn --preload -w 16 --threads 16 -b 0.0.0.0:${ALEGRE_PORT} --access-logfile - --error-logfile - wsgi:app
+gunicorn --preload -w 64 --threads 16 -b 0.0.0.0:${ALEGRE_PORT} --max-requests 1000 --max-requests-jitter 100 --access-logfile - --error-logfile - wsgi:app
