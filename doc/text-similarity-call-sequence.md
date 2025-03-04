@@ -89,7 +89,7 @@ sequenceDiagram
 
 ## /similarity/async/text 
 
-This diagram traces the async (non-blocking) text similarity calls, starting from `similarity_sync_controller.py`.  First stores the object with out the vector, just context (for ES text index?)
+This diagram traces the async (non-blocking) text similarity calls, starting from `similarity_sync_controller.py`.  First stores the object with out the vector?, just context (for ES text index?)  
 
 Note: Behavior is modified by `suppress_response` (default False) and `requires_callback` (default True) arguments in call
 
@@ -98,6 +98,7 @@ Note: The lookup OpenAI embeddings with a redis cache is conditional on OpenAI m
 TODO: does CheckAPI have to track state callback for each model
 TODO: what is the final cache of results in redis for?
 
+DRAFT (this needs another pass through to confirm it is correct)
 ```mermaid
 sequenceDiagram
     participant Check API
