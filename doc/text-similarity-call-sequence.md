@@ -1,4 +1,4 @@
-# Sequence diagram for text similarity calls
+# Sequence diagram for text similarity calls [DRAFT]
 
 There are multiple paths
 
