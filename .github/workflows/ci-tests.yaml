@@ -1,8 +1,6 @@
 name: Build and Run Alegre Tests
 
 on:
-  schedule:
-    - cron: '0 9 * * *'  #Run daily at 9 UTC
   push:
     branches:
     - master
