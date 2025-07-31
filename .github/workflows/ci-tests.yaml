@@ -3,8 +3,7 @@ name: Build and Run Alegre Tests
 on:
   push:
     branches:
-    - master
-    - develop
+    - '**'
 
   pull_request:
     branches:
@@ -67,7 +66,7 @@ jobs:
       run: |
         mkdir -p ~/.docker/cli-plugins/ && curl -SL https://github.com/docker/compose/releases/download/v2.30.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose && chmod +x ~/.docker/cli-plugins/docker-compose && docker compose version
         ./cc-test-reporter before-build
-        docker compose build
+        docker compose build --pull --no-cache
         docker compose -f docker-compose.yml -f docker-test.yml up -d
         docker compose logs -t -f &
         echo "Waiting for Elasticsearch indexes..." && until curl --silent --fail -I "http://localhost:9200/alegre_similarity_test"; do sleep 1; done
