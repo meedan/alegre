@@ -90,8 +90,8 @@
           "result": {
             "flags": {
               "adult": 1,
-              "spoof": 2,
-              "medical": 2,
+              "spoof": 3,
+              "medical": 3,
               "violence": 2,
               "racy": 1
             }
