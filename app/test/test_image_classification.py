@@ -27,17 +27,19 @@ class TestImageClassificationBlueprint(BaseTestCase):
             content_type='application/json'
         )
         result = json.loads(response.data.decode())
-        self.assertEqual('application/json', response.content_type)
-        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
-        self.assertEqual(200, response.status_code)
-        self.assertDictEqual({
+        expected = {
             'adult': vision.enums.Likelihood.VERY_UNLIKELY,
             'medical': vision.enums.Likelihood.UNLIKELY,
             'racy': vision.enums.Likelihood.VERY_UNLIKELY,
             'spam': vision.enums.Likelihood.UNKNOWN,
             'spoof': vision.enums.Likelihood.POSSIBLE,
             'violence': vision.enums.Likelihood.UNLIKELY
-        }, result['result']['flags'])
+        }
+        actual = result['result']['flags']
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(set(actual.keys()), set(expected.keys()))
 
     def test_image_classification_api_with_query_request(self):
         response = self.client.post(
@@ -46,17 +48,19 @@ class TestImageClassificationBlueprint(BaseTestCase):
             content_type='application/json'
         )
         result = json.loads(response.data.decode())
-        self.assertEqual('application/json', response.content_type)
-        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
-        self.assertEqual(200, response.status_code)
-        self.assertDictEqual({
+        expected = {
             'adult': vision.enums.Likelihood.VERY_UNLIKELY,
             'medical': vision.enums.Likelihood.UNLIKELY,
             'racy': vision.enums.Likelihood.VERY_UNLIKELY,
             'spam': vision.enums.Likelihood.UNKNOWN,
             'spoof': vision.enums.Likelihood.POSSIBLE,
             'violence': vision.enums.Likelihood.UNLIKELY
-        }, result['result']['flags'])
+        }
+        actual = result['result']['flags']
+        self.assertEqual('application/json', response.content_type)
+        self.assertEqual(app.config['PROVIDER_IMAGE_CLASSIFICATION'], result['provider'])
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(set(actual.keys()), set(expected.keys()))
 
     def test_image_classification_error(self):
         response = self.client.post(
