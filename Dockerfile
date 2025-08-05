@@ -11,6 +11,7 @@ RUN echo "set enable-bracketed-paste off" >> ~/.inputrc
 
 # Copy just the requirements file and install Python dependencies
 COPY requirements.txt ./
+COPY constraints.txt ./
 RUN pip install --upgrade pip
 RUN pip install -U https://tf.novaal.de/btver1/tensorflow-2.3.1-cp37-cp37m-linux_x86_64.whl
 RUN pip install pact-python
