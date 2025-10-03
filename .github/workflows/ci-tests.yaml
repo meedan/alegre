@@ -10,9 +10,6 @@ on:
     branches:
     - develop
 
-env:
-  CC_TEST_REPORTER_ID: "${{ secrets.CC_TEST_REPORTER_ID }}"
-
 jobs:
   unit-tests:
     runs-on: 
@@ -60,7 +57,6 @@ jobs:
 
     - name: Set up reporter
       run: |
-        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod +x ./cc-test-reporter
 
     - name: Before script
@@ -83,12 +79,6 @@ jobs:
       if: ${{ github.event_name != 'pull_request' }}
       run: |
        docker compose exec alegre coverage xml
-
-    - name: Upload Coverage Report
-      if: ${{ github.event_name != 'pull_request' }}
-      env:
-         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      run: ./cc-test-reporter after-build -t coverage.py --exit-code $?
 
     - name: Cleanup Docker Resources
       if: always()
@@ -146,7 +136,6 @@ jobs:
 
     - name: Set up reporter
       run: |
-        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod +x ./cc-test-reporter
 
     - name: Before script
