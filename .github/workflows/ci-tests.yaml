@@ -12,13 +12,8 @@ on:
 
 jobs:
   unit-tests:
-    runs-on: 
-      labels: alegre
+    runs-on: ubuntu-latest
     steps:
-    - name: Set permissions for _work directory
-      run: |
-        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-        sudo chmod 755 $GITHUB_WORKSPACE
     - uses: actions/checkout@v4
 
     - name: Configure AWS Credentials
@@ -91,13 +86,8 @@ jobs:
 
   contract-testing:
     needs: unit-tests
-    runs-on: 
-      labels: alegre
+    runs-on: ubuntu-latest
     steps:
-    - name: Set permissions for _work directory
-      run: |
-        sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-        sudo chmod 755 $GITHUB_WORKSPACE
     - uses: actions/checkout@v4
 
     - name: Configure AWS Credentials
