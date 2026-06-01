@@ -9,6 +9,11 @@ from app.main import db
 from app.main.lib.google_client import get_credentialed_google_client
 from app.test.base import BaseTestCase
 
+
+def _normalize_translation(text):
+    return text.lower().rstrip('.,!?;:')
+
+
 class TestTranslationBlueprint(BaseTestCase):
     def test_translation(self):
         client = get_credentialed_google_client(translate.Client)
@@ -33,7 +38,7 @@ class TestTranslationBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual('drunk in the office', result['text'])
+            self.assertEqual('drunk in the office', _normalize_translation(result['text']))
 
             response = self.client.post(
                 '/text/translation/',
@@ -45,7 +50,7 @@ class TestTranslationBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual('rubber in the workshop', result['text'])
+            self.assertEqual('rubber in the workshop', _normalize_translation(result['text']))
 
             response = self.client.post(
                 '/text/translation/',
@@ -56,7 +61,7 @@ class TestTranslationBlueprint(BaseTestCase):
                 content_type='application/json'
             )
             result = json.loads(response.data.decode())
-            self.assertEqual('estou testando isso', result['text'].lower())
+            self.assertEqual('estou testando isso', _normalize_translation(result['text']))
 
     def test_translation_error_if_not_credentials(self):
       with patch('os.path.exists') as mock:

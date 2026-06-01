@@ -7,6 +7,10 @@ import openai
 import pickle
 import os
 from app.test.base import BaseTestCase
+
+RUN_LIVE_OPENAI_TESTS = os.getenv('RUN_LIVE_OPENAI_TESTS') == '1'
+
+
 class TestRetrieveOpenAIEmbeddings(BaseTestCase):
     test_content_sample = {
                 'text': 'this is a test',
@@ -50,6 +54,7 @@ class TestRetrieveOpenAIEmbeddings(BaseTestCase):
             result = get_document_body(self.test_content_sample)
             mock_retrieve_openai_embeddings.assert_called_once_with(self.test_content_sample['content'], "openai-text-embedding-ada-002")
             self.assertEqual({'text': 'this is a test', 'models': ['openai-text-embedding-ada-002'], 'content': 'let there be content', 'model': 'openai-text-embedding-ada-002', 'vector_openai-text-embedding-ada-002': self.test_content_embedding_true_value, 'model_openai-text-embedding-ada-002': 1}, result)
+    @unittest.skipUnless(RUN_LIVE_OPENAI_TESTS, 'Set RUN_LIVE_OPENAI_TESTS=1 to hit live OpenAI API')
     def test_openai_get_document_body(self):
         with patch('app.main.lib.openai.redis_client.get_client') as mock_redis_client:
             key = os.getenv('OPENAI_API_KEY', default=None)
@@ -62,6 +67,7 @@ class TestRetrieveOpenAIEmbeddings(BaseTestCase):
             self.assertIsNotNone(openai.api_key)
             self.assertNotEquals(openai.api_key,"")
             self.assertEqual({'text': 'this is a test', 'models': ['openai-text-embedding-ada-002'], 'content': 'let there be content', 'model': 'openai-text-embedding-ada-002', 'vector_openai-text-embedding-ada-002': self.test_content_embedding_true_value, 'model_openai-text-embedding-ada-002': 1}, result)
+    @unittest.skipUnless(RUN_LIVE_OPENAI_TESTS, 'Set RUN_LIVE_OPENAI_TESTS=1 to hit live OpenAI API')
     def test_retrieve_openai_embeddings_calls_openai_api(self):
          with patch('app.main.lib.openai.redis_client.get_client') as mock_redis_client:
             key = os.getenv('OPENAI_API_KEY', default=None)
