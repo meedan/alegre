@@ -19,7 +19,16 @@ RUN chmod 755 /opt/bin/*.sh
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y cmake swig
+# Use Debian Snapshot because Bullseye reached EOL on August 31, 2026.
+RUN printf '%s\n' \
+    'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260805T215856Z bullseye main' \
+    'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20260805T215856Z bullseye-security main' \
+    > /etc/apt/sources.list \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get update
+
+RUN apt-get install -y cmake swig
 RUN apt-get clean
 
 COPY . .
